@@ -157,6 +157,7 @@
 		2D5FB33A1A67CCEB0041020C /* Standort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Standort.swift; sourceTree = "<group>"; };
 		2D5FB33B1A67CCEB0041020C /* Veranlassung.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Veranlassung.swift; sourceTree = "<group>"; };
 		2D939DBF1A67D22100FB2AFB /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
+		2D939DD31A67D5D200FB2AFB /* belis-app.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "belis-app.playground"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +187,7 @@
 				2D5FB2CB1A67C7320041020C /* belis-app */,
 				2D5FB2E41A67C7320041020C /* belis-appTests */,
 				2D5FB2CA1A67C7320041020C /* Products */,
+				2D939DD31A67D5D200FB2AFB /* belis-app.playground */,
 			);
 			sourceTree = "<group>";
 		};
