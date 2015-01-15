@@ -9,7 +9,6 @@
         <!--Login View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <viewController id="BYZ-38-t0r" customClass="LoginViewController" customModule="belis_app" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
@@ -207,13 +206,13 @@
                         <outlet property="view" destination="8bC-Xf-vdC" id="fV0-ZS-i4e"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="574" y="292"/>
+            <point key="canvasLocation" x="204.75" y="399"/>
         </scene>
         <!--Main View Controller-->
         <scene sceneID="i2e-N2-Nmm">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="D2a-FR-f0y" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="mainView" modalTransitionStyle="crossDissolve" id="Kou-sk-bUr" customClass="MainViewController" customModule="belis_app" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="m61-XT-Tbh"/>
@@ -452,13 +451,13 @@
                         <outlet property="tableView" destination="7Kb-8o-11z" id="NFb-Au-OqJ"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="D2a-FR-f0y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1230" y="399"/>
+            <point key="canvasLocation" x="862.5" y="399"/>
         </scene>
         <!--Suchauswahl-->
         <scene sceneID="tMj-pD-Odc">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="V7a-zh-PHi" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController title="Suchauswahl" modalPresentationStyle="currentContext" id="mNo-PQ-ieb" customClass="SelectionPopoverViewController" customModule="belis_app" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="htJ-9N-f0B"/>
@@ -564,8 +563,9 @@
                         <outlet property="switchMauerlaschen" destination="cLX-X6-A8C" id="ItZ-7i-IoP"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="V7a-zh-PHi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1599" y="-77.5"/>
+            <point key="canvasLocation" x="665.25" y="-34.125"/>
         </scene>
     </scenes>
 </document>

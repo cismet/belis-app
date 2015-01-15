@@ -46,6 +46,7 @@
 		2D5FB3441A67CCEB0041020C /* Schaltstelle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3391A67CCEB0041020C /* Schaltstelle.swift */; };
 		2D5FB3451A67CCEB0041020C /* Standort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB33A1A67CCEB0041020C /* Standort.swift */; };
 		2D5FB3461A67CCEB0041020C /* Veranlassung.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB33B1A67CCEB0041020C /* Veranlassung.swift */; };
+		2D939DCE1A67D2F400FB2AFB /* Alamofire.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2D939DC61A67D22100FB2AFB /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,7 +57,49 @@
 			remoteGlobalIDString = 2D5FB2C81A67C7320041020C;
 			remoteInfo = "belis-app";
 		};
+		2D939DC51A67D22100FB2AFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2D939DBF1A67D22100FB2AFB /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F8111E3319A95C8B0040E7D1;
+			remoteInfo = "Alamofire iOS";
+		};
+		2D939DC71A67D22100FB2AFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2D939DBF1A67D22100FB2AFB /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 4DD67C0B1A5C55C900ED2280;
+			remoteInfo = "Alamofire OSX";
+		};
+		2D939DC91A67D22100FB2AFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2D939DBF1A67D22100FB2AFB /* Alamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = F8111E3E19A95C8B0040E7D1;
+			remoteInfo = AlamofireTests;
+		};
+		2D939DCB1A67D2A600FB2AFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2D939DBF1A67D22100FB2AFB /* Alamofire.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = F8111E3219A95C8B0040E7D1;
+			remoteInfo = "Alamofire iOS";
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2D939DCD1A67D2BC00FB2AFB /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				2D939DCE1A67D2F400FB2AFB /* Alamofire.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2D5FB2C91A67C7320041020C /* belis-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "belis-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -113,6 +156,7 @@
 		2D5FB3391A67CCEB0041020C /* Schaltstelle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schaltstelle.swift; sourceTree = "<group>"; };
 		2D5FB33A1A67CCEB0041020C /* Standort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Standort.swift; sourceTree = "<group>"; };
 		2D5FB33B1A67CCEB0041020C /* Veranlassung.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Veranlassung.swift; sourceTree = "<group>"; };
+		2D939DBF1A67D22100FB2AFB /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +181,7 @@
 		2D5FB2C01A67C7320041020C = {
 			isa = PBXGroup;
 			children = (
+				2D939DBF1A67D22100FB2AFB /* Alamofire.xcodeproj */,
 				2D5FB2F11A67CA570041020C /* MapKit.framework */,
 				2D5FB2CB1A67C7320041020C /* belis-app */,
 				2D5FB2E41A67C7320041020C /* belis-appTests */,
@@ -258,6 +303,16 @@
 			name = wktparser;
 			sourceTree = "<group>";
 		};
+		2D939DC01A67D22100FB2AFB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2D939DC61A67D22100FB2AFB /* Alamofire.framework */,
+				2D939DC81A67D22100FB2AFB /* Alamofire.framework */,
+				2D939DCA1A67D22100FB2AFB /* AlamofireTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -268,10 +323,12 @@
 				2D5FB2C51A67C7320041020C /* Sources */,
 				2D5FB2C61A67C7320041020C /* Frameworks */,
 				2D5FB2C71A67C7320041020C /* Resources */,
+				2D939DCD1A67D2BC00FB2AFB /* Copy Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				2D939DCC1A67D2A600FB2AFB /* PBXTargetDependency */,
 			);
 			name = "belis-app";
 			productName = "belis-app";
@@ -330,6 +387,12 @@
 			mainGroup = 2D5FB2C01A67C7320041020C;
 			productRefGroup = 2D5FB2CA1A67C7320041020C /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 2D939DC01A67D22100FB2AFB /* Products */;
+					ProjectRef = 2D939DBF1A67D22100FB2AFB /* Alamofire.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				2D5FB2C81A67C7320041020C /* belis-app */,
@@ -337,6 +400,30 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		2D939DC61A67D22100FB2AFB /* Alamofire.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Alamofire.framework;
+			remoteRef = 2D939DC51A67D22100FB2AFB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2D939DC81A67D22100FB2AFB /* Alamofire.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Alamofire.framework;
+			remoteRef = 2D939DC71A67D22100FB2AFB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2D939DCA1A67D22100FB2AFB /* AlamofireTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = AlamofireTests.xctest;
+			remoteRef = 2D939DC91A67D22100FB2AFB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		2D5FB2C71A67C7320041020C /* Resources */ = {
@@ -415,6 +502,11 @@
 			isa = PBXTargetDependency;
 			target = 2D5FB2C81A67C7320041020C /* belis-app */;
 			targetProxy = 2D5FB2E21A67C7320041020C /* PBXContainerItemProxy */;
+		};
+		2D939DCC1A67D2A600FB2AFB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Alamofire iOS";
+			targetProxy = 2D939DCB1A67D2A600FB2AFB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
