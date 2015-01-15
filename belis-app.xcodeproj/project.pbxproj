@@ -14,6 +14,12 @@
 		2D5FB2D91A67C7320041020C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D81A67C7320041020C /* Images.xcassets */; };
 		2D5FB2DC1A67C7320041020C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2DA1A67C7320041020C /* LaunchScreen.xib */; };
 		2D5FB2E81A67C7320041020C /* belis_appTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2E71A67C7320041020C /* belis_appTests.swift */; };
+		2D5FB2F21A67CA570041020C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D5FB2F11A67CA570041020C /* MapKit.framework */; };
+		2D5FB2F41A67CAA60041020C /* wupp.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2F31A67CAA60041020C /* wupp.gpx */; };
+		2D5FB2F91A67CB120041020C /* belisBack.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2F51A67CB120041020C /* belisBack.png */; };
+		2D5FB2FA1A67CB120041020C /* leuchte.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2F61A67CB120041020C /* leuchte.png */; };
+		2D5FB2FB1A67CB120041020C /* mauerlasche.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2F71A67CB120041020C /* mauerlasche.png */; };
+		2D5FB2FC1A67CB120041020C /* ml.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2F81A67CB120041020C /* ml.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +44,12 @@
 		2D5FB2E11A67C7320041020C /* belis-appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "belis-appTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D5FB2E61A67C7320041020C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2D5FB2E71A67C7320041020C /* belis_appTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = belis_appTests.swift; sourceTree = "<group>"; };
+		2D5FB2F11A67CA570041020C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		2D5FB2F31A67CAA60041020C /* wupp.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = wupp.gpx; sourceTree = "<group>"; };
+		2D5FB2F51A67CB120041020C /* belisBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = belisBack.png; sourceTree = "<group>"; };
+		2D5FB2F61A67CB120041020C /* leuchte.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leuchte.png; sourceTree = "<group>"; };
+		2D5FB2F71A67CB120041020C /* mauerlasche.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mauerlasche.png; sourceTree = "<group>"; };
+		2D5FB2F81A67CB120041020C /* ml.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ml.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D5FB2F21A67CA570041020C /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +74,7 @@
 		2D5FB2C01A67C7320041020C = {
 			isa = PBXGroup;
 			children = (
+				2D5FB2F11A67CA570041020C /* MapKit.framework */,
 				2D5FB2CB1A67C7320041020C /* belis-app */,
 				2D5FB2E41A67C7320041020C /* belis-appTests */,
 				2D5FB2CA1A67C7320041020C /* Products */,
@@ -93,6 +107,11 @@
 		2D5FB2CC1A67C7320041020C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2D5FB2F51A67CB120041020C /* belisBack.png */,
+				2D5FB2F61A67CB120041020C /* leuchte.png */,
+				2D5FB2F71A67CB120041020C /* mauerlasche.png */,
+				2D5FB2F81A67CB120041020C /* ml.png */,
+				2D5FB2F31A67CAA60041020C /* wupp.gpx */,
 				2D5FB2CD1A67C7320041020C /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -164,6 +183,11 @@
 				TargetAttributes = {
 					2D5FB2C81A67C7320041020C = {
 						CreatedOnToolsVersion = 6.1.1;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					2D5FB2E01A67C7320041020C = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -196,7 +220,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D5FB2D71A67C7320041020C /* Main.storyboard in Resources */,
+				2D5FB2F41A67CAA60041020C /* wupp.gpx in Resources */,
+				2D5FB2FC1A67CB120041020C /* ml.png in Resources */,
+				2D5FB2F91A67CB120041020C /* belisBack.png in Resources */,
 				2D5FB2DC1A67C7320041020C /* LaunchScreen.xib in Resources */,
+				2D5FB2FB1A67CB120041020C /* mauerlasche.png in Resources */,
+				2D5FB2FA1A67CB120041020C /* leuchte.png in Resources */,
 				2D5FB2D91A67C7320041020C /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -411,6 +440,7 @@
 				2D5FB2ED1A67C7320041020C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2D5FB2EE1A67C7320041020C /* Build configuration list for PBXNativeTarget "belis-appTests" */ = {
 			isa = XCConfigurationList;
@@ -419,6 +449,7 @@
 				2D5FB2F01A67C7320041020C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
