@@ -7,12 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2D5FB2CF1A67C7320041020C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2CE1A67C7320041020C /* AppDelegate.swift */; };
 		2D5FB2D21A67C7320041020C /* belis_app.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D01A67C7320041020C /* belis_app.xcdatamodeld */; };
-		2D5FB2D41A67C7320041020C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D31A67C7320041020C /* ViewController.swift */; };
-		2D5FB2D71A67C7320041020C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D51A67C7320041020C /* Main.storyboard */; };
 		2D5FB2D91A67C7320041020C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D81A67C7320041020C /* Images.xcassets */; };
-		2D5FB2DC1A67C7320041020C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2DA1A67C7320041020C /* LaunchScreen.xib */; };
 		2D5FB2E81A67C7320041020C /* belis_appTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2E71A67C7320041020C /* belis_appTests.swift */; };
 		2D5FB2F21A67CA570041020C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D5FB2F11A67CA570041020C /* MapKit.framework */; };
 		2D5FB2F41A67CAA60041020C /* wupp.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2F31A67CAA60041020C /* wupp.gpx */; };
@@ -20,6 +16,36 @@
 		2D5FB2FA1A67CB120041020C /* leuchte.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2F61A67CB120041020C /* leuchte.png */; };
 		2D5FB2FB1A67CB120041020C /* mauerlasche.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2F71A67CB120041020C /* mauerlasche.png */; };
 		2D5FB2FC1A67CB120041020C /* ml.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2F81A67CB120041020C /* ml.png */; };
+		2D5FB3091A67CC340041020C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3011A67CC340041020C /* AppDelegate.swift */; };
+		2D5FB30A1A67CC340041020C /* DemoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3021A67CC340041020C /* DemoData.swift */; };
+		2D5FB30B1A67CC340041020C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB3031A67CC340041020C /* LaunchScreen.xib */; };
+		2D5FB30C1A67CC340041020C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3041A67CC340041020C /* LoginViewController.swift */; };
+		2D5FB30D1A67CC340041020C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB3051A67CC340041020C /* Main.storyboard */; };
+		2D5FB30E1A67CC340041020C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3061A67CC340041020C /* MainViewController.swift */; };
+		2D5FB30F1A67CC340041020C /* SelectionPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3071A67CC340041020C /* SelectionPopoverViewController.swift */; };
+		2D5FB3101A67CC340041020C /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3081A67CC340041020C /* TableViewCell.swift */; };
+		2D5FB3121A67CC780041020C /* MyOSMMKTileOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3111A67CC780041020C /* MyOSMMKTileOverlay.swift */; };
+		2D5FB3271A67CCA60041020C /* WKTGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3141A67CCA60041020C /* WKTGeometry.m */; };
+		2D5FB3281A67CCA60041020C /* WKTGeometryCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3161A67CCA60041020C /* WKTGeometryCollection.m */; };
+		2D5FB3291A67CCA60041020C /* WKTLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3181A67CCA60041020C /* WKTLine.m */; };
+		2D5FB32A1A67CCA60041020C /* WKTLineM.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB31A1A67CCA60041020C /* WKTLineM.m */; };
+		2D5FB32B1A67CCA60041020C /* WKTParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB31C1A67CCA60041020C /* WKTParser.m */; };
+		2D5FB32C1A67CCA60041020C /* WKTPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB31E1A67CCA60041020C /* WKTPoint.m */; };
+		2D5FB32D1A67CCA60041020C /* WKTPointM.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3201A67CCA60041020C /* WKTPointM.m */; };
+		2D5FB32E1A67CCA60041020C /* WKTPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3221A67CCA60041020C /* WKTPolygon.m */; };
+		2D5FB32F1A67CCA60041020C /* WKTPolygonM.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3241A67CCA60041020C /* WKTPolygonM.m */; };
+		2D5FB3301A67CCA60041020C /* WKTString.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3261A67CCA60041020C /* WKTString.m */; };
+		2D5FB33C1A67CCEB0041020C /* Abzweigdose.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3311A67CCEB0041020C /* Abzweigdose.swift */; };
+		2D5FB33D1A67CCEB0041020C /* Arbeitsauftrag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3321A67CCEB0041020C /* Arbeitsauftrag.swift */; };
+		2D5FB33E1A67CCEB0041020C /* Arbeitsprotokoll.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3331A67CCEB0041020C /* Arbeitsprotokoll.swift */; };
+		2D5FB33F1A67CCEB0041020C /* BaseEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3341A67CCEB0041020C /* BaseEntity.swift */; };
+		2D5FB3401A67CCEB0041020C /* GeoBaseEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3351A67CCEB0041020C /* GeoBaseEntity.swift */; };
+		2D5FB3411A67CCEB0041020C /* Leitung.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3361A67CCEB0041020C /* Leitung.swift */; };
+		2D5FB3421A67CCEB0041020C /* Leuchte.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3371A67CCEB0041020C /* Leuchte.swift */; };
+		2D5FB3431A67CCEB0041020C /* Mauerlasche.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3381A67CCEB0041020C /* Mauerlasche.swift */; };
+		2D5FB3441A67CCEB0041020C /* Schaltstelle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3391A67CCEB0041020C /* Schaltstelle.swift */; };
+		2D5FB3451A67CCEB0041020C /* Standort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB33A1A67CCEB0041020C /* Standort.swift */; };
+		2D5FB3461A67CCEB0041020C /* Veranlassung.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB33B1A67CCEB0041020C /* Veranlassung.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,12 +61,8 @@
 /* Begin PBXFileReference section */
 		2D5FB2C91A67C7320041020C /* belis-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "belis-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D5FB2CD1A67C7320041020C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2D5FB2CE1A67C7320041020C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2D5FB2D11A67C7320041020C /* belis_app.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = belis_app.xcdatamodel; sourceTree = "<group>"; };
-		2D5FB2D31A67C7320041020C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		2D5FB2D61A67C7320041020C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2D5FB2D81A67C7320041020C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		2D5FB2DB1A67C7320041020C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		2D5FB2E11A67C7320041020C /* belis-appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "belis-appTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D5FB2E61A67C7320041020C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2D5FB2E71A67C7320041020C /* belis_appTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = belis_appTests.swift; sourceTree = "<group>"; };
@@ -50,6 +72,47 @@
 		2D5FB2F61A67CB120041020C /* leuchte.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leuchte.png; sourceTree = "<group>"; };
 		2D5FB2F71A67CB120041020C /* mauerlasche.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mauerlasche.png; sourceTree = "<group>"; };
 		2D5FB2F81A67CB120041020C /* ml.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ml.png; sourceTree = "<group>"; };
+		2D5FB3001A67CC330041020C /* belis-app-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "belis-app-Bridging-Header.h"; sourceTree = "<group>"; };
+		2D5FB3011A67CC340041020C /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		2D5FB3021A67CC340041020C /* DemoData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoData.swift; sourceTree = "<group>"; };
+		2D5FB3031A67CC340041020C /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
+		2D5FB3041A67CC340041020C /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		2D5FB3051A67CC340041020C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		2D5FB3061A67CC340041020C /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		2D5FB3071A67CC340041020C /* SelectionPopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectionPopoverViewController.swift; sourceTree = "<group>"; };
+		2D5FB3081A67CC340041020C /* TableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
+		2D5FB3111A67CC780041020C /* MyOSMMKTileOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyOSMMKTileOverlay.swift; sourceTree = "<group>"; };
+		2D5FB3131A67CCA60041020C /* WKTGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKTGeometry.h; sourceTree = "<group>"; };
+		2D5FB3141A67CCA60041020C /* WKTGeometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKTGeometry.m; sourceTree = "<group>"; };
+		2D5FB3151A67CCA60041020C /* WKTGeometryCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKTGeometryCollection.h; sourceTree = "<group>"; };
+		2D5FB3161A67CCA60041020C /* WKTGeometryCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKTGeometryCollection.m; sourceTree = "<group>"; };
+		2D5FB3171A67CCA60041020C /* WKTLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKTLine.h; sourceTree = "<group>"; };
+		2D5FB3181A67CCA60041020C /* WKTLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKTLine.m; sourceTree = "<group>"; };
+		2D5FB3191A67CCA60041020C /* WKTLineM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKTLineM.h; sourceTree = "<group>"; };
+		2D5FB31A1A67CCA60041020C /* WKTLineM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKTLineM.m; sourceTree = "<group>"; };
+		2D5FB31B1A67CCA60041020C /* WKTParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKTParser.h; sourceTree = "<group>"; };
+		2D5FB31C1A67CCA60041020C /* WKTParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKTParser.m; sourceTree = "<group>"; };
+		2D5FB31D1A67CCA60041020C /* WKTPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKTPoint.h; sourceTree = "<group>"; };
+		2D5FB31E1A67CCA60041020C /* WKTPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKTPoint.m; sourceTree = "<group>"; };
+		2D5FB31F1A67CCA60041020C /* WKTPointM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKTPointM.h; sourceTree = "<group>"; };
+		2D5FB3201A67CCA60041020C /* WKTPointM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKTPointM.m; sourceTree = "<group>"; };
+		2D5FB3211A67CCA60041020C /* WKTPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKTPolygon.h; sourceTree = "<group>"; };
+		2D5FB3221A67CCA60041020C /* WKTPolygon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKTPolygon.m; sourceTree = "<group>"; };
+		2D5FB3231A67CCA60041020C /* WKTPolygonM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKTPolygonM.h; sourceTree = "<group>"; };
+		2D5FB3241A67CCA60041020C /* WKTPolygonM.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKTPolygonM.m; sourceTree = "<group>"; };
+		2D5FB3251A67CCA60041020C /* WKTString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKTString.h; sourceTree = "<group>"; };
+		2D5FB3261A67CCA60041020C /* WKTString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKTString.m; sourceTree = "<group>"; };
+		2D5FB3311A67CCEB0041020C /* Abzweigdose.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Abzweigdose.swift; sourceTree = "<group>"; };
+		2D5FB3321A67CCEB0041020C /* Arbeitsauftrag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Arbeitsauftrag.swift; sourceTree = "<group>"; };
+		2D5FB3331A67CCEB0041020C /* Arbeitsprotokoll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Arbeitsprotokoll.swift; sourceTree = "<group>"; };
+		2D5FB3341A67CCEB0041020C /* BaseEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseEntity.swift; sourceTree = "<group>"; };
+		2D5FB3351A67CCEB0041020C /* GeoBaseEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeoBaseEntity.swift; sourceTree = "<group>"; };
+		2D5FB3361A67CCEB0041020C /* Leitung.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Leitung.swift; sourceTree = "<group>"; };
+		2D5FB3371A67CCEB0041020C /* Leuchte.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Leuchte.swift; sourceTree = "<group>"; };
+		2D5FB3381A67CCEB0041020C /* Mauerlasche.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mauerlasche.swift; sourceTree = "<group>"; };
+		2D5FB3391A67CCEB0041020C /* Schaltstelle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schaltstelle.swift; sourceTree = "<group>"; };
+		2D5FB33A1A67CCEB0041020C /* Standort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Standort.swift; sourceTree = "<group>"; };
+		2D5FB33B1A67CCEB0041020C /* Veranlassung.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Veranlassung.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,13 +156,21 @@
 		2D5FB2CB1A67C7320041020C /* belis-app */ = {
 			isa = PBXGroup;
 			children = (
-				2D5FB2CE1A67C7320041020C /* AppDelegate.swift */,
-				2D5FB2D31A67C7320041020C /* ViewController.swift */,
-				2D5FB2D51A67C7320041020C /* Main.storyboard */,
+				2D5FB2FF1A67CBAC0041020C /* wktparser */,
+				2D5FB2FE1A67CB980041020C /* data */,
+				2D5FB2FD1A67CB870041020C /* tools */,
 				2D5FB2D81A67C7320041020C /* Images.xcassets */,
-				2D5FB2DA1A67C7320041020C /* LaunchScreen.xib */,
 				2D5FB2D01A67C7320041020C /* belis_app.xcdatamodeld */,
 				2D5FB2CC1A67C7320041020C /* Supporting Files */,
+				2D5FB3001A67CC330041020C /* belis-app-Bridging-Header.h */,
+				2D5FB3011A67CC340041020C /* AppDelegate.swift */,
+				2D5FB3021A67CC340041020C /* DemoData.swift */,
+				2D5FB3031A67CC340041020C /* LaunchScreen.xib */,
+				2D5FB3041A67CC340041020C /* LoginViewController.swift */,
+				2D5FB3051A67CC340041020C /* Main.storyboard */,
+				2D5FB3061A67CC340041020C /* MainViewController.swift */,
+				2D5FB3071A67CC340041020C /* SelectionPopoverViewController.swift */,
+				2D5FB3081A67CC340041020C /* TableViewCell.swift */,
 			);
 			path = "belis-app";
 			sourceTree = "<group>";
@@ -132,6 +203,59 @@
 				2D5FB2E61A67C7320041020C /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		2D5FB2FD1A67CB870041020C /* tools */ = {
+			isa = PBXGroup;
+			children = (
+				2D5FB3111A67CC780041020C /* MyOSMMKTileOverlay.swift */,
+			);
+			name = tools;
+			sourceTree = "<group>";
+		};
+		2D5FB2FE1A67CB980041020C /* data */ = {
+			isa = PBXGroup;
+			children = (
+				2D5FB3311A67CCEB0041020C /* Abzweigdose.swift */,
+				2D5FB3321A67CCEB0041020C /* Arbeitsauftrag.swift */,
+				2D5FB3331A67CCEB0041020C /* Arbeitsprotokoll.swift */,
+				2D5FB3341A67CCEB0041020C /* BaseEntity.swift */,
+				2D5FB3351A67CCEB0041020C /* GeoBaseEntity.swift */,
+				2D5FB3361A67CCEB0041020C /* Leitung.swift */,
+				2D5FB3371A67CCEB0041020C /* Leuchte.swift */,
+				2D5FB3381A67CCEB0041020C /* Mauerlasche.swift */,
+				2D5FB3391A67CCEB0041020C /* Schaltstelle.swift */,
+				2D5FB33A1A67CCEB0041020C /* Standort.swift */,
+				2D5FB33B1A67CCEB0041020C /* Veranlassung.swift */,
+			);
+			name = data;
+			sourceTree = "<group>";
+		};
+		2D5FB2FF1A67CBAC0041020C /* wktparser */ = {
+			isa = PBXGroup;
+			children = (
+				2D5FB3131A67CCA60041020C /* WKTGeometry.h */,
+				2D5FB3141A67CCA60041020C /* WKTGeometry.m */,
+				2D5FB3151A67CCA60041020C /* WKTGeometryCollection.h */,
+				2D5FB3161A67CCA60041020C /* WKTGeometryCollection.m */,
+				2D5FB3171A67CCA60041020C /* WKTLine.h */,
+				2D5FB3181A67CCA60041020C /* WKTLine.m */,
+				2D5FB3191A67CCA60041020C /* WKTLineM.h */,
+				2D5FB31A1A67CCA60041020C /* WKTLineM.m */,
+				2D5FB31B1A67CCA60041020C /* WKTParser.h */,
+				2D5FB31C1A67CCA60041020C /* WKTParser.m */,
+				2D5FB31D1A67CCA60041020C /* WKTPoint.h */,
+				2D5FB31E1A67CCA60041020C /* WKTPoint.m */,
+				2D5FB31F1A67CCA60041020C /* WKTPointM.h */,
+				2D5FB3201A67CCA60041020C /* WKTPointM.m */,
+				2D5FB3211A67CCA60041020C /* WKTPolygon.h */,
+				2D5FB3221A67CCA60041020C /* WKTPolygon.m */,
+				2D5FB3231A67CCA60041020C /* WKTPolygonM.h */,
+				2D5FB3241A67CCA60041020C /* WKTPolygonM.m */,
+				2D5FB3251A67CCA60041020C /* WKTString.h */,
+				2D5FB3261A67CCA60041020C /* WKTString.m */,
+			);
+			name = wktparser;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -219,11 +343,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D5FB2D71A67C7320041020C /* Main.storyboard in Resources */,
 				2D5FB2F41A67CAA60041020C /* wupp.gpx in Resources */,
 				2D5FB2FC1A67CB120041020C /* ml.png in Resources */,
 				2D5FB2F91A67CB120041020C /* belisBack.png in Resources */,
-				2D5FB2DC1A67C7320041020C /* LaunchScreen.xib in Resources */,
+				2D5FB30D1A67CC340041020C /* Main.storyboard in Resources */,
+				2D5FB30B1A67CC340041020C /* LaunchScreen.xib in Resources */,
 				2D5FB2FB1A67CB120041020C /* mauerlasche.png in Resources */,
 				2D5FB2FA1A67CB120041020C /* leuchte.png in Resources */,
 				2D5FB2D91A67C7320041020C /* Images.xcassets in Resources */,
@@ -244,9 +368,35 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D5FB2D41A67C7320041020C /* ViewController.swift in Sources */,
-				2D5FB2CF1A67C7320041020C /* AppDelegate.swift in Sources */,
+				2D5FB33C1A67CCEB0041020C /* Abzweigdose.swift in Sources */,
+				2D5FB32A1A67CCA60041020C /* WKTLineM.m in Sources */,
+				2D5FB3121A67CC780041020C /* MyOSMMKTileOverlay.swift in Sources */,
+				2D5FB3401A67CCEB0041020C /* GeoBaseEntity.swift in Sources */,
+				2D5FB3421A67CCEB0041020C /* Leuchte.swift in Sources */,
+				2D5FB32F1A67CCA60041020C /* WKTPolygonM.m in Sources */,
+				2D5FB3291A67CCA60041020C /* WKTLine.m in Sources */,
+				2D5FB30C1A67CC340041020C /* LoginViewController.swift in Sources */,
+				2D5FB30A1A67CC340041020C /* DemoData.swift in Sources */,
+				2D5FB3411A67CCEB0041020C /* Leitung.swift in Sources */,
+				2D5FB3461A67CCEB0041020C /* Veranlassung.swift in Sources */,
+				2D5FB33E1A67CCEB0041020C /* Arbeitsprotokoll.swift in Sources */,
+				2D5FB33D1A67CCEB0041020C /* Arbeitsauftrag.swift in Sources */,
+				2D5FB32E1A67CCA60041020C /* WKTPolygon.m in Sources */,
+				2D5FB3091A67CC340041020C /* AppDelegate.swift in Sources */,
+				2D5FB32B1A67CCA60041020C /* WKTParser.m in Sources */,
+				2D5FB3301A67CCA60041020C /* WKTString.m in Sources */,
+				2D5FB3451A67CCEB0041020C /* Standort.swift in Sources */,
+				2D5FB3271A67CCA60041020C /* WKTGeometry.m in Sources */,
+				2D5FB3441A67CCEB0041020C /* Schaltstelle.swift in Sources */,
 				2D5FB2D21A67C7320041020C /* belis_app.xcdatamodeld in Sources */,
+				2D5FB32C1A67CCA60041020C /* WKTPoint.m in Sources */,
+				2D5FB30E1A67CC340041020C /* MainViewController.swift in Sources */,
+				2D5FB3431A67CCEB0041020C /* Mauerlasche.swift in Sources */,
+				2D5FB33F1A67CCEB0041020C /* BaseEntity.swift in Sources */,
+				2D5FB3101A67CC340041020C /* TableViewCell.swift in Sources */,
+				2D5FB3281A67CCA60041020C /* WKTGeometryCollection.m in Sources */,
+				2D5FB32D1A67CCA60041020C /* WKTPointM.m in Sources */,
+				2D5FB30F1A67CC340041020C /* SelectionPopoverViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,25 +417,6 @@
 			targetProxy = 2D5FB2E21A67C7320041020C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		2D5FB2D51A67C7320041020C /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2D5FB2D61A67C7320041020C /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		2D5FB2DA1A67C7320041020C /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2D5FB2DB1A67C7320041020C /* Base */,
-			);
-			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		2D5FB2E91A67C7320041020C /* Debug */ = {
@@ -371,9 +502,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = "belis-app/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "belis-app/belis-app-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -381,9 +515,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = "belis-app/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "belis-app/belis-app-Bridging-Header.h";
 			};
 			name = Release;
 		};
