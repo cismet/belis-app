@@ -1,0 +1,439 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2D5FB2CF1A67C7320041020C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2CE1A67C7320041020C /* AppDelegate.swift */; };
+		2D5FB2D21A67C7320041020C /* belis_app.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D01A67C7320041020C /* belis_app.xcdatamodeld */; };
+		2D5FB2D41A67C7320041020C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D31A67C7320041020C /* ViewController.swift */; };
+		2D5FB2D71A67C7320041020C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D51A67C7320041020C /* Main.storyboard */; };
+		2D5FB2D91A67C7320041020C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D81A67C7320041020C /* Images.xcassets */; };
+		2D5FB2DC1A67C7320041020C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2DA1A67C7320041020C /* LaunchScreen.xib */; };
+		2D5FB2E81A67C7320041020C /* belis_appTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2E71A67C7320041020C /* belis_appTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2D5FB2E21A67C7320041020C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2D5FB2C11A67C7320041020C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2D5FB2C81A67C7320041020C;
+			remoteInfo = "belis-app";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		2D5FB2C91A67C7320041020C /* belis-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "belis-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D5FB2CD1A67C7320041020C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2D5FB2CE1A67C7320041020C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		2D5FB2D11A67C7320041020C /* belis_app.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = belis_app.xcdatamodel; sourceTree = "<group>"; };
+		2D5FB2D31A67C7320041020C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		2D5FB2D61A67C7320041020C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		2D5FB2D81A67C7320041020C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		2D5FB2DB1A67C7320041020C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		2D5FB2E11A67C7320041020C /* belis-appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "belis-appTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D5FB2E61A67C7320041020C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2D5FB2E71A67C7320041020C /* belis_appTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = belis_appTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2D5FB2C61A67C7320041020C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D5FB2DE1A67C7320041020C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2D5FB2C01A67C7320041020C = {
+			isa = PBXGroup;
+			children = (
+				2D5FB2CB1A67C7320041020C /* belis-app */,
+				2D5FB2E41A67C7320041020C /* belis-appTests */,
+				2D5FB2CA1A67C7320041020C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2D5FB2CA1A67C7320041020C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2D5FB2C91A67C7320041020C /* belis-app.app */,
+				2D5FB2E11A67C7320041020C /* belis-appTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2D5FB2CB1A67C7320041020C /* belis-app */ = {
+			isa = PBXGroup;
+			children = (
+				2D5FB2CE1A67C7320041020C /* AppDelegate.swift */,
+				2D5FB2D31A67C7320041020C /* ViewController.swift */,
+				2D5FB2D51A67C7320041020C /* Main.storyboard */,
+				2D5FB2D81A67C7320041020C /* Images.xcassets */,
+				2D5FB2DA1A67C7320041020C /* LaunchScreen.xib */,
+				2D5FB2D01A67C7320041020C /* belis_app.xcdatamodeld */,
+				2D5FB2CC1A67C7320041020C /* Supporting Files */,
+			);
+			path = "belis-app";
+			sourceTree = "<group>";
+		};
+		2D5FB2CC1A67C7320041020C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				2D5FB2CD1A67C7320041020C /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		2D5FB2E41A67C7320041020C /* belis-appTests */ = {
+			isa = PBXGroup;
+			children = (
+				2D5FB2E71A67C7320041020C /* belis_appTests.swift */,
+				2D5FB2E51A67C7320041020C /* Supporting Files */,
+			);
+			path = "belis-appTests";
+			sourceTree = "<group>";
+		};
+		2D5FB2E51A67C7320041020C /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				2D5FB2E61A67C7320041020C /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2D5FB2C81A67C7320041020C /* belis-app */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2D5FB2EB1A67C7320041020C /* Build configuration list for PBXNativeTarget "belis-app" */;
+			buildPhases = (
+				2D5FB2C51A67C7320041020C /* Sources */,
+				2D5FB2C61A67C7320041020C /* Frameworks */,
+				2D5FB2C71A67C7320041020C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "belis-app";
+			productName = "belis-app";
+			productReference = 2D5FB2C91A67C7320041020C /* belis-app.app */;
+			productType = "com.apple.product-type.application";
+		};
+		2D5FB2E01A67C7320041020C /* belis-appTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2D5FB2EE1A67C7320041020C /* Build configuration list for PBXNativeTarget "belis-appTests" */;
+			buildPhases = (
+				2D5FB2DD1A67C7320041020C /* Sources */,
+				2D5FB2DE1A67C7320041020C /* Frameworks */,
+				2D5FB2DF1A67C7320041020C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2D5FB2E31A67C7320041020C /* PBXTargetDependency */,
+			);
+			name = "belis-appTests";
+			productName = "belis-appTests";
+			productReference = 2D5FB2E11A67C7320041020C /* belis-appTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2D5FB2C11A67C7320041020C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = cismet;
+				TargetAttributes = {
+					2D5FB2C81A67C7320041020C = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					2D5FB2E01A67C7320041020C = {
+						CreatedOnToolsVersion = 6.1.1;
+						TestTargetID = 2D5FB2C81A67C7320041020C;
+					};
+				};
+			};
+			buildConfigurationList = 2D5FB2C41A67C7320041020C /* Build configuration list for PBXProject "belis-app" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 2D5FB2C01A67C7320041020C;
+			productRefGroup = 2D5FB2CA1A67C7320041020C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2D5FB2C81A67C7320041020C /* belis-app */,
+				2D5FB2E01A67C7320041020C /* belis-appTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2D5FB2C71A67C7320041020C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2D5FB2D71A67C7320041020C /* Main.storyboard in Resources */,
+				2D5FB2DC1A67C7320041020C /* LaunchScreen.xib in Resources */,
+				2D5FB2D91A67C7320041020C /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D5FB2DF1A67C7320041020C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2D5FB2C51A67C7320041020C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2D5FB2D41A67C7320041020C /* ViewController.swift in Sources */,
+				2D5FB2CF1A67C7320041020C /* AppDelegate.swift in Sources */,
+				2D5FB2D21A67C7320041020C /* belis_app.xcdatamodeld in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2D5FB2DD1A67C7320041020C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2D5FB2E81A67C7320041020C /* belis_appTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2D5FB2E31A67C7320041020C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2D5FB2C81A67C7320041020C /* belis-app */;
+			targetProxy = 2D5FB2E21A67C7320041020C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		2D5FB2D51A67C7320041020C /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2D5FB2D61A67C7320041020C /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		2D5FB2DA1A67C7320041020C /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2D5FB2DB1A67C7320041020C /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		2D5FB2E91A67C7320041020C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2D5FB2EA1A67C7320041020C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2D5FB2EC1A67C7320041020C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "belis-app/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		2D5FB2ED1A67C7320041020C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "belis-app/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		2D5FB2EF1A67C7320041020C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "belis-appTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/belis-app.app/belis-app";
+			};
+			name = Debug;
+		};
+		2D5FB2F01A67C7320041020C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "belis-appTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/belis-app.app/belis-app";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2D5FB2C41A67C7320041020C /* Build configuration list for PBXProject "belis-app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D5FB2E91A67C7320041020C /* Debug */,
+				2D5FB2EA1A67C7320041020C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2D5FB2EB1A67C7320041020C /* Build configuration list for PBXNativeTarget "belis-app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D5FB2EC1A67C7320041020C /* Debug */,
+				2D5FB2ED1A67C7320041020C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		2D5FB2EE1A67C7320041020C /* Build configuration list for PBXNativeTarget "belis-appTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2D5FB2EF1A67C7320041020C /* Debug */,
+				2D5FB2F01A67C7320041020C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		2D5FB2D01A67C7320041020C /* belis_app.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				2D5FB2D11A67C7320041020C /* belis_app.xcdatamodel */,
+			);
+			currentVersion = 2D5FB2D11A67C7320041020C /* belis_app.xcdatamodel */;
+			path = belis_app.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 2D5FB2C11A67C7320041020C /* Project object */;
+}
