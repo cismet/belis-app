@@ -48,6 +48,8 @@
 		2D5FB3461A67CCEB0041020C /* Veranlassung.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB33B1A67CCEB0041020C /* Veranlassung.swift */; };
 		2D939DCE1A67D2F400FB2AFB /* Alamofire.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2D939DC61A67D22100FB2AFB /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2D939DDB1A6905D500FB2AFB /* CidsConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */; };
+		2D939DED1A690A2800FB2AFB /* ObjectMapper.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2D939DE81A6909D600FB2AFB /* ObjectMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2D939DEF1A690A6300FB2AFB /* CidsUtilityClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D939DEE1A690A6300FB2AFB /* CidsUtilityClasses.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +88,27 @@
 			remoteGlobalIDString = F8111E3219A95C8B0040E7D1;
 			remoteInfo = "Alamofire iOS";
 		};
+		2D939DE71A6909D600FB2AFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2D939DE01A6909D600FB2AFB /* ObjectMapper.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6AAC8F7619F03C2900E7A677;
+			remoteInfo = ObjectMapper;
+		};
+		2D939DE91A6909D600FB2AFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2D939DE01A6909D600FB2AFB /* ObjectMapper.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 6AAC8F8119F03C2900E7A677;
+			remoteInfo = ObjectMapperTests;
+		};
+		2D939DEB1A690A1600FB2AFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2D939DE01A6909D600FB2AFB /* ObjectMapper.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 6AAC8F7519F03C2900E7A677;
+			remoteInfo = ObjectMapper;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -95,6 +118,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				2D939DED1A690A2800FB2AFB /* ObjectMapper.framework in Copy Frameworks */,
 				2D939DCE1A67D2F400FB2AFB /* Alamofire.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
@@ -160,6 +184,8 @@
 		2D939DBF1A67D22100FB2AFB /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		2D939DD31A67D5D200FB2AFB /* belis-app.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "belis-app.playground"; sourceTree = "<group>"; };
 		2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsConnector.swift; sourceTree = "<group>"; };
+		2D939DE01A6909D600FB2AFB /* ObjectMapper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ObjectMapper.xcodeproj; path = ObjectMapper/ObjectMapper.xcodeproj; sourceTree = "<group>"; };
+		2D939DEE1A690A6300FB2AFB /* CidsUtilityClasses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsUtilityClasses.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,6 +210,7 @@
 		2D5FB2C01A67C7320041020C = {
 			isa = PBXGroup;
 			children = (
+				2D939DE01A6909D600FB2AFB /* ObjectMapper.xcodeproj */,
 				2D939DBF1A67D22100FB2AFB /* Alamofire.xcodeproj */,
 				2D5FB2F11A67CA570041020C /* MapKit.framework */,
 				2D5FB2CB1A67C7320041020C /* belis-app */,
@@ -259,6 +286,7 @@
 			children = (
 				2D5FB3111A67CC780041020C /* MyOSMMKTileOverlay.swift */,
 				2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */,
+				2D939DEE1A690A6300FB2AFB /* CidsUtilityClasses.swift */,
 			);
 			name = tools;
 			sourceTree = "<group>";
@@ -318,6 +346,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		2D939DE11A6909D600FB2AFB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2D939DE81A6909D600FB2AFB /* ObjectMapper.framework */,
+				2D939DEA1A6909D600FB2AFB /* ObjectMapperTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -333,6 +370,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				2D939DEC1A690A1600FB2AFB /* PBXTargetDependency */,
 				2D939DCC1A67D2A600FB2AFB /* PBXTargetDependency */,
 			);
 			name = "belis-app";
@@ -397,6 +435,10 @@
 					ProductGroup = 2D939DC01A67D22100FB2AFB /* Products */;
 					ProjectRef = 2D939DBF1A67D22100FB2AFB /* Alamofire.xcodeproj */;
 				},
+				{
+					ProductGroup = 2D939DE11A6909D600FB2AFB /* Products */;
+					ProjectRef = 2D939DE01A6909D600FB2AFB /* ObjectMapper.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -426,6 +468,20 @@
 			fileType = wrapper.cfbundle;
 			path = AlamofireTests.xctest;
 			remoteRef = 2D939DC91A67D22100FB2AFB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2D939DE81A6909D600FB2AFB /* ObjectMapper.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ObjectMapper.framework;
+			remoteRef = 2D939DE71A6909D600FB2AFB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2D939DEA1A6909D600FB2AFB /* ObjectMapperTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = ObjectMapperTests.xctest;
+			remoteRef = 2D939DE91A6909D600FB2AFB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -489,6 +545,7 @@
 				2D5FB3281A67CCA60041020C /* WKTGeometryCollection.m in Sources */,
 				2D5FB32D1A67CCA60041020C /* WKTPointM.m in Sources */,
 				2D939DDB1A6905D500FB2AFB /* CidsConnector.swift in Sources */,
+				2D939DEF1A690A6300FB2AFB /* CidsUtilityClasses.swift in Sources */,
 				2D5FB30F1A67CC340041020C /* SelectionPopoverViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -513,6 +570,11 @@
 			isa = PBXTargetDependency;
 			name = "Alamofire iOS";
 			targetProxy = 2D939DCB1A67D2A600FB2AFB /* PBXContainerItemProxy */;
+		};
+		2D939DEC1A690A1600FB2AFB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = ObjectMapper;
+			targetProxy = 2D939DEB1A690A1600FB2AFB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
