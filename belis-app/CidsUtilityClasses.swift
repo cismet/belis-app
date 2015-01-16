@@ -11,8 +11,8 @@ import ObjectMapper
 
 
 class CidsObjectNode : MapperProtocol {
-    var classId :String?;
-    var objectId :String?;
+    var classId :Int?;
+    var objectId :Int?;
     required init(){};
     func map(mapper: Mapper) {
         classId <= mapper["classId"];
@@ -49,5 +49,9 @@ class QueryParameters : MapperProtocol {
     func map(mapper: Mapper) {
         list <= mapper["list"];
     }
-    
 }
+
+//class CollectionResult : MapperProtocol {
+//    var collection : [ ]
+//}
+
