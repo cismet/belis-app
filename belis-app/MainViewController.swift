@@ -10,6 +10,8 @@ import UIKit;
 import MapKit;
 import Alamofire;
 
+
+
 class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,CLLocationManagerDelegate, MKMapViewDelegate {
 
     @IBOutlet weak var mapView: MKMapView!;
@@ -370,55 +372,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
 //        tableView.selectRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 2), animated: true,scrollPosition: UITableViewScrollPosition.Middle);
 //        tableView(tableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 1, inSection: 2));
 
-        
-//        var sessionConfig = NSURLSessionConfiguration.defaultSessionConfiguration()
-//        sessionConfig.HTTPAdditionalHeaders = ["Accept" : "application/json"]
-//        var session = NSURLSession(configuration: sessionConfig)
-//        var task = session.dataTaskWithURL(url, completionHandler: {
-//            (data, response, error) in
-//            var json = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: nil) as? Dictionary<String, AnyObject>
-//            var tweet = json[„text“] ...
-//        })
-//        task.resume();
-        
-//        let baseUrl=NSURL(string:"http://kif:8890/");
-//        let objectManager = RKObjectManager(baseURL: baseUrl);
-//        AFNetworkActivityIndicatorManager.sharedManager().enabled=true;
-//        
-//        
-//        var formData=MultiPartForm(params: QueryParameters(list: [
-//            QueryParam(key: "LeuchteEnabled", value: "true"),
-//            QueryParam(key: "GeometryFromWkt", value: "POLYGON ((2582375.3331009173 5681538.290594944, 2582494.6975608254 5681538.290594944, 2582494.6975608254 5681583.652933975, 2582375.3331009173 5681583.652933975, 2582375.3331009173 5681538.290594944))"),
-//            QueryParam(key: "LeuchteEnabled", value: "true"),
-//            ]));
-//        
-//        var paramMapping=RKObjectMapping(forClass: QueryParam.self);
-//        paramMapping.addAttributeMappingsFromDictionary([
-//            "key":"key",
-//            "value":"value"
-//            ]);
-//        
-//        var paramsMapping=RKObjectMapping(forClass: QueryParameters.self);
-////        paramsMapping.a
-//  
-//        var manager = RKObjectManager();
-//
-//        var json = "{\"key\":\"LeuchteEnabled\",\"value\":\"true\"}";
-//        var fillInto = QueryParam();
-//        
-//        RKMapperOperation.in
-//        
-//        
-//        var op = RKMapperOperation(representation: json, mappingsDictionary: );
-//        
-//        op.targetObject=fillInto;
-//        var error=NSErrorPointer();
-//        op.execute(error);
-//        println(op.representation);
-//        println(fillInto.key);
-        
-       
-       
+        CidsConnector.search();
+                
     
     }
     
