@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D16C0C51A7011F000A61982 /* NetworkStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D16C0C41A7011F000A61982 /* NetworkStuff.swift */; };
 		2D5FB2D21A67C7320041020C /* belis_app.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D01A67C7320041020C /* belis_app.xcdatamodeld */; };
 		2D5FB2D91A67C7320041020C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D81A67C7320041020C /* Images.xcassets */; };
 		2D5FB2E81A67C7320041020C /* belis_appTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2E71A67C7320041020C /* belis_appTests.swift */; };
@@ -127,6 +128,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2D16C0C41A7011F000A61982 /* NetworkStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkStuff.swift; sourceTree = "<group>"; };
 		2D5FB2C91A67C7320041020C /* belis-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "belis-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D5FB2CD1A67C7320041020C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2D5FB2D11A67C7320041020C /* belis_app.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = belis_app.xcdatamodel; sourceTree = "<group>"; };
@@ -287,6 +289,7 @@
 				2D5FB3111A67CC780041020C /* MyOSMMKTileOverlay.swift */,
 				2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */,
 				2D939DEE1A690A6300FB2AFB /* CidsUtilityClasses.swift */,
+				2D16C0C41A7011F000A61982 /* NetworkStuff.swift */,
 			);
 			name = tools;
 			sourceTree = "<group>";
@@ -547,6 +550,7 @@
 				2D939DDB1A6905D500FB2AFB /* CidsConnector.swift in Sources */,
 				2D939DEF1A690A6300FB2AFB /* CidsUtilityClasses.swift in Sources */,
 				2D5FB30F1A67CC340041020C /* SelectionPopoverViewController.swift in Sources */,
+				2D16C0C51A7011F000A61982 /* NetworkStuff.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

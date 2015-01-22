@@ -7,7 +7,9 @@
 //
 
 import Foundation
-class Leitung : GeoBaseEntity {
+import ObjectMapper
+
+class Leitung : GeoBaseEntity , MapperProtocol{
     var leitungstyp : String?; //wird Leitungstypobjekt
     init(id: Int, leitungstyp: String, geoString: String) {
         super.init();
@@ -15,5 +17,10 @@ class Leitung : GeoBaseEntity {
         self.leitungstyp=leitungstyp;
         self.wgs84WKT=geoString;
     }
-
+    required init(){}
+    override func map(mapper: Mapper) {
+        id <= mapper["id"];
+        leitungstyp <= mapper["fk_leitungstyp.bezeichnung"];
+        wgs84WKT <= mapper["fk_geom.wgs84_wkt"]
+    }
 }

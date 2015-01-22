@@ -36,6 +36,12 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationUsageDescription</key>
+	<string>BelIS-App möchte Ihren Standort verwenden.</string>
+	<key>NSLocationWhenInUsageDescription</key>
+	<string>BelIS-App möchte Ihren Standort verwenden.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>BelIS-App möchte Ihren Standort verwenden.</string>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

@@ -7,11 +7,16 @@
 //
 
 import Foundation
+import ObjectMapper
 
-public class BaseEntity : NSObject {
-    override init(){
-        
+class BaseEntity : MapperProtocol{
+    required init(){
     }
 
     var id: Int?
+    
+    func map(mapper: Mapper) {
+        
+    }
+    
 }

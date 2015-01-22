@@ -9,7 +9,7 @@
 import UIKit;
 import MapKit;
 import Alamofire;
-
+import ObjectMapper;
 
 
 class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,CLLocationManagerDelegate, MKMapViewDelegate {
@@ -53,10 +53,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         locationManager=CLLocationManager();
         
         locationManager.desiredAccuracy=kCLLocationAccuracyBest;
-        locationManager.requestAlwaysAuthorization();
         
         locationManager.distanceFilter=100.0;
         locationManager.startUpdatingLocation();
+        locationManager.requestWhenInUseAuthorization()
         
         gotoUserLocationButton=MKUserTrackingBarButtonItem(mapView:mapView);
 
@@ -134,7 +134,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         else if indexPath.section==MAUERLASCHEN {
             let mauerlasche = searchResults[indexPath.section][indexPath.row] as Mauerlasche;
             cell.lblBezeichnung.text="Mauerlasche";
-            cell.lblStrasse.text="\(mauerlasche.id!)";
+            cell.lblStrasse.text="\(mauerlasche.strasse!)";
             cell.lblSubText.text="Laufende Nummer:\(mauerlasche.laufendeNummer)";
           
         }
@@ -242,6 +242,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     
+    
+    
     func mapView(mapView: MKMapView!, regionDidChangeAnimated animated: Bool) {
 //        println(mapView.region.span.latitudeDelta);
     }
@@ -274,6 +276,17 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
       }
     
     
+    func mapView(mapView: MKMapView!, didChangeUserTrackingMode mode: MKUserTrackingMode, animated: Bool) {
+//        if mode == MKUserTrackingMode.Follow {
+//            let center = mapView.userLocation.location.coordinate
+//            let  span = MKCoordinateSpanMake(0.002306, 0.001717)
+//            mapView.setRegion(region: MKCoordinateRegion(center: center, span: span), animated: true)
+//            mapView.setUserTrackingMode(MKUserTrackingMode.Follow, animated: true)
+//
+//        }
+        println("didChangeUserTrackingMode")
+    }
+    
     //Actions
     
     @IBAction func searchButtonTabbed(sender: AnyObject) {
@@ -283,9 +296,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
         }
 
-
         searchResults=[[Leuchte](),[Mauerlasche](),[Leitung]()];
-
+        
         self.tableView.reloadData();
 
         actInd.center = mapView.center;
@@ -295,11 +307,44 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         actInd.startAnimating();
 
         
+        var mRect = self.mapView.visibleMapRect;
+        var mRegion=MKCoordinateRegionForMapRect(mRect);
+        var x1=mRegion.center.longitude-(mRegion.span.longitudeDelta/2)
+        var y1=mRegion.center.latitude-(mRegion.span.latitudeDelta/2)
+        var x2=mRegion.center.longitude+(mRegion.span.longitudeDelta/2)
+        var y2=mRegion.center.latitude+(mRegion.span.latitudeDelta/2)
+        
+        
+        let ewktMapExtent="SRID=4326;POLYGON((\(x1) \(y1),\(x1) \(y2),\(x2) \(y2),\(x2) \(y1),\(x1) \(y1)))";
+        
+        
+        CidsConnector(user: "WendlingM@BELIS2", password: "kif").search(ewktMapExtent, leuchtenEnabled: "\(isLeuchtenEnabled)", mauerlaschenEnabled: "\(isMauerlaschenEnabled)", leitungenEnabled: "\(isleitungenEnabled)") {
+            searchResults in
+            self.searchResults=searchResults
+            self.tableView.reloadData();
+            
+            for entityClass in searchResults{
+                for entity in entityClass {
+                    
+                    entity.addToMapView(self.mapView);
+                    
+                }
+            }
+            self.actInd.stopAnimating();
+            self.actInd.removeFromSuperview();
+            
+        }
+
+        
+
+       
+        
+        
 
         //search();
         
         //demo search
-        timer=NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("demoSearch") , userInfo: nil, repeats: false);
+//        timer=NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("demoSearch") , userInfo: nil, repeats: false);
         
     }
     
@@ -371,10 +416,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
 //        tableView.selectRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 2), animated: true,scrollPosition: UITableViewScrollPosition.Middle);
 //        tableView(tableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 1, inSection: 2));
-
-        CidsConnector.search();
-                
-    
+        
     }
     
 }
