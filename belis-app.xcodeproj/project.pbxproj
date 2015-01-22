@@ -18,7 +18,6 @@
 		2D5FB2FB1A67CB120041020C /* mauerlasche.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2F71A67CB120041020C /* mauerlasche.png */; };
 		2D5FB2FC1A67CB120041020C /* ml.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2F81A67CB120041020C /* ml.png */; };
 		2D5FB3091A67CC340041020C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3011A67CC340041020C /* AppDelegate.swift */; };
-		2D5FB30A1A67CC340041020C /* DemoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3021A67CC340041020C /* DemoData.swift */; };
 		2D5FB30B1A67CC340041020C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB3031A67CC340041020C /* LaunchScreen.xib */; };
 		2D5FB30C1A67CC340041020C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3041A67CC340041020C /* LoginViewController.swift */; };
 		2D5FB30D1A67CC340041020C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB3051A67CC340041020C /* Main.storyboard */; };
@@ -144,7 +143,6 @@
 		2D5FB2F81A67CB120041020C /* ml.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ml.png; sourceTree = "<group>"; };
 		2D5FB3001A67CC330041020C /* belis-app-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "belis-app-Bridging-Header.h"; sourceTree = "<group>"; };
 		2D5FB3011A67CC340041020C /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		2D5FB3021A67CC340041020C /* DemoData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoData.swift; sourceTree = "<group>"; };
 		2D5FB3031A67CC340041020C /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		2D5FB3041A67CC340041020C /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		2D5FB3051A67CC340041020C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -242,7 +240,6 @@
 				2D5FB2CC1A67C7320041020C /* Supporting Files */,
 				2D5FB3001A67CC330041020C /* belis-app-Bridging-Header.h */,
 				2D5FB3011A67CC340041020C /* AppDelegate.swift */,
-				2D5FB3021A67CC340041020C /* DemoData.swift */,
 				2D5FB3031A67CC340041020C /* LaunchScreen.xib */,
 				2D5FB3041A67CC340041020C /* LoginViewController.swift */,
 				2D5FB3051A67CC340041020C /* Main.storyboard */,
@@ -527,7 +524,6 @@
 				2D5FB32F1A67CCA60041020C /* WKTPolygonM.m in Sources */,
 				2D5FB3291A67CCA60041020C /* WKTLine.m in Sources */,
 				2D5FB30C1A67CC340041020C /* LoginViewController.swift in Sources */,
-				2D5FB30A1A67CC340041020C /* DemoData.swift in Sources */,
 				2D5FB3411A67CCEB0041020C /* Leitung.swift in Sources */,
 				2D5FB3461A67CCEB0041020C /* Veranlassung.swift in Sources */,
 				2D5FB33E1A67CCEB0041020C /* Arbeitsprotokoll.swift in Sources */,

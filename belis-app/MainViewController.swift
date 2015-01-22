@@ -277,13 +277,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     
     func mapView(mapView: MKMapView!, didChangeUserTrackingMode mode: MKUserTrackingMode, animated: Bool) {
-//        if mode == MKUserTrackingMode.Follow {
-//            let center = mapView.userLocation.location.coordinate
-//            let  span = MKCoordinateSpanMake(0.002306, 0.001717)
-//            mapView.setRegion(region: MKCoordinateRegion(center: center, span: span), animated: true)
-//            mapView.setUserTrackingMode(MKUserTrackingMode.Follow, animated: true)
-//
-//        }
         println("didChangeUserTrackingMode")
     }
     
@@ -335,61 +328,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
         }
 
-        
-
-       
-        
-        
-
-        //search();
-        
-        //demo search
-//        timer=NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("demoSearch") , userInfo: nil, repeats: false);
-        
     }
     
-    func demoSearch(){
-        var allSearchResults=DemoData.getDemoData(isLeuchtenEnabled: isLeuchtenEnabled,isMauerlaschenEnabled: isMauerlaschenEnabled,isleitungenEnabled: isleitungenEnabled);
-        //        searchResults=DemoDataMauerlaschen.getDemoMauerlaschen();
-        var newSearchResults : [[GeoBaseEntity]] = [
-            [Leuchte](),[Mauerlasche](),[Leitung]()
-        ];
-        var i=0;
-        for entityClass in allSearchResults{
-            var goodOnes = [GeoBaseEntity]();
-            
-            for entity in entityClass {
-                if entity.liesIn(mapView.region) {
-                    newSearchResults[i].append(entity)
-                }
-            }
-            println(i);
-            i++;
-            
-        }
-        searchResults=newSearchResults;
-        
-        self.tableView.reloadData();
-        
-        for entityClass in searchResults{
-            for entity in entityClass {
-                
-                entity.addToMapView(mapView);
-                
-            }
-        }
-        actInd.stopAnimating();
-        actInd.removeFromSuperview();
-        
 
-
-    }
-    
-    func search(){
-        
-    }
-    
-    
     
     @IBAction func mapTypeButtonTabbed(sender: AnyObject) {
         switch(mapTypeSegmentedControl.selectedSegmentIndex){
