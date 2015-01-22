@@ -11,6 +11,7 @@ import ObjectMapper
 
 
 class CidsObjectNode : MapperProtocol {
+    var fucker :NSObject?;
     var classId :Int?;
     var objectId :Int?;
     required init(){};

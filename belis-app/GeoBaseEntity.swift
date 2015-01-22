@@ -7,11 +7,16 @@
 //
 
 import Foundation
+import ObjectMapper
 
+class GeoBaseEntity : BaseEntity, MapperProtocol{
+    
 
-class GeoBaseEntity : BaseEntity {
-    var wgs84WKT : String? {
+        var wgs84WKT : String?
+            {
         didSet {
+            //println("geoString="+wgs84WKT!);
+            if let wgs85WKTSTring=wgs84WKT {
             let geom=WKTParser.parseGeometry(wgs84WKT);
             if ( geom is WKTPoint){
                 let point=geom as WKTPoint;
@@ -31,6 +36,10 @@ class GeoBaseEntity : BaseEntity {
                 var styledLine=StyledMkPolyline(points: mLine.points(), count: mLine.pointCount);
                 mapObject=styledLine;
             }
+            }
+            else{
+                println("\(self) - id : \(self.id)");
+            }
 
         }
         
@@ -38,8 +47,8 @@ class GeoBaseEntity : BaseEntity {
     var mapObject : NSObject?;
     private var geom :WKTGeometry?
 
-    override init() {
-        super.init();
+    required init() {
+    
     }
     
     func addToMapView(mapView:MKMapView) {
@@ -131,7 +140,9 @@ class GeoBaseEntity : BaseEntity {
         
     }
     
+    override func map(mapper: Mapper) {
     
+    }
 
     
     

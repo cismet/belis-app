@@ -1,17 +1,61 @@
 // Playground - noun: a place where people can play
 
-import UIKit
-import Alamofire
-
-var result=Alamofire.request(.GET, "http://httpbin.org/get", parameters: ["foo": "bar"]);
-
-
-
-
-Alamofire.request(.GET, "http://httpbin.org/get", parameters: ["foo": "bar"])
-    .response { (request, response, data, error) in
-        println(response!.description);
+protocol EmptyInit {
+    init();
 }
+
+class FirstBase {
+
+}
+
+class A : FirstBase, EmptyInit{
+    required init(){
+        
+    }
+}
+
+
+
+class SecondBase : EmptyInit {
+    required init(){
+        
+    }
+}
+
+
+
+A();
+
+
+class B : SecondBase, EmptyInit {
+    required init() {
+        
+    }
+}
+
+B();
+
+
+
+func creation<T: EmptyInit>(x a:T.Type) -> T{
+    var object = T()
+    return object;
+}
+
+
+var b = creation(x: B.self);
+
+//var a = creation(x: A.self);
+
+
+
+
+
+
+
+let t=true
+
+println("\(t)")
 
 
 
