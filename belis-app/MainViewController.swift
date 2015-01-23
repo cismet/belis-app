@@ -331,6 +331,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     }
     
+    func createFocusRect() -> MKMapRect {
+        let mRect = self.mapView.visibleMapRect;
+        let newSize = MKMapSize(width: mRect.size.width/3,height: mRect.size.width/3)
+        let newOrigin = MKMapPoint(x: mRect.origin.x+newSize.width, y: mRect.origin.y+newSize.height)
+        return MKMapRect(origin: newOrigin,size: newSize)
+    }
 
     
     @IBAction func mapTypeButtonTabbed(sender: AnyObject) {

@@ -168,5 +168,8 @@ class HighlightedMkPolyline:MKPolyline{
     
 }
 
+class FocusRectangle:MKPolygon {
+    
+}
 
 
