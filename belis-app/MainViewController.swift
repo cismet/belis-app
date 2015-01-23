@@ -18,7 +18,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var tableView: UITableView!;
     @IBOutlet weak var mapTypeSegmentedControl: UISegmentedControl!;
     @IBOutlet weak var mapToolbar: UIToolbar!;
-
+    @IBOutlet weak var focusToggle: UISwitch!
+    
     let LEUCHTEN = 0;
     let MAUERLASCHEN = 1;
     let LEITUNGEN = 2;
@@ -358,6 +359,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
 //        tableView.selectRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 2), animated: true,scrollPosition: UITableViewScrollPosition.Middle);
 //        tableView(tableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 1, inSection: 2));
         
+    }
+   
+    @IBAction func focusItemTabbed(sender: AnyObject) {
+        
+        focusToggle.setOn(!focusToggle.on, animated: true)
     }
     
 }
