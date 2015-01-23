@@ -366,4 +366,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         focusToggle.setOn(!focusToggle.on, animated: true)
     }
     
+    @IBAction func focusToggleValueChanged(sender: AnyObject) {
+
+    }
 }

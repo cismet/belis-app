@@ -368,6 +368,9 @@
                                         <switch key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="W8A-zI-q3t">
                                             <rect key="frame" x="-25" y="-15" width="51" height="31"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <connections>
+                                                <action selector="focusToggleValueChanged:" destination="Kou-sk-bUr" eventType="valueChanged" id="gaC-vp-KN1"/>
+                                            </connections>
                                         </switch>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="TZp-tF-5Dr"/>
