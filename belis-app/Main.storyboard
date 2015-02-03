@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Kou-sk-bUr">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
-        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -152,20 +151,20 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="Fm0-f0-ahl"/>
+                                <exclude reference="KHp-rF-U6h"/>
+                                <exclude reference="bHf-TJ-9Xd"/>
+                                <exclude reference="uRL-vb-kKo"/>
+                                <exclude reference="wrE-oC-Vip"/>
                                 <exclude reference="PmC-zX-jDz"/>
                                 <exclude reference="cga-2Q-zcl"/>
                                 <exclude reference="oTW-dK-sxM"/>
                                 <exclude reference="rnb-kA-vu3"/>
                                 <exclude reference="6WA-3R-aLf"/>
-                                <exclude reference="wrE-oC-Vip"/>
                                 <exclude reference="iaG-Ao-UkW"/>
                                 <exclude reference="on7-ng-m5E"/>
                                 <exclude reference="gxg-jQ-BHC"/>
                                 <exclude reference="jtA-Pi-gFE"/>
-                                <exclude reference="Fm0-f0-ahl"/>
-                                <exclude reference="KHp-rF-U6h"/>
-                                <exclude reference="bHf-TJ-9Xd"/>
-                                <exclude reference="uRL-vb-kKo"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=regular">
@@ -178,20 +177,20 @@
                                 <exclude reference="wN6-16-chO"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="Fm0-f0-ahl"/>
+                                <include reference="KHp-rF-U6h"/>
+                                <include reference="bHf-TJ-9Xd"/>
+                                <include reference="uRL-vb-kKo"/>
+                                <include reference="wrE-oC-Vip"/>
                                 <include reference="PmC-zX-jDz"/>
                                 <include reference="cga-2Q-zcl"/>
                                 <include reference="oTW-dK-sxM"/>
                                 <include reference="rnb-kA-vu3"/>
                                 <include reference="6WA-3R-aLf"/>
-                                <include reference="wrE-oC-Vip"/>
                                 <include reference="iaG-Ao-UkW"/>
                                 <include reference="on7-ng-m5E"/>
                                 <include reference="gxg-jQ-BHC"/>
                                 <include reference="jtA-Pi-gFE"/>
-                                <include reference="Fm0-f0-ahl"/>
-                                <include reference="KHp-rF-U6h"/>
-                                <include reference="bHf-TJ-9Xd"/>
-                                <include reference="uRL-vb-kKo"/>
                             </mask>
                         </variation>
                     </view>
@@ -241,10 +240,16 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="vw7-N7-tu1"/>
-                                    <barButtonItem systemItem="search" id="5Kb-7L-5AP"/>
+                                    <barButtonItem systemItem="search" id="5Kb-7L-5AP">
+                                        <connections>
+                                            <segue destination="I60-EY-yAz" kind="popoverPresentation" popoverAnchorBarButtonItem="5Kb-7L-5AP" id="O3U-Za-RjO">
+                                                <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                            </segue>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" id="hZb-wC-ZDc">
                                         <textField key="customView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" usesAttributedText="YES" borderStyle="roundedRect" placeholder="Straße" minimumFontSize="17" clearButtonMode="unlessEditing" id="FwD-0Q-xQY">
-                                            <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
+                                            <rect key="frame" x="434" y="7" width="151" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <attributedString key="attributedText"/>
                                             <textInputTraits key="textInputTraits"/>
@@ -264,26 +269,6 @@
                                         <include reference="8zs-TB-ivE"/>
                                     </mask>
                                 </variation>
-                            </toolbar>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" alpha="0.79999999999999982" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vle-ou-viq" userLabel="BottomToolbar">
-                                <rect key="frame" x="192" y="556" width="408" height="44"/>
-                                <items>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="krF-89-wbM"/>
-                                    <barButtonItem width="187" style="plain" id="Xvf-cP-qxk">
-                                        <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="CU0-RI-bDh">
-                                            <rect key="frame" x="117" y="7.5" width="187" height="29"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <segments>
-                                                <segment title="Standard"/>
-                                                <segment title="Hybrid"/>
-                                                <segment title="Satellit"/>
-                                            </segments>
-                                            <connections>
-                                                <action selector="mapTypeButtonTabbed:" destination="Kou-sk-bUr" eventType="valueChanged" id="xes-EC-r6M"/>
-                                            </connections>
-                                        </segmentedControl>
-                                    </barButtonItem>
-                                </items>
                             </toolbar>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="fWn-J2-ozd">
                                 <rect key="frame" x="200" y="44" width="400" height="556"/>
@@ -370,6 +355,42 @@
                                     <outlet property="delegate" destination="Kou-sk-bUr" id="cht-ey-om0"/>
                                 </connections>
                             </tableView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" alpha="0.79999999999999982" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vle-ou-viq" userLabel="BottomToolbar">
+                                <rect key="frame" x="192" y="556" width="408" height="44"/>
+                                <items>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="krF-89-wbM"/>
+                                    <barButtonItem title="Fokus" id="c5K-sY-RnT">
+                                        <connections>
+                                            <action selector="focusItemTabbed:" destination="Kou-sk-bUr" id="wGp-ci-cJ8"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" id="FEy-dZ-rhg">
+                                        <switch key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="W8A-zI-q3t">
+                                            <rect key="frame" x="-25" y="-15" width="51" height="31"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <connections>
+                                                <action selector="focusToggleValueChanged:" destination="Kou-sk-bUr" eventType="valueChanged" id="gaC-vp-KN1"/>
+                                            </connections>
+                                        </switch>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="TZp-tF-5Dr"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="pBi-QW-CS9"/>
+                                    <barButtonItem width="187" style="plain" id="Xvf-cP-qxk">
+                                        <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="CU0-RI-bDh">
+                                            <rect key="frame" x="117" y="7.5" width="187" height="29"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <segments>
+                                                <segment title="Standard"/>
+                                                <segment title="Hybrid"/>
+                                                <segment title="Satellit"/>
+                                            </segments>
+                                            <connections>
+                                                <action selector="mapTypeButtonTabbed:" destination="Kou-sk-bUr" eventType="valueChanged" id="xes-EC-r6M"/>
+                                            </connections>
+                                        </segmentedControl>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -393,17 +414,17 @@
                                 <exclude reference="6ny-k3-Gs8"/>
                                 <exclude reference="IF6-TC-dUt"/>
                                 <exclude reference="Jo1-cT-fgB"/>
+                                <exclude reference="ANB-1D-2it"/>
+                                <exclude reference="klN-Bp-c5I"/>
                                 <exclude reference="EDI-PG-I3T"/>
                                 <exclude reference="EVc-7e-3mS"/>
                                 <exclude reference="QKh-uU-mlz"/>
                                 <exclude reference="d5j-o5-wHz"/>
                                 <exclude reference="obo-ak-AVb"/>
-                                <exclude reference="ANB-1D-2it"/>
-                                <exclude reference="klN-Bp-c5I"/>
-                                <exclude reference="9AU-a4-lVb"/>
-                                <exclude reference="ftA-Kh-2pG"/>
                                 <exclude reference="4nh-JD-8G3"/>
                                 <exclude reference="bEb-MF-jOI"/>
+                                <exclude reference="9AU-a4-lVb"/>
+                                <exclude reference="ftA-Kh-2pG"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=regular">
@@ -411,21 +432,22 @@
                                 <include reference="6ny-k3-Gs8"/>
                                 <include reference="IF6-TC-dUt"/>
                                 <include reference="Jo1-cT-fgB"/>
+                                <include reference="ANB-1D-2it"/>
+                                <include reference="klN-Bp-c5I"/>
                                 <include reference="EDI-PG-I3T"/>
                                 <include reference="EVc-7e-3mS"/>
                                 <include reference="QKh-uU-mlz"/>
                                 <include reference="d5j-o5-wHz"/>
                                 <include reference="obo-ak-AVb"/>
-                                <include reference="ANB-1D-2it"/>
-                                <include reference="klN-Bp-c5I"/>
-                                <include reference="9AU-a4-lVb"/>
-                                <include reference="ftA-Kh-2pG"/>
                                 <include reference="4nh-JD-8G3"/>
                                 <include reference="bEb-MF-jOI"/>
+                                <include reference="9AU-a4-lVb"/>
+                                <include reference="ftA-Kh-2pG"/>
                             </mask>
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="focusToggle" destination="W8A-zI-q3t" id="ab2-7g-zyq"/>
                         <outlet property="mapToolbar" destination="Vle-ou-viq" id="vQT-Qs-Mqy"/>
                         <outlet property="mapTypeSegmentedControl" destination="CU0-RI-bDh" id="Nt0-Qu-Elg"/>
                         <outlet property="mapView" destination="fWn-J2-ozd" id="9lq-5l-nb9"/>
@@ -547,6 +569,46 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V7a-zh-PHi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="885" y="-147.5"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="MZu-pc-XfO">
+            <objects>
+                <viewController modalPresentationStyle="currentContext" id="I60-EY-yAz" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="tNF-q7-Isr"/>
+                        <viewControllerLayoutGuide type="bottom" id="NCo-cU-60z"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="gRt-pG-Cwm">
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="200"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Test" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2fY-vG-YqK">
+                                <rect key="frame" x="158" y="70" width="32" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <value key="contentSizeForViewInPopover" type="size" width="400" height="200"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="400" height="200"/>
+                    <connections>
+                        <outlet property="searchDisplayController" destination="fVX-Mw-dXm" id="XUM-fO-tdn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Dlm-eX-fv1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="fVX-Mw-dXm">
+                    <connections>
+                        <outlet property="delegate" destination="I60-EY-yAz" id="j5l-cP-slB"/>
+                        <outlet property="searchContentsController" destination="I60-EY-yAz" id="RYC-cZ-bxg"/>
+                        <outlet property="searchResultsDataSource" destination="I60-EY-yAz" id="fH1-fW-YoM"/>
+                        <outlet property="searchResultsDelegate" destination="I60-EY-yAz" id="aVy-B6-PZf"/>
+                    </connections>
+                </searchDisplayController>
+            </objects>
+            <point key="canvasLocation" x="1321" y="-156"/>
         </scene>
     </scenes>
 </document>

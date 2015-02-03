@@ -18,7 +18,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var tableView: UITableView!;
     @IBOutlet weak var mapTypeSegmentedControl: UISegmentedControl!;
     @IBOutlet weak var mapToolbar: UIToolbar!;
-
+    @IBOutlet weak var focusToggle: UISwitch!
+    
     let LEUCHTEN = 0;
     let MAUERLASCHEN = 1;
     let LEITUNGEN = 2;
@@ -46,6 +47,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     var gotoUserLocationButton:MKUserTrackingBarButtonItem!;
     var locationManager: CLLocationManager!
+    
+    let focusRectShape = CAShapeLayer()
+
     
     override func viewDidLoad() {
         super.viewDidLoad();
@@ -96,6 +100,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         mapView.setCenterCoordinate(initLocation, animated: true);
         mapView.camera.altitude = 50;
         
+        focusRectShape.opacity = 0.4
+        focusRectShape.lineWidth = 2
+        focusRectShape.lineJoin = kCALineJoinMiter
+        focusRectShape.strokeColor = UIColor(red: 0.29, green: 0.53, blue: 0.53, alpha: 1).CGColor
+        focusRectShape.fillColor = UIColor(red: 0.51, green: 0.76, blue: 0.6, alpha: 1).CGColor
         
     }
 
@@ -300,7 +309,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         actInd.startAnimating();
 
         
-        var mRect = self.mapView.visibleMapRect;
+        var mRect : MKMapRect
+        if focusToggle.on {
+            mRect = createFocusRect()
+        }
+        else {
+            mRect = self.mapView.visibleMapRect;
+        }
+
+        
         var mRegion=MKCoordinateRegionForMapRect(mRect);
         var x1=mRegion.center.longitude-(mRegion.span.longitudeDelta/2)
         var y1=mRegion.center.latitude-(mRegion.span.latitudeDelta/2)
@@ -330,6 +347,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     }
     
+    func createFocusRect() -> MKMapRect {
+        let mRect = self.mapView.visibleMapRect;
+        let newSize = MKMapSize(width: mRect.size.width/3,height: mRect.size.height/3)
+        let newOrigin = MKMapPoint(x: mRect.origin.x+newSize.width, y: mRect.origin.y+newSize.height)
+        return MKMapRect(origin: newOrigin,size: newSize)
+    }
 
     
     @IBAction func mapTypeButtonTabbed(sender: AnyObject) {
@@ -359,5 +382,53 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
 //        tableView(tableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 1, inSection: 2));
         
     }
+   
+    @IBAction func focusItemTabbed(sender: AnyObject) {
+        
+        focusToggle.setOn(!focusToggle.on, animated: true)
+    }
     
+    @IBAction func focusToggleValueChanged(sender: AnyObject) {
+        ensureFocusRectangleIsDisplayedWhenAndWhereItShould()
+    }
+    
+    private func ensureFocusRectangleIsDisplayedWhenAndWhereItShould(){
+        focusRectShape.removeFromSuperlayer()
+        if focusToggle.on {
+            let path = UIBezierPath()
+            let w = self.mapView.frame.width / 3
+            let h = self.mapView.frame.height / 3
+            let x1 = w
+            let y1 = h
+            let x2 = x1 + w
+            let y2 = y1
+            let x3 = x2
+            let y3 = y2 + h
+            let x4 = x1
+            let y4 = y3
+            
+            path.moveToPoint(CGPointMake(x1, y1))
+            path.addLineToPoint(CGPointMake(x2, y2))
+            path.addLineToPoint(CGPointMake(x3, y3))
+            path.addLineToPoint(CGPointMake(x4, y4))
+            path.closePath()
+            focusRectShape.path = path.CGPath
+            mapView.layer.addSublayer(focusRectShape)
+
+        }
+        
+    }
+    
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        focusRectShape.removeFromSuperlayer()
+        coordinator.animateAlongsideTransition(nil, completion: { context in
+            if UIDevice.currentDevice().orientation.isLandscape.boolValue {
+                println("landscape")
+            } else {
+                println("portraight")
+            }
+            self.ensureFocusRectangleIsDisplayedWhenAndWhereItShould()
+        })
+        
+    }
 }
