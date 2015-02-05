@@ -54,24 +54,29 @@ class CidsConnector {
         let alamoRequest=manager.request(.POST, kif, parameters: y, encoding: .JSON)
             .authenticate(user: user, password: password)
             .responseJSON { (request, response, data, error) in
-               var json =  data!.valueForKeyPath("$collection") as [[String : AnyObject]];
-                var nodes = Mapper().mapArray(json, toType: CidsObjectNode.self);
-                println(nodes.count);
-                self.queue.cancelAllOperations()
-                if (nodes.count>0){
-                    self.searchResults[0].removeAll(keepCapacity: false);
-                    self.searchResults[1].removeAll(keepCapacity: false);
-                    self.searchResults[2].removeAll(keepCapacity: false);
-
+                if let checkeddata: AnyObject=data {
+                    var json =  data!.valueForKeyPath("$collection") as [[String : AnyObject]];
+                    var nodes = Mapper().mapArray(json, toType: CidsObjectNode.self);
+                    println(nodes.count);
+                    self.queue.cancelAllOperations()
+                    if (nodes.count>0){
+                        self.searchResults[0].removeAll(keepCapacity: false);
+                        self.searchResults[1].removeAll(keepCapacity: false);
+                        self.searchResults[2].removeAll(keepCapacity: false);
+                        
+                        
+                    }
+                    self.start=CidsConnector.currentTimeMillis();
+                    self.queue.maxConcurrentOperationCount = 10
                     
+                    for node in nodes {
+                        //println("\(node.classId!) : \(node.objectId!)")
+                        let op=self.getBelisObject(classId: node.classId!, objectId: node.objectId!,handler)
+                        self.queue.addOperation(op)
+                    }
                 }
-                self.start=CidsConnector.currentTimeMillis();
-                self.queue.maxConcurrentOperationCount = 10
-
-                for node in nodes {
-                    //println("\(node.classId!) : \(node.objectId!)")
-                    let op=self.getBelisObject(classId: node.classId!, objectId: node.objectId!,handler)
-                    self.queue.addOperation(op)
+                else {
+                    println("Problem in Request")
                 }
                 
             }
