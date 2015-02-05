@@ -11,36 +11,27 @@ import ObjectMapper
 
 class GeoBaseEntity : BaseEntity, MapperProtocol{
     
-
-        var wgs84WKT : String?
-            {
+    var wgs84WKT : String?
+        {
         didSet {
             //println("geoString="+wgs84WKT!);
             if let wgs85WKTSTring=wgs84WKT {
-            let geom=WKTParser.parseGeometry(wgs84WKT);
-            if ( geom is WKTPoint){
-                let point=geom as WKTPoint;
-                let mPoint=point.toMapPointAnnotation();
-                let myAnnotation=GeoBaseEntityPointAnnotation(delegateAnnotation: mPoint);
-                myAnnotation.imageName=getAnnotationImageName();
-                myAnnotation.callOutLeftImageName=getAnnotationCalloutImageName();
-                myAnnotation.title=getAnnotationTitle();
-                myAnnotation.subtitle=getAnnotationSubTitle();
-                myAnnotation.shouldShowCallout=canShowCallout();
-                mapObject=myAnnotation;
-            }
-            else if (geom is WKTLine) {
-                let line=geom as WKTLine;
-                let mLine=line.toMapLine();
-                mLine.title=".";
-                var styledLine=StyledMkPolyline(points: mLine.points(), count: mLine.pointCount);
-                mapObject=styledLine;
-            }
+                let geom=WKTParser.parseGeometry(wgs84WKT);
+                if ( geom is WKTPoint){
+                    let point=geom as WKTPoint;
+                    mapObject=GeoBaseEntityPointAnnotation(geoBaseEntity: self, point: point)
+                }
+                else if (geom is WKTLine) {
+                    let line=geom as WKTLine;
+                    let temp=self;
+                    mapObject=GeoBaseEntityStyledMkPolylineAnnotation(line: line)
+                    (mapObject as GeoBaseEntityStyledMkPolylineAnnotation).geoBaseEntity=self
+                }
             }
             else{
                 println("\(self) - id : \(self.id)");
             }
-
+            
         }
         
     }
@@ -149,27 +140,55 @@ class GeoBaseEntity : BaseEntity, MapperProtocol{
 }
 
 
-class GeoBaseEntityPointAnnotation:MKPointAnnotation{
-    var imageName: String!;
-    var callOutLeftImageName: String!;
-    var shouldShowCallout = false;
-    init(delegateAnnotation: MKPointAnnotation){
-        super.init();
-        coordinate=delegateAnnotation.coordinate;
+class GeoBaseEntityPointAnnotation:MKPointAnnotation, GeoBaseEntityProvider{
+    var imageName: String!
+    var callOutLeftImageName: String!
+    var shouldShowCallout = false
+    var geoBaseEntity: GeoBaseEntity
+    init(geoBaseEntity: GeoBaseEntity, point: WKTPoint){
+        self.geoBaseEntity=geoBaseEntity
+        super.init()
+        let mPoint=point.toMapPointAnnotation();
+        coordinate=mPoint.coordinate;
+        imageName=geoBaseEntity.getAnnotationImageName();
+        callOutLeftImageName=geoBaseEntity.getAnnotationCalloutImageName();
+        title=geoBaseEntity.getAnnotationTitle();
+        subtitle=geoBaseEntity.getAnnotationSubTitle();
+        shouldShowCallout=geoBaseEntity.canShowCallout();
+    }
+    
+    func getGeoBaseEntity() -> GeoBaseEntity {
+        return geoBaseEntity
     }
     
 }
 
-class StyledMkPolyline:MKPolyline{
+class GeoBaseEntityStyledMkPolylineAnnotation:MKPolyline{
+    var geoBaseEntity: GeoBaseEntity
+
+    override init() {
+        geoBaseEntity=GeoBaseEntity()
+        super.init()
+    }
     
+    convenience init(line: WKTLine) {
+        self.init()
+        let mLine=line.toMapLine();
+        mLine.title="."
+        self.init(points: mLine.points(), count: mLine.pointCount)
+    }
+    func getGeoBaseEntity() -> GeoBaseEntity {
+        return geoBaseEntity
+    }
+
 }
 
 class HighlightedMkPolyline:MKPolyline{
     
 }
 
-class FocusRectangle:MKPolygon {
-    
+protocol GeoBaseEntityProvider {
+    func getGeoBaseEntity() -> GeoBaseEntity
 }
 
 
