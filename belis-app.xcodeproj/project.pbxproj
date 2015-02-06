@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2D16C0C51A7011F000A61982 /* NetworkStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D16C0C41A7011F000A61982 /* NetworkStuff.swift */; };
+		2D2934271A84D4BF0034181F /* handle.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D2934261A84D4BF0034181F /* handle.png */; };
 		2D5FB2D21A67C7320041020C /* belis_app.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D01A67C7320041020C /* belis_app.xcdatamodeld */; };
 		2D5FB2D91A67C7320041020C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D81A67C7320041020C /* Images.xcassets */; };
 		2D5FB2E81A67C7320041020C /* belis_appTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2E71A67C7320041020C /* belis_appTests.swift */; };
@@ -129,6 +130,7 @@
 
 /* Begin PBXFileReference section */
 		2D16C0C41A7011F000A61982 /* NetworkStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkStuff.swift; sourceTree = "<group>"; };
+		2D2934261A84D4BF0034181F /* handle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = handle.png; sourceTree = "<group>"; };
 		2D5FB2C91A67C7320041020C /* belis-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "belis-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D5FB2CD1A67C7320041020C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2D5FB2D11A67C7320041020C /* belis_app.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = belis_app.xcdatamodel; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 		2D5FB2CC1A67C7320041020C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2D2934261A84D4BF0034181F /* handle.png */,
 				2D5FB2F51A67CB120041020C /* belisBack.png */,
 				2D5FB2F61A67CB120041020C /* leuchte.png */,
 				2D5FB2F71A67CB120041020C /* mauerlasche.png */,
@@ -501,6 +504,7 @@
 				2D5FB30D1A67CC340041020C /* Main.storyboard in Resources */,
 				2D5FB30B1A67CC340041020C /* LaunchScreen.xib in Resources */,
 				2D5FB2FB1A67CB120041020C /* mauerlasche.png in Resources */,
+				2D2934271A84D4BF0034181F /* handle.png in Resources */,
 				2D5FB2FA1A67CB120041020C /* leuchte.png in Resources */,
 				2D5FB2D91A67C7320041020C /* Images.xcassets in Resources */,
 			);
