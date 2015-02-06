@@ -106,6 +106,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         focusRectShape.lineJoin = kCALineJoinMiter
         focusRectShape.strokeColor = UIColor(red: 0.29, green: 0.53, blue: 0.53, alpha: 1).CGColor
         focusRectShape.fillColor = UIColor(red: 0.51, green: 0.76, blue: 0.6, alpha: 1).CGColor
+        
+      
        
     }
 
@@ -261,7 +263,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             anView.image = UIImage(named: gbePA.imageName);
             anView.rightCalloutAccessoryView=UIButton.buttonWithType(UIButtonType.DetailDisclosure) as UIView;
             anView.leftCalloutAccessoryView=UIImageView(image: UIImage(named: gbePA.callOutLeftImageName));
-
             return anView
         }
         return nil;
@@ -271,6 +272,59 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func mapView(mapView: MKMapView!, didChangeUserTrackingMode mode: MKUserTrackingMode, animated: Bool) {
         println("didChangeUserTrackingMode")
     }
+    
+    
+    func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
+        println("didSelectAnnotationView")
+    }
+    
+    func mapView(mapView: MKMapView!, didDeselectAnnotationView view: MKAnnotationView!) {
+        println("didDeselectAnnotationView")
+    }
+    
+    @IBAction func mapTabbed(sender: UITapGestureRecognizer) {
+        println("mapTabbed")
+
+        let touchPt = sender.locationInView(mapView)
+        
+        var foundPolyline: GeoBaseEntityStyledMkPolylineAnnotation?
+        
+        if mapView.overlays != nil {
+            for overlay: AnyObject in mapView.overlays {
+                if let lineAnnotation  = overlay as? GeoBaseEntityStyledMkPolylineAnnotation{
+                    var path  = CGPathCreateMutable()
+                    for i in 0...lineAnnotation.pointCount-1 {
+                        let mapPoint = lineAnnotation.points()[i]
+                        
+                        let cgPoint = mapView.convertCoordinate(MKCoordinateForMapPoint(mapPoint), toPointToView: mapView)
+                        if i==0 {
+                            CGPathMoveToPoint(path, nil, cgPoint.x, cgPoint.y)
+                        }
+                        else {
+                            CGPathAddLineToPoint(path, nil, cgPoint.x, cgPoint.y)
+                        }
+                    }
+                    let fuzzyPath=CGPathCreateCopyByStrokingPath(path, nil, 12, kCGLineCapRound, kCGLineJoinRound, 0.0)
+                    if (CGPathContainsPoint(fuzzyPath, nil, touchPt, false)) {
+                        foundPolyline = lineAnnotation
+                        break
+                    }
+                }
+            }
+            
+            if let hitPolyline = foundPolyline {
+                selectOnMap(hitPolyline.getGeoBaseEntity())
+                println("selected Line with \(hitPolyline.pointCount) points")
+            }
+            else {
+                selectOnMap(nil)
+            }
+            
+        }
+        
+    }
+   
+
     
     //Actions
     
@@ -443,47 +497,29 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 mapView.addOverlay(highlightedLine);
                 mapView.addOverlay(line);
                 
+                
+                
+            }
+            
+            
+            if geoBaseEntity is Leuchte {
+                
+            } else if geoBaseEntity is Leitung {
+                for i in 0...searchResults[LEITUNGEN].count-1 {
+                    var leuchten : [GeoBaseEntity] = searchResults[LEITUNGEN]
+                    if leuchten[i].id == geoBaseEntity.id {
+                        tableView.selectRowAtIndexPath(NSIndexPath(forRow: i, inSection: LEITUNGEN), animated: true, scrollPosition: UITableViewScrollPosition.Top)
+                        break;
+                    }
+                }
+            } else if geoBaseEntity is Mauerlasche {
+                
             }
         }
+        
+        
+        
     }
     
 
-    @IBAction func mapTabbed(sender: UITapGestureRecognizer) {
-        let touchPt = sender.locationInView(mapView)
-        var foundPolyline: GeoBaseEntityStyledMkPolylineAnnotation?
-        
-        if mapView.overlays != nil {
-            for overlay: AnyObject in mapView.overlays {
-                if let lineAnnotation  = overlay as? GeoBaseEntityStyledMkPolylineAnnotation{
-                    var path  = CGPathCreateMutable()
-                    for i in 0...lineAnnotation.pointCount-1 {
-                        let mapPoint = lineAnnotation.points()[i]
-                        
-                        let cgPoint = mapView.convertCoordinate(MKCoordinateForMapPoint(mapPoint), toPointToView: mapView)
-                        if i==0 {
-                            CGPathMoveToPoint(path, nil, cgPoint.x, cgPoint.y)
-                        }
-                        else {
-                            CGPathAddLineToPoint(path, nil, cgPoint.x, cgPoint.y)
-                        }
-                    }
-                    let fuzzyPath=CGPathCreateCopyByStrokingPath(path, nil, 12, kCGLineCapRound, kCGLineJoinRound, 0.0)
-                    if (CGPathContainsPoint(fuzzyPath, nil, touchPt, false)) {
-                        foundPolyline = lineAnnotation
-                        break
-                    }
-                }
-            }
-         
-            if let hitPolyline = foundPolyline {
-                selectOnMap(hitPolyline.getGeoBaseEntity())
-                println("selected Line with \(hitPolyline.pointCount) points")
-            }
-            else {
-                selectOnMap(nil)
-            }
-
-        }
-        
-    }
 }

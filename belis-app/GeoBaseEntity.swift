@@ -45,7 +45,9 @@ class GeoBaseEntity : BaseEntity, MapperProtocol{
     func addToMapView(mapView:MKMapView) {
         if  ( mapObject != nil ) {
             if (mapObject is GeoBaseEntityPointAnnotation){
+                
                 mapView.addAnnotation(mapObject as GeoBaseEntityPointAnnotation);
+                
                // mapView.showAnnotations([mapObject as GeoBaseEntityPointAnnotation], animated: true)
 
             }
