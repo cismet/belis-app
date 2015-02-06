@@ -415,60 +415,74 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
     }
     
-    func selectOnMap(geoBaseEntity : GeoBaseEntity){
+    func selectOnMap(geoBaseEntityToSelect : GeoBaseEntity?){
         if  highlightedLine != nil {
             mapView.removeOverlay(highlightedLine);
         }
-        var mapObj=geoBaseEntity.mapObject
-        
-        if mapObj is GeoBaseEntityPointAnnotation {
-            mapView.selectAnnotation(mapObj as MKAnnotation, animated: true);
-            //println("\((mapObj as GeoBaseEntityPointAnnotation).coordinate.latitude),\((mapObj as GeoBaseEntityPointAnnotation).coordinate.longitude)")
+        let selectedAnnotations = mapView.selectedAnnotations
+        if selectedAnnotations != nil {
+            for selAnno in selectedAnnotations{
+                if let a = (selAnno as? MKAnnotation){
+                    mapView.deselectAnnotation(a, animated: true)
+                }
+                
+            }
         }
-        else if mapObj is GeoBaseEntityStyledMkPolylineAnnotation {
-            var line = mapObj as GeoBaseEntityStyledMkPolylineAnnotation;
-            highlightedLine = HighlightedMkPolyline(points: line.points(), count: line.pointCount);
-            mapView.removeOverlay(line);
-            mapView.addOverlay(highlightedLine);
-            mapView.addOverlay(line);
+        
+        if let geoBaseEntity = geoBaseEntityToSelect{
+            var mapObj=geoBaseEntity.mapObject
             
+            if mapObj is GeoBaseEntityPointAnnotation {
+                mapView.selectAnnotation(mapObj as MKAnnotation, animated: true);
+                //println("\((mapObj as GeoBaseEntityPointAnnotation).coordinate.latitude),\((mapObj as GeoBaseEntityPointAnnotation).coordinate.longitude)")
+            }
+            else if mapObj is GeoBaseEntityStyledMkPolylineAnnotation {
+                var line = mapObj as GeoBaseEntityStyledMkPolylineAnnotation;
+                highlightedLine = HighlightedMkPolyline(points: line.points(), count: line.pointCount);
+                mapView.removeOverlay(line);
+                mapView.addOverlay(highlightedLine);
+                mapView.addOverlay(line);
+                
+            }
         }
     }
-    
     
 
     @IBAction func mapTabbed(sender: UITapGestureRecognizer) {
         let touchPt = sender.locationInView(mapView)
-        let coord = mapView.convertPoint(touchPt, toCoordinateFromView: mapView)
-        var nearestDistance: Double = -1.0
-        var nearestPolyline: GeoBaseEntityStyledMkPolylineAnnotation?
-        
-//        println("tabbed point:\(touchPt)")
-//        println("tabbed coord:\(coord.latitude),\(coord.longitude)")
-        
-        let maxMeters = MappingTools.metersFromPixel(10, atPoint: touchPt, inMap: mapView)
+        var foundPolyline: GeoBaseEntityStyledMkPolylineAnnotation?
         
         if mapView.overlays != nil {
             for overlay: AnyObject in mapView.overlays {
                 if let lineAnnotation  = overlay as? GeoBaseEntityStyledMkPolylineAnnotation{
-                    let distance = MappingTools.distanceOfPoint(MKMapPointForCoordinate(coord), toPoly: lineAnnotation)
-                    if distance < nearestDistance || nearestDistance == -1.0 {
-                        nearestDistance=distance
-                        nearestPolyline = lineAnnotation
+                    var path  = CGPathCreateMutable()
+                    for i in 0...lineAnnotation.pointCount-1 {
+                        let mapPoint = lineAnnotation.points()[i]
+                        
+                        let cgPoint = mapView.convertCoordinate(MKCoordinateForMapPoint(mapPoint), toPointToView: mapView)
+                        if i==0 {
+                            CGPathMoveToPoint(path, nil, cgPoint.x, cgPoint.y)
+                        }
+                        else {
+                            CGPathAddLineToPoint(path, nil, cgPoint.x, cgPoint.y)
+                        }
                     }
-                
+                    let fuzzyPath=CGPathCreateCopyByStrokingPath(path, nil, 12, kCGLineCapRound, kCGLineJoinRound, 0.0)
+                    if (CGPathContainsPoint(fuzzyPath, nil, touchPt, false)) {
+                        foundPolyline = lineAnnotation
+                        break
+                    }
                 }
-               
             }
-            if (nearestDistance <= maxMeters){
-                if let hitPolyline = nearestPolyline {
-                    selectOnMap(hitPolyline.getGeoBaseEntity())
-                }
-                
+         
+            if let hitPolyline = foundPolyline {
+                selectOnMap(hitPolyline.getGeoBaseEntity())
+                println("selected Line with \(hitPolyline.pointCount) points")
             }
             else {
-                println("Try Again")
+                selectOnMap(nil)
             }
+
         }
         
     }
