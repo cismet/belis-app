@@ -40,7 +40,7 @@ class Leuchte : GeoBaseEntity, MapperProtocol {
     }
     
         override func canShowCallout() -> Bool{
-        return true;
+        return true
     }
 
     override func map(mapper: Mapper) {

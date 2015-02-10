@@ -23,4 +23,19 @@ class Leitung : GeoBaseEntity , MapperProtocol{
         leitungstyp <= mapper["fk_leitungstyp.bezeichnung"];
         wgs84WKT <= mapper["fk_geom.wgs84_wkt"]
     }
+    
+//    override func getAnnotationImageName() -> String{
+//        return "handle.png";
+//    }
+    
+    override func getAnnotationTitle() -> String{
+        return "Leitung \(id)";
+    }
+    override func getAnnotationSubTitle() -> String{
+        return "\(leitungstyp!)";
+    }
+    override func canShowCallout() -> Bool{
+        return true;
+    }
+
 }

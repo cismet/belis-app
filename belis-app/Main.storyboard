@@ -270,12 +270,9 @@
                                     </mask>
                                 </variation>
                             </toolbar>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="fWn-J2-ozd">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" mapType="standard" pitchEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fWn-J2-ozd">
                                 <rect key="frame" x="200" y="44" width="400" height="556"/>
                                 <gestureRecognizers/>
-                                <connections>
-                                    <outletCollection property="gestureRecognizers" destination="h5Y-BD-dPQ" appends="YES" id="nUg-eF-B8u"/>
-                                </connections>
                             </mapView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" placeholderIntrinsicWidth="1024" placeholderIntrinsicHeight="768" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="58" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="7Kb-8o-11z">
                                 <rect key="frame" x="0.0" y="44" width="192" height="556"/>
@@ -459,11 +456,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D2a-FR-f0y" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="h5Y-BD-dPQ">
-                    <connections>
-                        <action selector="mapTabbed:" destination="Kou-sk-bUr" id="EBM-5H-0e3"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="877" y="413"/>
         </scene>

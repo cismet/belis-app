@@ -24,7 +24,7 @@ class GeoBaseEntity : BaseEntity, MapperProtocol{
                 else if (geom is WKTLine) {
                     let line=geom as WKTLine;
                     let temp=self;
-                    mapObject=GeoBaseEntityStyledMkPolylineAnnotation(line: line)
+                    mapObject=GeoBaseEntityStyledMkPolylineAnnotation(line: line, geoBaseEntity: self)
                     (mapObject as GeoBaseEntityStyledMkPolylineAnnotation).geoBaseEntity=self
                 }
             }
@@ -45,12 +45,16 @@ class GeoBaseEntity : BaseEntity, MapperProtocol{
     func addToMapView(mapView:MKMapView) {
         if  ( mapObject != nil ) {
             if (mapObject is GeoBaseEntityPointAnnotation){
+                
                 mapView.addAnnotation(mapObject as GeoBaseEntityPointAnnotation);
+                
                // mapView.showAnnotations([mapObject as GeoBaseEntityPointAnnotation], animated: true)
 
             }
-            else if (mapObject is MKPolyline){
-                mapView.addOverlay(mapObject as MKPolyline);
+            else if (mapObject is GeoBaseEntityStyledMkPolylineAnnotation){
+                mapView.addOverlay(mapObject as GeoBaseEntityStyledMkPolylineAnnotation);
+                mapView.addAnnotation(mapObject as GeoBaseEntityStyledMkPolylineAnnotation);
+
             }
             
         }
@@ -63,8 +67,8 @@ class GeoBaseEntity : BaseEntity, MapperProtocol{
             if (mapObject is GeoBaseEntityPointAnnotation){
                 mapView.removeAnnotation(mapObject as MKAnnotation);
             }
-            else if (mapObject is MKPolyline){
-                mapView.removeOverlay(mapObject as MKOverlay);
+            else if (mapObject is GeoBaseEntityStyledMkPolylineAnnotation){
+                mapView.removeOverlay(mapObject as GeoBaseEntityStyledMkPolylineAnnotation);
             }
         }
     }
@@ -164,6 +168,9 @@ class GeoBaseEntityPointAnnotation:MKPointAnnotation, GeoBaseEntityProvider{
 }
 
 class GeoBaseEntityStyledMkPolylineAnnotation:MKPolyline{
+    var imageName: String!
+    var callOutLeftImageName: String!
+    var shouldShowCallout = false
     var geoBaseEntity: GeoBaseEntity
 
     override init() {
@@ -171,11 +178,16 @@ class GeoBaseEntityStyledMkPolylineAnnotation:MKPolyline{
         super.init()
     }
     
-    convenience init(line: WKTLine) {
+    convenience init(line: WKTLine, geoBaseEntity: GeoBaseEntity) {
         self.init()
         let mLine=line.toMapLine();
         mLine.title="."
         self.init(points: mLine.points(), count: mLine.pointCount)
+        imageName=geoBaseEntity.getAnnotationImageName();
+        callOutLeftImageName=geoBaseEntity.getAnnotationCalloutImageName();
+        title=geoBaseEntity.getAnnotationTitle();
+        subtitle=geoBaseEntity.getAnnotationSubTitle();
+        shouldShowCallout=geoBaseEntity.canShowCallout();
     }
     func getGeoBaseEntity() -> GeoBaseEntity {
         return geoBaseEntity
