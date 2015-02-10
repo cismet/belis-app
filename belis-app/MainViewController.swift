@@ -13,7 +13,7 @@ import ObjectMapper;
 
 
 class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,CLLocationManagerDelegate, MKMapViewDelegate {
-
+    
     @IBOutlet weak var mapView: MKMapView!;
     @IBOutlet weak var tableView: UITableView!;
     @IBOutlet weak var mapTypeSegmentedControl: UISegmentedControl!;
@@ -23,34 +23,34 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     let LEUCHTEN = 0;
     let MAUERLASCHEN = 1;
     let LEITUNGEN = 2;
-
+    
     var searchResults : [[GeoBaseEntity]] = [
         [Leuchte](),[Mauerlasche](),[Leitung]()
     ];
-
+    
     var isLeuchtenEnabled=true;
     var isMauerlaschenEnabled=false;
     var isleitungenEnabled=true;
     var highlightedLine : HighlightedMkPolyline?;
-    
-
+    var selectedAnnotation : MKAnnotation?;
     
     var timer = NSTimer();
     
-//    var mappingLeuchte = RKObjectMapping(forClass: Leuchte.self);
-//    mappingLeuchte.addAttributeMappingsFromDictionary([
-//    "id":"id",
-//    "geom": "wgs84WKT",
-//    ]);
+    //    var mappingLeuchte = RKObjectMapping(forClass: Leuchte.self);
+    //    mappingLeuchte.addAttributeMappingsFromDictionary([
+    //    "id":"id",
+    //    "geom": "wgs84WKT",
+    //    ]);
     
     var actInd : UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(0,0, 150, 150)) as UIActivityIndicatorView
-   
+    
     
     var gotoUserLocationButton:MKUserTrackingBarButtonItem!;
     var locationManager: CLLocationManager!
     
     let focusRectShape = CAShapeLayer()
-
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad();
@@ -64,19 +64,19 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         locationManager.requestWhenInUseAuthorization()
         
         gotoUserLocationButton=MKUserTrackingBarButtonItem(mapView:mapView);
-
+        
         mapToolbar.items!.insert(gotoUserLocationButton,atIndex:0 );
         
-//        var mappingLeitung = RKObjectMapping(forClass: Leitung.self);
-//        mappingLeitung.addAttributeMappingsFromDictionary([
-//            "id":"id",
-//            "geom": "wgs84WKT",
-//            "typ":"leitungstyp"
-//            ]);
-//
-//        var jsonString="{"id"}";
+        //        var mappingLeitung = RKObjectMapping(forClass: Leitung.self);
+        //        mappingLeitung.addAttributeMappingsFromDictionary([
+        //            "id":"id",
+        //            "geom": "wgs84WKT",
+        //            "typ":"leitungstyp"
+        //            ]);
+        //
+        //        var jsonString="{"id"}";
         
-
+        
         
         //delegate stuff
         locationManager.delegate=self;
@@ -85,19 +85,18 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         
         
-
-//        var tileOverlay = MyOSMMKTileOverlay()
-//        mapView.addOverlay(tileOverlay);
+        //        var tileOverlay = MyOSMMKTileOverlay()
+        //        mapView.addOverlay(tileOverlay);
         
         
         var lat: CLLocationDegrees = 51.2751340785898
         var lng: CLLocationDegrees = 7.21241877946317
         var initLocation: CLLocationCoordinate2D = CLLocationCoordinate2DMake(lat, lng)
-
+        
         mapView.rotateEnabled=false;
         mapView.zoomEnabled=true;
         mapView.showsBuildings=true;
-
+        
         mapView.setCenterCoordinate(initLocation, animated: true);
         mapView.camera.altitude = 50;
         
@@ -107,10 +106,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         focusRectShape.strokeColor = UIColor(red: 0.29, green: 0.53, blue: 0.53, alpha: 1).CGColor
         focusRectShape.fillColor = UIColor(red: 0.51, green: 0.76, blue: 0.6, alpha: 1).CGColor
         
-      
-       
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("mapTapped:"))
+        mapView.addGestureRecognizer(tapGestureRecognizer)
+        //mapView.gestureRecognizerShouldBegin(tapGestureRecognizer)
+        
+        
+        
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -136,7 +140,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell: TableViewCell = tableView.dequeueReusableCellWithIdentifier("firstCellPrototype") as TableViewCell
         if indexPath.section==LEUCHTEN {
-//            println(indexPath.row);
+            //            println(indexPath.row);
             let leuchte = searchResults[indexPath.section][indexPath.row] as Leuchte;
             cell.lblBezeichnung.text="L \(leuchte.standort!.laufendeNummer).\(leuchte.leuchtenNummer)";
             cell.lblStrasse.text="\(leuchte.standort!.strasse!)";
@@ -147,7 +151,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             cell.lblBezeichnung.text="Mauerlasche";
             cell.lblStrasse.text="\(mauerlasche.strasse!)";
             cell.lblSubText.text="Laufende Nummer:\(mauerlasche.laufendeNummer)";
-          
+            
         }
         else if indexPath.section==LEITUNGEN {
             let leitung = searchResults[indexPath.section][indexPath.row]  as Leitung;
@@ -166,6 +170,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     //UITableViewDelegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
+        println("didSelectRowAtIndexPath")
         selectOnMap(searchResults[indexPath.section][indexPath.row])
     }
     
@@ -191,18 +196,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-//    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-//       
-//    }
-//    
-//    func tableView(tableView: UITableView!, editActionsForRowAtIndexPath indexPath: NSIndexPath!) -> [AnyObject]! {
-//        
-//    }
-
     
     // CLLocationManagerDelegate
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-//        println("locations = \(locations)");
+        
     }
     
     
@@ -239,7 +236,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     
     func mapView(mapView: MKMapView!, regionDidChangeAnimated animated: Bool) {
-//        println(mapView.region.span.latitudeDelta);
+        //        println(mapView.region.span.latitudeDelta);
     }
     
     func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
@@ -250,7 +247,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             var anView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId)
             if anView == nil {
                 anView = MKAnnotationView(annotation: gbePA, reuseIdentifier: reuseId)
-               
+                
             }
             else {
                 anView.annotation = gbePA
@@ -264,9 +261,28 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             anView.rightCalloutAccessoryView=UIButton.buttonWithType(UIButtonType.DetailDisclosure) as UIView;
             anView.leftCalloutAccessoryView=UIImageView(image: UIImage(named: gbePA.callOutLeftImageName));
             return anView
+        } else if (annotation is GeoBaseEntityStyledMkPolylineAnnotation){
+            let gbeSMKPA=annotation as GeoBaseEntityStyledMkPolylineAnnotation;
+            let reuseId = "belisAnnotation"
+            var anView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId)
+            if anView == nil {
+                anView = MKAnnotationView(annotation: gbeSMKPA, reuseIdentifier: reuseId)
+                
+            }
+            else {
+                anView.annotation = gbeSMKPA
+            }
+            
+            //Set annotation-specific properties **AFTER**
+            //the view is dequeued or created...
+            anView.image = UIImage(named: gbeSMKPA.imageName);
+            anView.canShowCallout = gbeSMKPA.shouldShowCallout;
+            return anView
+            
         }
+        
         return nil;
-      }
+    }
     
     
     func mapView(mapView: MKMapView!, didChangeUserTrackingMode mode: MKUserTrackingMode, animated: Bool) {
@@ -275,56 +291,167 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     
     func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
-        println("didSelectAnnotationView")
+        delay(0.0)
+            {
+                if view.annotation !== self.selectedAnnotation {
+                    mapView.deselectAnnotation(view.annotation, animated: false)
+                    mapView.selectAnnotation(self.selectedAnnotation, animated: false)
+                }
+                
+        }
+        println("didSelectAnnotationView >> \(view.annotation.title)")
     }
     
     func mapView(mapView: MKMapView!, didDeselectAnnotationView view: MKAnnotationView!) {
-        println("didDeselectAnnotationView")
+        delay(0.0)
+            {
+                if view.annotation === self.selectedAnnotation {
+                    mapView.selectAnnotation(self.selectedAnnotation, animated: false)
+                }
+                
+        }
+        println("didDeselectAnnotationView >> \(view.annotation.title)")
     }
     
-    @IBAction func mapTabbed(sender: UITapGestureRecognizer) {
-        println("mapTabbed")
-
+    func delay(delay:Double, closure:()->()) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(delay * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), closure)
+    }
+    
+    
+    func mapTapped(sender: UITapGestureRecognizer) {
         let touchPt = sender.locationInView(mapView)
+        var hittedUI = mapView.hitTest(touchPt, withEvent: nil)
+        //        println(hittedUI)
+        println("mapTabbed")
+        
+        
+        let buffer=CGFloat(12)
         
         var foundPolyline: GeoBaseEntityStyledMkPolylineAnnotation?
+        var foundPoint: GeoBaseEntityPointAnnotation?
         
-        if mapView.overlays != nil {
-            for overlay: AnyObject in mapView.overlays {
-                if let lineAnnotation  = overlay as? GeoBaseEntityStyledMkPolylineAnnotation{
+        
+        
+        
+        
+        
+        if mapView.annotations != nil {
+            for anno: AnyObject in mapView.annotations {
+                if let pointAnnotation = anno as? GeoBaseEntityPointAnnotation {
+                    let cgPoint = mapView.convertCoordinate(pointAnnotation.coordinate, toPointToView: mapView)
                     var path  = CGPathCreateMutable()
-                    for i in 0...lineAnnotation.pointCount-1 {
-                        let mapPoint = lineAnnotation.points()[i]
-                        
-                        let cgPoint = mapView.convertCoordinate(MKCoordinateForMapPoint(mapPoint), toPointToView: mapView)
-                        if i==0 {
-                            CGPathMoveToPoint(path, nil, cgPoint.x, cgPoint.y)
-                        }
-                        else {
-                            CGPathAddLineToPoint(path, nil, cgPoint.x, cgPoint.y)
-                        }
-                    }
-                    let fuzzyPath=CGPathCreateCopyByStrokingPath(path, nil, 12, kCGLineCapRound, kCGLineJoinRound, 0.0)
+                    CGPathMoveToPoint(path, nil, cgPoint.x, cgPoint.y)
+                    CGPathAddLineToPoint(path, nil, cgPoint.x, cgPoint.y)
+                    
+                    let fuzzyPath=CGPathCreateCopyByStrokingPath(path, nil, buffer, kCGLineCapRound, kCGLineJoinRound, 0.0)
                     if (CGPathContainsPoint(fuzzyPath, nil, touchPt, false)) {
-                        foundPolyline = lineAnnotation
+                        foundPoint = pointAnnotation
+                        println("foundPoint")
+                        selectOnMap(foundPoint?.getGeoBaseEntity())
                         break
                     }
                 }
             }
+        }
+        
+        if (foundPoint == nil){
             
-            if let hitPolyline = foundPolyline {
-                selectOnMap(hitPolyline.getGeoBaseEntity())
-                println("selected Line with \(hitPolyline.pointCount) points")
+            if mapView.overlays != nil {
+                for overlay: AnyObject in mapView.overlays {
+                    if let lineAnnotation  = overlay as? GeoBaseEntityStyledMkPolylineAnnotation{
+                        var path  = CGPathCreateMutable()
+                        for i in 0...lineAnnotation.pointCount-1 {
+                            let mapPoint = lineAnnotation.points()[i]
+                            
+                            let cgPoint = mapView.convertCoordinate(MKCoordinateForMapPoint(mapPoint), toPointToView: mapView)
+                            if i==0 {
+                                CGPathMoveToPoint(path, nil, cgPoint.x, cgPoint.y)
+                            }
+                            else {
+                                CGPathAddLineToPoint(path, nil, cgPoint.x, cgPoint.y)
+                            }
+                        }
+                        let fuzzyPath=CGPathCreateCopyByStrokingPath(path, nil, buffer, kCGLineCapRound, kCGLineJoinRound, 0.0)
+                        if (CGPathContainsPoint(fuzzyPath, nil, touchPt, false)) {
+                            foundPolyline = lineAnnotation
+                            break
+                        }
+                    }
+                }
+                
+                if let hitPolyline = foundPolyline {
+                    selectOnMap(hitPolyline.getGeoBaseEntity())
+                    println("selected Line with \(hitPolyline.pointCount) points")
+                }
+                else {
+                    selectOnMap(nil)
+                }
+                
             }
-            else {
-                selectOnMap(nil)
-            }
-            
         }
         
     }
-   
-
+    
+    func selectOnMap(geoBaseEntityToSelect : GeoBaseEntity?){
+        if  highlightedLine != nil {
+            mapView.removeOverlay(highlightedLine);
+        }
+        if (selectedAnnotation != nil){
+            mapView.deselectAnnotation(selectedAnnotation, animated: false)
+        }
+        
+        if let geoBaseEntity = geoBaseEntityToSelect{
+            var mapObj=geoBaseEntity.mapObject
+            
+            mapView.selectAnnotation(mapObj as MKAnnotation, animated: true);
+            selectedAnnotation=mapObj as? MKAnnotation
+            
+            if mapObj is GeoBaseEntityPointAnnotation {
+                
+                
+            }
+            else if mapObj is GeoBaseEntityStyledMkPolylineAnnotation {
+                var line = mapObj as GeoBaseEntityStyledMkPolylineAnnotation;
+                highlightedLine = HighlightedMkPolyline(points: line.points(), count: line.pointCount);
+                mapView.removeOverlay(line);
+                mapView.addOverlay(highlightedLine);
+                mapView.addOverlay(line); //bring the highlightedLine below the line
+                
+            }
+            
+            var kindOfGeoBaseEntity = 0;
+            if geoBaseEntity is Leuchte {
+                kindOfGeoBaseEntity=LEUCHTEN
+            } else if geoBaseEntity is Leitung {
+                kindOfGeoBaseEntity=LEITUNGEN
+            } else if geoBaseEntity is Mauerlasche {
+                kindOfGeoBaseEntity=MAUERLASCHEN
+            }
+            for i in 0...searchResults[kindOfGeoBaseEntity].count-1 {
+                var leuchten : [GeoBaseEntity] = searchResults[kindOfGeoBaseEntity]
+                if leuchten[i].id == geoBaseEntity.id {
+                    tableView.selectRowAtIndexPath(NSIndexPath(forRow: i, inSection: kindOfGeoBaseEntity), animated: true, scrollPosition: UITableViewScrollPosition.Top)
+                    break;
+                }
+            }
+            
+            
+        } else {
+            selectedAnnotation=nil
+        }
+        
+        
+        
+    }
+    
+    
+    
+    
     
     //Actions
     
@@ -334,17 +461,17 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 entity.removeFromMapView(mapView);
             }
         }
-
+        
         searchResults=[[Leuchte](),[Mauerlasche](),[Leitung]()];
         
         self.tableView.reloadData();
-
+        
         actInd.center = mapView.center;
         actInd.hidesWhenStopped = true;
         actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
         self.view.addSubview(actInd);
         actInd.startAnimating();
-
+        
         
         var mRect : MKMapRect
         if focusToggle.on {
@@ -353,7 +480,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         else {
             mRect = self.mapView.visibleMapRect;
         }
-
+        
         
         var mRegion=MKCoordinateRegionForMapRect(mRect);
         var x1=mRegion.center.longitude-(mRegion.span.longitudeDelta/2)
@@ -381,7 +508,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             self.actInd.removeFromSuperview();
             
         }
-
+        
     }
     
     func createFocusRect() -> MKMapRect {
@@ -390,11 +517,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let newOrigin = MKMapPoint(x: mRect.origin.x+newSize.width, y: mRect.origin.y+newSize.height)
         return MKMapRect(origin: newOrigin,size: newSize)
     }
-
+    
     
     @IBAction func mapTypeButtonTabbed(sender: AnyObject) {
         switch(mapTypeSegmentedControl.selectedSegmentIndex){
-    
+            
         case 0:
             mapView.mapType=MKMapType.Standard;
         case 1:
@@ -408,20 +535,19 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     @IBAction func lookUpButtonTabbed(sender: AnyObject) {
-//        if tableView.hidden {
-//            tableView.hidden = false;
-//        }
-//        else {
-//            tableView.hidden = true;
-//        }
-
-//        tableView.selectRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 2), animated: true,scrollPosition: UITableViewScrollPosition.Middle);
-//        tableView(tableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 1, inSection: 2));
+        //        if tableView.hidden {
+        //            tableView.hidden = false;
+        //        }
+        //        else {
+        //            tableView.hidden = true;
+        //        }
+        
+        //        tableView.selectRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 2), animated: true,scrollPosition: UITableViewScrollPosition.Middle);
+        //        tableView(tableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 1, inSection: 2));
         
     }
-   
+    
     @IBAction func focusItemTabbed(sender: AnyObject) {
-        
         focusToggle.setOn(!focusToggle.on, animated: true)
     }
     
@@ -451,7 +577,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             path.closePath()
             focusRectShape.path = path.CGPath
             mapView.layer.addSublayer(focusRectShape)
-
+            
         }
         
     }
@@ -469,57 +595,5 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
     }
     
-    func selectOnMap(geoBaseEntityToSelect : GeoBaseEntity?){
-        if  highlightedLine != nil {
-            mapView.removeOverlay(highlightedLine);
-        }
-        let selectedAnnotations = mapView.selectedAnnotations
-        if selectedAnnotations != nil {
-            for selAnno in selectedAnnotations{
-                if let a = (selAnno as? MKAnnotation){
-                    mapView.deselectAnnotation(a, animated: true)
-                }
-                
-            }
-        }
-        
-        if let geoBaseEntity = geoBaseEntityToSelect{
-            var mapObj=geoBaseEntity.mapObject
-            
-            if mapObj is GeoBaseEntityPointAnnotation {
-                mapView.selectAnnotation(mapObj as MKAnnotation, animated: true);
-                //println("\((mapObj as GeoBaseEntityPointAnnotation).coordinate.latitude),\((mapObj as GeoBaseEntityPointAnnotation).coordinate.longitude)")
-            }
-            else if mapObj is GeoBaseEntityStyledMkPolylineAnnotation {
-                var line = mapObj as GeoBaseEntityStyledMkPolylineAnnotation;
-                highlightedLine = HighlightedMkPolyline(points: line.points(), count: line.pointCount);
-                mapView.removeOverlay(line);
-                mapView.addOverlay(highlightedLine);
-                mapView.addOverlay(line);
-                
-                
-                
-            }
-            
-            
-            if geoBaseEntity is Leuchte {
-                
-            } else if geoBaseEntity is Leitung {
-                for i in 0...searchResults[LEITUNGEN].count-1 {
-                    var leuchten : [GeoBaseEntity] = searchResults[LEITUNGEN]
-                    if leuchten[i].id == geoBaseEntity.id {
-                        tableView.selectRowAtIndexPath(NSIndexPath(forRow: i, inSection: LEITUNGEN), animated: true, scrollPosition: UITableViewScrollPosition.Top)
-                        break;
-                    }
-                }
-            } else if geoBaseEntity is Mauerlasche {
-                
-            }
-        }
-        
-        
-        
-    }
     
-
 }
