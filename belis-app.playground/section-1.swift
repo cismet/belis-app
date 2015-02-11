@@ -9,7 +9,7 @@ class FirstBase {
 }
 
 class A : FirstBase, EmptyInit{
-    required init(){
+    required override init(){
         
     }
 }
@@ -46,6 +46,7 @@ func creation<T: EmptyInit>(x a:T.Type) -> T{
 var b = creation(x: B.self);
 
 //var a = creation(x: A.self);
+
 
 
 
