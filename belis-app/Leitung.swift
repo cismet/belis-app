@@ -39,3 +39,39 @@ class Leitung : GeoBaseEntity , MapperProtocol{
     }
 
 }
+
+class Material : BaseEntity, MapperProtocol{
+    var bezeichnung: String = "-"
+    
+    required init() {
+        
+    }
+    
+    override func map(mapper: Mapper) {
+        bezeichnung <= mapper["bezeichung"]
+    }
+}
+
+class Querschnitt : BaseEntity, MapperProtocol {
+    var groesse: Float = 0.0
+    required init() {
+        
+    }
+
+    override func map(mapper: Mapper) {
+        groesse <= mapper["querschnitt"]
+    }
+}
+
+class Leitungstyp : BaseEntity, MapperProtocol{
+    var bezeichnung: String = "-"
+
+    required init() {
+        
+    }
+    
+    override func map(mapper: Mapper) {
+            bezeichnung <= mapper["bezeichung"]
+    }
+}
+

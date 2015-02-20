@@ -54,7 +54,6 @@ class GeoBaseEntity : BaseEntity, MapperProtocol{
             else if (mapObject is GeoBaseEntityStyledMkPolylineAnnotation){
                 mapView.addOverlay(mapObject as GeoBaseEntityStyledMkPolylineAnnotation);
                 mapView.addAnnotation(mapObject as GeoBaseEntityStyledMkPolylineAnnotation);
-
             }
             
         }
@@ -157,7 +156,7 @@ class GeoBaseEntityPointAnnotation:MKPointAnnotation, GeoBaseEntityProvider{
         imageName=geoBaseEntity.getAnnotationImageName();
         callOutLeftImageName=geoBaseEntity.getAnnotationCalloutImageName();
         title=geoBaseEntity.getAnnotationTitle();
-        subtitle=geoBaseEntity.getAnnotationSubTitle();
+//        subtitle=geoBaseEntity.getAnnotationSubTitle();
         shouldShowCallout=geoBaseEntity.canShowCallout();
     }
     
@@ -186,7 +185,7 @@ class GeoBaseEntityStyledMkPolylineAnnotation:MKPolyline{
         imageName=geoBaseEntity.getAnnotationImageName();
         callOutLeftImageName=geoBaseEntity.getAnnotationCalloutImageName();
         title=geoBaseEntity.getAnnotationTitle();
-        subtitle=geoBaseEntity.getAnnotationSubTitle();
+//        subtitle=geoBaseEntity.getAnnotationSubTitle();
         shouldShowCallout=geoBaseEntity.canShowCallout();
     }
     func getGeoBaseEntity() -> GeoBaseEntity {

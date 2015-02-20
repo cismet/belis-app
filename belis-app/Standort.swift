@@ -54,3 +54,14 @@ class Standort: GeoBaseEntity , MapperProtocol{
     
 }
 
+class Bezirk : BaseEntity, MapperProtocol{
+    var name: String = ""
+    required init() {
+        
+    }
+    
+    override func map(mapper: Mapper) {
+        super.id <= mapper["id"]
+        name <= mapper["bezirk"]
+    }
+}

@@ -13,7 +13,7 @@ class BaseEntity : MapperProtocol{
     required init(){
     }
 
-    var id: Int?
+    var id: Int = -1
     
     func map(mapper: Mapper) {
         
