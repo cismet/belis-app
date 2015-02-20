@@ -111,7 +111,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         mapView.addGestureRecognizer(tapGestureRecognizer)
         //mapView.gestureRecognizerShouldBegin(tapGestureRecognizer)
         
-        
+        UINavigationController(rootViewController: self)
         
     }
     
@@ -142,9 +142,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if indexPath.section==LEUCHTEN {
             //            println(indexPath.row);
             let leuchte = searchResults[indexPath.section][indexPath.row] as Leuchte;
-            cell.lblBezeichnung.text="L \(leuchte.standort!.laufendeNummer).\(leuchte.leuchtenNummer)";
-            cell.lblStrasse.text="\(leuchte.standort!.strasse!)";
-            cell.lblSubText.text="\(leuchte.typ!)";
+            cell.lblBezeichnung.text=leuchte.getMainTitle()
+            cell.lblStrasse.text=leuchte.getTertiaryInfo()
+            cell.lblSubText.text=leuchte.getSubTitle()
         }
         else if indexPath.section==MAUERLASCHEN {
             let mauerlasche = searchResults[indexPath.section][indexPath.row] as Mauerlasche;
@@ -156,7 +156,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         else if indexPath.section==LEITUNGEN {
             let leitung = searchResults[indexPath.section][indexPath.row]  as Leitung;
             cell.lblBezeichnung.text="Leitung";
-            cell.lblStrasse.text="\(leitung.id!)";
+            cell.lblStrasse.text="\(leitung.id)";
             cell.lblSubText.text="\(leitung.leitungstyp!)";
             
         }
@@ -252,14 +252,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             else {
                 anView.annotation = gbePA
             }
-            
             //Set annotation-specific properties **AFTER**
             //the view is dequeued or created...
             
             anView.canShowCallout = gbePA.shouldShowCallout;
             anView.image = UIImage(named: gbePA.imageName);
-            anView.rightCalloutAccessoryView=UIButton.buttonWithType(UIButtonType.DetailDisclosure) as UIView;
-            anView.leftCalloutAccessoryView=UIImageView(image: UIImage(named: gbePA.callOutLeftImageName));
+            //            anView.rightCalloutAccessoryView=UIButton.buttonWithType(UIButtonType.DetailDisclosure) as UIView;
+            //            anView.leftCalloutAccessoryView=UIImageView(image: UIImage(named: gbePA.callOutLeftImageName));
+            //            anView.leftCalloutAccessoryView.backgroundColor=UIColor.blueColor()
             return anView
         } else if (annotation is GeoBaseEntityStyledMkPolylineAnnotation){
             let gbeSMKPA=annotation as GeoBaseEntityStyledMkPolylineAnnotation;
@@ -322,7 +322,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             dispatch_get_main_queue(), closure)
     }
     
-    
+    // MARK: - Use mark to logically organize your code
     func mapTapped(sender: UITapGestureRecognizer) {
         let touchPt = sender.locationInView(mapView)
         var hittedUI = mapView.hitTest(touchPt, withEvent: nil)
@@ -330,7 +330,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         println("mapTabbed")
         
         
-        let buffer=CGFloat(12)
+        let buffer=CGFloat(22)
         
         var foundPolyline: GeoBaseEntityStyledMkPolylineAnnotation?
         var foundPoint: GeoBaseEntityPointAnnotation?
@@ -450,6 +450,17 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     
+    func mapView(mapView: MKMapView!, annotationView view: MKAnnotationView!, calloutAccessoryControlTapped control: UIControl!) {
+        println("FUBAAAAT")
+        //var detailVC=LeuchtenDetailsViewController()
+        var detailVC=storyboard!.instantiateViewControllerWithIdentifier("LeuchtenDetails") as UIViewController
+        selectedAnnotation=nil
+        mapView.deselectAnnotation(view.annotation, animated: false)
+        let popC=UIPopoverController(contentViewController: detailVC)
+        //popC.popoverContentSize = CGSizeMake(200, 70);
+        popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
+        
+    }
     
     
     

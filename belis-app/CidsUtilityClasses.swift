@@ -56,3 +56,5 @@ class QueryParameters : MapperProtocol {
 //    var collection : [ ]
 //}
 
+
+

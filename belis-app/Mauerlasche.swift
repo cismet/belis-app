@@ -28,7 +28,7 @@ class Mauerlasche : GeoBaseEntity, MapperProtocol {
         return "mauerlasche.png";
     }
     override func getAnnotationTitle() -> String{
-        return "M\(id!) ";
+        return "M\(id) ";
     }
     override func getAnnotationSubTitle() -> String{
         return "";

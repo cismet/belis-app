@@ -240,13 +240,7 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="vw7-N7-tu1"/>
-                                    <barButtonItem systemItem="search" id="5Kb-7L-5AP">
-                                        <connections>
-                                            <segue destination="I60-EY-yAz" kind="popoverPresentation" popoverAnchorBarButtonItem="5Kb-7L-5AP" id="O3U-Za-RjO">
-                                                <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                            </segue>
-                                        </connections>
-                                    </barButtonItem>
+                                    <barButtonItem systemItem="search" id="5Kb-7L-5AP"/>
                                     <barButtonItem style="plain" id="hZb-wC-ZDc">
                                         <textField key="customView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" usesAttributedText="YES" borderStyle="roundedRect" placeholder="Straße" minimumFontSize="17" clearButtonMode="unlessEditing" id="FwD-0Q-xQY">
                                             <rect key="frame" x="434" y="7" width="151" height="30"/>
@@ -288,7 +282,7 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="N0M-Xt-0Mi" id="vF2-p0-x03">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bezeichnung" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fAi-yZ-iib">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Bezeichnung" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fAi-yZ-iib" userLabel="MainTitle">
                                                     <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -297,7 +291,7 @@
                                                         <rect key="frame" x="8" y="8" width="109" height="21"/>
                                                     </variation>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M0b-ma-Qz1">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M0b-ma-Qz1" userLabel="Subtitle">
                                                     <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -306,7 +300,7 @@
                                                         <rect key="frame" x="8" y="29" width="260" height="21"/>
                                                     </variation>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Straße" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jCl-Bq-sbj">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Straße" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jCl-Bq-sbj" userLabel="TertiaryInfo">
                                                     <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -316,20 +310,6 @@
                                                     </variation>
                                                 </label>
                                             </subviews>
-                                            <variation key="default">
-                                                <mask key="subviews">
-                                                    <exclude reference="fAi-yZ-iib"/>
-                                                    <exclude reference="M0b-ma-Qz1"/>
-                                                    <exclude reference="jCl-Bq-sbj"/>
-                                                </mask>
-                                            </variation>
-                                            <variation key="heightClass=regular-widthClass=regular">
-                                                <mask key="subviews">
-                                                    <include reference="fAi-yZ-iib"/>
-                                                    <include reference="M0b-ma-Qz1"/>
-                                                    <include reference="jCl-Bq-sbj"/>
-                                                </mask>
-                                            </variation>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="lblBezeichnung" destination="fAi-yZ-iib" id="ves-83-7uT"/>
@@ -339,18 +319,6 @@
                                     </tableViewCell>
                                 </prototypes>
                                 <sections/>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="L8M-hE-7H6"/>
-                                        <exclude reference="qiZ-JT-tln"/>
-                                    </mask>
-                                </variation>
-                                <variation key="heightClass=regular-widthClass=regular">
-                                    <mask key="constraints">
-                                        <include reference="L8M-hE-7H6"/>
-                                        <include reference="qiZ-JT-tln"/>
-                                    </mask>
-                                </variation>
                                 <connections>
                                     <outlet property="dataSource" destination="Kou-sk-bUr" id="eJy-LK-XCv"/>
                                     <outlet property="delegate" destination="Kou-sk-bUr" id="cht-ey-om0"/>
@@ -458,6 +426,53 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D2a-FR-f0y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="877" y="413"/>
+        </scene>
+        <!--Leuchten Details View Controller-->
+        <scene sceneID="Fbf-UK-G93">
+            <objects>
+                <viewController storyboardIdentifier="LeuchtenDetails" id="Hq1-Hf-x4Z" customClass="LeuchtenDetailsViewController" customModule="belis_app" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="k5k-nL-BnD"/>
+                        <viewControllerLayoutGuide type="bottom" id="Z4M-WZ-f3Y"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="FQl-jW-ldw">
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="400"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Llw-pY-x5I">
+                                <rect key="frame" x="114" y="177" width="83" height="30"/>
+                                <state key="normal" title="dkfgjdfgjdfg">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="cvcfgh" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="o6k-56-Hd3">
+                                <rect key="frame" x="152" y="286" width="97" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="CdA-vp-RyM">
+                                <rect key="frame" x="187" y="92" width="118" height="31"/>
+                            </slider>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BNu-WJ-MhN">
+                                <rect key="frame" x="284" y="184" width="51" height="31"/>
+                            </switch>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="2" translatesAutoresizingMaskIntoConstraints="NO" id="fhc-ad-Y0r">
+                                <rect key="frame" x="16" y="14" width="257" height="29"/>
+                                <segments>
+                                    <segment title="First"/>
+                                    <segment title="Second"/>
+                                    <segment title="Third"/>
+                                </segments>
+                            </segmentedControl>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="400" height="400"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="K6N-fU-BTT" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="598" y="-659"/>
         </scene>
         <!--Suchauswahl-->
         <scene sceneID="tMj-pD-Odc">
@@ -569,47 +584,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V7a-zh-PHi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="885" y="-147.5"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="MZu-pc-XfO">
-            <objects>
-                <viewController modalPresentationStyle="currentContext" id="I60-EY-yAz" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="tNF-q7-Isr"/>
-                        <viewControllerLayoutGuide type="bottom" id="NCo-cU-60z"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="gRt-pG-Cwm">
-                        <rect key="frame" x="0.0" y="0.0" width="400" height="200"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Test" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2fY-vG-YqK">
-                                <rect key="frame" x="158" y="70" width="32" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <value key="contentSizeForViewInPopover" type="size" width="400" height="200"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="400" height="200"/>
-                    <connections>
-                        <outlet property="searchDisplayController" destination="fVX-Mw-dXm" id="XUM-fO-tdn"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Dlm-eX-fv1" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="fVX-Mw-dXm">
-                    <connections>
-                        <outlet property="delegate" destination="I60-EY-yAz" id="j5l-cP-slB"/>
-                        <outlet property="searchContentsController" destination="I60-EY-yAz" id="RYC-cZ-bxg"/>
-                        <outlet property="searchResultsDataSource" destination="I60-EY-yAz" id="fH1-fW-YoM"/>
-                        <outlet property="searchResultsDelegate" destination="I60-EY-yAz" id="aVy-B6-PZf"/>
-                    </connections>
-                </searchDisplayController>
-            </objects>
-            <point key="canvasLocation" x="1321" y="-156"/>
+            <point key="canvasLocation" x="833" y="-136.5"/>
         </scene>
     </scenes>
 </document>
