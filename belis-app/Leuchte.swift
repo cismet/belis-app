@@ -288,7 +288,7 @@ class Doppelkommando : BaseEntity, MapperProtocol{
 
 class Kennziffer : BaseEntity, MapperProtocol{
     var beschreibung: String?
-    var kennziffer: Int = -1
+    var kennziffer: Int?
     required init() {
         
     }
