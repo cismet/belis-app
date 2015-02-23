@@ -22,3 +22,20 @@ protocol CellInformationProviderProtocol {
     func getTertiaryInfo() -> String
     func getQuaternaryInfo() -> String
 }
+
+class NoCellInformation : CellInformationProviderProtocol {
+    // CellInformationProviderProtocol
+    
+    func getMainTitle() -> String{
+        return "should not happen"
+    }
+    func getSubTitle() -> String{
+        return "should not happen"
+    }
+    func getTertiaryInfo() -> String{
+        return "should not happen"
+    }
+    func getQuaternaryInfo() -> String{
+        return "should not happen"
+    }
+}
