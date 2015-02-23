@@ -47,11 +47,12 @@ class CidsConnector {
         
         let y = Mapper().toJSON(qp);
         
-        var kif="http://kif:8890/searches/BELIS2.de.cismet.belis2.server.search.BelisObjectsWktSearch/results?role=all&limit=100&offset";
+        //var kif="http://kif:8890/searches/BELIS2.de.cismet.belis2.server.search.BelisObjectsWktSearch/results?role=all&limit=100&offset";
+        var publicURL="http://belis-rest.cismet.de/searches/BELIS2.de.cismet.belis2.server.search.BelisObjectsWktSearch/results?role=all&limit=100&offset";
         var bin="http://requestb.in/11yncui1";
         let configuration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
         let manager = Alamofire.Manager(configuration: configuration)
-        let alamoRequest=manager.request(.POST, kif, parameters: y, encoding: .JSON)
+        let alamoRequest=manager.request(.POST, publicURL, parameters: y, encoding: .JSON)
             .authenticate(user: user, password: password)
             .responseJSON { (request, response, data, error) in
                 if let checkeddata: AnyObject=data {
@@ -87,8 +88,9 @@ class CidsConnector {
     func getBelisObject(#classId: Int!, objectId :Int!, handler: (searchResults : [[GeoBaseEntity]]) -> ()) -> NetworkOperation{
         let classKey=classes[classId]!;
         //println("go for id:\(objectId)@\(classKey)");
-        let kif="http://kif:8890/BELIS2.\(classKey)/\(objectId)" //?role=all&omitNullValues=true&deduplicate=false
-        let operation=NetworkOperation(method: Alamofire.Method.GET, URLString: kif, user: user, password: password, parameters: ["role":"all","omitNullValues":"true","deduplicate":"true"]) {
+        //let kif="http://kif:8890/BELIS2.\(classKey)/\(objectId)" //?role=all&omitNullValues=true&deduplicate=false
+        let publicUrl="http://belis-rest.cismet.de/BELIS2.\(classKey)/\(objectId)" //?role=all&omitNullValues=true&deduplicate=false
+        let operation=NetworkOperation(method: Alamofire.Method.GET, URLString: publicUrl, user: user, password: password, parameters: ["role":"all","omitNullValues":"true","deduplicate":"true"]) {
             (urlRequest , response, responseObject, error) in
             if let jsonData: AnyObject=responseObject {
                 var json =  jsonData as [String : AnyObject];

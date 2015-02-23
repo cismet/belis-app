@@ -503,7 +503,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let ewktMapExtent="SRID=4326;POLYGON((\(x1) \(y1),\(x1) \(y2),\(x2) \(y2),\(x2) \(y1),\(x1) \(y1)))";
         
         
-        CidsConnector(user: "WendlingM@BELIS2", password: "kif").search(ewktMapExtent, leuchtenEnabled: "\(isLeuchtenEnabled)", mauerlaschenEnabled: "\(isMauerlaschenEnabled)", leitungenEnabled: "\(isleitungenEnabled)") {
+        CidsConnector(user: "WendlingM@BELIS2", password: "boxy").search(ewktMapExtent, leuchtenEnabled: "\(isLeuchtenEnabled)", mauerlaschenEnabled: "\(isMauerlaschenEnabled)", leitungenEnabled: "\(isleitungenEnabled)") {
             searchResults in
             self.searchResults=searchResults
             self.tableView.reloadData();
