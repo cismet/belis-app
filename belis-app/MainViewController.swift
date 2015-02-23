@@ -148,9 +148,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else if indexPath.section==MAUERLASCHEN {
             let mauerlasche = searchResults[indexPath.section][indexPath.row] as Mauerlasche;
-            cell.lblBezeichnung.text="Mauerlasche";
-            cell.lblStrasse.text="\(mauerlasche.strasse!)";
-            cell.lblSubText.text="Laufende Nummer:\(mauerlasche.laufendeNummer)";
+            cell.lblBezeichnung.text=mauerlasche.getMainTitle()
+            cell.lblStrasse.text=mauerlasche.getTertiaryInfo()
+            cell.lblSubText.text=mauerlasche.getSubTitle()
             
         }
         else if indexPath.section==LEITUNGEN {
