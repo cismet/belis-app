@@ -139,27 +139,25 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell: TableViewCell = tableView.dequeueReusableCellWithIdentifier("firstCellPrototype") as TableViewCell
+        var cellInfoProvider: CellInformationProviderProtocol = NoCellInformation()
+        
         if indexPath.section==LEUCHTEN {
             //            println(indexPath.row);
             let leuchte = searchResults[indexPath.section][indexPath.row] as Leuchte;
-            cell.lblBezeichnung.text=leuchte.getMainTitle()
-            cell.lblStrasse.text=leuchte.getTertiaryInfo()
-            cell.lblSubText.text=leuchte.getSubTitle()
+            cellInfoProvider=leuchte
         }
         else if indexPath.section==MAUERLASCHEN {
             let mauerlasche = searchResults[indexPath.section][indexPath.row] as Mauerlasche;
-            cell.lblBezeichnung.text=mauerlasche.getMainTitle()
-            cell.lblStrasse.text=mauerlasche.getTertiaryInfo()
-            cell.lblSubText.text=mauerlasche.getSubTitle()
-            
+            cellInfoProvider=mauerlasche
         }
         else if indexPath.section==LEITUNGEN {
             let leitung = searchResults[indexPath.section][indexPath.row]  as Leitung;
-            cell.lblBezeichnung.text="Leitung";
-            cell.lblStrasse.text="\(leitung.id)";
-            cell.lblSubText.text="\(leitung.leitungstyp!)";
-            
+            cellInfoProvider=leitung
         }
+        
+        cell.lblBezeichnung.text=cellInfoProvider.getMainTitle()
+        cell.lblStrasse.text=cellInfoProvider.getTertiaryInfo()
+        cell.lblSubText.text=cellInfoProvider.getSubTitle()
         
         return cell;
     }
