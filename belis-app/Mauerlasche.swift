@@ -74,10 +74,10 @@ class Mauerlasche : GeoBaseEntity, MapperProtocol,CellInformationProviderProtoco
     
     func getMainTitle() -> String{
         if let lfdNr = laufendeNummer {
-            return "\(lfdNr)"
+            return "M-\(lfdNr)"
         }
         else {
-            return "ohne Nummer"
+            return "M"
         }
     }
     func getSubTitle() -> String{
