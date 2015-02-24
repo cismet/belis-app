@@ -351,6 +351,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                         foundPoint = pointAnnotation
                         println("foundPoint")
                         selectOnMap(foundPoint?.getGeoBaseEntity())
+                        selectInTable(foundPoint?.getGeoBaseEntity())
                         break
                     }
                 }
@@ -384,6 +385,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 
                 if let hitPolyline = foundPolyline {
                     selectOnMap(hitPolyline.getGeoBaseEntity())
+                    selectInTable(hitPolyline.getGeoBaseEntity())
                     println("selected Line with \(hitPolyline.pointCount) points")
                 }
                 else {
@@ -421,7 +423,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 mapView.addOverlay(line); //bring the highlightedLine below the line
                 
             }
-            
+        } else {
+            selectedAnnotation=nil
+        }
+    }
+
+
+    func selectInTable(geoBaseEntityToSelect : GeoBaseEntity?){
+        if let geoBaseEntity = geoBaseEntityToSelect?{
             var kindOfGeoBaseEntity = 0;
             if geoBaseEntity is Leuchte {
                 kindOfGeoBaseEntity=LEUCHTEN
@@ -431,20 +440,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 kindOfGeoBaseEntity=MAUERLASCHEN
             }
             for i in 0...searchResults[kindOfGeoBaseEntity].count-1 {
-                var leuchten : [GeoBaseEntity] = searchResults[kindOfGeoBaseEntity]
-                if leuchten[i].id == geoBaseEntity.id {
+                var results : [GeoBaseEntity] = searchResults[kindOfGeoBaseEntity]
+                if results[i].id == geoBaseEntity.id {
                     tableView.selectRowAtIndexPath(NSIndexPath(forRow: i, inSection: kindOfGeoBaseEntity), animated: true, scrollPosition: UITableViewScrollPosition.Top)
                     break;
                 }
             }
-            
-            
-        } else {
-            selectedAnnotation=nil
         }
-        
-        
-        
     }
     
     
