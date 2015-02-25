@@ -28,6 +28,10 @@
 	<string>BelIS-App möchte Ihren Standort verwenden.</string>
 	<key>NSLocationWhenInUsageDescription</key>
 	<string>BelIS-App möchte Ihren Standort verwenden.</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>webhostinghub-glyphs.ttf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

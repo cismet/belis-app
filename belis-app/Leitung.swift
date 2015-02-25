@@ -31,15 +31,17 @@ class Leitung : GeoBaseEntity , MapperProtocol,CellInformationProviderProtocol {
     
     
     override func getAnnotationTitle() -> String{
-        return "\(getMainTitle())-\(getSubTitle())"
+        return "\(getMainTitle()) - \(getSubTitle())"
     }
-    override func getAnnotationSubTitle() -> String{
-        return "\(leitungstyp!)";
-    }
+
     override func canShowCallout() -> Bool{
         return true;
     }
-    
+
+    override func getAnnotationCalloutGlyphIconName() -> String {
+        return "icon-line";
+    }
+   
     // CellInformationProviderProtocol
     
     func getMainTitle() -> String{

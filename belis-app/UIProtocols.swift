@@ -10,8 +10,7 @@ import Foundation
 
 protocol CallOutInformationProviderProtocol {
     func getTitle() -> String
-    func getIconName() -> String
-    func getDetailButtonImageName() -> String
+    func getGlyphIconName() -> String
     func getDetailViewID() -> String
     func canShowDetailInformation() -> Bool
 }

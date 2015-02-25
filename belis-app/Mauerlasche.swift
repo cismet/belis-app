@@ -39,16 +39,13 @@ class Mauerlasche : GeoBaseEntity, MapperProtocol,CellInformationProviderProtoco
     override func getAnnotationTitle() -> String{
         return getMainTitle();
     }
-    override func getAnnotationSubTitle() -> String{
-        return "";
-    }
     
     override func canShowCallout() -> Bool{
         return true;
     }
 
-    override func getAnnotationCalloutImageName() -> String {
-        return "ml.png";
+    override func getAnnotationCalloutGlyphIconName() -> String {
+        return "icon-nut";
     }
     
     override func map(mapper: Mapper) {
