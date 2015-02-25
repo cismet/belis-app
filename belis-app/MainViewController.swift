@@ -314,6 +314,21 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             return nil
         }
     }
+    func getGlyphedImage(glyphName: String) -> UIImage? {
+        if let glyph=WebHostingGlyps.glyphs[glyphName] {
+            
+            let color=UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)
+            let alpha=UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
+            let font=UIFont(name: "WebHostingHub-Glyphs", size: 14)!
+            let image=UIImage(text: glyph, font: font, color: color, backgroundColor: alpha, size: CGSize(width: 20,height:20), offset: CGPoint(x: 0, y: 2))
+            return image
+        }
+        else  {
+            return nil
+        }
+    }
+
+    
     func getGlyphedButton(glyphName: String) -> UIButton? {
         if let glyph=WebHostingGlyps.glyphs[glyphName] {
             var btn=UIButton(frame: CGRectMake(0, 0, 25,25))
@@ -498,14 +513,45 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     
     func mapView(mapView: MKMapView!, annotationView view: MKAnnotationView!, calloutAccessoryControlTapped control: UIControl!) {
-        println("FUBAAAAT")
         //var detailVC=LeuchtenDetailsViewController()
-        var detailVC=storyboard!.instantiateViewControllerWithIdentifier("LeuchtenDetails") as UIViewController
-        selectedAnnotation=nil
-        mapView.deselectAnnotation(view.annotation, animated: false)
-        let popC=UIPopoverController(contentViewController: detailVC)
-        //popC.popoverContentSize = CGSizeMake(200, 70);
-        popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
+        //        var detailVC=storyboard!.instantiateViewControllerWithIdentifier("LeuchtenDetails") as UIViewController
+        var geoBaseEntity: GeoBaseEntity?
+        if let pointAnnotation = view.annotation as? GeoBaseEntityPointAnnotation {
+            geoBaseEntity=pointAnnotation.geoBaseEntity
+        }
+        else if let lineAnnotation = view.annotation as? GeoBaseEntityStyledMkPolylineAnnotation {
+            geoBaseEntity=lineAnnotation.geoBaseEntity
+        }
+        
+        if let leuchte = geoBaseEntity as? Leuchte {
+            
+        }
+        else if let leitung = geoBaseEntity as? Leitung {
+            let detailVC=LeitungenVC(nibName: "LeitungenVC", bundle: nil)
+            let dokumenteVC=DokumenteVC(nibName: "DokumenteVC", bundle: nil)
+            detailVC.title="Daten"
+            dokumenteVC.title="Dokumente"
+            var tbc = UITabBarController()
+            tbc.setViewControllers([detailVC,dokumenteVC], animated: true)
+            (tbc.tabBar.items as [UITabBarItem])[0].image=getGlyphedImage("icon-line")
+            (tbc.tabBar.items as [UITabBarItem])[1].image=getGlyphedImage("icon-document")
+
+            selectedAnnotation=nil
+            mapView.deselectAnnotation(view.annotation, animated: false)
+            let popC=UIPopoverController(contentViewController: tbc)
+            //popC.popoverContentSize = CGSizeMake(200, 70);
+            popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
+
+        }
+        else if let mauerlasche = geoBaseEntity as? Mauerlasche {
+            
+        }
+
+        
+        
+
+        
+        
         
     }
     

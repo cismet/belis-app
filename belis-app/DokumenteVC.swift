@@ -1,14 +1,14 @@
 //
-//  LeuchtenDetailsViewController.swift
+//  DokumenteVC.swift
 //  belis-app
 //
-//  Created by Thorsten Hell on 10/02/15.
+//  Created by Thorsten Hell on 25/02/15.
 //  Copyright (c) 2015 cismet. All rights reserved.
 //
 
 import UIKit
 
-class LeuchtenDetailsViewController: UIViewController {
+class DokumenteVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
