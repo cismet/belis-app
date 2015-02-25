@@ -255,9 +255,19 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             anView.canShowCallout = gbePA.shouldShowCallout;
             anView.image = UIImage(named: gbePA.imageName);
-            //            anView.rightCalloutAccessoryView=UIButton.buttonWithType(UIButtonType.DetailDisclosure) as UIView;
-            //            anView.leftCalloutAccessoryView=UIImageView(image: UIImage(named: gbePA.callOutLeftImageName));
-            //            anView.leftCalloutAccessoryView.backgroundColor=UIColor.blueColor()
+            
+            
+            if let label=getGlyphedLabel(gbePA.glyphName) {
+                label.textColor=UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)
+                anView.leftCalloutAccessoryView=label
+            }
+            
+
+            if let btn=getGlyphedButton("icon-chevron-right"){
+                btn.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0), forState: UIControlState.Normal)
+                anView.rightCalloutAccessoryView=btn
+            }
+            anView.alpha=0.9
             return anView
         } else if (annotation is GeoBaseEntityStyledMkPolylineAnnotation){
             let gbeSMKPA=annotation as GeoBaseEntityStyledMkPolylineAnnotation;
@@ -271,16 +281,53 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 anView.annotation = gbeSMKPA
             }
             
+            if let label=getGlyphedLabel(gbeSMKPA.glyphName) {
+                label.textColor=UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)
+                anView.leftCalloutAccessoryView=label
+            }
+            if let btn=getGlyphedButton("icon-chevron-right"){
+                btn.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0), forState: UIControlState.Normal)
+                anView.rightCalloutAccessoryView=btn
+            }
+
             //Set annotation-specific properties **AFTER**
             //the view is dequeued or created...
             anView.image = UIImage(named: gbeSMKPA.imageName);
             anView.canShowCallout = gbeSMKPA.shouldShowCallout;
+            anView.alpha=0.9
             return anView
             
         }
         
         return nil;
     }
+    func getGlyphedLabel(glyphName: String) -> UILabel? {
+        if let glyph=WebHostingGlyps.glyphs[glyphName] {
+            var label=UILabel(frame: CGRectMake(0, 0, 25,25))
+            label.font = UIFont(name: "WebHostingHub-Glyphs", size: 20)
+            label.textAlignment=NSTextAlignment.Center
+            label.text=glyph
+            label.sizeToFit()
+            return label
+        }
+        else  {
+            return nil
+        }
+    }
+    func getGlyphedButton(glyphName: String) -> UIButton? {
+        if let glyph=WebHostingGlyps.glyphs[glyphName] {
+            var btn=UIButton(frame: CGRectMake(0, 0, 25,25))
+            btn.titleLabel!.font = UIFont(name: "WebHostingHub-Glyphs", size: 20)
+            btn.titleLabel!.textAlignment=NSTextAlignment.Center
+            btn.setTitle(glyph, forState: UIControlState.Normal)
+            btn.sizeToFit()
+            return btn
+        }
+        else  {
+            return nil
+        }
+    }
+    
     
     
     func mapView(mapView: MKMapView!, didChangeUserTrackingMode mode: MKUserTrackingMode, animated: Bool) {
@@ -427,8 +474,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             selectedAnnotation=nil
         }
     }
-
-
+    
+    
     func selectInTable(geoBaseEntityToSelect : GeoBaseEntity?){
         if let geoBaseEntity = geoBaseEntityToSelect?{
             var kindOfGeoBaseEntity = 0;

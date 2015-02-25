@@ -56,6 +56,10 @@
 		2D939DDB1A6905D500FB2AFB /* CidsConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */; };
 		2D939DED1A690A2800FB2AFB /* ObjectMapper.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2D939DE81A6909D600FB2AFB /* ObjectMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2D939DEF1A690A6300FB2AFB /* CidsUtilityClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D939DEE1A690A6300FB2AFB /* CidsUtilityClasses.swift */; };
+		2DB6E8BC1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */; };
+		2DB6E8BD1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */; };
+		2DB6E8C21A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */; };
+		2DB6E8C31A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */; };
 		2DF6A9BC1A82541900E20FBF /* MappingStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */; };
 /* End PBXBuildFile section */
 
@@ -199,6 +203,8 @@
 		2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsConnector.swift; sourceTree = "<group>"; };
 		2D939DE01A6909D600FB2AFB /* ObjectMapper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ObjectMapper.xcodeproj; path = ObjectMapper/ObjectMapper.xcodeproj; sourceTree = "<group>"; };
 		2D939DEE1A690A6300FB2AFB /* CidsUtilityClasses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsUtilityClasses.swift; sourceTree = "<group>"; };
+		2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "webhostinghub-glyphs.ttf"; sourceTree = "<group>"; };
+		2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebHostingGlyph.swift; sourceTree = "<group>"; };
 		2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MappingStuff.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -246,6 +252,7 @@
 		2D5FB2CB1A67C7320041020C /* belis-app */ = {
 			isa = PBXGroup;
 			children = (
+				2DB6E8C91A9DD5D500D4EA4E /* viewController */,
 				2D5FB2FF1A67CBAC0041020C /* wktparser */,
 				2D5FB2FE1A67CB980041020C /* data */,
 				2D5FB2FD1A67CB870041020C /* tools */,
@@ -255,12 +262,7 @@
 				2D5FB3001A67CC330041020C /* belis-app-Bridging-Header.h */,
 				2D5FB3011A67CC340041020C /* AppDelegate.swift */,
 				2D5FB3031A67CC340041020C /* LaunchScreen.xib */,
-				2D5FB3041A67CC340041020C /* LoginViewController.swift */,
-				2D40B96D1A8A695D0028564B /* LeuchtenDetailsViewController.swift */,
 				2D5FB3051A67CC340041020C /* Main.storyboard */,
-				2D5FB3061A67CC340041020C /* MainViewController.swift */,
-				2D5FB3071A67CC340041020C /* SelectionPopoverViewController.swift */,
-				2D5FB3081A67CC340041020C /* TableViewCell.swift */,
 			);
 			path = "belis-app";
 			sourceTree = "<group>";
@@ -268,6 +270,7 @@
 		2D5FB2CC1A67C7320041020C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */,
 				2D2934261A84D4BF0034181F /* handle.png */,
 				2D5FB2F51A67CB120041020C /* belisBack.png */,
 				2D5FB2F61A67CB120041020C /* leuchte.png */,
@@ -305,6 +308,7 @@
 				2D16C0C41A7011F000A61982 /* NetworkStuff.swift */,
 				2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */,
 				2D3DC3601A94F65E0035575A /* SwiftTools.swift */,
+				2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */,
 			);
 			name = tools;
 			sourceTree = "<group>";
@@ -374,6 +378,18 @@
 				2D939DEA1A6909D600FB2AFB /* ObjectMapperTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		2DB6E8C91A9DD5D500D4EA4E /* viewController */ = {
+			isa = PBXGroup;
+			children = (
+				2D5FB3081A67CC340041020C /* TableViewCell.swift */,
+				2D5FB3071A67CC340041020C /* SelectionPopoverViewController.swift */,
+				2D5FB3061A67CC340041020C /* MainViewController.swift */,
+				2D40B96D1A8A695D0028564B /* LeuchtenDetailsViewController.swift */,
+				2D5FB3041A67CC340041020C /* LoginViewController.swift */,
+			);
+			name = viewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -516,6 +532,7 @@
 				2D5FB2F41A67CAA60041020C /* wupp.gpx in Resources */,
 				2D5FB2FC1A67CB120041020C /* ml.png in Resources */,
 				2D5FB2F91A67CB120041020C /* belisBack.png in Resources */,
+				2DB6E8BC1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */,
 				2D5FB30D1A67CC340041020C /* Main.storyboard in Resources */,
 				2D5FB30B1A67CC340041020C /* LaunchScreen.xib in Resources */,
 				2D5FB2FB1A67CB120041020C /* mauerlasche.png in Resources */,
@@ -529,6 +546,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DB6E8BD1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -543,6 +561,7 @@
 				2D3DC3561A8BA86E0035575A /* UIProtocols.swift in Sources */,
 				2DF6A9BC1A82541900E20FBF /* MappingStuff.swift in Sources */,
 				2D5FB32A1A67CCA60041020C /* WKTLineM.m in Sources */,
+				2DB6E8C21A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */,
 				2D5FB3121A67CC780041020C /* MyOSMMKTileOverlay.swift in Sources */,
 				2D5FB3401A67CCEB0041020C /* GeoBaseEntity.swift in Sources */,
 				2D3DC35F1A94EBA50035575A /* Timestamp.swift in Sources */,
@@ -583,6 +602,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2DB6E8C31A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */,
 				2D5FB2E81A67C7320041020C /* belis_appTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

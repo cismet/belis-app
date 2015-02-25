@@ -95,25 +95,22 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
     override func getAnnotationTitle() -> String{
         return getMainTitle();
     }
-    override func getAnnotationSubTitle() -> String{
-        return "";//\(typ!)";
-    }
     
-        override func canShowCallout() -> Bool{
+    override func canShowCallout() -> Bool{
         return true
+    }
+    override func getAnnotationCalloutGlyphIconName() -> String {
+        return "icon-ceilinglight"
     }
 
     
     func getTitle() -> String {
         return getAnnotationTitle()
     }
-    func getIconName() -> String{
-         return ""
+    func getGlyphIconName() -> String {
+         return "icon-ceilinglight"
     }
-    func getDetailButtonImageName() -> String{
-         return ""
-    }
-
+    
     func getDetailViewID() -> String{
          return "LeuchtenDetails"
     }

@@ -75,16 +75,13 @@ class GeoBaseEntity : BaseEntity, MapperProtocol{
     func getAnnotationTitle() -> String{
         return "";
     }
-    func getAnnotationSubTitle() -> String{
-        return "";
-    }
     func getAnnotationImageName() -> String{
         return "";
     }
     func canShowCallout() -> Bool{
         return false;
     }
-    func getAnnotationCalloutImageName() -> String {
+    func getAnnotationCalloutGlyphIconName() -> String {
         return "";
     }
 
@@ -145,7 +142,7 @@ class GeoBaseEntity : BaseEntity, MapperProtocol{
 
 class GeoBaseEntityPointAnnotation:MKPointAnnotation, GeoBaseEntityProvider{
     var imageName: String!
-    var callOutLeftImageName: String!
+    var glyphName: String!
     var shouldShowCallout = false
     var geoBaseEntity: GeoBaseEntity
     init(geoBaseEntity: GeoBaseEntity, point: WKTPoint){
@@ -154,7 +151,7 @@ class GeoBaseEntityPointAnnotation:MKPointAnnotation, GeoBaseEntityProvider{
         let mPoint=point.toMapPointAnnotation();
         coordinate=mPoint.coordinate;
         imageName=geoBaseEntity.getAnnotationImageName();
-        callOutLeftImageName=geoBaseEntity.getAnnotationCalloutImageName();
+        glyphName=geoBaseEntity.getAnnotationCalloutGlyphIconName();
         title=geoBaseEntity.getAnnotationTitle();
 //        subtitle=geoBaseEntity.getAnnotationSubTitle();
         shouldShowCallout=geoBaseEntity.canShowCallout();
@@ -168,7 +165,7 @@ class GeoBaseEntityPointAnnotation:MKPointAnnotation, GeoBaseEntityProvider{
 
 class GeoBaseEntityStyledMkPolylineAnnotation:MKPolyline{
     var imageName: String!
-    var callOutLeftImageName: String!
+    var glyphName: String!
     var shouldShowCallout = false
     var geoBaseEntity: GeoBaseEntity
 
@@ -183,7 +180,7 @@ class GeoBaseEntityStyledMkPolylineAnnotation:MKPolyline{
         mLine.title="."
         self.init(points: mLine.points(), count: mLine.pointCount)
         imageName=geoBaseEntity.getAnnotationImageName();
-        callOutLeftImageName=geoBaseEntity.getAnnotationCalloutImageName();
+        glyphName=geoBaseEntity.getAnnotationCalloutGlyphIconName();
         title=geoBaseEntity.getAnnotationTitle();
 //        subtitle=geoBaseEntity.getAnnotationSubTitle();
         shouldShowCallout=geoBaseEntity.canShowCallout();
