@@ -532,7 +532,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             detailVC.title="Daten"
             dokumenteVC.title="Dokumente"
             var tbc = UITabBarController()
-            tbc.setViewControllers([detailVC,dokumenteVC], animated: true)
+            var dokumenteNC=UINavigationController(rootViewController: dokumenteVC)
+
+            tbc.setViewControllers([detailVC,dokumenteNC], animated: true)
             (tbc.tabBar.items as [UITabBarItem])[0].image=getGlyphedImage("icon-line")
             (tbc.tabBar.items as [UITabBarItem])[1].image=getGlyphedImage("icon-document")
 
@@ -540,6 +542,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             mapView.deselectAnnotation(view.annotation, animated: false)
             let popC=UIPopoverController(contentViewController: tbc)
             //popC.popoverContentSize = CGSizeMake(200, 70);
+            
             popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
 
         }

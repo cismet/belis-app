@@ -61,6 +61,8 @@
 		2D9D3ACC1A9E19350049F46F /* DokumenteVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D9D3ACA1A9E19350049F46F /* DokumenteVC.xib */; };
 		2D9D3AD41A9E239A0049F46F /* AF+Image+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9D3AD31A9E239A0049F46F /* AF+Image+Extension.swift */; };
 		2D9D3AD61A9E23DD0049F46F /* AF+ImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9D3AD51A9E23DD0049F46F /* AF+ImageView+Extension.swift */; };
+		2D9D3B1A1A9F777D0049F46F /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D9D3B191A9F777D0049F46F /* QuickLook.framework */; };
+		2D9D3B1C1A9F77B50049F46F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D9D3B1B1A9F77B50049F46F /* UIKit.framework */; };
 		2DB6E8BC1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */; };
 		2DB6E8BD1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */; };
 		2DB6E8C21A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */; };
@@ -213,6 +215,8 @@
 		2D9D3ACA1A9E19350049F46F /* DokumenteVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DokumenteVC.xib; sourceTree = "<group>"; };
 		2D9D3AD31A9E239A0049F46F /* AF+Image+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AF+Image+Extension.swift"; sourceTree = "<group>"; };
 		2D9D3AD51A9E23DD0049F46F /* AF+ImageView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AF+ImageView+Extension.swift"; sourceTree = "<group>"; };
+		2D9D3B191A9F777D0049F46F /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
+		2D9D3B1B1A9F77B50049F46F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "webhostinghub-glyphs.ttf"; sourceTree = "<group>"; };
 		2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebHostingGlyph.swift; sourceTree = "<group>"; };
 		2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MappingStuff.swift; sourceTree = "<group>"; };
@@ -223,6 +227,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D9D3B1C1A9F77B50049F46F /* UIKit.framework in Frameworks */,
+				2D9D3B1A1A9F777D0049F46F /* QuickLook.framework in Frameworks */,
 				2D5FB2F21A67CA570041020C /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -240,6 +246,8 @@
 		2D5FB2C01A67C7320041020C = {
 			isa = PBXGroup;
 			children = (
+				2D9D3B1B1A9F77B50049F46F /* UIKit.framework */,
+				2D9D3B191A9F777D0049F46F /* QuickLook.framework */,
 				2D939DE01A6909D600FB2AFB /* ObjectMapper.xcodeproj */,
 				2D939DBF1A67D22100FB2AFB /* Alamofire.xcodeproj */,
 				2D5FB2F11A67CA570041020C /* MapKit.framework */,
