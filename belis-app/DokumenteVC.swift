@@ -11,6 +11,7 @@ import QuickLook
 
 class DokumenteVC: UIViewController, UITableViewDataSource, UITableViewDelegate,QLPreviewControllerDataSource{
     let previewC=QLPreviewController()
+    
     @IBOutlet weak var documentTV: UITableView!
     let urls = [
         NSURL(string: "file:///Users/thorsten/Desktop/testdocs/b.pdf"),
@@ -78,8 +79,13 @@ class DokumenteVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
 //        self.navigationController?.pushViewController(previewVC, animated: true)
       
         self.previewC.currentPreviewItemIndex=indexPath.row
+
+        //navigationController?.tabBarController?.preferredContentSize=CGSizeMake(500,700)
+
         navigationController?.pushViewController(previewC, animated: true)
-     
+        
+        //Fullscreen
+        //self.presentViewController(previewC, animated: true, completion: nil)
     }
     
     
