@@ -427,37 +427,6 @@
             </objects>
             <point key="canvasLocation" x="876.75" y="412.5"/>
         </scene>
-        <!--Leuchten Details View Controller-->
-        <scene sceneID="Fbf-UK-G93">
-            <objects>
-                <viewController storyboardIdentifier="LeuchtenDetails" id="Hq1-Hf-x4Z" customClass="LeuchtenDetailsViewController" customModule="belis_app" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="k5k-nL-BnD"/>
-                        <viewControllerLayoutGuide type="bottom" id="Z4M-WZ-f3Y"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="FQl-jW-ldw">
-                        <rect key="frame" x="0.0" y="0.0" width="400" height="420"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="400" height="420"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="K6N-fU-BTT" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="526" y="-664"/>
-        </scene>
-        <!--Page View Controller-->
-        <scene sceneID="X40-Wb-JmS">
-            <objects>
-                <pageViewController autoresizesArchivedViewToFullSize="NO" modalPresentationStyle="currentContext" transitionStyle="pageCurl" navigationOrientation="horizontal" spineLocation="min" id="KzN-iW-30I" sceneMemberID="viewController">
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="400" height="500"/>
-                </pageViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="HBV-hL-3jF" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1048" y="-640"/>
-        </scene>
         <!--Suchauswahl-->
         <scene sceneID="tMj-pD-Odc">
             <objects>
