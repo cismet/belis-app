@@ -68,6 +68,14 @@
 		2DB6E8C21A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */; };
 		2DB6E8C31A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */; };
 		2DF6A9BC1A82541900E20FBF /* MappingStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */; };
+		2DF6B5F51AA0CE2500A81C4B /* LeuchtenMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6B5F31AA0CE2500A81C4B /* LeuchtenMainVC.swift */; };
+		2DF6B5F61AA0CE2500A81C4B /* LeuchtenMainVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF6B5F41AA0CE2500A81C4B /* LeuchtenMainVC.xib */; };
+		2DF6B5F91AA0CE3800A81C4B /* LeuchtenAllVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6B5F71AA0CE3800A81C4B /* LeuchtenAllVC.swift */; };
+		2DF6B5FA1AA0CE3800A81C4B /* LeuchtenAllVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF6B5F81AA0CE3800A81C4B /* LeuchtenAllVC.xib */; };
+		2DF6B5FD1AA0CE6C00A81C4B /* SchaltstelleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6B5FB1AA0CE6C00A81C4B /* SchaltstelleVC.swift */; };
+		2DF6B5FE1AA0CE6C00A81C4B /* SchaltstelleVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF6B5FC1AA0CE6C00A81C4B /* SchaltstelleVC.xib */; };
+		2DF6B6011AA0CE8000A81C4B /* MauerlascheVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6B5FF1AA0CE8000A81C4B /* MauerlascheVC.swift */; };
+		2DF6B6021AA0CE8000A81C4B /* MauerlascheVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF6B6001AA0CE8000A81C4B /* MauerlascheVC.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -220,6 +228,14 @@
 		2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "webhostinghub-glyphs.ttf"; sourceTree = "<group>"; };
 		2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebHostingGlyph.swift; sourceTree = "<group>"; };
 		2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MappingStuff.swift; sourceTree = "<group>"; };
+		2DF6B5F31AA0CE2500A81C4B /* LeuchtenMainVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeuchtenMainVC.swift; sourceTree = "<group>"; };
+		2DF6B5F41AA0CE2500A81C4B /* LeuchtenMainVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeuchtenMainVC.xib; sourceTree = "<group>"; };
+		2DF6B5F71AA0CE3800A81C4B /* LeuchtenAllVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeuchtenAllVC.swift; sourceTree = "<group>"; };
+		2DF6B5F81AA0CE3800A81C4B /* LeuchtenAllVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeuchtenAllVC.xib; sourceTree = "<group>"; };
+		2DF6B5FB1AA0CE6C00A81C4B /* SchaltstelleVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchaltstelleVC.swift; sourceTree = "<group>"; };
+		2DF6B5FC1AA0CE6C00A81C4B /* SchaltstelleVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SchaltstelleVC.xib; sourceTree = "<group>"; };
+		2DF6B5FF1AA0CE8000A81C4B /* MauerlascheVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MauerlascheVC.swift; sourceTree = "<group>"; };
+		2DF6B6001AA0CE8000A81C4B /* MauerlascheVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MauerlascheVC.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -407,6 +423,14 @@
 				2D9D3AC61A9E191F0049F46F /* LeitungenVC.xib */,
 				2D9D3AC91A9E19350049F46F /* DokumenteVC.swift */,
 				2D9D3ACA1A9E19350049F46F /* DokumenteVC.xib */,
+				2DF6B5F31AA0CE2500A81C4B /* LeuchtenMainVC.swift */,
+				2DF6B5F41AA0CE2500A81C4B /* LeuchtenMainVC.xib */,
+				2DF6B5F71AA0CE3800A81C4B /* LeuchtenAllVC.swift */,
+				2DF6B5F81AA0CE3800A81C4B /* LeuchtenAllVC.xib */,
+				2DF6B5FB1AA0CE6C00A81C4B /* SchaltstelleVC.swift */,
+				2DF6B5FC1AA0CE6C00A81C4B /* SchaltstelleVC.xib */,
+				2DF6B5FF1AA0CE8000A81C4B /* MauerlascheVC.swift */,
+				2DF6B6001AA0CE8000A81C4B /* MauerlascheVC.xib */,
 			);
 			name = details;
 			sourceTree = "<group>";
@@ -561,8 +585,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D5FB2F41A67CAA60041020C /* wupp.gpx in Resources */,
+				2DF6B5FE1AA0CE6C00A81C4B /* SchaltstelleVC.xib in Resources */,
 				2D9D3ACC1A9E19350049F46F /* DokumenteVC.xib in Resources */,
+				2DF6B5FA1AA0CE3800A81C4B /* LeuchtenAllVC.xib in Resources */,
 				2D5FB2FC1A67CB120041020C /* ml.png in Resources */,
+				2DF6B6021AA0CE8000A81C4B /* MauerlascheVC.xib in Resources */,
+				2DF6B5F61AA0CE2500A81C4B /* LeuchtenMainVC.xib in Resources */,
 				2D5FB2F91A67CB120041020C /* belisBack.png in Resources */,
 				2DB6E8BC1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */,
 				2D5FB30D1A67CC340041020C /* Main.storyboard in Resources */,
@@ -597,6 +625,8 @@
 				2D9D3AD61A9E23DD0049F46F /* AF+ImageView+Extension.swift in Sources */,
 				2D5FB32A1A67CCA60041020C /* WKTLineM.m in Sources */,
 				2DB6E8C21A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */,
+				2DF6B5F91AA0CE3800A81C4B /* LeuchtenAllVC.swift in Sources */,
+				2DF6B5FD1AA0CE6C00A81C4B /* SchaltstelleVC.swift in Sources */,
 				2D5FB3121A67CC780041020C /* MyOSMMKTileOverlay.swift in Sources */,
 				2D5FB3401A67CCEB0041020C /* GeoBaseEntity.swift in Sources */,
 				2D3DC35F1A94EBA50035575A /* Timestamp.swift in Sources */,
@@ -613,6 +643,7 @@
 				2D5FB3091A67CC340041020C /* AppDelegate.swift in Sources */,
 				2D5FB32B1A67CCA60041020C /* WKTParser.m in Sources */,
 				2D5FB3301A67CCA60041020C /* WKTString.m in Sources */,
+				2DF6B5F51AA0CE2500A81C4B /* LeuchtenMainVC.swift in Sources */,
 				2D5FB3451A67CCEB0041020C /* Standort.swift in Sources */,
 				2D5FB3271A67CCA60041020C /* WKTGeometry.m in Sources */,
 				2D5FB3441A67CCEB0041020C /* Schaltstelle.swift in Sources */,
@@ -629,6 +660,7 @@
 				2D939DDB1A6905D500FB2AFB /* CidsConnector.swift in Sources */,
 				2D939DEF1A690A6300FB2AFB /* CidsUtilityClasses.swift in Sources */,
 				2D5FB30F1A67CC340041020C /* SelectionPopoverViewController.swift in Sources */,
+				2DF6B6011AA0CE8000A81C4B /* MauerlascheVC.swift in Sources */,
 				2D16C0C51A7011F000A61982 /* NetworkStuff.swift in Sources */,
 				2D3DC3611A94F65E0035575A /* SwiftTools.swift in Sources */,
 			);
