@@ -55,6 +55,8 @@
 		2D939DDB1A6905D500FB2AFB /* CidsConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */; };
 		2D939DED1A690A2800FB2AFB /* ObjectMapper.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2D939DE81A6909D600FB2AFB /* ObjectMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2D939DEF1A690A6300FB2AFB /* CidsUtilityClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D939DEE1A690A6300FB2AFB /* CidsUtilityClasses.swift */; };
+		2D9952231AA5FFC600B5E02E /* DokumentPreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9952211AA5FFC600B5E02E /* DokumentPreviewVC.swift */; };
+		2D9952241AA5FFC600B5E02E /* DokumentPreviewVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D9952221AA5FFC600B5E02E /* DokumentPreviewVC.xib */; };
 		2D9D3AC71A9E191F0049F46F /* LeitungenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9D3AC51A9E191F0049F46F /* LeitungenVC.swift */; };
 		2D9D3AC81A9E191F0049F46F /* LeitungenVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D9D3AC61A9E191F0049F46F /* LeitungenVC.xib */; };
 		2D9D3ACB1A9E19350049F46F /* DokumenteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9D3AC91A9E19350049F46F /* DokumenteVC.swift */; };
@@ -67,6 +69,7 @@
 		2DB6E8BD1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */; };
 		2DB6E8C21A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */; };
 		2DB6E8C31A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */; };
+		2DBA35091AA5A8D500BCAE5A /* UrlSessionBackgroundDownload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DBA35081AA5A8D500BCAE5A /* UrlSessionBackgroundDownload.swift */; };
 		2DF6A9BC1A82541900E20FBF /* MappingStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */; };
 		2DF6B5F51AA0CE2500A81C4B /* LeuchtenMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6B5F31AA0CE2500A81C4B /* LeuchtenMainVC.swift */; };
 		2DF6B5F61AA0CE2500A81C4B /* LeuchtenMainVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2DF6B5F41AA0CE2500A81C4B /* LeuchtenMainVC.xib */; };
@@ -217,6 +220,8 @@
 		2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsConnector.swift; sourceTree = "<group>"; };
 		2D939DE01A6909D600FB2AFB /* ObjectMapper.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ObjectMapper.xcodeproj; path = ObjectMapper/ObjectMapper.xcodeproj; sourceTree = "<group>"; };
 		2D939DEE1A690A6300FB2AFB /* CidsUtilityClasses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsUtilityClasses.swift; sourceTree = "<group>"; };
+		2D9952211AA5FFC600B5E02E /* DokumentPreviewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DokumentPreviewVC.swift; sourceTree = "<group>"; };
+		2D9952221AA5FFC600B5E02E /* DokumentPreviewVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DokumentPreviewVC.xib; sourceTree = "<group>"; };
 		2D9D3AC51A9E191F0049F46F /* LeitungenVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeitungenVC.swift; sourceTree = "<group>"; };
 		2D9D3AC61A9E191F0049F46F /* LeitungenVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeitungenVC.xib; sourceTree = "<group>"; };
 		2D9D3AC91A9E19350049F46F /* DokumenteVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DokumenteVC.swift; sourceTree = "<group>"; };
@@ -227,6 +232,7 @@
 		2D9D3B1B1A9F77B50049F46F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "webhostinghub-glyphs.ttf"; sourceTree = "<group>"; };
 		2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebHostingGlyph.swift; sourceTree = "<group>"; };
+		2DBA35081AA5A8D500BCAE5A /* UrlSessionBackgroundDownload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlSessionBackgroundDownload.swift; sourceTree = "<group>"; };
 		2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MappingStuff.swift; sourceTree = "<group>"; };
 		2DF6B5F31AA0CE2500A81C4B /* LeuchtenMainVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeuchtenMainVC.swift; sourceTree = "<group>"; };
 		2DF6B5F41AA0CE2500A81C4B /* LeuchtenMainVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeuchtenMainVC.xib; sourceTree = "<group>"; };
@@ -345,6 +351,7 @@
 				2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */,
 				2D9D3AD31A9E239A0049F46F /* AF+Image+Extension.swift */,
 				2D9D3AD51A9E23DD0049F46F /* AF+ImageView+Extension.swift */,
+				2DBA35081AA5A8D500BCAE5A /* UrlSessionBackgroundDownload.swift */,
 			);
 			name = tools;
 			sourceTree = "<group>";
@@ -423,6 +430,8 @@
 				2D9D3AC61A9E191F0049F46F /* LeitungenVC.xib */,
 				2D9D3AC91A9E19350049F46F /* DokumenteVC.swift */,
 				2D9D3ACA1A9E19350049F46F /* DokumenteVC.xib */,
+				2D9952211AA5FFC600B5E02E /* DokumentPreviewVC.swift */,
+				2D9952221AA5FFC600B5E02E /* DokumentPreviewVC.xib */,
 				2DF6B5F31AA0CE2500A81C4B /* LeuchtenMainVC.swift */,
 				2DF6B5F41AA0CE2500A81C4B /* LeuchtenMainVC.xib */,
 				2DF6B5F71AA0CE3800A81C4B /* LeuchtenAllVC.swift */,
@@ -587,6 +596,7 @@
 				2D5FB2F41A67CAA60041020C /* wupp.gpx in Resources */,
 				2DF6B5FE1AA0CE6C00A81C4B /* SchaltstelleVC.xib in Resources */,
 				2D9D3ACC1A9E19350049F46F /* DokumenteVC.xib in Resources */,
+				2D9952241AA5FFC600B5E02E /* DokumentPreviewVC.xib in Resources */,
 				2DF6B5FA1AA0CE3800A81C4B /* LeuchtenAllVC.xib in Resources */,
 				2D5FB2FC1A67CB120041020C /* ml.png in Resources */,
 				2DF6B6021AA0CE8000A81C4B /* MauerlascheVC.xib in Resources */,
@@ -649,6 +659,7 @@
 				2D5FB3441A67CCEB0041020C /* Schaltstelle.swift in Sources */,
 				2D5FB2D21A67C7320041020C /* belis_app.xcdatamodeld in Sources */,
 				2D5FB32C1A67CCA60041020C /* WKTPoint.m in Sources */,
+				2D9952231AA5FFC600B5E02E /* DokumentPreviewVC.swift in Sources */,
 				2D5FB30E1A67CC340041020C /* MainViewController.swift in Sources */,
 				2D5FB3431A67CCEB0041020C /* Mauerlasche.swift in Sources */,
 				2D5FB33F1A67CCEB0041020C /* BaseEntity.swift in Sources */,
@@ -660,6 +671,7 @@
 				2D939DDB1A6905D500FB2AFB /* CidsConnector.swift in Sources */,
 				2D939DEF1A690A6300FB2AFB /* CidsUtilityClasses.swift in Sources */,
 				2D5FB30F1A67CC340041020C /* SelectionPopoverViewController.swift in Sources */,
+				2DBA35091AA5A8D500BCAE5A /* UrlSessionBackgroundDownload.swift in Sources */,
 				2DF6B6011AA0CE8000A81C4B /* MauerlascheVC.swift in Sources */,
 				2D16C0C51A7011F000A61982 /* NetworkStuff.swift in Sources */,
 				2D3DC3611A94F65E0035575A /* SwiftTools.swift in Sources */,

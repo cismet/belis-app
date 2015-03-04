@@ -13,10 +13,16 @@ class DokumenteVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
     let previewC=QLPreviewController()
     
     @IBOutlet weak var documentTV: UITableView!
+//    let urls = [
+//        NSURL(string: "file:///Users/thorsten/Desktop/testdocs/b.pdf"),
+//        NSURL(string: "file:///Users/thorsten/Desktop/testdocs/a.png"),
+//        NSURL(string: "file:///Users/thorsten/Desktop/testdocs/2.png")]
+    
     let urls = [
-        NSURL(string: "file:///Users/thorsten/Desktop/testdocs/b.pdf"),
-        NSURL(string: "file:///Users/thorsten/Desktop/testdocs/a.png"),
-        NSURL(string: "file:///Users/thorsten/Desktop/testdocs/2.png")]
+        NSURL(string: "https://dl.dropboxusercontent.com/u/8114622/testdocs/b.pdf"),
+        NSURL(string: "https://dl.dropboxusercontent.com/u/8114622/testdocs/a.png"),
+        NSURL(string: "https://dl.dropboxusercontent.com/u/8114622/testdocs/2.png")]
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -78,14 +84,45 @@ class DokumenteVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
 //        previewVC.url="file:///Users/thorsten/Desktop/b.pdf"
 //        self.navigationController?.pushViewController(previewVC, animated: true)
       
-        self.previewC.currentPreviewItemIndex=indexPath.row
+        //self.previewC.currentPreviewItemIndex=indexPath.row
 
         //navigationController?.tabBarController?.preferredContentSize=CGSizeMake(500,700)
 
-        navigationController?.pushViewController(previewC, animated: true)
+        //navigationController?.pushViewController(previewC, animated: true)
         
         //Fullscreen
         //self.presentViewController(previewC, animated: true, completion: nil)
+             
+       
+        let previewVC=DokumentPreviewVC(nibName: "DokumentPreviewVC", bundle: nil)
+        
+//        
+//        var webView = UIWebView(frame: CGRectMake(10, 10, 100, 100))
+//        var wvController=UIViewController()
+//        let u = urls[indexPath.row]
+//        
+//
+//        var request = NSURLRequest(URL: u!)
+//
+//        webView.scalesPageToFit=true
+//
+//        webView.contentMode=UIViewContentMode.ScaleAspectFit
+//        
+//        
+//        
+//        var w=CGFloat(200.0)
+//        
+//        webView.frame = CGRectMake(0, 0, 100, 100)
+//        webView.loadRequest(request)
+//
+//
+//        wvController.view = webView
+//        navigationController?.pushViewController(wvController, animated: true)
+        previewVC.nsUrlToLoad=urls[indexPath.row]
+        navigationController?.pushViewController(previewVC, animated: true)
+      
+
+
     }
     
     
@@ -94,13 +131,27 @@ class DokumenteVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
     }
     
     func numberOfPreviewItemsInPreviewController(controller: QLPreviewController!) -> Int {
-        return 3
+        return 1
     }
     
+     var delegate = DownloadSessionDelegate.sharedInstance
     
     func previewController(controller: QLPreviewController!, previewItemAtIndex index: Int) -> QLPreviewItem! {
+       
+//        var configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier(SessionProperties.identifier)
+//        var backgroundSession = NSURLSession(configuration: configuration, delegate: self.delegate, delegateQueue: nil)
+//        var url = NSURLRequest(URL: NSURL(string: urls[index])!)
+//        var downloadTask = backgroundSession.downloadTaskWithRequest(url)
+//        downloadTask.resume()
+        //sleep(3)
         return urls[index]
+        
+        
+        
     }
+    
+
+        
     
     
 //    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -114,4 +165,11 @@ class DokumenteVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
 //            return "Leitungen \(searchResults[LEITUNGEN].count)";
 //        }
 //    }
+
+
+}
+
+
+struct SessionProperties {
+    static let identifier : String! = "url_session_background_download"
 }
