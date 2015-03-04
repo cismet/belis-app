@@ -16,14 +16,14 @@ class DokumentPreviewVC: UIViewController {
     @IBOutlet weak var webview: UIWebView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        var b = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: self, action:"someAction")
-        var a = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Compose, target: self, action:nil)
-//        self.navigationItem.rightBarButtonItem = b
-        self.navigationItem.setRightBarButtonItems([a,b], animated: true)
+//        var b = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: self, action:"someAction")
+//        var a = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Compose, target: self, action: "showInFullscreen")
+////        self.navigationItem.rightBarButtonItem = b
+//        self.navigationItem.setRightBarButtonItems([a,b], animated: true)
         
         webview.scalesPageToFit=true
         webview.contentMode=UIViewContentMode.ScaleAspectFit
-        
+
         if let nsu=nsUrlToLoad {
             loadUrl(nsu)
         }
@@ -36,6 +36,17 @@ class DokumentPreviewVC: UIViewController {
  
         // Do any additional setup after loading the view.
     }
+    func showInFullscreen() {
+
+//        self.navigationController?.popViewControllerAnimated(false)
+//        self.navigationController?.
+//        self.navigationController?.pushViewController(self, animated: true)
+//        
+
+//        UIApplication.sharedApplication().openURL(nsUrlToLoad!)
+
+    }
+    
     
     func someAction() {
         // 1
@@ -86,6 +97,7 @@ class DokumentPreviewVC: UIViewController {
     func loadUrl(url: NSURL){
         
         var request = NSMutableURLRequest(URL: url, cachePolicy: NSURLRequestCachePolicy.ReturnCacheDataElseLoad, timeoutInterval: 100)
+        
         let token=""
         request.addValue("Basic "+token, forHTTPHeaderField: "Authorization")
         
