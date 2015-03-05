@@ -6,6 +6,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LeitungenVC" customModule="belis_app" customModuleProvider="target">
             <connections>
+                <outlet property="lblMaterial" destination="7Ug-eb-wyx" id="LAv-kb-J8Z"/>
+                <outlet property="lblQuerschnitt" destination="9fn-IA-FsN" id="bui-ag-pLQ"/>
+                <outlet property="lblTitle" destination="twP-xa-iHy" id="G8L-Pc-HKF"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
