@@ -17,7 +17,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 
-belis-app/Secrets.swift
+/belis-app/Secrets.swift
 
 # CocoaPods
 #
