@@ -1,5 +1,6 @@
 # Xcode
 #
+/belis-app/Secrets.swift
 build/
 *.pbxuser
 !default.pbxuser
@@ -16,8 +17,6 @@ DerivedData
 *.hmap
 *.ipa
 *.xcuserstate
-
-/belis-app/Secrets.swift
 
 # CocoaPods
 #
