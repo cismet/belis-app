@@ -547,10 +547,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         else if let leitung = geoBaseEntity as? Leitung {
             let detailVC=LeitungenVC(nibName: "LeitungenVC", bundle: nil)
             detailVC.title="Leitung"
+            detailVC.leitung=leitung
+            
             let dokumenteVC=DokumenteVC(nibName: "DokumenteVC", bundle: nil)
             dokumenteVC.title="Dokumente"
             var dokumenteNC=UINavigationController(rootViewController: dokumenteVC)
-
+            dokumenteVC.dmsUrls=leitung.dokumente
+            
             var tbc = UITabBarController()
             tbc.setViewControllers([detailVC,dokumenteNC], animated: true)
             (tbc.tabBar.items as [UITabBarItem])[0].image=getGlyphedImage("icon-line")

@@ -63,7 +63,7 @@ class Leitung : GeoBaseEntity , MapperProtocol,CellInformationProviderProtocol {
         }
         var aPart:String
         if let a = querschnitt?.groesse? {
-            aPart = ",\(a)mm²"
+            aPart = ", \(a)mm²"
         }
         else {
             aPart=""
@@ -88,7 +88,8 @@ class Leitungsmaterial : BaseEntity, MapperProtocol{
     }
     
     override func map(mapper: Mapper) {
-        bezeichnung <= mapper["bezeichung"]
+        id <= mapper["id"];
+        bezeichnung <= mapper["bezeichnung"]
     }
 }
 
@@ -100,7 +101,7 @@ class Querschnitt : BaseEntity, MapperProtocol {
     
     override func map(mapper: Mapper) {
         id <= mapper["id"];
-        groesse <= mapper["querschnitt"]
+        groesse <= mapper["groesse"]
     }
 }
 

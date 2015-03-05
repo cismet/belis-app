@@ -8,7 +8,7 @@
 
 import UIKit
  
-class DokumentPreviewVC: UIViewController {
+class DokumentPreviewVC: UIViewController , UIWebViewDelegate {
 
     var nsUrlToLoad: NSURL?
     var urlToLoad: String?
@@ -23,16 +23,20 @@ class DokumentPreviewVC: UIViewController {
         
         webview.scalesPageToFit=true
         webview.contentMode=UIViewContentMode.ScaleAspectFit
-
+        webview.delegate=self
+        
         if let nsu=nsUrlToLoad {
+            urlToLoad=nsu.absoluteString
             loadUrl(nsu)
+            
         }
         else if let url=urlToLoad{
             if let nsu=NSURL(string: url){
+                nsUrlToLoad=nsu
                 loadUrl(nsu)
             }
         }
-        
+
  
         // Do any additional setup after loading the view.
     }
@@ -95,14 +99,38 @@ class DokumentPreviewVC: UIViewController {
     */
     
     func loadUrl(url: NSURL){
-        
         var request = NSMutableURLRequest(URL: url, cachePolicy: NSURLRequestCachePolicy.ReturnCacheDataElseLoad, timeoutInterval: 100)
+       
+        let loginString = NSString(format: "%@", Secrets.getWebDavAuthString())
+        let loginData: NSData = loginString.dataUsingEncoding(NSUTF8StringEncoding)!
+        let base64LoginString = loginData.base64EncodedStringWithOptions(nil)
+//        var defaultCredentials: NSURLCredential = NSURLCredential(user: login, password: password, persistence: NSURLCredentialPersistence.ForSession);
         
-        let token=""
-        request.addValue("Basic "+token, forHTTPHeaderField: "Authorization")
-        
+     //   request.setValue("Basic \(base64LoginString)", forHTTPHeaderField: "Authorization")
+
+        NSURLConnection(request: request, delegate: self)
+
         webview.loadRequest(request)
+
     }
     
+    
+    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        var headerIsPresent = request.allHTTPHeaderFields
+        
+        return true
+    }
+    func webViewDidStartLoad(webView: UIWebView) {
+        println("start")
+        
+    }
+    func webViewDidFinishLoad(webView: UIWebView) {
+        println("finished")
+    }
+    func webView(webView: UIWebView, didFailLoadWithError error: NSError) {
+            println("Failed with error:\(error.localizedDescription)")
+    }
 
+    
+    
 }

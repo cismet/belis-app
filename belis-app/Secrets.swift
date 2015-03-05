@@ -7,3 +7,9 @@
 //
 
 import Foundation
+
+class Secrets{
+    class func getWebDavAuthString() -> String {
+        return "xxx"
+    }
+}
