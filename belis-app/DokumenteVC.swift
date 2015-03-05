@@ -9,28 +9,21 @@
 import UIKit
 import QuickLook
 
-class DokumenteVC: UIViewController, UITableViewDataSource, UITableViewDelegate,QLPreviewControllerDataSource{
-    let previewC=QLPreviewController()
+class DokumenteVC: UIViewController, UITableViewDataSource, UITableViewDelegate{
+
+    var dmsUrls: [DMSUrl]=[]
     
     @IBOutlet weak var documentTV: UITableView!
-//    let urls = [
-//        NSURL(string: "file:///Users/thorsten/Desktop/testdocs/b.pdf"),
-//        NSURL(string: "file:///Users/thorsten/Desktop/testdocs/a.png"),
-//        NSURL(string: "file:///Users/thorsten/Desktop/testdocs/2.png")]
-    
-    let urls = [
-        NSURL(string: "https://dl.dropboxusercontent.com/u/8114622/testdocs/b.pdf"),
-        NSURL(string: "https://dl.dropboxusercontent.com/u/8114622/testdocs/a.png"),
-        NSURL(string: "https://dl.dropboxusercontent.com/u/8114622/testdocs/2.png")]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        previewC.dataSource=self
         // Do any additional setup after loading the view.
         documentTV.delegate=self
-       
         documentTV.registerClass(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,21 +46,15 @@ class DokumenteVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
     
     //UITableViewDataSource
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3;
+        return dmsUrls.count;
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier("Cell") as UITableViewCell
         let row=indexPath.row
-        if row == 0 {
-            cell.textLabel!.text="Dokument 1"
-        }
-        else if row == 1{
-            cell.textLabel!.text="Dokument 2"
-        }
-        else if row == 2{
-            cell.textLabel!.text="Dokument 3"
-        }
+        let dmsUrl=dmsUrls[row]
+
+        cell.textLabel!.text=dmsUrl.getTitle()
         cell.accessoryType=UITableViewCellAccessoryType.DisclosureIndicator
         
         
@@ -118,7 +105,10 @@ class DokumenteVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
 //
 //        wvController.view = webView
 //        navigationController?.pushViewController(wvController, animated: true)
-        previewVC.nsUrlToLoad=urls[indexPath.row]
+        let row=indexPath.row
+        let dmsUrl=dmsUrls[row]
+        println(dmsUrl.getUrl())
+        previewVC.nsUrlToLoad=NSURL(string: dmsUrl.getUrl())
         navigationController?.pushViewController(previewVC, animated: true)
       
 
@@ -129,26 +119,7 @@ class DokumenteVC: UIViewController, UITableViewDataSource, UITableViewDelegate,
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 0
     }
-    
-    func numberOfPreviewItemsInPreviewController(controller: QLPreviewController!) -> Int {
-        return 1
-    }
-    
-     var delegate = DownloadSessionDelegate.sharedInstance
-    
-    func previewController(controller: QLPreviewController!, previewItemAtIndex index: Int) -> QLPreviewItem! {
-       
-//        var configuration = NSURLSessionConfiguration.backgroundSessionConfigurationWithIdentifier(SessionProperties.identifier)
-//        var backgroundSession = NSURLSession(configuration: configuration, delegate: self.delegate, delegateQueue: nil)
-//        var url = NSURLRequest(URL: NSURL(string: urls[index])!)
-//        var downloadTask = backgroundSession.downloadTaskWithRequest(url)
-//        downloadTask.resume()
-        //sleep(3)
-        return urls[index]
-        
-        
-        
-    }
+
     
 
         
