@@ -51,6 +51,7 @@
 		2D5FB3441A67CCEB0041020C /* Schaltstelle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3391A67CCEB0041020C /* Schaltstelle.swift */; };
 		2D5FB3451A67CCEB0041020C /* Standort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB33A1A67CCEB0041020C /* Standort.swift */; };
 		2D5FB3461A67CCEB0041020C /* Veranlassung.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB33B1A67CCEB0041020C /* Veranlassung.swift */; };
+		2D65AABC1AB09B8E00621A0A /* cismetSignet2k.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D65AABB1AB09B8E00621A0A /* cismetSignet2k.png */; };
 		2D81C2A51AA84B710051876C /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D81C2A41AA84B710051876C /* Secrets.swift */; };
 		2D939DCE1A67D2F400FB2AFB /* Alamofire.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2D939DC61A67D22100FB2AFB /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		2D939DDB1A6905D500FB2AFB /* CidsConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */; };
@@ -216,6 +217,7 @@
 		2D5FB3391A67CCEB0041020C /* Schaltstelle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schaltstelle.swift; sourceTree = "<group>"; };
 		2D5FB33A1A67CCEB0041020C /* Standort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Standort.swift; sourceTree = "<group>"; };
 		2D5FB33B1A67CCEB0041020C /* Veranlassung.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Veranlassung.swift; sourceTree = "<group>"; };
+		2D65AABB1AB09B8E00621A0A /* cismetSignet2k.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cismetSignet2k.png; sourceTree = "<group>"; };
 		2D81C2A41AA84B710051876C /* Secrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		2D939DBF1A67D22100FB2AFB /* Alamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Alamofire.xcodeproj; path = Alamofire/Alamofire.xcodeproj; sourceTree = "<group>"; };
 		2D939DD31A67D5D200FB2AFB /* belis-app.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "belis-app.playground"; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 		2D5FB2CC1A67C7320041020C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2D65AABB1AB09B8E00621A0A /* cismetSignet2k.png */,
 				2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */,
 				2D2934261A84D4BF0034181F /* handle.png */,
 				2D5FB2F51A67CB120041020C /* belisBack.png */,
@@ -597,6 +600,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D5FB2F41A67CAA60041020C /* wupp.gpx in Resources */,
+				2D65AABC1AB09B8E00621A0A /* cismetSignet2k.png in Resources */,
 				2DF6B5FE1AA0CE6C00A81C4B /* SchaltstelleVC.xib in Resources */,
 				2D9D3ACC1A9E19350049F46F /* DokumenteVC.xib in Resources */,
 				2D9952241AA5FFC600B5E02E /* DokumentPreviewVC.xib in Resources */,
