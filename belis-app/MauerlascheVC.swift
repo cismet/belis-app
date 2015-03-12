@@ -21,6 +21,10 @@ class MauerlascheVC: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    
+    func someAction(){
+        println("Mauerlaschenaction")
+    }
 
     /*
     // MARK: - Navigation
