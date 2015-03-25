@@ -38,3 +38,12 @@ class NoCellInformation : CellInformationProviderProtocol {
         return "should not happen"
     }
 }
+
+@objc protocol CellData {
+    func getCellReuseIdentifier() -> String
+    
+}
+
+@objc protocol CellDataUI {
+    func fillFromCellData(cellData :CellData)
+}
