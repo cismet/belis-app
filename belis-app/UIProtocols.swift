@@ -41,9 +41,17 @@ class NoCellInformation : CellInformationProviderProtocol {
 
 @objc protocol CellData {
     func getCellReuseIdentifier() -> String
-    
+}
+
+@objc protocol CellDataProvider {
+    func getAllData() -> [String: [CellData]]
 }
 
 @objc protocol CellDataUI {
     func fillFromCellData(cellData :CellData)
 }
+
+@objc protocol SimpleCellActionProvider {
+    func action(UIViewController)
+}
+

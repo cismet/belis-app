@@ -80,6 +80,25 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
 
         //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
         wgs84WKT <= mapper["fk_standort.fk_geom.wgs84_wkt"]
+        
+        //fill GUI Cell Data 
+        data["main"]?.append(SimpleInfoCellData(data: "Trilux Seilleuchte 58W"))
+        data["main"]?.append(SingleTitledInfoCellData(title: "Strasse", data: "Bredde"))
+        data["main"]?.append(SingleTitledInfoCellData(title: "Energielieferant", data: "WSW"))
+        data["main"]?.append(SingleTitledInfoCellData(title: "Schaltstelle", data: "L4N"))
+        data["main"]?.append(SingleTitledInfoCellData(title: "Montagefirma", data: "SAG"))
+        data["main"]?.append(MemoTitledInfoCellData(title: "Bemerkung", data: "Damit Ihr indess erkennt, woher dieser ganze Irrthum gekommen ist, und weshalb man die Lust anklagt und den Schmerz lobet, so will ich Euch Alles eröffnen und auseinander setzen, was jener Begründer der Wahrheit und gleichsam Baumeister des glücklichen Lebens selbst darüber gesagt hat. Niemand, sagt er, verschmähe, oder hasse, oder fliehe die Lust als solche, sondern weil grosse Schmerzen ihr folgen, wenn man nicht mit Vernunft ihr nachzugehen verstehe. Ebenso werde der Schmerz als solcher von Niemand geliebt, gesucht und verlangt, sondern weil mitunter solche Zeiten eintreten, dass man mittelst Arbeiten und Schmerzen eine grosse Lust sich zu verschaften suchen müsse. Um hier gleich bei dem Einfachsten stehen zu bleiben, so würde Niemand von uns anstrengende körperliche Uebungen vornehmen, wenn er nicht einen Vortheil davon erwartete. Wer dürfte aber wohl Den tadeln, der nach einer Lust verlangt, welcher keine Unannehmlichkeit folgt, oder der einem Schmerze ausweicht, aus dem keine Lust hervorgeht?"))
+        
+        data["Dokumente"]=[]
+        data["Dokumente"]?.append(SimpleInfoCellData(data: "Skizze"))
+        data["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: "Testbild", url: "http://lorempixel.com/300/400/sports/"))
+        data["Dokumente"]?.append(SimpleInfoCellData(data: "Schaltplan"))
+        data["Dokumente"]?.append(SimpleInfoCellData(data: "Schaltplan"))
+        data["Dokumente"]?.append(SimpleInfoCellData(data: "Schaltplan 2"))
+        data["Dokumente"]?.append(SimpleInfoCellData(data: "Schaltplan 3"))
+        data["Dokumente"]?.append(SimpleInfoCellData(data: "Schaltplan 4"))
+        data["Dokumente"]?.append(SimpleInfoCellData(data: "Schaltplan 5"))
+        data["Dokumente"]?.append(SimpleInfoCellData(data: "Schaltplan 6"))
     }
     
     

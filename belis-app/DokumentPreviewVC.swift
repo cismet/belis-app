@@ -134,3 +134,7 @@ class DokumentPreviewVC: UIViewController , UIWebViewDelegate {
     
     
 }
+//
+//struct SessionProperties {
+//    static let identifier : String! = "url_session_background_download"
+//}
