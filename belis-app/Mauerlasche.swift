@@ -64,6 +64,40 @@ class Mauerlasche : GeoBaseEntity, MapperProtocol,CellInformationProviderProtoco
 
         //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
         wgs84WKT <= mapper["fk_geom.wgs84_wkt"]
+        
+        //fill GUI Cell Data
+        
+        if let mat=material?.bezeichnung {
+            data["main"]?.append(SingleTitledInfoCellData(title: "Material", data: mat))
+        }
+        data["main"]?.append(SingleTitledInfoCellData(title: "Strasse", data: strasse?.name ?? "-"))
+        
+        if let jj=erstellungsjahr {
+            if let pruefd=pruefdatum {
+                data["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Montage",dataLeft: "\(jj)" ,titleRight: "Prüfung",dataRight: "\(pruefd)"))
+            }
+            else {
+                data["main"]?.append(SingleTitledInfoCellData(title: "Montage", data: "\(jj)"))
+            }
+        }
+        else {
+            if let pruefd=pruefdatum {
+                data["main"]?.append(SingleTitledInfoCellData(title: "Prüfung", data: "\(pruefd)"))
+            }
+        }
+        if let m=monteur {
+            data["main"]?.append(SingleTitledInfoCellData(title: "Monteur", data: m))
+        }
+        if let bem=bemerkung {
+            data["main"]?.append(MemoTitledInfoCellData(title: "Bemerkung", data: bem))
+        }
+        
+        if let fotodok=foto {
+            data["Foto"]=[]
+            data["Foto"]?.append(SimpleUrlPreviewInfoCellData(title: fotodok.getTitle(), url: fotodok.getUrl()))
+        }
+        
+        
     }
     
     

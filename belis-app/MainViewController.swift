@@ -29,7 +29,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     ];
     
     var isLeuchtenEnabled=true;
-    var isMauerlaschenEnabled=false;
+    var isMauerlaschenEnabled=true;
     var isleitungenEnabled=true;
     var highlightedLine : HighlightedMkPolyline?;
     var selectedAnnotation : MKAnnotation?;
@@ -262,7 +262,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 anView.leftCalloutAccessoryView=label
             }
             
-
+            
             if let btn=getGlyphedButton("icon-chevron-right"){
                 btn.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0), forState: UIControlState.Normal)
                 anView.rightCalloutAccessoryView=btn
@@ -289,7 +289,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 btn.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0), forState: UIControlState.Normal)
                 anView.rightCalloutAccessoryView=btn
             }
-
+            
             //Set annotation-specific properties **AFTER**
             //the view is dequeued or created...
             anView.image = UIImage(named: gbeSMKPA.imageName);
@@ -327,7 +327,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             return nil
         }
     }
-
+    
     
     func getGlyphedButton(glyphName: String) -> UIButton? {
         if let glyph=WebHostingGlyps.glyphs[glyphName] {
@@ -524,76 +524,54 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
         if let leuchte = geoBaseEntity as? Leuchte {
-            let detailMainVC=LeuchtenMainVC(nibName: "LeuchtenMainVC", bundle: nil)
-            detailMainVC.title="Leuchte"
-            let detailAllVC=LeuchtenAllVC(nibName: "LeuchtenAllVC", bundle: nil)
-            detailAllVC.title="mehr"
-            let dokumenteVC=DokumenteVC(nibName: "DokumenteVC", bundle: nil)
-            dokumenteVC.title="Dokumente"
-            let dokumenteNC=UINavigationController(rootViewController: dokumenteVC)
-            var tbc = UITabBarController()
-            tbc.setViewControllers([detailMainVC,detailAllVC,dokumenteNC], animated: true)
-            (tbc.tabBar.items as [UITabBarItem])[0].image=getGlyphedImage("icon-ceilinglight")
-            (tbc.tabBar.items as [UITabBarItem])[1].image=getGlyphedImage("icon-tag")
-            (tbc.tabBar.items as [UITabBarItem])[2].image=getGlyphedImage("icon-document")
+            let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            detailVC.setData(leuchte.getAllData())
+            detailVC.title="Leuchte"
+            var detailNC=UINavigationController(rootViewController: detailVC)
+            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
+            detailVC.navigationItem.rightBarButtonItem = action
+            let icon=UIBarButtonItem()
+            icon.image=getGlyphedImage("icon-ceilinglight")
+            detailVC.navigationItem.leftBarButtonItem = icon
             selectedAnnotation=nil
             mapView.deselectAnnotation(view.annotation, animated: false)
-            let popC=UIPopoverController(contentViewController: tbc)
-            //popC.popoverContentSize = CGSizeMake(200, 70);
-            
+            let popC=UIPopoverController(contentViewController: detailNC)
             popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
-            
         }
-        else if let leitung = geoBaseEntity as? Leitung {
-            let detailVC=LeitungenVC(nibName: "LeitungenVC", bundle: nil)
+        if let leitung = geoBaseEntity as? Leitung {
+            let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            detailVC.setData(leitung.getAllData())
             detailVC.title="Leitung"
-            detailVC.leitung=leitung
-            
-            let dokumenteVC=DokumenteVC(nibName: "DokumenteVC", bundle: nil)
-            dokumenteVC.title="Dokumente"
-            var dokumenteNC=UINavigationController(rootViewController: dokumenteVC)
-            dokumenteVC.dmsUrls=leitung.dokumente
-            
-            var tbc = UITabBarController()
-            tbc.setViewControllers([detailVC,dokumenteNC], animated: true)
-            (tbc.tabBar.items as [UITabBarItem])[0].image=getGlyphedImage("icon-line")
-            (tbc.tabBar.items as [UITabBarItem])[1].image=getGlyphedImage("icon-document")
+            var detailNC=UINavigationController(rootViewController: detailVC)
+            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
+            detailVC.navigationItem.rightBarButtonItem = action
+            let icon=UIBarButtonItem()
+            icon.image=getGlyphedImage("icon-line")
+            detailVC.navigationItem.leftBarButtonItem = icon
             selectedAnnotation=nil
             mapView.deselectAnnotation(view.annotation, animated: false)
-            let popC=UIPopoverController(contentViewController: tbc)
+            let popC=UIPopoverController(contentViewController: detailNC)
             //popC.popoverContentSize = CGSizeMake(200, 70);
-            
             popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
-
         }
         else if let mauerlasche = geoBaseEntity as? Mauerlasche {
-            let detailVC=MauerlascheVC(nibName: "MauerlascheVC", bundle: nil)
+            let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            detailVC.setData(mauerlasche.getAllData())
             detailVC.title="Mauerlasche"
-            let dokumenteVC=DokumenteVC(nibName: "DokumenteVC", bundle: nil)
-            dokumenteVC.title="Dokumente"
-            var dokumenteNC=UINavigationController(rootViewController: dokumenteVC)
-            
-            var tbc = UITabBarController()
-            tbc.setViewControllers([detailVC,dokumenteNC], animated: true)
-            (tbc.tabBar.items as [UITabBarItem])[0].image=getGlyphedImage("icon-nut")
-            (tbc.tabBar.items as [UITabBarItem])[1].image=getGlyphedImage("icon-document")
+            var detailNC=UINavigationController(rootViewController: detailVC)
+            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
+            detailVC.navigationItem.rightBarButtonItem = action
+            let icon=UIBarButtonItem()
+            icon.image=getGlyphedImage("icon-nut")
+            detailVC.navigationItem.leftBarButtonItem = icon
             selectedAnnotation=nil
             mapView.deselectAnnotation(view.annotation, animated: false)
-            let popC=UIPopoverController(contentViewController: tbc)
+            let popC=UIPopoverController(contentViewController: detailNC)
             //popC.popoverContentSize = CGSizeMake(200, 70);
-            
-            popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
-           
+            popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)            
         }
-
-        
-        
-
-        
-        
-        
-    }
-    
+     }
+       
     
     
     //Actions

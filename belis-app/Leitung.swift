@@ -27,6 +27,27 @@ class Leitung : GeoBaseEntity , MapperProtocol,CellInformationProviderProtocol {
 
         //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
         wgs84WKT <= mapper["fk_geom.wgs84_wkt"]
+        
+        
+        //fill GUI Cell Data
+
+        
+        data["main"]?.append(SimpleInfoCellData(data: leitungstyp?.bezeichnung ?? "Leitung"))
+        data["main"]?.append(SingleTitledInfoCellData(title: "Material",data: material?.bezeichnung? ?? "-"))
+        
+        if let a = querschnitt?.groesse? {
+            data["main"]?.append(SingleTitledInfoCellData(title: "Querschnitt", data: "\(a)mm²"))
+        }
+        
+        if dokumente.count>0 {
+            data["Dokumente"]=[]
+            for doc in dokumente {
+                
+                data["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: doc.getTitle(), url: doc.getUrl()))
+            }
+        }
+        
+        
     }
     
     
