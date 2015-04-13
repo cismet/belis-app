@@ -27,6 +27,10 @@ class SingleTitledInfoCell: UITableViewCell, CellDataUI{
         if let d=cellData as? SingleTitledInfoCellData {
             lblTitle.text=d.title
             lblData.text=d.data
+        } else if let d=cellData as? SingleTitledInfoCellDataWithDetails {
+            lblTitle.text=d.title
+            lblData.text=d.data
+            
         }
     }
 
@@ -43,6 +47,30 @@ class SingleTitledInfoCellData:CellData {
     
     func getCellReuseIdentifier() -> String {
         return "singleTitled"
+    }
+    
+}
+
+class SingleTitledInfoCellDataWithDetails:CellData, SimpleCellActionProvider {
+    var title: String
+    var data: String
+    var details: [String: [CellData]] = ["main":[]]
+
+    
+    init(title: String,data: String, details:[String: [CellData]]) {
+        self.title=title
+        self.data=data
+        self.details=details
+    }
+    
+    func getCellReuseIdentifier() -> String {
+        return "singleTitled"
+    }
+    
+    func action(vc:UIViewController) {
+        let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+        detailVC.setData(details)
+        vc.navigationController?.pushViewController(detailVC, animated: true)
     }
     
 }
