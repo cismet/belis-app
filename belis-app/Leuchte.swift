@@ -82,8 +82,24 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
         wgs84WKT <= mapper["fk_standort.fk_geom.wgs84_wkt"]
         
         //fill GUI Cell Data 
-        data["main"]?.append(SimpleInfoCellData(data: "Trilux Seilleuchte 58W"))
-        data["main"]?.append(SingleTitledInfoCellData(title: "Strasse", data: "Bredde"))
+        data["main"]?.append(SimpleInfoCellData(data: getSubTitle()))
+        if let inbetriebnahme=inbetriebnahme_leuchte {
+            data["main"]?.append(SingleTitledInfoCellData(title: "Inbetriebnahme", data: "\(inbetriebnahme)"))
+        }
+        if let str=strasse {
+            if let strName=strasse?.name {
+                var strDetails: [String: [CellData]] = ["main":[]]
+                strDetails["main"]?.append(SingleTitledInfoCellData(title: "Strasse", data: strName))
+                if let schluessel=str.key {
+                    strDetails["main"]?.append(SingleTitledInfoCellData(title: "Schlüssel", data: schluessel))
+                }
+                
+                data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Strasse", data: strName ,details: strDetails))
+                
+            }
+        }
+    
+
         data["main"]?.append(SingleTitledInfoCellData(title: "Energielieferant", data: "WSW"))
         data["main"]?.append(SingleTitledInfoCellData(title: "Schaltstelle", data: "L4N"))
         data["main"]?.append(SingleTitledInfoCellData(title: "Montagefirma", data: "SAG"))
