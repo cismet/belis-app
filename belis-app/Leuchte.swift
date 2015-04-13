@@ -27,7 +27,7 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
     var schaltstelle: String?
     var anzahl_1dk: Int?
     var anzahl_2dk: Int?
-    var stadtbezirk: Bezirk?
+    var stadtbezirk: Stadtbezirk?
     var bemerkungen: String?
     var dokumente: [DMSUrl] = []
     var anschlussleistung_1dk: Float?
@@ -172,7 +172,7 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
             nrPart = "-0"
         }
         var standortPart:String
-        if let snrInt = standort?.laufendeNummer {
+        if let snrInt = standort?.lfdNummer {
             standortPart=", \(snrInt)"
         }
         else {
