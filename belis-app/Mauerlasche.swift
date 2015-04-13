@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Mauerlasche : GeoBaseEntity, MapperProtocol,CellInformationProviderProtocol {
+class Mauerlasche : GeoBaseEntity, MapperProtocol,CellInformationProviderProtocol, CellDataProvider {
     var erstellungsjahr: Int?
     var laufendeNummer: Int?
     var material: Mauerlaschenmaterial?
@@ -65,8 +65,10 @@ class Mauerlasche : GeoBaseEntity, MapperProtocol,CellInformationProviderProtoco
         //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
         wgs84WKT <= mapper["fk_geom.wgs84_wkt"]
         
-        //fill GUI Cell Data
-        
+    }
+    
+    func getAllData() -> [String: [CellData]] {
+        var data: [String: [CellData]] = ["main":[]]
         if let mat=material?.bezeichnung {
             data["main"]?.append(SingleTitledInfoCellData(title: "Material", data: mat))
         }
@@ -98,9 +100,8 @@ class Mauerlasche : GeoBaseEntity, MapperProtocol,CellInformationProviderProtoco
         }
         
         
+        return data
     }
-    
-    
     // CellInformationProviderProtocol
     
     func getMainTitle() -> String{

@@ -50,8 +50,7 @@ class Standort: GeoBaseEntity , MapperProtocol{
     
 
     override func map(mapper: Mapper) {
-        id <= mapper["id"];
-        strasse <= mapper["fk_strassenschluessel.strasse"];
+        super.id <= mapper["id"];
         plz  <= mapper["plz"]
         strasse  <= mapper["fk_strassenschluessel"]
         bezirk  <= mapper["fk_stadtbezirk"]

@@ -8,8 +8,7 @@
 
 import Foundation
 import ObjectMapper
-
-class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol, CellInformationProviderProtocol {
+class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol, CellInformationProviderProtocol, CellDataProvider {
     var strasse: Strasse?
     var energielieferant: Energielieferant?
     var rundsteuerempfaenger: Rundsteuerempfaenger?
@@ -77,29 +76,36 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
         vorschaltgeraet <= mapper["vorschaltgeraet"]
         monteur <= mapper["monteur"]
         einbaudatum <= mapper["einbaudatum"]
-
+        
         //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
         wgs84WKT <= mapper["fk_standort.fk_geom.wgs84_wkt"]
         
-        //fill GUI Cell Data 
+    }
+    
+    func getAllData() -> [String: [CellData]] {
+        var data: [String: [CellData]] = ["main":[]]
         data["main"]?.append(SimpleInfoCellData(data: getSubTitle()))
         if let inbetriebnahme=inbetriebnahme_leuchte {
             data["main"]?.append(SingleTitledInfoCellData(title: "Inbetriebnahme", data: "\(inbetriebnahme)"))
         }
-        if let str=strasse {
-            if let strName=strasse?.name {
-                var strDetails: [String: [CellData]] = ["main":[]]
-                strDetails["main"]?.append(SingleTitledInfoCellData(title: "Strasse", data: strName))
-                if let schluessel=str.key {
-                    strDetails["main"]?.append(SingleTitledInfoCellData(title: "Schlüssel", data: schluessel))
-                }
-                
-                data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Strasse", data: strName ,details: strDetails))
-                
+        
+        if let strName=standort?.strasse?.name {
+            var strDetails: [String: [CellData]] = ["main":[]]
+            strDetails["main"]?.append(SingleTitledInfoCellData(title: "Strasse", data: strName))
+            if let schluessel=standort?.strasse?.key {
+                strDetails["main"]?.append(SingleTitledInfoCellData(title: "Schlüssel", data: schluessel))
             }
+            if let bez = standort?.bezirk?.name {
+                strDetails["main"]?.append(SingleTitledInfoCellData(title: "Stadtbezirk", data: bez))
+            }
+            
+            data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Strasse", data: strName ,details: strDetails))
+            
+            
         }
-    
-
+        
+        
+        
         data["main"]?.append(SingleTitledInfoCellData(title: "Energielieferant", data: "WSW"))
         data["main"]?.append(SingleTitledInfoCellData(title: "Schaltstelle", data: "L4N"))
         data["main"]?.append(SingleTitledInfoCellData(title: "Montagefirma", data: "SAG"))
@@ -115,8 +121,9 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
         data["Dokumente"]?.append(SimpleInfoCellData(data: "Schaltplan 4"))
         data["Dokumente"]?.append(SimpleInfoCellData(data: "Schaltplan 5"))
         data["Dokumente"]?.append(SimpleInfoCellData(data: "Schaltplan 6"))
+        
+        return data
     }
-    
     
     
     required init(){
@@ -137,19 +144,19 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
     override func getAnnotationCalloutGlyphIconName() -> String {
         return "icon-ceilinglight"
     }
-
+    
     
     func getTitle() -> String {
         return getAnnotationTitle()
     }
     func getGlyphIconName() -> String {
-         return "icon-ceilinglight"
+        return "icon-ceilinglight"
     }
     
     func getDetailViewID() -> String{
-         return "LeuchtenDetails"
+        return "LeuchtenDetails"
     }
-
+    
     func canShowDetailInformation() -> Bool{
         return true
     }
@@ -198,23 +205,10 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
     func getQuaternaryInfo() -> String{
         return ""
     }
-
+    
     
 }
 
-class Strasse : BaseEntity, MapperProtocol{
-    var name: String?
-    var key: String?
-    required init() {
-        
-    }
-    
-    override func map(mapper: Mapper) {
-        super.id <= mapper["id"]
-        name <= mapper["strasse"]
-        key <= mapper["pk"]
-    }
-}
 
 class Energielieferant : BaseEntity, MapperProtocol{
     var energielieferant: String?
