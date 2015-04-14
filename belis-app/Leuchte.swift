@@ -91,7 +91,14 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
         
         if let strName=standort?.strasse?.name {
             var strDetails: [String: [CellData]] = ["main":[]]
-            strDetails["main"]?.append(SingleTitledInfoCellData(title: "Strasse", data: strName))
+            if let hausnr=standort?.hausnummer {
+                strDetails["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Strasse", dataLeft: strName, titleRight: "Hausnummer", dataRight: "\(hausnr)"))
+            }
+            else {
+                strDetails["main"]?.append(SingleTitledInfoCellData(title: "Strasse", data: strName))
+                
+            }
+            
             if let schluessel=standort?.strasse?.key {
                 strDetails["main"]?.append(SingleTitledInfoCellData(title: "Schlüssel", data: schluessel))
             }
@@ -99,28 +106,282 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
                 strDetails["main"]?.append(SingleTitledInfoCellData(title: "Stadtbezirk", data: bez))
             }
             
-            data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Strasse", data: strName ,details: strDetails))
             
+            
+            if let hausnr=standort?.hausnummer {
+                data["main"]?.append(DoubleTitledInfoCellDataWithDetails(titleLeft: "Strasse", dataLeft: strName, titleRight: "Hausnummer", dataRight: "\(hausnr)",details:strDetails))
+            }
+            else {
+                data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Strasse", data: strName,details:strDetails))
+                
+            }
             
         }
         
+        var mastVorhanden=true //wenn virtueller Standort nil ist, dann bleibt true gesetzt
+        if let isVirtStandort=standort?.istVirtuellerStandort? {
+            mastVorhanden = !isVirtStandort
+        }
+        
+        //Mast
+        if mastVorhanden {
+            var mastDetails: [String: [CellData]] = ["main":[]]
+            
+            if let ueberschrift=standort?.mastart?.name {
+                mastDetails["main"]?.append(SimpleInfoCellData(data: ueberschrift))
+            }
+            
+            if let typ=standort?.typ?.typ {
+                var mastTypDetails: [String: [CellData]] = ["main":[]]
+                mastTypDetails["main"]?.append(SimpleInfoCellData(data: typ))
+                if let bezeichnung=standort?.typ?.bezeichnung {
+                    mastTypDetails["main"]?.append(SimpleInfoCellData(data: bezeichnung))
+                    
+                }
+                
+                if let hersteller=standort?.typ?.hersteller {
+                    mastTypDetails["main"]?.append(SingleTitledInfoCellData(title: "Hersteller", data: hersteller))
+                    
+                }
+                if let lph=standort?.typ?.lph {
+                    mastTypDetails["main"]?.append(SingleTitledInfoCellData(title: "Lph", data: "\(lph)"))
+                    
+                }
+                if let wandstaerke=standort?.typ?.wandstaerke {
+                    mastTypDetails["main"]?.append(SingleTitledInfoCellData(title: "Wandstärke", data: "\(wandstaerke)"))
+                    
+                }
+                if let foto=standort?.typ?.foto {
+                    mastTypDetails["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: "Foto", url: foto.getUrl()))
+                }
+                
+                if let urls=standort?.typ?.dokumente {
+                    for url in urls {
+                        mastTypDetails["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
+                    }
+                }
+                if mastDetails["main"]?.count>1 {
+                    mastDetails["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Masttyp", data: typ,details:mastTypDetails))
+                }
+                else {
+                    mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Masttyp", data: typ))
+                }
+            }
+            
+            if let klassifizierung=standort?.klassifizierung?.name {
+                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Klassifizierung", data: klassifizierung))
+            }
+            if let anlagengruppe=standort?.anlagengruppe?.bezeichnung {
+                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Anlagengruppe", data: anlagengruppe))
+            }
+            if let unterhalt=standort?.unterhaltspflicht?.name {
+                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Unterhalt", data: unterhalt))
+            }
+            if let mastschutz=standort?.mastschutz {
+                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Mastschutz erneuert am", data: "\(mastschutz)"))
+            }
+            if let inbetriebnahme=standort?.inbetriebnahme {
+                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Inbetriebnahme am", data: "\(inbetriebnahme)"))
+            }
+            if let lae=standort?.letzteAenderung {
+                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Letzte Änderung am", data: "\(lae)"))
+            }
+            if let rev=standort?.revision {
+                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Letzte Revision am", data: "\(rev)"))
+            }
+            if let ma=standort?.mastanstrich {
+                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Letzter Mastanstrich am", data: "\(ma)"))
+            }
+            if let farbe=standort?.anstrichfrabe {
+                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Anstrichfarbe", data: "\(farbe)"))
+            }
+            if let fa=standort?.montagefirma {
+                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Montagefirma", data: "\(fa)"))
+            }
+            if let ve=standort?.verrechnungseinheit {
+                if ve {
+                    mastDetails["main"]?.append(SimpleInfoCellData(data: "Verrechnungseinheit"))
+                }
+            }
+            if let gruendung=standort?.gruendung {
+                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Gründung", data: gruendung))
+            }
+            
+            //Prüfungen
+            var pruefDetails: [String: [CellData]] = ["main":[]]
+            if let eP=standort?.elektrischePruefung {
+                var erdStr="nein"
+                if let erdung=standort?.erdung {
+                    if erdung {
+                        erdStr="ja"
+                    }
+                }
+                pruefDetails["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Elektrische Pruefung", dataLeft: "\(eP)", titleRight: "Erdung", dataRight: erdStr))
+            }
+            if let pruefer=standort?.monteur {
+                pruefDetails["main"]?.append(SingleTitledInfoCellData(title: "Elektrische Pruefung durchgeführt von", data: pruefer))
+            }
+            if let ssp=standort?.standsicherheitspruefung {
+                if let np=standort?.naechstesPruefdatum {
+                    pruefDetails["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Standsicherheitsprüfung", dataLeft: "\(ssp)", titleRight: "Nächster Prüftermin", dataRight: "\(np)"))
+                }
+                else {
+                    pruefDetails["main"]?.append(SingleTitledInfoCellData(title: "Standsicherheitsprüfung", data: "\(ssp)"))
+                }
+            }
+            else if let np=standort?.naechstesPruefdatum {
+                pruefDetails["main"]?.append(SingleTitledInfoCellData(title: "Nächster Prüftermin", data: "\(np)"))
+            }
+            if let vf=standort?.verfahrenSHP {
+                pruefDetails["main"]?.append(SingleTitledInfoCellData(title: "Verfahren", data: vf))
+                
+            }
+            
+            if pruefDetails["main"]?.count>0 {
+                data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Prüfungen",details: pruefDetails))
+                
+            }
+            //------------------------(PR)
+            
+            if let anbauten=standort?.anbauten {
+                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Anbauten", data: anbauten))
+            }
+            if let bem=standort?.bemerkung {
+                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Bemerkung", data: bem))
+            }
+            
+            if let foto=standort?.foto {
+                data["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: "Foto", url: foto.getUrl()))
+            }
+            
+            if let urls=standort?.dokumente {
+                for url in urls {
+                    data["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
+                }
+            }
+            
+            data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Mast",details: mastDetails))
+        }
+        //------------------------(M)
+        
+        if let energieprov=energielieferant?.name {
+            data["main"]?.append(SingleTitledInfoCellData(title: "Energielieferant", data: energieprov))
+            
+        }
+        
+        if let schaltS=schaltstelle {
+            data["main"]?.append(SingleTitledInfoCellData(title: "Schaltstelle", data: schaltS))
+            
+        }
+        
+        if let rse=rundsteuerempfaenger?.rs_typ {
+            if let ebd=einbaudatum? {
+                data["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Rundsteuerempfänger", dataLeft: rse, titleRight: "Einbaudatum", dataRight: "\(ebd)"))
+            }
+            else {
+                data["main"]?.append(SingleTitledInfoCellData(title: "Rundsteuerempfänger", data: rse))
+            }
+        }
+        else {
+            if let ebd=einbaudatum? {
+                data["main"]?.append(SingleTitledInfoCellData(title: "Einbaudatum", data: "\(ebd)"))
+            }
+        }
+        
+        if let uhalt=unterhaltspflicht_leuchte?.unterhaltspflichtiger {
+            data["main"]?.append(SingleTitledInfoCellData(title: "Unterhalt", data: uhalt))
+        }
+        if let zaehler=zaehler? {
+            if zaehler {
+                data["main"]?.append(SimpleInfoCellData(data: "Zähler vorhanden"))
+            }
+            else {
+                data["main"]?.append(SimpleInfoCellData(data: "kein Zähler vorhanden"))
+            }
+        }
+        //Doppelkommandos
+        var dkDetails: [String: [CellData]] = ["main":[]]
+        if let dk1=dk1?.beschreibung {
+            dkDetails["main"]?.append(SingleTitledInfoCellData(title: "Doppelkommando 1", data: dk1))
+        }
+        if let pdk1=anschlussleistung_1dk? {
+            dkDetails["main"]?.append(SingleTitledInfoCellData(title: "Anschlussleistung DK1", data: "\(pdk1)"))
+        }
+        if let dk2=dk2?.beschreibung {
+            dkDetails["main"]?.append(SingleTitledInfoCellData(title: "Doppelkommando 2", data: dk2))
+        }
+        if let pdk2=anschlussleistung_2dk? {
+            dkDetails["main"]?.append(SingleTitledInfoCellData(title: "Anschlussleistung DK2", data: "\(pdk2)"))
+        }
+        if dkDetails["main"]?.count>0 {
+            data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Doppelkommandos",details: dkDetails))
+        }
+        //------------------------(DK)
+        
+        //Leuchtmittel
+        var leuchtmittelDetails: [String: [CellData]] = ["main":[]]
+        
+        if let lm=leuchtmittel?.hersteller {
+            leuchtmittelDetails["main"]?.append(SingleTitledInfoCellData(title: "Leuchtmittel", data: lm))
+        }
+        if let lichtfarbe=leuchtmittel?.lichtfarbe {
+            leuchtmittelDetails["main"]?.append(SingleTitledInfoCellData(title: "Lichtfarbe", data: lichtfarbe))
+        }
+        if let ld=lebensdauer? {
+            leuchtmittelDetails["main"]?.append(SingleTitledInfoCellData(title: "Lebensdauer", data: "\(ld)"))
+        }
+        if let wd=wechseldatum? {
+            if let nw=naechster_wechsel? {
+                leuchtmittelDetails["main"]?.append(DoubleTitledInfoCellData(titleLeft: "letzter Leuchtmittelwechsel", dataLeft: "\(wd)", titleRight: "nächster Wechsel", dataRight:  "\(nw)"))
+            }
+            else {
+                leuchtmittelDetails["main"]?.append(SingleTitledInfoCellData(title: "letzter Leuchtmittelwechsel", data: "\(wd)"))
+            }
+        } else if let nw=naechster_wechsel? {
+            leuchtmittelDetails["main"]?.append(SingleTitledInfoCellData(title: "nächster Wechsel", data: "\(nw)"))
+        }
+        
+        if let sonderturnus=wartungszyklus? {
+            leuchtmittelDetails["main"]?.append(SingleTitledInfoCellData(title: "Sonderturnus", data: "\(sonderturnus)"))
+        }
+        if leuchtmittelDetails["main"]?.count>0 {
+            if let lm=leuchtmittel?.hersteller {
+                data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Leuchtmittel", data: lm, details: leuchtmittelDetails))
+            }
+            else {
+                data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Leuchtmittel",details: leuchtmittelDetails))
+            }
+        }
+        //------------------------(LM)
+        
+        //Vorschaltgerät
+        var vsgDetails: [String: [CellData]] = ["main":[]]
+        if let vsg=vorschaltgeraet? {
+            vsgDetails["main"]?.append(SingleTitledInfoCellData(title: "Vorschaltgerät", data: vsg))
+            if let vsgWe=wechselvorschaltgeraet? {
+                vsgDetails["main"]?.append(SingleTitledInfoCellData(title: "Erneuerung Vorschaltgerät", data: "\(vsgWe)"))
+            }
+            if vsgDetails["main"]?.count>1 {
+                data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Vorschaltgerät", data: vsg, details: vsgDetails))
+            }
+            else {
+                data["main"]?.append(SingleTitledInfoCellData(title: "Vorschaltgerät", data: vsg))
+            }
+            
+        }
+        //------------------------(VSG)
+        if let montagefirma=montagefirma_leuchte {
+            data["main"]?.append(SingleTitledInfoCellData(title: "Montagefirma", data: montagefirma))
+        }
+        if let bem=bemerkungen {
+            data["main"]?.append(SingleTitledInfoCellData(title: "Bemerkungen", data: bem))
+        }
         
         
-        data["main"]?.append(SingleTitledInfoCellData(title: "Energielieferant", data: "WSW"))
-        data["main"]?.append(SingleTitledInfoCellData(title: "Schaltstelle", data: "L4N"))
-        data["main"]?.append(SingleTitledInfoCellData(title: "Montagefirma", data: "SAG"))
-        data["main"]?.append(MemoTitledInfoCellData(title: "Bemerkung", data: "Damit Ihr indess erkennt, woher dieser ganze Irrthum gekommen ist, und weshalb man die Lust anklagt und den Schmerz lobet, so will ich Euch Alles eröffnen und auseinander setzen, was jener Begründer der Wahrheit und gleichsam Baumeister des glücklichen Lebens selbst darüber gesagt hat. Niemand, sagt er, verschmähe, oder hasse, oder fliehe die Lust als solche, sondern weil grosse Schmerzen ihr folgen, wenn man nicht mit Vernunft ihr nachzugehen verstehe. Ebenso werde der Schmerz als solcher von Niemand geliebt, gesucht und verlangt, sondern weil mitunter solche Zeiten eintreten, dass man mittelst Arbeiten und Schmerzen eine grosse Lust sich zu verschaften suchen müsse. Um hier gleich bei dem Einfachsten stehen zu bleiben, so würde Niemand von uns anstrengende körperliche Uebungen vornehmen, wenn er nicht einen Vortheil davon erwartete. Wer dürfte aber wohl Den tadeln, der nach einer Lust verlangt, welcher keine Unannehmlichkeit folgt, oder der einem Schmerze ausweicht, aus dem keine Lust hervorgeht?"))
+        for url in dokumente {
+            data["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
+        }
         
-        data["Dokumente"]=[]
-        data["Dokumente"]?.append(SimpleInfoCellData(data: "Skizze"))
-        data["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: "Testbild", url: "http://lorempixel.com/300/400/sports/"))
-        data["Dokumente"]?.append(SimpleInfoCellData(data: "Schaltplan"))
-        data["Dokumente"]?.append(SimpleInfoCellData(data: "Schaltplan"))
-        data["Dokumente"]?.append(SimpleInfoCellData(data: "Schaltplan 2"))
-        data["Dokumente"]?.append(SimpleInfoCellData(data: "Schaltplan 3"))
-        data["Dokumente"]?.append(SimpleInfoCellData(data: "Schaltplan 4"))
-        data["Dokumente"]?.append(SimpleInfoCellData(data: "Schaltplan 5"))
-        data["Dokumente"]?.append(SimpleInfoCellData(data: "Schaltplan 6"))
         
         return data
     }
@@ -211,7 +472,7 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
 
 
 class Energielieferant : BaseEntity, MapperProtocol{
-    var energielieferant: String?
+    var name: String?
     var key: Int?
     required init() {
         
@@ -219,7 +480,7 @@ class Energielieferant : BaseEntity, MapperProtocol{
     
     override func map(mapper: Mapper) {
         super.id <= mapper["id"]
-        energielieferant <= mapper["energielieferant"]
+        name <= mapper["energielieferant"]
         key <= mapper["pk"]
     }
 }

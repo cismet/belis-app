@@ -31,6 +31,10 @@ class MemoTitledInfoCell: UITableViewCell,CellDataUI {
             lblData.scrollRangeToVisible(NSMakeRange(0,0))
         }
     }
+    func getPreferredCellHeight() -> CGFloat {
+        return CGFloat(90)
+    }
+
     
 }
 

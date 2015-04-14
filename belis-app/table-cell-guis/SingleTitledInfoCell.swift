@@ -27,11 +27,17 @@ class SingleTitledInfoCell: UITableViewCell, CellDataUI{
         if let d=cellData as? SingleTitledInfoCellData {
             lblTitle.text=d.title
             lblData.text=d.data
+            accessoryType=UITableViewCellAccessoryType.None
         } else if let d=cellData as? SingleTitledInfoCellDataWithDetails {
             lblTitle.text=d.title
             lblData.text=d.data
-            
+            accessoryType=UITableViewCellAccessoryType.DisclosureIndicator
         }
+        
+    }
+    
+    func getPreferredCellHeight() -> CGFloat {
+        return CGFloat(56)
     }
 
 }
