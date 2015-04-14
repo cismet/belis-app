@@ -90,7 +90,7 @@ class CidsConnector {
         //println("go for id:\(objectId)@\(classKey)");
         //let kif="http://kif:8890/BELIS2.\(classKey)/\(objectId)" //?role=all&omitNullValues=true&deduplicate=false
         let publicUrl="http://belis-rest.cismet.de/BELIS2.\(classKey)/\(objectId)" //?role=all&omitNullValues=true&deduplicate=false
-        let operation=NetworkOperation(method: Alamofire.Method.GET, URLString: publicUrl, user: user, password: password, parameters: ["role":"all","omitNullValues":"true","deduplicate":"true"]) {
+        let operation=NetworkOperation(method: Alamofire.Method.GET, URLString: publicUrl, user: user, password: password, parameters: ["role":"all","omitNullValues":"true","deduplicate":"false"]) {
             (urlRequest , response, responseObject, error) in
             if let jsonData: AnyObject=responseObject {
                 var json =  jsonData as [String : AnyObject];

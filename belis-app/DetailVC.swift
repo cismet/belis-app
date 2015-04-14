@@ -22,6 +22,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate{
         tableView.registerNib(UINib(nibName: "MemoTitledInfoCell", bundle: nil), forCellReuseIdentifier: "memoTitled")
         tableView.registerClass(SimpleInfoCell.self, forCellReuseIdentifier: "simple")
             tableView.registerClass(SimpleUrlPreviewInfoCell.self, forCellReuseIdentifier: "simpleUrl")
+        tableView.rowHeight=UITableViewAutomaticDimension
     }
  
     override func didReceiveMemoryWarning() {
@@ -75,6 +76,20 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate{
         else {
             return 20
         }
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
+        let row=indexPath.row
+        let section = indexPath.section
+        let sectionKey: String = data.keys.array[section]
+        let dataItem: CellData = data[sectionKey]![row]
+        let cellReuseId=dataItem.getCellReuseIdentifier()
+        let cell: UITableViewCell  = tableView.dequeueReusableCellWithIdentifier(cellReuseId) as UITableViewCell
+        if let heightProvider = cell as? CellDataUI {
+            return heightProvider.getPreferredCellHeight()
+        }
+        return 44
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {

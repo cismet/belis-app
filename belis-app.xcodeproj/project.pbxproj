@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D0A979C1ADBC4C8005312BA /* Strasse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0A979B1ADBC4C8005312BA /* Strasse.swift */; };
 		2D0B7F651AB3451700E33A6C /* SingleTitledInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0B7F631AB3451700E33A6C /* SingleTitledInfoCell.swift */; };
 		2D0B7F661AB3451700E33A6C /* SingleTitledInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D0B7F641AB3451700E33A6C /* SingleTitledInfoCell.xib */; };
 		2D0B7F691AB3454100E33A6C /* DoubleTitledInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0B7F671AB3454100E33A6C /* DoubleTitledInfoCell.swift */; };
@@ -156,6 +157,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2D0A979B1ADBC4C8005312BA /* Strasse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Strasse.swift; sourceTree = "<group>"; };
 		2D0B7F631AB3451700E33A6C /* SingleTitledInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SingleTitledInfoCell.swift; path = "table-cell-guis/SingleTitledInfoCell.swift"; sourceTree = "<group>"; };
 		2D0B7F641AB3451700E33A6C /* SingleTitledInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SingleTitledInfoCell.xib; path = "table-cell-guis/SingleTitledInfoCell.xib"; sourceTree = "<group>"; };
 		2D0B7F671AB3454100E33A6C /* DoubleTitledInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DoubleTitledInfoCell.swift; path = "table-cell-guis/DoubleTitledInfoCell.swift"; sourceTree = "<group>"; };
@@ -390,6 +392,7 @@
 				2D3DC3551A8BA86E0035575A /* UIProtocols.swift */,
 				2D3DC3591A94E2C60035575A /* DMSUrl.swift */,
 				2D3DC35E1A94EBA50035575A /* Timestamp.swift */,
+				2D0A979B1ADBC4C8005312BA /* Strasse.swift */,
 			);
 			name = data;
 			sourceTree = "<group>";
@@ -635,6 +638,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D0A979C1ADBC4C8005312BA /* Strasse.swift in Sources */,
 				2D0B7F651AB3451700E33A6C /* SingleTitledInfoCell.swift in Sources */,
 				2D0B7F691AB3454100E33A6C /* DoubleTitledInfoCell.swift in Sources */,
 				2D81C2A51AA84B710051876C /* Secrets.swift in Sources */,

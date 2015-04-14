@@ -15,6 +15,10 @@ class SimpleUrlPreviewInfoCell : UITableViewCell, CellDataUI {
             super.textLabel!.text=d.title
         }
     }
+    func getPreferredCellHeight() -> CGFloat {
+        return CGFloat(44)
+    }
+
 }
 
 class SimpleUrlPreviewInfoCellData : CellData, SimpleCellActionProvider {

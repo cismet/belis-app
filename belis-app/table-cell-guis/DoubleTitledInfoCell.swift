@@ -34,9 +34,22 @@ class DoubleTitledInfoCell: UITableViewCell,CellDataUI {
             lblRightTitle.text=d.titleRight
             lblLeftData.text=d.dataLeft
             lblRightData.text=d.dataRight
+            accessoryType=UITableViewCellAccessoryType.None
+            
+        } else if let d=cellData as? DoubleTitledInfoCellDataWithDetails {
+            lblLeftTitle.text=d.titleLeft
+            lblRightTitle.text=d.titleRight
+            lblLeftData.text=d.dataLeft
+            lblRightData.text=d.dataRight
+            accessoryType=UITableViewCellAccessoryType.DisclosureIndicator
+
         }
         
     }
+    func getPreferredCellHeight() -> CGFloat {
+        return CGFloat(54)
+    }
+
 }
 class DoubleTitledInfoCellData: CellData {
     var titleLeft: String
@@ -54,4 +67,32 @@ class DoubleTitledInfoCellData: CellData {
         return "doubleTitled"
     }
 
+}
+
+class DoubleTitledInfoCellDataWithDetails:CellData, SimpleCellActionProvider {
+    var titleLeft: String
+    var dataLeft: String
+    var titleRight: String
+    var dataRight: String
+    var details: [String: [CellData]] = ["main":[]]
+    
+    
+    init(titleLeft: String,dataLeft: String,titleRight: String,dataRight: String, details:[String: [CellData]]) {
+        self.titleLeft=titleLeft
+        self.dataLeft=dataLeft
+        self.titleRight=titleRight
+        self.dataRight=dataRight
+        self.details=details
+    }
+    
+    func getCellReuseIdentifier() -> String {
+        return "doubleTitled"
+    }
+    
+    func action(vc:UIViewController) {
+        let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+        detailVC.setData(details)
+        vc.navigationController?.pushViewController(detailVC, animated: true)
+    }
+    
 }

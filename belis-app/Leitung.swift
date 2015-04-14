@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Leitung : GeoBaseEntity , MapperProtocol,CellInformationProviderProtocol {
+class Leitung : GeoBaseEntity , MapperProtocol,CellInformationProviderProtocol, CellDataProvider {
     var material: Leitungsmaterial?
     var leitungstyp: Leitungstyp?
     var querschnitt: Querschnitt?
@@ -29,9 +29,9 @@ class Leitung : GeoBaseEntity , MapperProtocol,CellInformationProviderProtocol {
         wgs84WKT <= mapper["fk_geom.wgs84_wkt"]
         
         
-        //fill GUI Cell Data
-
-        
+    }
+    func getAllData() -> [String: [CellData]] {
+        var data: [String: [CellData]] = ["main":[]]
         data["main"]?.append(SimpleInfoCellData(data: leitungstyp?.bezeichnung ?? "Leitung"))
         data["main"]?.append(SingleTitledInfoCellData(title: "Material",data: material?.bezeichnung? ?? "-"))
         
@@ -46,10 +46,9 @@ class Leitung : GeoBaseEntity , MapperProtocol,CellInformationProviderProtocol {
                 data["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: doc.getTitle(), url: doc.getUrl()))
             }
         }
-        
-        
+
+        return data;
     }
-    
     
     override func getAnnotationTitle() -> String{
         return "\(getMainTitle()) - \(getSubTitle())"

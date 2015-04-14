@@ -9,8 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class BaseEntity : MapperProtocol, CellDataProvider{
-    var data: [String: [CellData]] = ["main":[]]
+class BaseEntity : MapperProtocol {
     
     required init(){
     }
@@ -19,10 +18,6 @@ class BaseEntity : MapperProtocol, CellDataProvider{
     
     func map(mapper: Mapper) {
         
-    }
-    
-    func getAllData() -> [String: [CellData]] {
-        return data
     }
     
 }
