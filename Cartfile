@@ -1,0 +1,5 @@
+#Mapping of json files to objects
+github "Hearst-DD/ObjectMapper" ~> 0.9
+
+#Networking stuff
+github "Alamofire/Alamofire" >= 1.2
