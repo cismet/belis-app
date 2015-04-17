@@ -1,5 +1,5 @@
 #Mapping of json files to objects
-github "Hearst-DD/ObjectMapper" >= 0.9
+github "Hearst-DD/ObjectMapper"  "swift-1.2"
 
 #Networking stuff
 github "Alamofire/Alamofire" >= 1.2
