@@ -42,7 +42,7 @@ class SingleTitledInfoCell: UITableViewCell, CellDataUI{
 
 }
 
-class SingleTitledInfoCellData:CellData {
+@objc class SingleTitledInfoCellData:CellData {
     var title: String
     var data: String
     
@@ -69,13 +69,13 @@ class SingleTitledInfoCellDataWithDetails:CellData, SimpleCellActionProvider {
         self.details=details
     }
     
-    func getCellReuseIdentifier() -> String {
+    @objc func getCellReuseIdentifier() -> String {
         return "singleTitled"
     }
     
-    func action(vc:UIViewController) {
+    @objc func action(vc:UIViewController) {
         let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
-        detailVC.setData(details)
+        detailVC.setCellData(details)
         vc.navigationController?.pushViewController(detailVC, animated: true)
     }
     

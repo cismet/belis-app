@@ -56,8 +56,8 @@ class CidsConnector {
             .authenticate(user: user, password: password)
             .responseJSON { (request, response, data, error) in
                 if let checkeddata: AnyObject=data {
-                    var json =  data!.valueForKeyPath("$collection") as [[String : AnyObject]];
-                    var nodes = Mapper().mapArray(json, toType: CidsObjectNode.self);
+                    var json =  data!.valueForKeyPath("$collection") as! [[String : AnyObject]];
+                    var nodes = Mapper<CidsObjectNode>().mapArray(json)
                     println(nodes.count);
                     self.queue.cancelAllOperations()
                     if (nodes.count>0){
@@ -72,7 +72,7 @@ class CidsConnector {
                     
                     for node in nodes {
                         //println("\(node.classId!) : \(node.objectId!)")
-                        let op=self.getBelisObject(classId: node.classId!, objectId: node.objectId!,handler)
+                        let op=self.getBelisObject(classId: node.classId!, objectId: node.objectId!,handler: handler)
                         self.queue.addOperation(op)
                     }
                 }
@@ -93,19 +93,19 @@ class CidsConnector {
         let operation=NetworkOperation(method: Alamofire.Method.GET, URLString: publicUrl, user: user, password: password, parameters: ["role":"all","omitNullValues":"true","deduplicate":"false"]) {
             (urlRequest , response, responseObject, error) in
             if let jsonData: AnyObject=responseObject {
-                var json =  jsonData as [String : AnyObject];
+                var json =  jsonData as! [String : AnyObject];
                 //                println(json);
                 let classKey=self.classes[classId] as String!
                 switch (classKey){
                     case "TDTA_LEUCHTEN":
-                        var leuchte = Mapper().map(json, toType: Leuchte.self);
-                        self.searchResults[0].append(leuchte)
+                        var leuchte = Mapper<Leuchte>().map(json)
+                        self.searchResults[0].append(leuchte!)
                      case "MAUERLASCHE":
-                        var mauerlasche = Mapper().map(json, toType: Mauerlasche.self);
-                        self.searchResults[1].append(mauerlasche)
+                        var mauerlasche = Mapper<Mauerlasche>().map(json)
+                        self.searchResults[1].append(mauerlasche!)
                     case "LEITUNG":
-                        var leitung = Mapper().map(json, toType: Leitung.self);
-                        self.searchResults[2].append(leitung)
+                        var leitung = Mapper<Leitung>().map(json)
+                        self.searchResults[2].append(leitung!)
                default:
                     println("could not find object with classid=\(classId)")
                 }

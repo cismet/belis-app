@@ -10,45 +10,53 @@ import Foundation
 import ObjectMapper
 
 
-class CidsObjectNode : MapperProtocol {
+class CidsObjectNode : Mappable {
     var fucker :NSObject?;
     var classId :Int?;
     var objectId :Int?;
-    required init(){};
-    func map(mapper: Mapper) {
-        classId <= mapper["classId"];
-        objectId <= mapper["objectId"];
+    
+    required init?(_ map: Map) {
+        mapping(map)
+    }
+    func mapping(map: Map) {
+        classId <- map["classId"];
+        objectId <- map["objectId"];
     }
 }
 
 
-class SingleQueryParameter : MapperProtocol {
+class SingleQueryParameter : Mappable {
     var key: String?;
     var value: String?;
-    required init(){
+    init(){
         self.key="?";
         self.value="?";
+    }
+    required init?(_ map: Map) {
+        mapping(map)
     }
     init(key: String, value: String) {
         self.key=key;
         self.value=value;
     }
-    func map(mapper: Mapper) {
-        key <= mapper["key"];
-        value <= mapper["value"];
+    func mapping(map: Map) {
+        key <- map["key"];
+        value <- map["value"];
     }
     
 }
 
-class QueryParameters : MapperProtocol {
+class QueryParameters : Mappable {
     var list: [SingleQueryParameter]?;
-    required init(){};
 
     init(list: [SingleQueryParameter]) {
         self.list=list;
     }
-    func map(mapper: Mapper) {
-        list <= mapper["list"];
+    required init?(_ map: Map) {
+        mapping(map)
+    }
+    func mapping(map: Map) {
+        list <- map["list"];
     }
 }
 

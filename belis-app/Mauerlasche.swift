@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Mauerlasche : GeoBaseEntity, MapperProtocol,CellInformationProviderProtocol, CellDataProvider {
+class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, CellDataProvider {
     var erstellungsjahr: Int?
     var laufendeNummer: Int?
     var material: Mauerlaschenmaterial?
@@ -21,18 +21,19 @@ class Mauerlasche : GeoBaseEntity, MapperProtocol,CellInformationProviderProtoco
     var foto: DMSUrl?
     
 
-
-    required init(){
-    }
     
     init(id: Int, laufendeNummer: Int, geoString: String) {
-        super.init();
+        super.init()
         self.id=id;
         self.laufendeNummer=laufendeNummer;
         self.wgs84WKT=geoString;
     }
 
-    
+    required init?(_ map: Map) {
+        super.init(map)
+    }
+
+       
     override func getAnnotationImageName() -> String{
         return "mauerlasche.png";
     }
@@ -48,26 +49,26 @@ class Mauerlasche : GeoBaseEntity, MapperProtocol,CellInformationProviderProtoco
         return "icon-nut";
     }
     
-    override func map(mapper: Mapper) {
-        id <= mapper["id"]
-        strasse <= mapper["fk_strassenschluessel"]
-        erstellungsjahr <= mapper["erstellungsjahr"]
+    override func mapping(map: Map) {
+        id <- map["id"]
+        strasse <- map["fk_strassenschluessel"]
+        erstellungsjahr <- map["erstellungsjahr"]
 
-        laufendeNummer <= mapper["laufende_nummer"]
-        material <= mapper["fk_material"]
-        strasse <= mapper["fk_strassenschluessel"]
-        dokumente <= mapper["dokumente"]
-        pruefdatum <= mapper["pruefdatum"]
-        monteur <= mapper["monteur"]
-        bemerkung <= mapper["bemerkung"]
-        foto <= mapper["foto"]
+        laufendeNummer <- map["laufende_nummer"]
+        material <- map["fk_material"]
+        strasse <- map["fk_strassenschluessel"]
+        dokumente <- map["dokumente"]
+        pruefdatum <- map["pruefdatum"]
+        monteur <- map["monteur"]
+        bemerkung <- map["bemerkung"]
+        foto <- map["foto"]
 
         //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
-        wgs84WKT <= mapper["fk_geom.wgs84_wkt"]
+        wgs84WKT <- map["fk_geom.wgs84_wkt"]
         
     }
     
-    func getAllData() -> [String: [CellData]] {
+    @objc func getAllData() -> [String: [CellData]] {
         var data: [String: [CellData]] = ["main":[]]
         if let mat=material?.bezeichnung {
             data["main"]?.append(SingleTitledInfoCellData(title: "Material", data: mat))
@@ -113,7 +114,7 @@ class Mauerlasche : GeoBaseEntity, MapperProtocol,CellInformationProviderProtoco
         }
     }
     func getSubTitle() -> String{
-        if let mat = material?.bezeichnung? {
+        if let mat = material?.bezeichnung {
             return mat
         }
         else {
@@ -131,14 +132,12 @@ class Mauerlasche : GeoBaseEntity, MapperProtocol,CellInformationProviderProtoco
     }
 }
 
-class Mauerlaschenmaterial : BaseEntity, MapperProtocol{
+class Mauerlaschenmaterial : BaseEntity, Mappable{
     var bezeichnung: String?
     
-    required init(){
-    }
-    override func map(mapper: Mapper) {
-        id <= mapper["id"];
-        bezeichnung <= mapper["bezeichnung"];
+    override func mapping(map: Map) {
+        id <- map["id"];
+        bezeichnung <- map["bezeichnung"];
     }
 
     

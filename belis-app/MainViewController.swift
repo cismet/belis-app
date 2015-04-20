@@ -125,7 +125,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // Pass the selected object to the new view controller.
         
         if (segue.identifier == "showSearchSelectionPopover") {
-            let selectionVC = segue.destinationViewController as SelectionPopoverViewController;
+            let selectionVC = segue.destinationViewController as! SelectionPopoverViewController;
             selectionVC.mainVC=self;
         }
         
@@ -138,20 +138,20 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell: TableViewCell = tableView.dequeueReusableCellWithIdentifier("firstCellPrototype") as TableViewCell
+        var cell: TableViewCell = tableView.dequeueReusableCellWithIdentifier("firstCellPrototype")as! TableViewCell
         var cellInfoProvider: CellInformationProviderProtocol = NoCellInformation()
         
         if indexPath.section==LEUCHTEN {
             //            println(indexPath.row);
-            let leuchte = searchResults[indexPath.section][indexPath.row] as Leuchte;
+            let leuchte = searchResults[indexPath.section][indexPath.row] as! Leuchte;
             cellInfoProvider=leuchte
         }
         else if indexPath.section==MAUERLASCHEN {
-            let mauerlasche = searchResults[indexPath.section][indexPath.row] as Mauerlasche;
+            let mauerlasche = searchResults[indexPath.section][indexPath.row] as! Mauerlasche;
             cellInfoProvider=mauerlasche
         }
         else if indexPath.section==LEITUNGEN {
-            let leitung = searchResults[indexPath.section][indexPath.row]  as Leitung;
+            let leitung = searchResults[indexPath.section][indexPath.row]  as! Leitung;
             cellInfoProvider=leitung
         }
         
@@ -224,7 +224,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else if (overlay is MKTileOverlay){
             
-            var renderer =  MyDesperateMKTileOverlayRenderer(tileOverlay: overlay as MKTileOverlay);
+            var renderer =  MyDesperateMKTileOverlayRenderer(tileOverlay: overlay as! MKTileOverlay);
             return renderer;
         }
         return nil
@@ -239,7 +239,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
         if (annotation is GeoBaseEntityPointAnnotation){
-            let gbePA=annotation as GeoBaseEntityPointAnnotation;
+            let gbePA=annotation as! GeoBaseEntityPointAnnotation;
             let reuseId = "belisAnnotation"
             
             var anView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId)
@@ -270,7 +270,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             anView.alpha=0.9
             return anView
         } else if (annotation is GeoBaseEntityStyledMkPolylineAnnotation){
-            let gbeSMKPA=annotation as GeoBaseEntityStyledMkPolylineAnnotation;
+            let gbeSMKPA=annotation as! GeoBaseEntityStyledMkPolylineAnnotation;
             let reuseId = "belisAnnotation"
             var anView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId)
             if anView == nil {
@@ -470,7 +470,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if let geoBaseEntity = geoBaseEntityToSelect{
             var mapObj=geoBaseEntity.mapObject
             
-            mapView.selectAnnotation(mapObj as MKAnnotation, animated: true);
+            mapView.selectAnnotation(mapObj as! MKAnnotation, animated: true);
             selectedAnnotation=mapObj as? MKAnnotation
             
             if mapObj is GeoBaseEntityPointAnnotation {
@@ -478,7 +478,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 
             }
             else if mapObj is GeoBaseEntityStyledMkPolylineAnnotation {
-                var line = mapObj as GeoBaseEntityStyledMkPolylineAnnotation;
+                var line = mapObj as! GeoBaseEntityStyledMkPolylineAnnotation;
                 highlightedLine = HighlightedMkPolyline(points: line.points(), count: line.pointCount);
                 mapView.removeOverlay(line);
                 mapView.addOverlay(highlightedLine);
@@ -492,7 +492,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     
     func selectInTable(geoBaseEntityToSelect : GeoBaseEntity?){
-        if let geoBaseEntity = geoBaseEntityToSelect?{
+        if let geoBaseEntity = geoBaseEntityToSelect{
             var kindOfGeoBaseEntity = 0;
             if geoBaseEntity is Leuchte {
                 kindOfGeoBaseEntity=LEUCHTEN
@@ -525,7 +525,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         if let leuchte = geoBaseEntity as? Leuchte {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
-            detailVC.setData(leuchte.getAllData())
+            detailVC.setCellData(leuchte.getAllData())
             detailVC.title="Leuchte"
             var detailNC=UINavigationController(rootViewController: detailVC)
             var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
@@ -540,7 +540,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         if let leitung = geoBaseEntity as? Leitung {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
-            detailVC.setData(leitung.getAllData())
+            detailVC.setCellData(leitung.getAllData())
             detailVC.title="Leitung"
             var detailNC=UINavigationController(rootViewController: detailVC)
             var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
@@ -556,7 +556,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else if let mauerlasche = geoBaseEntity as? Mauerlasche {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
-            detailVC.setData(mauerlasche.getAllData())
+            detailVC.setCellData(mauerlasche.getAllData())
             detailVC.title="Mauerlasche"
             var detailNC=UINavigationController(rootViewController: detailVC)
             var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")

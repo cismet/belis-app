@@ -9,15 +9,19 @@
 import Foundation
 import ObjectMapper
 
-class BaseEntity : MapperProtocol {
+class BaseEntity : Mappable {
+    init() {
+        
+    }
     
-    required init(){
+    required init?(_ map: Map) {
+        mapping(map)
     }
 
     var id: Int = -1
     
-    func map(mapper: Mapper) {
-        
+    func mapping(map: Map) {
+    
     }
     
 }

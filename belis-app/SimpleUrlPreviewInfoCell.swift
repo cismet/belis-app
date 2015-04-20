@@ -30,11 +30,11 @@ class SimpleUrlPreviewInfoCellData : CellData, SimpleCellActionProvider {
         self.url=url
     }
     
-    func getCellReuseIdentifier() -> String {
+    @objc func getCellReuseIdentifier() -> String {
         return "simpleUrl"
     }
     
-    func action(vc:UIViewController) {
+    @objc func action(vc:UIViewController) {
         let previewVC=DokumentPreviewVC(nibName: "DokumentPreviewVC", bundle: nil)
         previewVC.nsUrlToLoad=NSURL(string: self.url )
         vc.navigationController?.pushViewController(previewVC, animated: true)

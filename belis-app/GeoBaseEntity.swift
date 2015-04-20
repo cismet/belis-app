@@ -9,7 +9,10 @@
 import Foundation
 import ObjectMapper
 
-class GeoBaseEntity : BaseEntity, MapperProtocol{
+class GeoBaseEntity : BaseEntity, Mappable{
+    override init(){
+        super.init()
+    }
     
     var wgs84WKT : String?
         {
@@ -18,14 +21,14 @@ class GeoBaseEntity : BaseEntity, MapperProtocol{
             if let wgs85WKTSTring=wgs84WKT {
                 let geom=WKTParser.parseGeometry(wgs84WKT);
                 if ( geom is WKTPoint){
-                    let point=geom as WKTPoint;
+                    let point=geom as! WKTPoint;
                     mapObject=GeoBaseEntityPointAnnotation(geoBaseEntity: self, point: point)
                 }
                 else if (geom is WKTLine) {
-                    let line=geom as WKTLine;
+                    let line=geom as! WKTLine;
                     let temp=self;
                     mapObject=GeoBaseEntityStyledMkPolylineAnnotation(line: line, geoBaseEntity: self)
-                    (mapObject as GeoBaseEntityStyledMkPolylineAnnotation).geoBaseEntity=self
+                    (mapObject as! GeoBaseEntityStyledMkPolylineAnnotation).geoBaseEntity=self
                 }
             }
             else{
@@ -37,23 +40,19 @@ class GeoBaseEntity : BaseEntity, MapperProtocol{
     }
     var mapObject : NSObject?;
     private var geom :WKTGeometry?
-
-    required init() {
     
-    }
-    
-    func addToMapView(mapView:MKMapView) {
+        func addToMapView(mapView:MKMapView) {
         if  ( mapObject != nil ) {
             if (mapObject is GeoBaseEntityPointAnnotation){
                 
-                mapView.addAnnotation(mapObject as GeoBaseEntityPointAnnotation);
+                mapView.addAnnotation(mapObject as! GeoBaseEntityPointAnnotation);
                 
                // mapView.showAnnotations([mapObject as GeoBaseEntityPointAnnotation], animated: true)
 
             }
             else if (mapObject is GeoBaseEntityStyledMkPolylineAnnotation){
-                mapView.addOverlay(mapObject as GeoBaseEntityStyledMkPolylineAnnotation);
-                mapView.addAnnotation(mapObject as GeoBaseEntityStyledMkPolylineAnnotation);
+                mapView.addOverlay(mapObject as! GeoBaseEntityStyledMkPolylineAnnotation);
+                mapView.addAnnotation(mapObject as! GeoBaseEntityStyledMkPolylineAnnotation);
             }
             
         }
@@ -64,10 +63,10 @@ class GeoBaseEntity : BaseEntity, MapperProtocol{
     func removeFromMapView(mapView:MKMapView) {
         if ( mapObject != nil ){
             if (mapObject is GeoBaseEntityPointAnnotation){
-                mapView.removeAnnotation(mapObject as MKAnnotation);
+                mapView.removeAnnotation(mapObject as! MKAnnotation);
             }
             else if (mapObject is GeoBaseEntityStyledMkPolylineAnnotation){
-                mapView.removeOverlay(mapObject as GeoBaseEntityStyledMkPolylineAnnotation);
+                mapView.removeOverlay(mapObject as! GeoBaseEntityStyledMkPolylineAnnotation);
             }
         }
     }
@@ -99,7 +98,7 @@ class GeoBaseEntity : BaseEntity, MapperProtocol{
         southEastCorner.longitude = center.longitude + (region.span.longitudeDelta / 2.0);
 
         if (mapObject is MKAnnotation){
-            var anno = mapObject as MKAnnotation;
+            var anno = mapObject as! MKAnnotation;
             return (
                     anno.coordinate.latitude  >= northWestCorner.latitude &&
                     anno.coordinate.latitude  <= southEastCorner.latitude &&
@@ -110,7 +109,7 @@ class GeoBaseEntity : BaseEntity, MapperProtocol{
             
         }
         else if mapObject is MKPolyline {
-            var line = mapObject as MKPolyline;
+            var line = mapObject as! MKPolyline;
             var coords = [CLLocationCoordinate2D](count: line.pointCount, repeatedValue: kCLLocationCoordinate2DInvalid);
             line.getCoordinates(&coords, range: NSMakeRange(0, line.pointCount));
             
@@ -131,10 +130,13 @@ class GeoBaseEntity : BaseEntity, MapperProtocol{
         
     }
     
-    override func map(mapper: Mapper) {
     
+    required init?(_ map: Map) {
+        super.init(map)
     }
-
+    override func mapping(map: Map) {
+        
+    }
     
     
 }
@@ -170,8 +172,7 @@ class GeoBaseEntityStyledMkPolylineAnnotation:MKPolyline{
     var geoBaseEntity: GeoBaseEntity
 
     override init() {
-        geoBaseEntity=GeoBaseEntity()
-        super.init()
+        geoBaseEntity = GeoBaseEntity()
     }
     
     convenience init(line: WKTLine, geoBaseEntity: GeoBaseEntity) {

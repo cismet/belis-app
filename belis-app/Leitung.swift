@@ -9,33 +9,36 @@
 import Foundation
 import ObjectMapper
 
-class Leitung : GeoBaseEntity , MapperProtocol,CellInformationProviderProtocol, CellDataProvider {
+class Leitung : GeoBaseEntity , Mappable,CellInformationProviderProtocol, CellDataProvider {
     var material: Leitungsmaterial?
     var leitungstyp: Leitungstyp?
     var querschnitt: Querschnitt?
     var dokumente: [DMSUrl] = []
     var laenge: Float?
     
-    required init(){}
-    override func map(mapper: Mapper) {
-        id <= mapper["id"];
-        material <= mapper["fk_material"];
-        leitungstyp <= mapper["fk_leitungstyp"];
-        querschnitt <= mapper["fk_querschnitt"];
-        dokumente <= mapper["dokumente"]
-        laenge <= mapper["laenge"]
+    required init?(_ map: Map) {
+        super.init(map)
+    }
+   
+    override func mapping(map: Map) {
+        id <- map["id"];
+        material <- map["fk_material"];
+        leitungstyp <- map["fk_leitungstyp"];
+        querschnitt <- map["fk_querschnitt"];
+        dokumente <- map["dokumente"]
+        laenge <- map["laenge"]
 
         //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
-        wgs84WKT <= mapper["fk_geom.wgs84_wkt"]
+        wgs84WKT <- map["fk_geom.wgs84_wkt"]
         
         
     }
-    func getAllData() -> [String: [CellData]] {
+    @objc func getAllData() -> [String: [CellData]] {
         var data: [String: [CellData]] = ["main":[]]
         data["main"]?.append(SimpleInfoCellData(data: leitungstyp?.bezeichnung ?? "Leitung"))
-        data["main"]?.append(SingleTitledInfoCellData(title: "Material",data: material?.bezeichnung? ?? "-"))
+        data["main"]?.append(SingleTitledInfoCellData(title: "Material",data: material?.bezeichnung ?? "-"))
         
-        if let a = querschnitt?.groesse? {
+        if let a = querschnitt?.groesse {
             data["main"]?.append(SingleTitledInfoCellData(title: "Querschnitt", data: "\(a)mm²"))
         }
         
@@ -65,7 +68,7 @@ class Leitung : GeoBaseEntity , MapperProtocol,CellInformationProviderProtocol, 
     // CellInformationProviderProtocol
     
     func getMainTitle() -> String{
-        if let mat = leitungstyp?.bezeichnung? {
+        if let mat = leitungstyp?.bezeichnung {
             return mat
         }
         else {
@@ -74,7 +77,7 @@ class Leitung : GeoBaseEntity , MapperProtocol,CellInformationProviderProtocol, 
     }
     func getSubTitle() -> String{
         var laengePart: String
-        if let len = laenge? {
+        if let len = laenge {
             let rounded=String(format: "%.2f", len)
             laengePart="\(rounded)m"
         }
@@ -82,7 +85,7 @@ class Leitung : GeoBaseEntity , MapperProtocol,CellInformationProviderProtocol, 
             laengePart="?m"
         }
         var aPart:String
-        if let a = querschnitt?.groesse? {
+        if let a = querschnitt?.groesse {
             aPart = ", \(a)mm²"
         }
         else {
@@ -100,41 +103,31 @@ class Leitung : GeoBaseEntity , MapperProtocol,CellInformationProviderProtocol, 
 
 }
 
-class Leitungsmaterial : BaseEntity, MapperProtocol{
+class Leitungsmaterial : BaseEntity, Mappable{
     var bezeichnung: String?
     
-    required init() {
-        
-    }
-    
-    override func map(mapper: Mapper) {
-        id <= mapper["id"];
-        bezeichnung <= mapper["bezeichnung"]
+   
+    override func mapping(map: Map) {
+        id <- map["id"];
+        bezeichnung <- map["bezeichnung"]
     }
 }
 
-class Querschnitt : BaseEntity, MapperProtocol {
+class Querschnitt : BaseEntity, Mappable {
     var groesse: Float?
-    required init() {
-        
-    }
     
-    override func map(mapper: Mapper) {
-        id <= mapper["id"];
-        groesse <= mapper["groesse"]
+    override func mapping(map: Map) {
+        id <- map["id"];
+        groesse <- map["groesse"]
     }
 }
 
-class Leitungstyp : BaseEntity, MapperProtocol{
+class Leitungstyp : BaseEntity, Mappable{
     var bezeichnung: String?
     
-    required init() {
-        
-    }
-    
-    override func map(mapper: Mapper) {
-        id <= mapper["id"];
-        bezeichnung <= mapper["bezeichnung"]
+    override func mapping(map: Map) {
+        id <- map["id"];
+        bezeichnung <- map["bezeichnung"]
     }
 }
 
