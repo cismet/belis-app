@@ -63,7 +63,7 @@ class DoubleTitledInfoCellData: CellData {
         self.titleRight=titleRight
         self.dataRight=dataRight
     }
-    func getCellReuseIdentifier() -> String {
+    @objc func getCellReuseIdentifier() -> String {
         return "doubleTitled"
     }
 
@@ -84,14 +84,14 @@ class DoubleTitledInfoCellDataWithDetails:CellData, SimpleCellActionProvider {
         self.dataRight=dataRight
         self.details=details
     }
-    
+   @objc  
     func getCellReuseIdentifier() -> String {
         return "doubleTitled"
     }
     
-    func action(vc:UIViewController) {
+    @objc func action(vc:UIViewController) {
         let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
-        detailVC.setData(details)
+        detailVC.setCellData(details)
         vc.navigationController?.pushViewController(detailVC, animated: true)
     }
     

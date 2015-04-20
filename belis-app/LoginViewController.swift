@@ -42,7 +42,7 @@ class LoginViewController: UIViewController {
     }
 
     @IBAction func loginButtonTabbed(sender: AnyObject) {
-        let mainView = self.storyboard?.instantiateViewControllerWithIdentifier("mainView") as MainViewController;
+        let mainView = self.storyboard?.instantiateViewControllerWithIdentifier("mainView") as! MainViewController;
         self.presentViewController(mainView, animated: true, completion: {} );
         
     }

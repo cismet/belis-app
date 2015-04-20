@@ -8,7 +8,7 @@
 
 import Foundation
 import ObjectMapper
-class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol, CellInformationProviderProtocol, CellDataProvider {
+class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, CellInformationProviderProtocol, CellDataProvider {
     var strasse: Strasse?
     var energielieferant: Energielieferant?
     var rundsteuerempfaenger: Rundsteuerempfaenger?
@@ -42,47 +42,48 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
     var monteur: String?
     var einbaudatum: NSDate?
     
-    override func map(mapper: Mapper) {
-        id <= mapper["id"];
-        strasse <= mapper["fk_strassenschluessel"]
-        energielieferant <= mapper["fk_energielieferant"]
-        rundsteuerempfaenger <= mapper["rundsteuerempfaenger"]
-        typ <= mapper["fk_leuchttyp"]
-        unterhaltspflicht_leuchte <= mapper["fk_unterhaltspflicht_leuchte"]
-        zaehler <= mapper["zaehler"]
-        dk1 <= mapper["fk_dk1"]
-        dk2 <= mapper["fk_dk2"]
-        inbetriebnahme_leuchte <= mapper["inbetriebnahme_leuchte"]
-        lfd_nummer <= mapper["lfd_nummer"]
-        standort  <= mapper["fk_standort"]
-        kennziffer <= mapper["fk_kennziffer"]
-        leuchtennummer <= mapper["leuchtennummer"]
-        montagefirma_leuchte <= mapper["montagefirma_leuchte"]
-        schaltstelle <= mapper["schaltstelle"]
-        anzahl_1dk <= mapper["anzahl_1dk"]
-        anzahl_2dk <= mapper["anzahl_2dk"]
-        stadtbezirk <= mapper["fk_stadtbezirk"]
-        bemerkungen <= mapper["bemerkungen"]
-        dokumente <= mapper["dokumente"]
-        anschlussleistung_1dk <= mapper["anschlussleistung_1dk"]
-        anschlussleistung_2dk <= mapper["anschlussleistung_2dk"]
-        kabeluebergangskasten_sk_ii <= mapper["kabeluebergangskasten_sk_ii"]
-        leuchtmittel <= mapper["leuchtmittel"]
-        lebensdauer <= mapper["lebensdauer"]
-        wechseldatum <= mapper["wechseldatum"]
-        wartungszyklus <= mapper["wartungszyklus"]
-        wechselvorschaltgeraet <= mapper["wechselvorschaltgeraet"]
-        naechster_wechsel <= mapper["naechster_wechsel"]
-        vorschaltgeraet <= mapper["vorschaltgeraet"]
-        monteur <= mapper["monteur"]
-        einbaudatum <= mapper["einbaudatum"]
+ 
+    override func mapping(map: Map) {
+        id <- map["id"];
+        strasse <- map["fk_strassenschluessel"]
+        energielieferant <- map["fk_energielieferant"]
+        rundsteuerempfaenger <- map["rundsteuerempfaenger"]
+        typ <- map["fk_leuchttyp"]
+        unterhaltspflicht_leuchte <- map["fk_unterhaltspflicht_leuchte"]
+        zaehler <- map["zaehler"]
+        dk1 <- map["fk_dk1"]
+        dk2 <- map["fk_dk2"]
+        inbetriebnahme_leuchte <- map["inbetriebnahme_leuchte"]
+        lfd_nummer <- map["lfd_nummer"]
+        standort  <- map["fk_standort"]
+        kennziffer <- map["fk_kennziffer"]
+        leuchtennummer <- map["leuchtennummer"]
+        montagefirma_leuchte <- map["montagefirma_leuchte"]
+        schaltstelle <- map["schaltstelle"]
+        anzahl_1dk <- map["anzahl_1dk"]
+        anzahl_2dk <- map["anzahl_2dk"]
+        stadtbezirk <- map["fk_stadtbezirk"]
+        bemerkungen <- map["bemerkungen"]
+        dokumente <- map["dokumente"]
+        anschlussleistung_1dk <- map["anschlussleistung_1dk"]
+        anschlussleistung_2dk <- map["anschlussleistung_2dk"]
+        kabeluebergangskasten_sk_ii <- map["kabeluebergangskasten_sk_ii"]
+        leuchtmittel <- map["leuchtmittel"]
+        lebensdauer <- map["lebensdauer"]
+        wechseldatum <- map["wechseldatum"]
+        wartungszyklus <- map["wartungszyklus"]
+        wechselvorschaltgeraet <- map["wechselvorschaltgeraet"]
+        naechster_wechsel <- map["naechster_wechsel"]
+        vorschaltgeraet <- map["vorschaltgeraet"]
+        monteur <- map["monteur"]
+        einbaudatum <- map["einbaudatum"]
         
         //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
-        wgs84WKT <= mapper["fk_standort.fk_geom.wgs84_wkt"]
+        wgs84WKT <- map["fk_standort.fk_geom.wgs84_wkt"]
         
     }
     
-    func getAllData() -> [String: [CellData]] {
+    @objc func getAllData() -> [String: [CellData]] {
         var data: [String: [CellData]] = ["main":[]]
         data["main"]?.append(SimpleInfoCellData(data: getSubTitle()))
         if let inbetriebnahme=inbetriebnahme_leuchte {
@@ -119,7 +120,7 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
         }
         
         var mastVorhanden=true //wenn virtueller Standort nil ist, dann bleibt true gesetzt
-        if let isVirtStandort=standort?.istVirtuellerStandort? {
+        if let isVirtStandort=standort?.istVirtuellerStandort {
             mastVorhanden = !isVirtStandort
         }
         
@@ -275,7 +276,7 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
         }
         
         if let rse=rundsteuerempfaenger?.rs_typ {
-            if let ebd=einbaudatum? {
+            if let ebd=einbaudatum {
                 data["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Rundsteuerempfänger", dataLeft: rse, titleRight: "Einbaudatum", dataRight: "\(ebd)"))
             }
             else {
@@ -283,7 +284,7 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
             }
         }
         else {
-            if let ebd=einbaudatum? {
+            if let ebd=einbaudatum {
                 data["main"]?.append(SingleTitledInfoCellData(title: "Einbaudatum", data: "\(ebd)"))
             }
         }
@@ -291,7 +292,7 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
         if let uhalt=unterhaltspflicht_leuchte?.unterhaltspflichtiger {
             data["main"]?.append(SingleTitledInfoCellData(title: "Unterhalt", data: uhalt))
         }
-        if let zaehler=zaehler? {
+        if let zaehler=zaehler {
             if zaehler {
                 data["main"]?.append(SimpleInfoCellData(data: "Zähler vorhanden"))
             }
@@ -304,13 +305,13 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
         if let dk1=dk1?.beschreibung {
             dkDetails["main"]?.append(SingleTitledInfoCellData(title: "Doppelkommando 1", data: dk1))
         }
-        if let pdk1=anschlussleistung_1dk? {
+        if let pdk1=anschlussleistung_1dk {
             dkDetails["main"]?.append(SingleTitledInfoCellData(title: "Anschlussleistung DK1", data: "\(pdk1)"))
         }
         if let dk2=dk2?.beschreibung {
             dkDetails["main"]?.append(SingleTitledInfoCellData(title: "Doppelkommando 2", data: dk2))
         }
-        if let pdk2=anschlussleistung_2dk? {
+        if let pdk2=anschlussleistung_2dk {
             dkDetails["main"]?.append(SingleTitledInfoCellData(title: "Anschlussleistung DK2", data: "\(pdk2)"))
         }
         if dkDetails["main"]?.count>0 {
@@ -327,21 +328,21 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
         if let lichtfarbe=leuchtmittel?.lichtfarbe {
             leuchtmittelDetails["main"]?.append(SingleTitledInfoCellData(title: "Lichtfarbe", data: lichtfarbe))
         }
-        if let ld=lebensdauer? {
+        if let ld=lebensdauer {
             leuchtmittelDetails["main"]?.append(SingleTitledInfoCellData(title: "Lebensdauer", data: "\(ld)"))
         }
-        if let wd=wechseldatum? {
-            if let nw=naechster_wechsel? {
+        if let wd=wechseldatum {
+            if let nw=naechster_wechsel {
                 leuchtmittelDetails["main"]?.append(DoubleTitledInfoCellData(titleLeft: "letzter Leuchtmittelwechsel", dataLeft: "\(wd)", titleRight: "nächster Wechsel", dataRight:  "\(nw)"))
             }
             else {
                 leuchtmittelDetails["main"]?.append(SingleTitledInfoCellData(title: "letzter Leuchtmittelwechsel", data: "\(wd)"))
             }
-        } else if let nw=naechster_wechsel? {
+        } else if let nw=naechster_wechsel {
             leuchtmittelDetails["main"]?.append(SingleTitledInfoCellData(title: "nächster Wechsel", data: "\(nw)"))
         }
         
-        if let sonderturnus=wartungszyklus? {
+        if let sonderturnus=wartungszyklus {
             leuchtmittelDetails["main"]?.append(SingleTitledInfoCellData(title: "Sonderturnus", data: "\(sonderturnus)"))
         }
         if leuchtmittelDetails["main"]?.count>0 {
@@ -356,9 +357,9 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
         
         //Vorschaltgerät
         var vsgDetails: [String: [CellData]] = ["main":[]]
-        if let vsg=vorschaltgeraet? {
+        if let vsg=vorschaltgeraet {
             vsgDetails["main"]?.append(SingleTitledInfoCellData(title: "Vorschaltgerät", data: vsg))
-            if let vsgWe=wechselvorschaltgeraet? {
+            if let vsgWe=wechselvorschaltgeraet {
                 vsgDetails["main"]?.append(SingleTitledInfoCellData(title: "Erneuerung Vorschaltgerät", data: "\(vsgWe)"))
             }
             if vsgDetails["main"]?.count>1 {
@@ -387,9 +388,6 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
     }
     
     
-    required init(){
-        super.init();
-    }
     
     override func getAnnotationImageName() -> String{
         return "leuchte.png";
@@ -433,7 +431,7 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
             typPart = "Leuchte"
         }
         var nrPart:String
-        if let lnInt = leuchtennummer? {
+        if let lnInt = leuchtennummer {
             nrPart = "-\(lnInt)"
         }
         else {
@@ -450,7 +448,7 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
         return "\(typPart)\(nrPart)\(standortPart)"
     }
     func getSubTitle() -> String{
-        if let typBez = typ?.fabrikat? {
+        if let typBez = typ?.fabrikat {
             return typBez
         }
         else {
@@ -471,41 +469,35 @@ class Leuchte : GeoBaseEntity, MapperProtocol,CallOutInformationProviderProtocol
 }
 
 
-class Energielieferant : BaseEntity, MapperProtocol{
+class Energielieferant : BaseEntity, Mappable{
     var name: String?
     var key: Int?
-    required init() {
-        
-    }
     
-    override func map(mapper: Mapper) {
-        super.id <= mapper["id"]
-        name <= mapper["energielieferant"]
-        key <= mapper["pk"]
+    override func mapping(map: Map) {
+        super.id <- map["id"]
+        name <- map["energielieferant"]
+        key <- map["pk"]
     }
 }
 
-class Rundsteuerempfaenger : BaseEntity, MapperProtocol{
+class Rundsteuerempfaenger : BaseEntity, Mappable{
     var herrsteller_rs: String?
     var rs_typ: String?
     var anschlusswert: Float?
     var programm: String?
     var foto: DMSUrl?
-    required init() {
-        
-    }
     
-    override func map(mapper: Mapper) {
-        super.id <= mapper["id"]
-        herrsteller_rs <= mapper["herrsteller_rs"]
-        rs_typ <= mapper["rs_typ"]
-        anschlusswert <= mapper["anschlusswert"]
-        programm <= mapper["programm"]
-        foto <= mapper["foto"]
+    override func mapping(map: Map) {
+        super.id <- map["id"]
+        herrsteller_rs <- map["herrsteller_rs"]
+        rs_typ <- map["rs_typ"]
+        anschlusswert <- map["anschlusswert"]
+        programm <- map["programm"]
+        foto <- map["foto"]
     }
 }
 
-class LeuchtenTyp : BaseEntity, MapperProtocol{
+class LeuchtenTyp : BaseEntity, Mappable{
     var leuchtenTyp: String?
     var bestueckung: Float?
     var leistung: Float?
@@ -520,86 +512,65 @@ class LeuchtenTyp : BaseEntity, MapperProtocol{
     var foto: DMSUrl?
     var dokumente: [DMSUrl] = []
     var typenbezeichnung: String?
-    
-    required init() {
-        
-    }
-    
-    override func map(mapper: Mapper) {
-        super.id <= mapper["id"]
-        leuchtenTyp <= mapper["leuchtentyp"]
-        bestueckung <= mapper["bestueckung"]
-        leistung <= mapper["leistung"]
-        leistung_brutto <= mapper["leistung_brutto"]
-        fabrikat <= mapper["fabrikat"]
-        lampe <= mapper["lampe"]
-        leistung2stufe <= mapper["leistung2stufe"]
-        vorschaltgeraet <= mapper["vorschaltgeraet"]
-        einbau_vorschaltgeraet <= mapper["einbau_vorschaltgeraet"]
-        leistung_reduziert <= mapper["leistung_reduziert"]
-        leistung_brutto_reduziert <= mapper["leistung_brutto_reduziert"]
-        foto <= mapper["foto"]
-        dokumente <= mapper["dokumente"]
-        typenbezeichnung <= mapper["typenbezeichnung"]
+
+    override func mapping(map: Map) {
+        super.id <- map["id"]
+        leuchtenTyp <- map["leuchtentyp"]
+        bestueckung <- map["bestueckung"]
+        leistung <- map["leistung"]
+        leistung_brutto <- map["leistung_brutto"]
+        fabrikat <- map["fabrikat"]
+        lampe <- map["lampe"]
+        leistung2stufe <- map["leistung2stufe"]
+        vorschaltgeraet <- map["vorschaltgeraet"]
+        einbau_vorschaltgeraet <- map["einbau_vorschaltgeraet"]
+        leistung_reduziert <- map["leistung_reduziert"]
+        leistung_brutto_reduziert <- map["leistung_brutto_reduziert"]
+        foto <- map["foto"]
+        dokumente <- map["dokumente"]
+        typenbezeichnung <- map["typenbezeichnung"]
     }
 }
 
-class Unterhaltspflicht : BaseEntity, MapperProtocol{
+class Unterhaltspflicht : BaseEntity, Mappable{
     var unterhaltspflichtiger: String?
     var key: Int?
-    required init() {
-        
-    }
-    
-    override func map(mapper: Mapper) {
-        super.id <= mapper["id"]
-        unterhaltspflichtiger <= mapper["unterhaltspflichtiger_leuchte"]
-        key <= mapper["pk"]
+    override func mapping(map: Map) {
+        super.id <- map["id"]
+        unterhaltspflichtiger <- map["unterhaltspflichtiger_leuchte"]
+        key <- map["pk"]
     }
 }
 
-class Doppelkommando : BaseEntity, MapperProtocol{
+class Doppelkommando : BaseEntity, Mappable{
     var key: String?
     var beschreibung: String?
-    
-    required init() {
-        
-    }
-    
-    override func map(mapper: Mapper) {
-        super.id <= mapper["id"]
-        beschreibung <= mapper["beschreibung"]
-        key <= mapper["pk"]
+    override func mapping(map: Map) {
+        super.id <- map["id"]
+        beschreibung <- map["beschreibung"]
+        key <- map["pk"]
     }
 }
 
-class Kennziffer : BaseEntity, MapperProtocol{
+class Kennziffer : BaseEntity, Mappable{
     var beschreibung: String?
     var kennziffer: Int?
-    required init() {
-        
-    }
-    
-    override func map(mapper: Mapper) {
-        super.id <= mapper["id"]
-        beschreibung <= mapper["beschreibung"]
-        kennziffer <= mapper["kennziffer"]
+    override func mapping(map: Map) {
+        super.id <- map["id"]
+        beschreibung <- map["beschreibung"]
+        kennziffer <- map["kennziffer"]
     }
 }
 
 
-class Leuchtmittel : BaseEntity, MapperProtocol{
+class Leuchtmittel : BaseEntity, Mappable{
     var hersteller: String?
     var lichtfarbe: String?
     
-    required init() {
-        
-    }
-    
-    override func map(mapper: Mapper) {
-        super.id <= mapper["id"]
-        hersteller <= mapper["hersteller"]
-        lichtfarbe <= mapper["lichtfarbe"]
+    override func mapping(map: Map) {
+        super.id <- map["id"]
+        hersteller <- map["hersteller"]
+        lichtfarbe <- map["lichtfarbe"]
     }
 }
 

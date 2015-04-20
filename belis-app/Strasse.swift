@@ -10,16 +10,12 @@ import Foundation
 import ObjectMapper
 
 
-class Strasse : BaseEntity, MapperProtocol{
+class Strasse : BaseEntity, Mappable{
     var name: String?
     var key: String?
-    required init() {
-        
-    }
-    
-    override func map(mapper: Mapper) {
-        super.id <= mapper["id"]
-        name <= mapper["strasse"]
-        key <= mapper["pk"]
+    override func mapping(map: Map) {
+        super.id <- map["id"]
+        name <- map["strasse"]
+        key <- map["pk"]
     }
 }

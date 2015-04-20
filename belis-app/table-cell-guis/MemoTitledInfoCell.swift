@@ -46,7 +46,7 @@ class MemoTitledInfoCellData : CellData{
         self.title=title
         self.data=data
     }
-    func getCellReuseIdentifier() -> String {
+    @objc func getCellReuseIdentifier() -> String {
         return "memoTitled"
     }
 

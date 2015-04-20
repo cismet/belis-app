@@ -1,9 +1,10 @@
 //
 //  AF+ImageView+Extension.swift
-//  belis-app
 //
-//  Created by Thorsten Hell on 25/02/15.
-//  Copyright (c) 2015 cismet. All rights reserved.
+//  Version 1.04
+//
+//  Created by Melvin Rivera on 7/23/14.
+//  Copyright (c) 2014 All Forces. All rights reserved.
 //
 
 import Foundation
@@ -35,3 +36,4 @@ extension UIImageView {
     
     
 }
+ 

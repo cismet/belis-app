@@ -10,7 +10,7 @@ import Foundation
 import ObjectMapper
 
 
-class Standort: GeoBaseEntity , MapperProtocol{
+class Standort: GeoBaseEntity , Mappable{
     var plz : String?
     var strasse : Strasse?
     var bezirk : Stadtbezirk?
@@ -44,106 +44,89 @@ class Standort: GeoBaseEntity , MapperProtocol{
     var anlagengruppe: MastAnlagengruppe?
     var anbauten: String?
 
-    required init(){
-        super.init();
+    required init?(_ map: Map) {
+        super.init(map)
     }
     
-
-    override func map(mapper: Mapper) {
-        super.id <= mapper["id"];
-        plz  <= mapper["plz"]
-        strasse  <= mapper["fk_strassenschluessel"]
-        bezirk  <= mapper["fk_stadtbezirk"]
-        mastart  <= mapper["fk_mastart"]
-        klassifizierung <= mapper["fk_klassifizierung"]
-        mastanstrich <= mapper["mastanstrich"]
-        mastschutz <= mapper["mastschutz"]
-        unterhaltspflicht <= mapper["fk_unterhaltspflicht_mast"]
-        typ <= mapper["fk_masttyp"]
-        inbetriebnahme <= mapper["inbetriebnahme_mast"]
-        verrechnungseinheit <= mapper["verrechnungseinheit"]
-        letzteAenderung <= mapper["letzte_aenderung"]
-        istVirtuellerStandort <= mapper["ist_virtueller_standort"]
-        bemerkung <= mapper["bemerkungen"]
-        montagefirma <= mapper["montagefirma"]
-        standortangabe <= mapper["standortangabe"]
-        kennziffer <= mapper["fk_kennziffer"]
-        lfdNummer <= mapper["lfd_nummer"]
-        hausnummer <= mapper["haus_nr"]
-        dokumente <= mapper["dokumente"]
-        gruendung <= mapper["gruendung"]
-        elektrischePruefung <= mapper["elek_pruefung"]
-        erdung <= mapper["erdung"]
-        monteur <= mapper["monteur"]
-        standsicherheitspruefung <= mapper["standsicherheitspruefung"]
-        verfahrenSHP <= mapper["verfahren"]
-        foto <= mapper["foto"]
-        naechstesPruefdatum <= mapper["naechstes_pruefdatum"]
-        anstrichfrabe <= mapper["anstrichfarbe"]
-        revision <= mapper["revision"]
-        anlagengruppe <= mapper["anlagengruppe"]
-        anbauten <= mapper["anbauten"]
+    override func mapping(map: Map) {
+        super.id <- map["id"];
+        plz  <- map["plz"]
+        strasse  <- map["fk_strassenschluessel"]
+        bezirk  <- map["fk_stadtbezirk"]
+        mastart  <- map["fk_mastart"]
+        klassifizierung <- map["fk_klassifizierung"]
+        mastanstrich <- map["mastanstrich"]
+        mastschutz <- map["mastschutz"]
+        unterhaltspflicht <- map["fk_unterhaltspflicht_mast"]
+        typ <- map["fk_masttyp"]
+        inbetriebnahme <- map["inbetriebnahme_mast"]
+        verrechnungseinheit <- map["verrechnungseinheit"]
+        letzteAenderung <- map["letzte_aenderung"]
+        istVirtuellerStandort <- map["ist_virtueller_standort"]
+        bemerkung <- map["bemerkungen"]
+        montagefirma <- map["montagefirma"]
+        standortangabe <- map["standortangabe"]
+        kennziffer <- map["fk_kennziffer"]
+        lfdNummer <- map["lfd_nummer"]
+        hausnummer <- map["haus_nr"]
+        dokumente <- map["dokumente"]
+        gruendung <- map["gruendung"]
+        elektrischePruefung <- map["elek_pruefung"]
+        erdung <- map["erdung"]
+        monteur <- map["monteur"]
+        standsicherheitspruefung <- map["standsicherheitspruefung"]
+        verfahrenSHP <- map["verfahren"]
+        foto <- map["foto"]
+        naechstesPruefdatum <- map["naechstes_pruefdatum"]
+        anstrichfrabe <- map["anstrichfarbe"]
+        revision <- map["revision"]
+        anlagengruppe <- map["anlagengruppe"]
+        anbauten <- map["anbauten"]
 
         //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
-        wgs84WKT <= mapper["fk_geom.wgs84_wkt"]
+        wgs84WKT <- map["fk_geom.wgs84_wkt"]
         
     }
     
     
 }
 
-class Stadtbezirk : BaseEntity, MapperProtocol{
+class Stadtbezirk : BaseEntity, Mappable{
     var name: String?
-    required init() {
-        
-    }
-    
-    override func map(mapper: Mapper) {
-        super.id <= mapper["id"]
-        name <= mapper["bezirk"]
+    override func mapping(map: Map) {
+        super.id <- map["id"]
+        name <- map["bezirk"]
     }
 }
-class Mastart : BaseEntity, MapperProtocol{
+class Mastart : BaseEntity, Mappable{
     var pk: String?
     var name: String?
     
-    required init() {
-        
-    }
-    
-    override func map(mapper: Mapper) {
-        super.id <= mapper["id"]
-        pk <= mapper["pk"]
-        name <= mapper["mastart"]
+    override func mapping(map: Map) {
+        super.id <- map["id"]
+        pk <- map["pk"]
+        name <- map["mastart"]
     }
 }
-class Mastklassifizierung : BaseEntity, MapperProtocol{
+class Mastklassifizierung : BaseEntity, Mappable{
     var pk: String?
     var name: String?
-    required init() {
-        
-    }
-    
-    override func map(mapper: Mapper) {
-        super.id <= mapper["id"]
-        pk <= mapper["pk"]
-        name <= mapper["klassifizierung"]
+    override func mapping(map: Map) {
+        super.id <- map["id"]
+        pk <- map["pk"]
+        name <- map["klassifizierung"]
     }
 }
-class MastUnterhaltspflicht : BaseEntity, MapperProtocol{
+class MastUnterhaltspflicht : BaseEntity, Mappable{
     var pk: String?
     var name: String?
-    required init() {
-        
-    }
-    
-    override func map(mapper: Mapper) {
-        super.id <= mapper["id"]
-        pk <= mapper["pk"]
-        name <= mapper["unterhalt_mast"]
+    override func mapping(map: Map) {
+        super.id <- map["id"]
+        pk <- map["pk"]
+        name <- map["unterhalt_mast"]
     }
 }
-class Masttyp : BaseEntity, MapperProtocol{
+class Masttyp : BaseEntity, Mappable{
     var typ: String?
     var bezeichnung: String?
     var lph: Double?
@@ -152,46 +135,34 @@ class Masttyp : BaseEntity, MapperProtocol{
     var dokumente: [DMSUrl] = []
     var foto: DMSUrl?
     
-    required init() {
-        
-    }
-    
-    override func map(mapper: Mapper) {
-        super.id <= mapper["id"]
-        typ <= mapper["masttyp"]
-        bezeichnung <= mapper["bezeichnung"]
-        lph <= mapper["lph"]
-        hersteller <= mapper["hersteller"]
-        wandstaerke <= mapper["wandstaerke"]
-        dokumente <= mapper["dokumente"]
-        foto <= mapper["foto"]
+    override func mapping(map: Map) {
+        super.id <- map["id"]
+        typ <- map["masttyp"]
+        bezeichnung <- map["bezeichnung"]
+        lph <- map["lph"]
+        hersteller <- map["hersteller"]
+        wandstaerke <- map["wandstaerke"]
+        dokumente <- map["dokumente"]
+        foto <- map["foto"]
     }
 }
 
-class MastKennziffer : BaseEntity, MapperProtocol{
+class MastKennziffer : BaseEntity, Mappable{
     var kennziffer: Int?
     var beschreibung: String?
     
-    required init() {
-        
-    }
-    
-    override func map(mapper: Mapper) {
-        super.id <= mapper["id"]
-        kennziffer <= mapper["kennziffer"]
-        beschreibung <= mapper["beschreibung"]
+    override func mapping(map: Map) {
+        super.id <- map["id"]
+        kennziffer <- map["kennziffer"]
+        beschreibung <- map["beschreibung"]
     }
 }
-class MastAnlagengruppe : BaseEntity, MapperProtocol{
+class MastAnlagengruppe : BaseEntity, Mappable{
     var nummer: Int?
     var bezeichnung: String?
-    required init() {
-        
-    }
-    
-    override func map(mapper: Mapper) {
-        super.id <= mapper["id"]
-        nummer <= mapper["nummer"]
-        bezeichnung <= mapper["bezeichnung"]
+    override func mapping(map: Map) {
+        super.id <- map["id"]
+        nummer <- map["nummer"]
+        bezeichnung <- map["bezeichnung"]
     }
 }

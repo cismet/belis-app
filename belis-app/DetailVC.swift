@@ -30,7 +30,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate{
         // Dispose of any resources that can be recreated.
     }
     
-    func setData(data:[String: [CellData]]){
+    func setCellData(data:[String: [CellData]]){
         self.data=data
     }
     
@@ -59,7 +59,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate{
         let sectionKey: String = data.keys.array[section]
         let dataItem: CellData = data[sectionKey]![row]
         let cellReuseId=dataItem.getCellReuseIdentifier()
-        let cell: UITableViewCell  = tableView.dequeueReusableCellWithIdentifier(cellReuseId) as UITableViewCell
+        let cell: UITableViewCell  = tableView.dequeueReusableCellWithIdentifier(cellReuseId) as! UITableViewCell
         if let filler = cell as? CellDataUI {
             filler.fillFromCellData(dataItem)
         }
@@ -85,7 +85,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate{
         let sectionKey: String = data.keys.array[section]
         let dataItem: CellData = data[sectionKey]![row]
         let cellReuseId=dataItem.getCellReuseIdentifier()
-        let cell: UITableViewCell  = tableView.dequeueReusableCellWithIdentifier(cellReuseId) as UITableViewCell
+        let cell: UITableViewCell  = tableView.dequeueReusableCellWithIdentifier(cellReuseId) as! UITableViewCell
         if let heightProvider = cell as? CellDataUI {
             return heightProvider.getPreferredCellHeight()
         }
@@ -104,7 +104,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate{
         let sectionKey: String = data.keys.array[section]
         let dataItem: CellData = data[sectionKey]![row]
         if let actionProvider = dataItem as? SimpleCellActionProvider {
-            (dataItem as SimpleCellActionProvider).action(self)
+            (dataItem as! SimpleCellActionProvider).action(self)
         }
     }
     
