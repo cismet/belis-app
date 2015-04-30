@@ -58,7 +58,7 @@ class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, Cel
         material <- map["fk_material"]
         strasse <- map["fk_strassenschluessel"]
         dokumente <- map["dokumente"]
-        pruefdatum <- map["pruefdatum"]
+        pruefdatum <- (map["pruefdatum"], DateTransformFromMillisecondsTimestamp())
         monteur <- map["monteur"]
         bemerkung <- map["bemerkung"]
         foto <- map["foto"]
@@ -85,7 +85,7 @@ class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, Cel
         }
         else {
             if let pruefd=pruefdatum {
-                data["main"]?.append(SingleTitledInfoCellData(title: "Prüfung", data: "\(pruefd)"))
+                data["main"]?.append(SingleTitledInfoCellData(title: "Prüfung", data: "\(pruefd.toDateString())"))
             }
         }
         if let m=monteur {
