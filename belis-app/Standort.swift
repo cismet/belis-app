@@ -55,13 +55,13 @@ class Standort: GeoBaseEntity , Mappable{
         bezirk  <- map["fk_stadtbezirk"]
         mastart  <- map["fk_mastart"]
         klassifizierung <- map["fk_klassifizierung"]
-        mastanstrich <- map["mastanstrich"]
-        mastschutz <- map["mastschutz"]
+        mastanstrich <- (map["mastanstrich"], DateTransformFromMillisecondsTimestamp())
+        mastschutz <- (map["mastschutz"], DateTransformFromMillisecondsTimestamp())
         unterhaltspflicht <- map["fk_unterhaltspflicht_mast"]
         typ <- map["fk_masttyp"]
-        inbetriebnahme <- map["inbetriebnahme_mast"]
+        inbetriebnahme <- (map["inbetriebnahme_mast"], DateTransformFromMillisecondsTimestamp())
         verrechnungseinheit <- map["verrechnungseinheit"]
-        letzteAenderung <- map["letzte_aenderung"]
+        letzteAenderung <- (map["letzte_aenderung"], DateTransformFromMillisecondsTimestamp())
         istVirtuellerStandort <- map["ist_virtueller_standort"]
         bemerkung <- map["bemerkungen"]
         montagefirma <- map["montagefirma"]
@@ -71,15 +71,15 @@ class Standort: GeoBaseEntity , Mappable{
         hausnummer <- map["haus_nr"]
         dokumente <- map["dokumente"]
         gruendung <- map["gruendung"]
-        elektrischePruefung <- map["elek_pruefung"]
+        elektrischePruefung <- (map["elek_pruefung"], DateTransformFromMillisecondsTimestamp())
         erdung <- map["erdung"]
         monteur <- map["monteur"]
-        standsicherheitspruefung <- map["standsicherheitspruefung"]
+        standsicherheitspruefung <- (map["standsicherheitspruefung"], DateTransformFromMillisecondsTimestamp())
         verfahrenSHP <- map["verfahren"]
         foto <- map["foto"]
-        naechstesPruefdatum <- map["naechstes_pruefdatum"]
+        naechstesPruefdatum <- (map["naechstes_pruefdatum"], DateTransformFromMillisecondsTimestamp())
         anstrichfrabe <- map["anstrichfarbe"]
-        revision <- map["revision"]
+        revision <- (map["revision"], DateTransformFromMillisecondsTimestamp())
         anlagengruppe <- map["anlagengruppe"]
         anbauten <- map["anbauten"]
 

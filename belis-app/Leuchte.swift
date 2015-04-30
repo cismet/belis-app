@@ -53,7 +53,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         zaehler <- map["zaehler"]
         dk1 <- map["fk_dk1"]
         dk2 <- map["fk_dk2"]
-        inbetriebnahme_leuchte <- map["inbetriebnahme_leuchte"]
+        inbetriebnahme_leuchte <- (map["inbetriebnahme_leuchte"], DateTransformFromMillisecondsTimestamp())
         lfd_nummer <- map["lfd_nummer"]
         standort  <- map["fk_standort"]
         kennziffer <- map["fk_kennziffer"]
@@ -70,13 +70,13 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         kabeluebergangskasten_sk_ii <- map["kabeluebergangskasten_sk_ii"]
         leuchtmittel <- map["leuchtmittel"]
         lebensdauer <- map["lebensdauer"]
-        wechseldatum <- map["wechseldatum"]
-        wartungszyklus <- map["wartungszyklus"]
-        wechselvorschaltgeraet <- map["wechselvorschaltgeraet"]
-        naechster_wechsel <- map["naechster_wechsel"]
+        wechseldatum <- (map["wechseldatum"], DateTransformFromMillisecondsTimestamp())
+        wartungszyklus <- (map["wartungszyklus"], DateTransformFromMillisecondsTimestamp())
+        wechselvorschaltgeraet <- (map["wechselvorschaltgeraet"], DateTransformFromMillisecondsTimestamp())
+        naechster_wechsel <- (map["naechster_wechsel"], DateTransformFromMillisecondsTimestamp())
         vorschaltgeraet <- map["vorschaltgeraet"]
         monteur <- map["monteur"]
-        einbaudatum <- map["einbaudatum"]
+        einbaudatum <- (map["einbaudatum"], DateTransformFromMillisecondsTimestamp())
         
         //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
         wgs84WKT <- map["fk_standort.fk_geom.wgs84_wkt"]
@@ -87,7 +87,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         var data: [String: [CellData]] = ["main":[]]
         data["main"]?.append(SimpleInfoCellData(data: getSubTitle()))
         if let inbetriebnahme=inbetriebnahme_leuchte {
-            data["main"]?.append(SingleTitledInfoCellData(title: "Inbetriebnahme", data: "\(inbetriebnahme)"))
+            data["main"]?.append(SingleTitledInfoCellData(title: "Inbetriebnahme", data: "\(inbetriebnahme.toDateString())"))
         }
         
         if let strName=standort?.strasse?.name {
@@ -179,19 +179,19 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
                 mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Unterhalt", data: unterhalt))
             }
             if let mastschutz=standort?.mastschutz {
-                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Mastschutz erneuert am", data: "\(mastschutz)"))
+                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Mastschutz erneuert am", data: "\(mastschutz.toDateString())"))
             }
             if let inbetriebnahme=standort?.inbetriebnahme {
-                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Inbetriebnahme am", data: "\(inbetriebnahme)"))
+                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Inbetriebnahme am", data: "\(inbetriebnahme.toDateString())"))
             }
             if let lae=standort?.letzteAenderung {
-                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Letzte Änderung am", data: "\(lae)"))
+                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Letzte Änderung am", data: "\(lae.toDateString())"))
             }
             if let rev=standort?.revision {
-                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Letzte Revision am", data: "\(rev)"))
+                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Letzte Revision am", data: "\(rev.toDateString())"))
             }
             if let ma=standort?.mastanstrich {
-                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Letzter Mastanstrich am", data: "\(ma)"))
+                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Letzter Mastanstrich am", data: "\(ma.toDateString())"))
             }
             if let farbe=standort?.anstrichfrabe {
                 mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Anstrichfarbe", data: "\(farbe)"))
@@ -277,7 +277,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         
         if let rse=rundsteuerempfaenger?.rs_typ {
             if let ebd=einbaudatum {
-                data["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Rundsteuerempfänger", dataLeft: rse, titleRight: "Einbaudatum", dataRight: "\(ebd)"))
+                data["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Rundsteuerempfänger", dataLeft: rse, titleRight: "Einbaudatum", dataRight: "\(ebd.toDateString())"))
             }
             else {
                 data["main"]?.append(SingleTitledInfoCellData(title: "Rundsteuerempfänger", data: rse))
@@ -285,7 +285,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         }
         else {
             if let ebd=einbaudatum {
-                data["main"]?.append(SingleTitledInfoCellData(title: "Einbaudatum", data: "\(ebd)"))
+                data["main"]?.append(SingleTitledInfoCellData(title: "Einbaudatum", data: "\(ebd.toDateString())"))
             }
         }
         
@@ -333,17 +333,17 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         }
         if let wd=wechseldatum {
             if let nw=naechster_wechsel {
-                leuchtmittelDetails["main"]?.append(DoubleTitledInfoCellData(titleLeft: "letzter Leuchtmittelwechsel", dataLeft: "\(wd)", titleRight: "nächster Wechsel", dataRight:  "\(nw)"))
+                leuchtmittelDetails["main"]?.append(DoubleTitledInfoCellData(titleLeft: "letzter Leuchtmittelwechsel", dataLeft: "\(wd.toDateString())", titleRight: "nächster Wechsel", dataRight:  "\(nw.toDateString())"))
             }
             else {
-                leuchtmittelDetails["main"]?.append(SingleTitledInfoCellData(title: "letzter Leuchtmittelwechsel", data: "\(wd)"))
+                leuchtmittelDetails["main"]?.append(SingleTitledInfoCellData(title: "letzter Leuchtmittelwechsel", data: "\(wd.toDateString())"))
             }
         } else if let nw=naechster_wechsel {
-            leuchtmittelDetails["main"]?.append(SingleTitledInfoCellData(title: "nächster Wechsel", data: "\(nw)"))
+            leuchtmittelDetails["main"]?.append(SingleTitledInfoCellData(title: "nächster Wechsel", data: "\(nw.toDateString())"))
         }
         
         if let sonderturnus=wartungszyklus {
-            leuchtmittelDetails["main"]?.append(SingleTitledInfoCellData(title: "Sonderturnus", data: "\(sonderturnus)"))
+            leuchtmittelDetails["main"]?.append(SingleTitledInfoCellData(title: "Sonderturnus", data: "\(sonderturnus.toDateString())"))
         }
         if leuchtmittelDetails["main"]?.count>0 {
             if let lm=leuchtmittel?.hersteller {
@@ -360,7 +360,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         if let vsg=vorschaltgeraet {
             vsgDetails["main"]?.append(SingleTitledInfoCellData(title: "Vorschaltgerät", data: vsg))
             if let vsgWe=wechselvorschaltgeraet {
-                vsgDetails["main"]?.append(SingleTitledInfoCellData(title: "Erneuerung Vorschaltgerät", data: "\(vsgWe)"))
+                vsgDetails["main"]?.append(SingleTitledInfoCellData(title: "Erneuerung Vorschaltgerät", data: "\(vsgWe.toDateString())"))
             }
             if vsgDetails["main"]?.count>1 {
                 data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Vorschaltgerät", data: vsg, details: vsgDetails))
