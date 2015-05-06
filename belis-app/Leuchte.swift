@@ -152,13 +152,24 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
                     mastTypDetails["main"]?.append(SingleTitledInfoCellData(title: "Wandstärke", data: "\(wandstaerke)"))
                     
                 }
+                var docCount=0
                 if let foto=standort?.typ?.foto {
+                    mastTypDetails["Dokumente"]=[]
                     mastTypDetails["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: "Foto", url: foto.getUrl()))
+                    docCount=1
                 }
                 
-                if let urls=standort?.typ?.dokumente {
-                    for url in urls {
-                        mastTypDetails["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
+                
+                // zuerst die Dokumente des Typs
+                if standort?.typ?.dokumente.count>0 {
+                    if docCount==0 {
+                        data["Dokumente"]=[]
+                    }
+                    if let urls=standort?.typ?.dokumente {
+                        for url in urls {
+                            mastTypDetails["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
+                            docCount++
+                        }
                     }
                 }
                 if mastDetails["main"]?.count>1 {
@@ -217,21 +228,21 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
                         erdStr="ja"
                     }
                 }
-                pruefDetails["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Elektrische Pruefung", dataLeft: "\(eP)", titleRight: "Erdung", dataRight: erdStr))
+                pruefDetails["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Elektrische Pruefung", dataLeft: "\(eP.toDateString())", titleRight: "Erdung", dataRight: erdStr))
             }
             if let pruefer=standort?.monteur {
                 pruefDetails["main"]?.append(SingleTitledInfoCellData(title: "Elektrische Pruefung durchgeführt von", data: pruefer))
             }
             if let ssp=standort?.standsicherheitspruefung {
                 if let np=standort?.naechstesPruefdatum {
-                    pruefDetails["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Standsicherheitsprüfung", dataLeft: "\(ssp)", titleRight: "Nächster Prüftermin", dataRight: "\(np)"))
+                    pruefDetails["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Standsicherheitsprüfung", dataLeft: "\(ssp.toDateString())", titleRight: "Nächster Prüftermin", dataRight: "\(np.toDateString())"))
                 }
                 else {
-                    pruefDetails["main"]?.append(SingleTitledInfoCellData(title: "Standsicherheitsprüfung", data: "\(ssp)"))
+                    pruefDetails["main"]?.append(SingleTitledInfoCellData(title: "Standsicherheitsprüfung", data: "\(ssp.toDateString())"))
                 }
             }
             else if let np=standort?.naechstesPruefdatum {
-                pruefDetails["main"]?.append(SingleTitledInfoCellData(title: "Nächster Prüftermin", data: "\(np)"))
+                pruefDetails["main"]?.append(SingleTitledInfoCellData(title: "Nächster Prüftermin", data: "\(np.toDateString())"))
             }
             if let vf=standort?.verfahrenSHP {
                 pruefDetails["main"]?.append(SingleTitledInfoCellData(title: "Verfahren", data: vf))
@@ -250,14 +261,19 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
             if let bem=standort?.bemerkung {
                 mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Bemerkung", data: bem))
             }
-            
+            var docCount=0
             if let foto=standort?.foto {
-                data["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: "Foto", url: foto.getUrl()))
+                mastDetails["Dokumente"]=[]
+                mastDetails["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: "Foto", url: foto.getUrl()))
             }
             
             if let urls=standort?.dokumente {
+                if docCount==0 && standort?.dokumente.count>0 {
+                    mastDetails["Dokumente"]=[]
+                }
+                
                 for url in urls {
-                    data["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
+                    mastDetails["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
                 }
             }
             
@@ -378,9 +394,11 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
             data["main"]?.append(SingleTitledInfoCellData(title: "Bemerkungen", data: bem))
         }
         
-        
-        for url in dokumente {
-            data["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
+        if dokumente.count>0 {
+            data["Dokumente"]=[]
+            for url in dokumente {
+                data["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
+            }
         }
         
         
