@@ -11,9 +11,15 @@ import Alamofire;
 import ObjectMapper;
 
 class CidsConnector {
+   
+    let LEUCHTEN = 0;
+    let MASTEN = 1;
+    let MAUERLASCHEN = 2;
+    let LEITUNGEN = 3;
+    
     private var user : String; //WendlingM@BELIS2"
     private var password : String; //kif
-    private var classes = [27:"TDTA_LEUCHTEN", 52:"MAUERLASCHE",49:"LEITUNG"] as [Int:String];
+    private var classes = [27:"TDTA_LEUCHTEN", 26:"TDTA_STANDORT_MAST", 52:"MAUERLASCHE",49:"LEITUNG"] as [Int:String];
     let queue = NSOperationQueue()
 
     let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
@@ -27,7 +33,7 @@ class CidsConnector {
 //        manager=NetworkManager().manager!
     }
     var searchResults : [[GeoBaseEntity]] = [
-        [Leuchte](),[Mauerlasche](),[Leitung]()
+        [Leuchte](),[Standort](),[Mauerlasche](),[Leitung]()
     ];
     var start=CidsConnector.currentTimeMillis();
     
@@ -36,10 +42,11 @@ class CidsConnector {
 
     }
     
-    func search(ewktMapContent: String,leuchtenEnabled: String, mauerlaschenEnabled: String, leitungenEnabled: String, handler: (searchResults : [[GeoBaseEntity]]) -> ()) {
+    func search(ewktMapContent: String,leuchtenEnabled: String, mastenEnabled: String,mauerlaschenEnabled: String, leitungenEnabled: String, handler: (searchResults : [[GeoBaseEntity]]) -> ()) {
         
         var qp=QueryParameters(list:[
             SingleQueryParameter(key: "LeuchteEnabled", value: leuchtenEnabled),
+            SingleQueryParameter(key: "MastOhneLeuchtenEnabled", value: mastenEnabled),
             SingleQueryParameter(key: "MauerlascheEnabled", value: mauerlaschenEnabled),
             SingleQueryParameter(key: "LeitungEnabled", value: leitungenEnabled),
             SingleQueryParameter(key: "GeometryFromWkt", value: ewktMapContent)
@@ -64,8 +71,7 @@ class CidsConnector {
                         self.searchResults[0].removeAll(keepCapacity: false);
                         self.searchResults[1].removeAll(keepCapacity: false);
                         self.searchResults[2].removeAll(keepCapacity: false);
-                        
-                        
+                        self.searchResults[3].removeAll(keepCapacity: false);
                     }
                     self.start=CidsConnector.currentTimeMillis();
                     self.queue.maxConcurrentOperationCount = 10
@@ -81,7 +87,7 @@ class CidsConnector {
                 }
                 
             }
-        //println(alamoRequest.debugDescription)
+        println(alamoRequest.debugDescription)
     }
 
     
@@ -97,15 +103,18 @@ class CidsConnector {
                 //                println(json);
                 let classKey=self.classes[classId] as String!
                 switch (classKey){
-                    case "TDTA_LEUCHTEN":
-                        var leuchte = Mapper<Leuchte>().map(json)
-                        self.searchResults[0].append(leuchte!)
+                case "TDTA_LEUCHTEN":
+                    var leuchte = Mapper<Leuchte>().map(json)
+                    self.searchResults[self.LEUCHTEN].append(leuchte!)
+                case "TDTA_STANDORT_MAST":
+                    var mast = Mapper<Standort>().map(json)
+                    self.searchResults[self.MASTEN].append(mast!)
                      case "MAUERLASCHE":
                         var mauerlasche = Mapper<Mauerlasche>().map(json)
-                        self.searchResults[1].append(mauerlasche!)
+                        self.searchResults[self.MAUERLASCHEN].append(mauerlasche!)
                     case "LEITUNG":
                         var leitung = Mapper<Leitung>().map(json)
-                        self.searchResults[2].append(leitung!)
+                        self.searchResults[self.LEITUNGEN].append(leitung!)
                default:
                     println("could not find object with classid=\(classId)")
                 }
