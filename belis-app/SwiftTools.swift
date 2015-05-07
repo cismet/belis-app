@@ -36,3 +36,7 @@ class DateTransformFromMillisecondsTimestamp : TransformType {
         return nil
     }
 }
+
+class MatchingSearchItemsAnnotations : MKPointAnnotation {
+    
+}

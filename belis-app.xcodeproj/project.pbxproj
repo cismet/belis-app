@@ -79,6 +79,7 @@
 		2DB8E80E1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB8E80D1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift */; };
 		2DBA35091AA5A8D500BCAE5A /* UrlSessionBackgroundDownload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DBA35081AA5A8D500BCAE5A /* UrlSessionBackgroundDownload.swift */; };
 		2DF2C7DD1AB6E2FE00F3A2FC /* SimpleInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF2C7DC1AB6E2FE00F3A2FC /* SimpleInfoCell.swift */; };
+		2DF5EBCC1AFB6F9100062669 /* mast.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DF5EBCB1AFB6F9100062669 /* mast.png */; };
 		2DF6A9BC1A82541900E20FBF /* MappingStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */; };
 /* End PBXBuildFile section */
 
@@ -179,6 +180,7 @@
 		2DB8E80D1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleUrlPreviewInfoCell.swift; sourceTree = "<group>"; };
 		2DBA35081AA5A8D500BCAE5A /* UrlSessionBackgroundDownload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlSessionBackgroundDownload.swift; sourceTree = "<group>"; };
 		2DF2C7DC1AB6E2FE00F3A2FC /* SimpleInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleInfoCell.swift; sourceTree = "<group>"; };
+		2DF5EBCB1AFB6F9100062669 /* mast.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mast.png; sourceTree = "<group>"; };
 		2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MappingStuff.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -270,6 +272,7 @@
 				2D2934261A84D4BF0034181F /* handle.png */,
 				2D5FB2F51A67CB120041020C /* belisBack.png */,
 				2D5FB2F61A67CB120041020C /* leuchte.png */,
+				2DF5EBCB1AFB6F9100062669 /* mast.png */,
 				2D5FB2F71A67CB120041020C /* mauerlasche.png */,
 				2D5FB2F81A67CB120041020C /* ml.png */,
 				2D5FB2F31A67CAA60041020C /* wupp.gpx */,
@@ -486,6 +489,7 @@
 				2D5FB30D1A67CC340041020C /* Main.storyboard in Resources */,
 				2D5FB30B1A67CC340041020C /* LaunchScreen.xib in Resources */,
 				2D5FB2FB1A67CB120041020C /* mauerlasche.png in Resources */,
+				2DF5EBCC1AFB6F9100062669 /* mast.png in Resources */,
 				2D2934271A84D4BF0034181F /* handle.png in Resources */,
 				2D5FB2FA1A67CB120041020C /* leuchte.png in Resources */,
 				2D5FB2D91A67C7320041020C /* Images.xcassets in Resources */,

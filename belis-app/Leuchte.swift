@@ -83,6 +83,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         
     }
     
+    //CellDataProvider
     @objc func getAllData() -> [String: [CellData]] {
         var data: [String: [CellData]] = ["main":[]]
         data["main"]?.append(SimpleInfoCellData(data: getSubTitle()))
@@ -130,158 +131,15 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         
         //Mast
         if mastVorhanden {
-            var mastDetails: [String: [CellData]] = ["main":[]]
-            
-            if let ueberschrift=standort?.mastart?.name {
-                mastDetails["main"]?.append(SimpleInfoCellData(data: ueberschrift))
+            if let s=standort {
+                var mastDetails: [String: [CellData]] = s.getAllData()
+                data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Mast",details: mastDetails))
+            }
+            else {
+                //serious error
             }
             
-            if let typ=standort?.typ?.typ {
-                var mastTypDetails: [String: [CellData]] = ["main":[]]
-                mastTypDetails["main"]?.append(SimpleInfoCellData(data: typ))
-                if let bezeichnung=standort?.typ?.bezeichnung {
-                    mastTypDetails["main"]?.append(SimpleInfoCellData(data: bezeichnung))
-                    
-                }
-                
-                if let hersteller=standort?.typ?.hersteller {
-                    mastTypDetails["main"]?.append(SingleTitledInfoCellData(title: "Hersteller", data: hersteller))
-                    
-                }
-                if let lph=standort?.typ?.lph {
-                    mastTypDetails["main"]?.append(SingleTitledInfoCellData(title: "Lph", data: "\(lph)"))
-                    
-                }
-                if let wandstaerke=standort?.typ?.wandstaerke {
-                    mastTypDetails["main"]?.append(SingleTitledInfoCellData(title: "Wandstärke", data: "\(wandstaerke)"))
-                    
-                }
-                var docCount=0
-                if let foto=standort?.typ?.foto {
-                    mastTypDetails["Dokumente"]=[]
-                    mastTypDetails["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: "Foto", url: foto.getUrl()))
-                    docCount=1
-                }
-                
-                
-                // zuerst die Dokumente des Typs
-                if standort?.typ?.dokumente.count>0 {
-                    if docCount==0 {
-                        data["Dokumente"]=[]
-                    }
-                    if let urls=standort?.typ?.dokumente {
-                        for url in urls {
-                            mastTypDetails["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
-                            docCount++
-                        }
-                    }
-                }
-                if mastDetails["main"]?.count>1 {
-                    mastDetails["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Masttyp", data: typ,details:mastTypDetails))
-                }
-                else {
-                    mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Masttyp", data: typ))
-                }
-            }
-            
-            if let klassifizierung=standort?.klassifizierung?.name {
-                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Klassifizierung", data: klassifizierung))
-            }
-            if let anlagengruppe=standort?.anlagengruppe?.bezeichnung {
-                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Anlagengruppe", data: anlagengruppe))
-            }
-            if let unterhalt=standort?.unterhaltspflicht?.name {
-                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Unterhalt", data: unterhalt))
-            }
-            if let mastschutz=standort?.mastschutz {
-                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Mastschutz erneuert am", data: "\(mastschutz.toDateString())"))
-            }
-            if let inbetriebnahme=standort?.inbetriebnahme {
-                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Inbetriebnahme am", data: "\(inbetriebnahme.toDateString())"))
-            }
-            if let lae=standort?.letzteAenderung {
-                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Letzte Änderung am", data: "\(lae.toDateString())"))
-            }
-            if let rev=standort?.revision {
-                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Letzte Revision am", data: "\(rev.toDateString())"))
-            }
-            if let ma=standort?.mastanstrich {
-                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Letzter Mastanstrich am", data: "\(ma.toDateString())"))
-            }
-            if let farbe=standort?.anstrichfrabe {
-                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Anstrichfarbe", data: "\(farbe)"))
-            }
-            if let fa=standort?.montagefirma {
-                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Montagefirma", data: "\(fa)"))
-            }
-            if let ve=standort?.verrechnungseinheit {
-                if ve {
-                    mastDetails["main"]?.append(SimpleInfoCellData(data: "Verrechnungseinheit"))
-                }
-            }
-            if let gruendung=standort?.gruendung {
-                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Gründung", data: gruendung))
-            }
-            
-            //Prüfungen
-            var pruefDetails: [String: [CellData]] = ["main":[]]
-            if let eP=standort?.elektrischePruefung {
-                var erdStr="nein"
-                if let erdung=standort?.erdung {
-                    if erdung {
-                        erdStr="ja"
-                    }
-                }
-                pruefDetails["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Elektrische Pruefung", dataLeft: "\(eP.toDateString())", titleRight: "Erdung", dataRight: erdStr))
-            }
-            if let pruefer=standort?.monteur {
-                pruefDetails["main"]?.append(SingleTitledInfoCellData(title: "Elektrische Pruefung durchgeführt von", data: pruefer))
-            }
-            if let ssp=standort?.standsicherheitspruefung {
-                if let np=standort?.naechstesPruefdatum {
-                    pruefDetails["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Standsicherheitsprüfung", dataLeft: "\(ssp.toDateString())", titleRight: "Nächster Prüftermin", dataRight: "\(np.toDateString())"))
-                }
-                else {
-                    pruefDetails["main"]?.append(SingleTitledInfoCellData(title: "Standsicherheitsprüfung", data: "\(ssp.toDateString())"))
-                }
-            }
-            else if let np=standort?.naechstesPruefdatum {
-                pruefDetails["main"]?.append(SingleTitledInfoCellData(title: "Nächster Prüftermin", data: "\(np.toDateString())"))
-            }
-            if let vf=standort?.verfahrenSHP {
-                pruefDetails["main"]?.append(SingleTitledInfoCellData(title: "Verfahren", data: vf))
-                
-            }
-            
-            if pruefDetails["main"]?.count>0 {
-                data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Prüfungen",details: pruefDetails))
-                
-            }
-            //------------------------(PR)
-            
-            if let anbauten=standort?.anbauten {
-                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Anbauten", data: anbauten))
-            }
-            if let bem=standort?.bemerkung {
-                mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Bemerkung", data: bem))
-            }
-            var docCount=0
-            if let foto=standort?.foto {
-                mastDetails["Dokumente"]=[]
-                mastDetails["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: "Foto", url: foto.getUrl()))
-            }
-            
-            if let urls=standort?.dokumente {
-                if docCount==0 && standort?.dokumente.count>0 {
-                    mastDetails["Dokumente"]=[]
-                }
-                
-                for url in urls {
-                    mastDetails["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
-                }
-            }
-            
-            data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Mast",details: mastDetails))
+
         }
         //------------------------(M)
         

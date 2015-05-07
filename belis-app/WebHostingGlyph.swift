@@ -23,7 +23,8 @@ struct WebHostingGlyps {
         "icon-antenna":"\u{f3ec}",
         "icon-document":"\u{f0c2}",
         "icon-chevron-right":"\u{f488}",
-        "icon-camera":"\u{f19b}"
+        "icon-camera":"\u{f19b}",
+        "icon-horizontalexpand":"\u{f578}"
     ]
     
 }

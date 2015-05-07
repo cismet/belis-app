@@ -12,23 +12,28 @@ import Alamofire;
 import ObjectMapper;
 
 
-class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,CLLocationManagerDelegate, MKMapViewDelegate {
+class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var mapView: MKMapView!;
     @IBOutlet weak var tableView: UITableView!;
     @IBOutlet weak var mapTypeSegmentedControl: UISegmentedControl!;
     @IBOutlet weak var mapToolbar: UIToolbar!;
     @IBOutlet weak var focusToggle: UISwitch!
+    @IBOutlet weak var textfieldGeoSearch: UITextField!
     
     let LEUCHTEN = 0;
-    let MAUERLASCHEN = 1;
-    let LEITUNGEN = 2;
+    let MASTEN = 1;
+    let MAUERLASCHEN = 2;
+    let LEITUNGEN = 3;
     
     var searchResults : [[GeoBaseEntity]] = [
-        [Leuchte](),[Mauerlasche](),[Leitung]()
+        [Leuchte](),[Standort](),[Mauerlasche](),[Leitung]()
     ];
-    
+    var matchingSearchItems: [MKMapItem] = [MKMapItem]()
+    var matchingSearchItemsAnnotations: [MKPointAnnotation ] = [MKPointAnnotation]()
+
     var isLeuchtenEnabled=true;
+    var isMastenEnabled=true;
     var isMauerlaschenEnabled=true;
     var isleitungenEnabled=true;
     var highlightedLine : HighlightedMkPolyline?;
@@ -112,7 +117,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //mapView.gestureRecognizerShouldBegin(tapGestureRecognizer)
         
         UINavigationController(rootViewController: self)
+        textfieldGeoSearch.delegate=self
         
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
     
     override func didReceiveMemoryWarning() {
@@ -131,6 +142,57 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
     }
     
+    @IBAction func geoSearchButtonTabbed(sender: AnyObject) {
+        if textfieldGeoSearch.text != "" {
+            geoSearch()
+        }
+    }
+    @IBAction func geoSearchInputDidEnd(sender: AnyObject) {
+        geoSearch()
+    }
+    
+    private func geoSearch(){
+        if matchingSearchItems.count>0 {
+            self.mapView.removeAnnotations(self.matchingSearchItemsAnnotations)
+            self.matchingSearchItems.removeAll(keepCapacity: false)
+            matchingSearchItemsAnnotations.removeAll(keepCapacity: false)
+        }
+        let request = MKLocalSearchRequest()
+        request.naturalLanguageQuery = textfieldGeoSearch.text
+        request.region = mapView.region
+        
+        let search = MKLocalSearch(request: request)
+        
+        search.startWithCompletionHandler({(response:
+            MKLocalSearchResponse!,
+            error: NSError!) in
+            
+            if error != nil {
+                println("Error occured in search: \(error.localizedDescription)")
+            } else if response.mapItems.count == 0 {
+                println("No matches found")
+            } else {
+                println("Matches found")
+                
+                for item in response.mapItems as! [MKMapItem] {
+                    
+                    
+                    self.matchingSearchItems.append(item as MKMapItem)
+                    println("Matching items = \(self.matchingSearchItems.count)")
+                    
+                    var annotation = MatchingSearchItemsAnnotations()
+                    annotation.coordinate = item.placemark.coordinate
+                    annotation.title = item.name
+                    self.matchingSearchItemsAnnotations.append(annotation)
+                    self.mapView.addAnnotation(annotation)
+                }
+                
+                self.mapView.showAnnotations(self.matchingSearchItemsAnnotations, animated: true)
+                
+            }
+        })
+        
+    }
     
     //UITableViewDataSource
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -145,6 +207,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             //            println(indexPath.row);
             let leuchte = searchResults[indexPath.section][indexPath.row] as! Leuchte;
             cellInfoProvider=leuchte
+        }
+        if indexPath.section==MASTEN {
+            //            println(indexPath.row);
+            let standort = searchResults[indexPath.section][indexPath.row] as! Standort;
+            cellInfoProvider=standort
         }
         else if indexPath.section==MAUERLASCHEN {
             let mauerlasche = searchResults[indexPath.section][indexPath.row] as! Mauerlasche;
@@ -162,7 +229,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return cell;
     }
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 3;
+        return 4;
     }
     
     
@@ -182,13 +249,17 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
+    
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if (section==0){
+        if (section==LEUCHTEN){
             return "Leuchten \(searchResults[LEUCHTEN].count)";
         }
-        else if (section==1){
+        else if (section==MASTEN){
+            return "Masten \(searchResults[MASTEN].count)";
+        }
+        else if (section==MAUERLASCHEN){
             return "Mauerlaschen \(searchResults[MAUERLASCHEN].count)";
-        }else
+        }else //LEITUNGEN
         {
             return "Leitungen \(searchResults[LEITUNGEN].count)";
         }
@@ -353,9 +424,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
         delay(0.0)
             {
-                if view.annotation !== self.selectedAnnotation {
-                    mapView.deselectAnnotation(view.annotation, animated: false)
-                    mapView.selectAnnotation(self.selectedAnnotation, animated: false)
+                if !view.annotation.isKindOfClass(MatchingSearchItemsAnnotations) {
+                    if view.annotation !== self.selectedAnnotation {
+                        mapView.deselectAnnotation(view.annotation, animated: false)
+                        mapView.selectAnnotation(self.selectedAnnotation, animated: false)
+                    }
                 }
                 
         }
@@ -528,8 +601,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             detailVC.setCellData(leuchte.getAllData())
             detailVC.title="Leuchte"
             var detailNC=UINavigationController(rootViewController: detailVC)
-            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
-            detailVC.navigationItem.rightBarButtonItem = action
+//            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
+//            detailVC.navigationItem.rightBarButtonItem = action
             let icon=UIBarButtonItem()
             icon.image=getGlyphedImage("icon-ceilinglight")
             detailVC.navigationItem.leftBarButtonItem = icon
@@ -538,7 +611,22 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let popC=UIPopoverController(contentViewController: detailNC)
             popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
         }
-        if let leitung = geoBaseEntity as? Leitung {
+        else if let standort = geoBaseEntity as? Standort {
+            let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            detailVC.setCellData(standort.getAllData())
+            detailVC.title="Mast"
+            var detailNC=UINavigationController(rootViewController: detailVC)
+//            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
+//            detailVC.navigationItem.rightBarButtonItem = action
+            let icon=UIBarButtonItem()
+            icon.image=getGlyphedImage("icon-horizontalexpand")
+            detailVC.navigationItem.leftBarButtonItem = icon
+            selectedAnnotation=nil
+            mapView.deselectAnnotation(view.annotation, animated: false)
+            let popC=UIPopoverController(contentViewController: detailNC)
+            popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
+        }
+        else if let leitung = geoBaseEntity as? Leitung {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
             detailVC.setCellData(leitung.getAllData())
             detailVC.title="Leitung"
@@ -583,7 +671,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
         }
         
-        searchResults=[[Leuchte](),[Mauerlasche](),[Leitung]()];
+        searchResults=[[Leuchte](),[Standort](),[Mauerlasche](),[Leitung]()];
         
         self.tableView.reloadData();
         
@@ -613,7 +701,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let ewktMapExtent="SRID=4326;POLYGON((\(x1) \(y1),\(x1) \(y2),\(x2) \(y2),\(x2) \(y1),\(x1) \(y1)))";
         
         
-        CidsConnector(user: "WendlingM@BELIS2", password: "boxy").search(ewktMapExtent, leuchtenEnabled: "\(isLeuchtenEnabled)", mauerlaschenEnabled: "\(isMauerlaschenEnabled)", leitungenEnabled: "\(isleitungenEnabled)") {
+        CidsConnector(user: "WendlingM@BELIS2", password: "boxy").search(ewktMapExtent, leuchtenEnabled: "\(isLeuchtenEnabled)", mastenEnabled: "\(isMastenEnabled)", mauerlaschenEnabled: "\(isMauerlaschenEnabled)", leitungenEnabled: "\(isleitungenEnabled)") {
             searchResults in
             self.searchResults=searchResults
             self.tableView.reloadData();
