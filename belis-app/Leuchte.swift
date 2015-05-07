@@ -106,7 +106,10 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
             if let bez = standort?.bezirk?.name {
                 strDetails["main"]?.append(SingleTitledInfoCellData(title: "Stadtbezirk", data: bez))
             }
-            
+            if let standortangabe=standort?.standortangabe {
+                strDetails["main"]?.append(SingleTitledInfoCellData(title: "Standortangabe", data: standortangabe))
+            }
+
             
             
             if let hausnr=standort?.hausnummer {
@@ -116,6 +119,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
                 data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Strasse", data: strName,details:strDetails))
                 
             }
+            
             
         }
         
