@@ -7,7 +7,219 @@
 //
 
 import Foundation
+import ObjectMapper
 
-class Schaltstelle : GeoBaseEntity {
+class Schaltstelle : GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider{
     
+    var erstellungsjahr: NSDate?
+    var laufendeNummer: Int?
+    var bauart: Schaltstellenbauart?
+    var strasse: Strasse?
+    var bemerkung: String?
+    var schaltstellenNummer: String?
+    var zusaetzlicheStandortbezeichnung: String?
+    var hausnummer: String?
+    var dokumente: [DMSUrl]=[]
+    var pruefdatum: NSDate?
+    var foto: DMSUrl?
+    var monteur: String?
+    var rundsteuerempfaenger: Rundsteuerempfaenger?
+    var einbaudatumRundsteuerempfaenger: NSDate?
+        
+    required init?(_ map: Map) {
+        super.init(map)
+    }
+    
+    override func mapping(map: Map) {
+        super.id <- map["id"];
+        erstellungsjahr <- (map["erstellungsjahr"],DateTransformFromMillisecondsTimestamp())
+        laufendeNummer <- map["laufende_nummer"]
+        bauart <- map["fk_bauart"]
+        strasse <- map["fk_strassenschluessel"]
+        bemerkung <- map["bemerkung"]
+        schaltstellenNummer <- map["schaltstellen_nummer"]
+        zusaetzlicheStandortbezeichnung <- map["zusaetzliche_standortbezeichnung"]
+        hausnummer <- map["haus_nummer"]
+        dokumente <- map["dokumente"]
+        pruefdatum <- (map["pruefdatum"], DateTransformFromMillisecondsTimestamp())
+        foto <- map["foto"]
+        monteur <- map["monteur"]
+        rundsteuerempfaenger <- map["rundsteuerempfaenger"]
+        einbaudatumRundsteuerempfaenger <- (map["einbaudatum_rs"], DateTransformFromMillisecondsTimestamp())
+        
+        //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
+        wgs84WKT <- map["fk_geom.wgs84_wkt"]
+
+    }
+    // CellInformationProviderProtocol
+    
+    func getMainTitle() -> String{
+        var s=""
+        
+        if let bauartBez=bauart?.bezeichnung {
+            s=bauartBez
+        }
+        else {
+            s="Schaltstelle"
+        }
+        
+        if let nr=laufendeNummer {
+            s=s+" - \(nr)"
+        }
+        return s
+    }
+    func getSubTitle() -> String{
+        return "-"
+    }
+    func getTertiaryInfo() -> String{
+        if let str = strasse?.name {
+            return str
+        }
+        return "-"
+    }
+    func getQuaternaryInfo() -> String{
+        return ""
+    }
+    
+    
+    //CallOutInformationProviderProtocol
+    
+    func getTitle() -> String {
+        return getAnnotationTitle()
+    }
+    func getGlyphIconName() -> String {
+        return "icon-switch"
+    }
+    
+    func getDetailViewID() -> String{
+        return "SchaltstelleDetails"
+    }
+    
+    func canShowDetailInformation() -> Bool{
+        return true
+    }
+    
+    
+    //Override GeoBaseEntity
+    override func getAnnotationImageName() -> String{
+        return "schaltstelle.png";
+    }
+    
+    override func getAnnotationTitle() -> String{
+        return getMainTitle();
+    }
+    
+    override func canShowCallout() -> Bool{
+        return true
+    }
+    override func getAnnotationCalloutGlyphIconName() -> String {
+        return "icon-switch"
+    }
+    
+    
+    
+    //CellDataProvider
+    @objc func getAllData() -> [String: [CellData]] {
+        var details: [String: [CellData]] = ["main":[]]
+        details["main"]?.append(SimpleInfoCellData(data: getMainTitle()))
+        
+        //Laufende Nummer
+        
+        //Strasse
+        if let strName=strasse?.name {
+            var strDetails: [String: [CellData]] = ["main":[]]
+            
+            if let hausnr=hausnummer {
+                strDetails["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Strasse", dataLeft: strName, titleRight: "Hausnummer", dataRight: "\(hausnr)"))
+            }
+            else {
+                strDetails["main"]?.append(SingleTitledInfoCellData(title: "Strasse", data: strName))
+                
+            }
+            
+            if let schluessel=strasse?.key {
+                strDetails["main"]?.append(SingleTitledInfoCellData(title: "Schlüssel", data: schluessel))
+            }
+            
+            if let standortangabe=zusaetzlicheStandortbezeichnung {
+                strDetails["main"]?.append(SingleTitledInfoCellData(title: "Standortangabe", data: standortangabe))
+            }
+            
+            if let hausnr=hausnummer {
+                details["main"]?.append(DoubleTitledInfoCellDataWithDetails(titleLeft: "Strasse", dataLeft: strName, titleRight: "Hausnummer", dataRight: "\(hausnr)",details:strDetails))
+            }
+            else {
+                details["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Strasse", data: strName,details:strDetails))
+            }
+        }
+        
+        //Erstellungsjahr
+        if let erst=erstellungsjahr {
+            details["main"]?.append(SingleTitledInfoCellData(title: "Erstellungsjahr", data: erst.toDateString()))
+        }
+        
+        //Prüfdatum
+        if let pruef=pruefdatum {
+            details["main"]?.append(SingleTitledInfoCellData(title: "Prüfdatum", data: pruef.toDateString()))
+        }
+
+        //Monteur
+        if let mont=monteur {
+            details["main"]?.append(SingleTitledInfoCellData(title: "Monteur", data: mont))
+        }
+
+        
+        //Schaltstellennummer
+        if let snr=schaltstellenNummer {
+            details["main"]?.append(SingleTitledInfoCellData(title: "Schaltstellennummer", data: "\(snr)"))
+        }
+
+
+        //Rundsteuerempfänger + Einbaudatum
+        
+        if let rse=rundsteuerempfaenger?.rs_typ {
+            if let ebd=einbaudatumRundsteuerempfaenger {
+                details["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Rundsteuerempfänger", dataLeft: rse, titleRight: "Einbaudatum", dataRight: "\(ebd.toDateString())"))
+            }
+            else {
+                details["main"]?.append(SingleTitledInfoCellData(title: "Rundsteuerempfänger", data: rse))
+            }
+        }
+
+        //Bemerkung
+        if let bem=bemerkung {
+            details["main"]?.append(SingleTitledInfoCellData(title: "Bemerkung", data: bem))
+        }
+        
+
+        //Dokumente
+
+        var docCount=0
+        if let fotoChecked=foto {
+            details["Dokumente"]=[]
+            details["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: "Foto", url: fotoChecked.getUrl()))
+            docCount=1
+        }
+        
+        
+        if docCount==0 && dokumente.count>0 {
+            details["Dokumente"]=[]
+        }
+        
+        for url in dokumente {
+            details["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
+        }
+        
+        return details
+    }
+    
+}
+
+
+class Schaltstellenbauart: BaseEntity, Mappable{
+    var bezeichnung: String?
+    override func mapping(map: Map) {
+        super.id <- map["id"]
+        bezeichnung <- map["bezeichnung"]
+    }
 }

@@ -78,6 +78,7 @@
 		2DB6E8C31A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */; };
 		2DB8E80E1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB8E80D1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift */; };
 		2DBA35091AA5A8D500BCAE5A /* UrlSessionBackgroundDownload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DBA35081AA5A8D500BCAE5A /* UrlSessionBackgroundDownload.swift */; };
+		2DEDB58B1AFCCDC9004ADC92 /* schaltstelle.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DEDB58A1AFCCDC9004ADC92 /* schaltstelle.png */; };
 		2DF2C7DD1AB6E2FE00F3A2FC /* SimpleInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF2C7DC1AB6E2FE00F3A2FC /* SimpleInfoCell.swift */; };
 		2DF5EBCC1AFB6F9100062669 /* mast.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DF5EBCB1AFB6F9100062669 /* mast.png */; };
 		2DF6A9BC1A82541900E20FBF /* MappingStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */; };
@@ -179,6 +180,7 @@
 		2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebHostingGlyph.swift; sourceTree = "<group>"; };
 		2DB8E80D1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleUrlPreviewInfoCell.swift; sourceTree = "<group>"; };
 		2DBA35081AA5A8D500BCAE5A /* UrlSessionBackgroundDownload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlSessionBackgroundDownload.swift; sourceTree = "<group>"; };
+		2DEDB58A1AFCCDC9004ADC92 /* schaltstelle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = schaltstelle.png; sourceTree = "<group>"; };
 		2DF2C7DC1AB6E2FE00F3A2FC /* SimpleInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleInfoCell.swift; sourceTree = "<group>"; };
 		2DF5EBCB1AFB6F9100062669 /* mast.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mast.png; sourceTree = "<group>"; };
 		2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MappingStuff.swift; sourceTree = "<group>"; };
@@ -273,6 +275,7 @@
 				2D5FB2F51A67CB120041020C /* belisBack.png */,
 				2D5FB2F61A67CB120041020C /* leuchte.png */,
 				2DF5EBCB1AFB6F9100062669 /* mast.png */,
+				2DEDB58A1AFCCDC9004ADC92 /* schaltstelle.png */,
 				2D5FB2F71A67CB120041020C /* mauerlasche.png */,
 				2D5FB2F81A67CB120041020C /* ml.png */,
 				2D5FB2F31A67CAA60041020C /* wupp.gpx */,
@@ -481,6 +484,7 @@
 				2D65AABC1AB09B8E00621A0A /* cismetSignet2k.png in Resources */,
 				2D9952241AA5FFC600B5E02E /* DokumentPreviewVC.xib in Resources */,
 				2D0B7F6E1AB3456D00E33A6C /* MemoTitledInfoCell.xib in Resources */,
+				2DEDB58B1AFCCDC9004ADC92 /* schaltstelle.png in Resources */,
 				2D407C211AC2ECD40083013A /* DetailVC.xib in Resources */,
 				2D0B7F6A1AB3454100E33A6C /* DoubleTitledInfoCell.xib in Resources */,
 				2D5FB2FC1A67CB120041020C /* ml.png in Resources */,
