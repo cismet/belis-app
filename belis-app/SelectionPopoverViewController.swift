@@ -16,10 +16,9 @@ class SelectionPopoverViewController: UIViewController {
     @IBOutlet weak var switchMauerlaschen: UISwitch!
     @IBOutlet weak var switchLeitungen: UISwitch!
     @IBOutlet weak var switchMasten: UISwitch!
-    
+    @IBOutlet weak var switchSchaltstellen: UISwitch!
     
     @IBAction func leuchtenSwitchToggled(sender: AnyObject) {
-
         mainVC.isLeuchtenEnabled=switchLeuchten.on
     }
     
@@ -36,11 +35,20 @@ class SelectionPopoverViewController: UIViewController {
         mainVC.isleitungenEnabled=switchLeitungen.on
     }
     
+    
+    @IBAction func schaltstellenSwitchToggled(sender: AnyObject) {
+        mainVC.isSchaltstelleEnabled=switchSchaltstellen.on
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         switchLeitungen.setOn(mainVC.isleitungenEnabled,animated:false)
         switchMauerlaschen.setOn(mainVC.isMauerlaschenEnabled,animated:false)
         switchLeuchten.setOn(mainVC.isLeuchtenEnabled,animated:false)
+        switchSchaltstellen.setOn(mainVC.isSchaltstelleEnabled, animated: false)
+        switchMasten.setOn(mainVC.isMastenEnabled, animated: false)
+        
     }
 
     override func didReceiveMemoryWarning() {
