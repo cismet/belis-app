@@ -509,7 +509,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <value key="contentSizeForViewInPopover" type="size" width="256" height="217"/>
+                    <value key="contentSizeForViewInPopover" type="size" width="256" height="284"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="274" height="257"/>
                     <connections>
