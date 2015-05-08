@@ -569,6 +569,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             var kindOfGeoBaseEntity = 0;
             if geoBaseEntity is Leuchte {
                 kindOfGeoBaseEntity=LEUCHTEN
+            } else if geoBaseEntity is Standort {
+                kindOfGeoBaseEntity=MASTEN
             } else if geoBaseEntity is Leitung {
                 kindOfGeoBaseEntity=LEITUNGEN
             } else if geoBaseEntity is Mauerlasche {
