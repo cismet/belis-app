@@ -12,14 +12,15 @@ import ObjectMapper;
 
 class CidsConnector {
    
-    let LEUCHTEN = 0;
-    let MASTEN = 1;
-    let MAUERLASCHEN = 2;
-    let LEITUNGEN = 3;
+    let LEUCHTEN = 0
+    let MASTEN = 1
+    let MAUERLASCHEN = 2
+    let LEITUNGEN = 3
+    let SCHALTSTELLEN = 4
     
     private var user : String; //WendlingM@BELIS2"
     private var password : String; //kif
-    private var classes = [27:"TDTA_LEUCHTEN", 26:"TDTA_STANDORT_MAST", 52:"MAUERLASCHE",49:"LEITUNG"] as [Int:String];
+    private var classes = [27:"TDTA_LEUCHTEN", 26:"TDTA_STANDORT_MAST", 52:"MAUERLASCHE",49:"LEITUNG", 51:"SCHALTSTELLE"] as [Int:String];
     let queue = NSOperationQueue()
 
     let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
@@ -33,7 +34,7 @@ class CidsConnector {
 //        manager=NetworkManager().manager!
     }
     var searchResults : [[GeoBaseEntity]] = [
-        [Leuchte](),[Standort](),[Mauerlasche](),[Leitung]()
+        [Leuchte](),[Standort](),[Mauerlasche](),[Leitung](),[Schaltstelle]()
     ];
     var start=CidsConnector.currentTimeMillis();
     
@@ -42,13 +43,14 @@ class CidsConnector {
 
     }
     
-    func search(ewktMapContent: String,leuchtenEnabled: String, mastenEnabled: String,mauerlaschenEnabled: String, leitungenEnabled: String, handler: (searchResults : [[GeoBaseEntity]]) -> ()) {
+    func search(ewktMapContent: String,leuchtenEnabled: String, mastenEnabled: String,mauerlaschenEnabled: String, leitungenEnabled: String, schaltstellenEnabled: String, handler: (searchResults : [[GeoBaseEntity]]) -> ()) {
         
         var qp=QueryParameters(list:[
             SingleQueryParameter(key: "LeuchteEnabled", value: leuchtenEnabled),
             SingleQueryParameter(key: "MastOhneLeuchtenEnabled", value: mastenEnabled),
             SingleQueryParameter(key: "MauerlascheEnabled", value: mauerlaschenEnabled),
             SingleQueryParameter(key: "LeitungEnabled", value: leitungenEnabled),
+            SingleQueryParameter(key: "SchaltstelleEnabled", value: schaltstellenEnabled),
             SingleQueryParameter(key: "GeometryFromWkt", value: ewktMapContent)
             ]);
         
@@ -72,6 +74,8 @@ class CidsConnector {
                         self.searchResults[1].removeAll(keepCapacity: false);
                         self.searchResults[2].removeAll(keepCapacity: false);
                         self.searchResults[3].removeAll(keepCapacity: false);
+                        self.searchResults[4].removeAll(keepCapacity: false);
+
                     }
                     self.start=CidsConnector.currentTimeMillis();
                     self.queue.maxConcurrentOperationCount = 10
@@ -109,24 +113,27 @@ class CidsConnector {
                 case "TDTA_STANDORT_MAST":
                     var mast = Mapper<Standort>().map(json)
                     self.searchResults[self.MASTEN].append(mast!)
-                     case "MAUERLASCHE":
-                        var mauerlasche = Mapper<Mauerlasche>().map(json)
-                        self.searchResults[self.MAUERLASCHEN].append(mauerlasche!)
-                    case "LEITUNG":
-                        var leitung = Mapper<Leitung>().map(json)
-                        self.searchResults[self.LEITUNGEN].append(leitung!)
-               default:
+                case "MAUERLASCHE":
+                    var mauerlasche = Mapper<Mauerlasche>().map(json)
+                    self.searchResults[self.MAUERLASCHEN].append(mauerlasche!)
+                case "LEITUNG":
+                    var leitung = Mapper<Leitung>().map(json)
+                    self.searchResults[self.LEITUNGEN].append(leitung!)
+                case "SCHALTSTELLE":
+                    var schaltstelle = Mapper<Schaltstelle>().map(json)
+                    self.searchResults[self.SCHALTSTELLEN].append(schaltstelle!)
+                default:
                     println("could not find object with classid=\(classId)")
                 }
                 
                 //println("+")
                 //println("\(leuchte.id)==>\(leuchte.leuchtenNummer):\(leuchte.typ)@\(leuchte.standort?.strasse)->\(leuchte.wgs84WKT)");
-
+                
                 if self.queue.operationCount==1 {
                     var duration=(CidsConnector.currentTimeMillis() - self.start)
                     handler(searchResults: self.searchResults);
                     println("loaded \(duration)");
-
+                    
                 }
             }
             else {
@@ -134,7 +141,7 @@ class CidsConnector {
                 self.searchResults[0].append(Leuchte())
                 
             }
-        
+            
             
         }
         

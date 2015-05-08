@@ -25,9 +25,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     let MASTEN = 1;
     let MAUERLASCHEN = 2;
     let LEITUNGEN = 3;
+    let SCHALTSTELLEN = 4;
     
     var searchResults : [[GeoBaseEntity]] = [
-        [Leuchte](),[Standort](),[Mauerlasche](),[Leitung]()
+        [Leuchte](),[Standort](),[Mauerlasche](),[Leitung](), [Schaltstelle]()
     ];
     var matchingSearchItems: [MKMapItem] = [MKMapItem]()
     var matchingSearchItemsAnnotations: [MKPointAnnotation ] = [MKPointAnnotation]()
@@ -36,6 +37,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var isMastenEnabled=true;
     var isMauerlaschenEnabled=true;
     var isleitungenEnabled=true;
+    var isSchaltstelleEnabled=true;
     var highlightedLine : HighlightedMkPolyline?;
     var selectedAnnotation : MKAnnotation?;
     
@@ -221,6 +223,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let leitung = searchResults[indexPath.section][indexPath.row]  as! Leitung;
             cellInfoProvider=leitung
         }
+        else if indexPath.section==SCHALTSTELLEN {
+            let schaltstelle = searchResults[indexPath.section][indexPath.row]  as! Schaltstelle;
+            cellInfoProvider=schaltstelle
+        }
         
         cell.lblBezeichnung.text=cellInfoProvider.getMainTitle()
         cell.lblStrasse.text=cellInfoProvider.getTertiaryInfo()
@@ -229,7 +235,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return cell;
     }
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 4;
+        return 5;
     }
     
     
@@ -259,6 +265,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else if (section==MAUERLASCHEN){
             return "Mauerlaschen \(searchResults[MAUERLASCHEN].count)";
+        }else if (section==SCHALTSTELLEN){
+            return "Schaltstellen \(searchResults[SCHALTSTELLEN].count)";
         }else //LEITUNGEN
         {
             return "Leitungen \(searchResults[LEITUNGEN].count)";
@@ -575,6 +583,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 kindOfGeoBaseEntity=LEITUNGEN
             } else if geoBaseEntity is Mauerlasche {
                 kindOfGeoBaseEntity=MAUERLASCHEN
+            }else if geoBaseEntity is Schaltstelle {
+                kindOfGeoBaseEntity=SCHALTSTELLEN
             }
             for i in 0...searchResults[kindOfGeoBaseEntity].count-1 {
                 var results : [GeoBaseEntity] = searchResults[kindOfGeoBaseEntity]
@@ -658,7 +668,23 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             mapView.deselectAnnotation(view.annotation, animated: false)
             let popC=UIPopoverController(contentViewController: detailNC)
             //popC.popoverContentSize = CGSizeMake(200, 70);
-            popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)            
+            popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
+        }
+        else if let schaltstelle = geoBaseEntity as? Schaltstelle {
+            let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            detailVC.setCellData(schaltstelle.getAllData())
+            detailVC.title="Schaltstelle"
+            var detailNC=UINavigationController(rootViewController: detailVC)
+//            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
+//            detailVC.navigationItem.rightBarButtonItem = action
+            let icon=UIBarButtonItem()
+            icon.image=getGlyphedImage("icon-switch")
+            detailVC.navigationItem.leftBarButtonItem = icon
+            selectedAnnotation=nil
+            mapView.deselectAnnotation(view.annotation, animated: false)
+            let popC=UIPopoverController(contentViewController: detailNC)
+            //popC.popoverContentSize = CGSizeMake(200, 70);
+            popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
         }
      }
        
@@ -673,7 +699,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
         }
         
-        searchResults=[[Leuchte](),[Standort](),[Mauerlasche](),[Leitung]()];
+        searchResults=[[Leuchte](),[Standort](),[Mauerlasche](),[Leitung](),[Schaltstelle]()];
         
         self.tableView.reloadData();
         
@@ -703,7 +729,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let ewktMapExtent="SRID=4326;POLYGON((\(x1) \(y1),\(x1) \(y2),\(x2) \(y2),\(x2) \(y1),\(x1) \(y1)))";
         
         
-        CidsConnector(user: "WendlingM@BELIS2", password: "boxy").search(ewktMapExtent, leuchtenEnabled: "\(isLeuchtenEnabled)", mastenEnabled: "\(isMastenEnabled)", mauerlaschenEnabled: "\(isMauerlaschenEnabled)", leitungenEnabled: "\(isleitungenEnabled)") {
+        CidsConnector(user: "WendlingM@BELIS2", password: "boxy").search(ewktMapExtent, leuchtenEnabled: "\(isLeuchtenEnabled)", mastenEnabled: "\(isMastenEnabled)", mauerlaschenEnabled: "\(isMauerlaschenEnabled)", leitungenEnabled: "\(isleitungenEnabled)",schaltstellenEnabled: "\(isSchaltstelleEnabled)" ) {
             searchResults in
             self.searchResults=searchResults
             self.tableView.reloadData();
