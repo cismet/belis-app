@@ -39,7 +39,7 @@ public class CidsConnector {
 
     }
     
-    func search(ewktMapContent: String,leuchtenEnabled: String, mastenEnabled: String,mauerlaschenEnabled: String, leitungenEnabled: String, schaltstellenEnabled: String, handler: (results : [Entity: [GeoBaseEntity]]) -> ()) {
+    func search(ewktMapContent: String,leuchtenEnabled: String, mastenEnabled: String,mauerlaschenEnabled: String, leitungenEnabled: String, schaltstellenEnabled: String, handler: () -> ()) {
         
 
         var qp=QueryParameters(list:[
@@ -87,7 +87,7 @@ public class CidsConnector {
     }
 
     
-    func getBelisObject(#classId: Int!, objectId :Int!, handler: (results: [Entity: [GeoBaseEntity]]) -> ()) -> NetworkOperation{
+    func getBelisObject(#classId: Int!, objectId :Int!, handler: () -> ()) -> NetworkOperation{
         //println("go for id:\(objectId)@\(classKey)");
         //let kif="http://kif:8890/BELIS2.\(classKey)/\(objectId)" //?role=all&omitNullValues=true&deduplicate=false
         let rightEntity=Entity.byClassId(classId)!
@@ -128,7 +128,7 @@ public class CidsConnector {
                 
                 if self.queue.operationCount==1 {
                     var duration=(CidsConnector.currentTimeMillis() - self.start)
-                    handler(results: self.searchResults);
+                    handler();
                     println("loaded \(duration)");
                     
                 }

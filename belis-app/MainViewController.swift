@@ -21,7 +21,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var focusToggle: UISwitch!
     @IBOutlet weak var textfieldGeoSearch: UITextField!
     
-    var searchResults=[Entity: [GeoBaseEntity]]()
+    //var searchResults=[Entity: [GeoBaseEntity]]()
 
     
     
@@ -193,13 +193,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     //UITableViewDataSource
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchResults[Entity.byIndex(section)]?.count ?? 0
+        return cidsConnector.searchResults[Entity.byIndex(section)]?.count ?? 0
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell: TableViewCell = tableView.dequeueReusableCellWithIdentifier("firstCellPrototype")as! TableViewCell
         var cellInfoProvider: CellInformationProviderProtocol = NoCellInformation()
-        if let obj=searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row] {
+        if let obj=cidsConnector.searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row] {
             if let cellInfoProvider=obj as? CellInformationProviderProtocol {
                 cell.lblBezeichnung.text=cellInfoProvider.getMainTitle()
                 cell.lblStrasse.text=cellInfoProvider.getTertiaryInfo()
@@ -218,14 +218,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     //UITableViewDelegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
         println("didSelectRowAtIndexPath")
-        if let obj=searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row] {
+        if let obj=cidsConnector.searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row] {
             selectOnMap(obj)
         }
     }
     
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if let array=searchResults[Entity.byIndex(section)]{
+        if let array=cidsConnector.searchResults[Entity.byIndex(section)]{
             if (array.count>0){
                 return 25
             }
@@ -236,7 +236,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         var title=Entity.byIndex(section).rawValue
-        if let array=searchResults[Entity.byIndex(section)]{
+        if let array=cidsConnector.searchResults[Entity.byIndex(section)]{
             return title + " \(array.count)"
         }
         else {
@@ -548,8 +548,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             var entity=geoBaseEntity.getType()
             
             //need old fashioned loop for index
-            for i in 0...searchResults[entity]!.count-1 {
-                var results : [GeoBaseEntity] = searchResults[entity]!
+            for i in 0...cidsConnector.searchResults[entity]!.count-1 {
+                var results : [GeoBaseEntity] = cidsConnector.searchResults[entity]!
                 if results[i].id == geoBaseEntity.id {
                     tableView.selectRowAtIndexPath(NSIndexPath(forRow: i, inSection: entity.index()), animated: true, scrollPosition: UITableViewScrollPosition.Top)
                     break;
@@ -655,7 +655,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     //Actions
     
     @IBAction func searchButtonTabbed(sender: AnyObject) {
-        for (entityType, entityArray) in searchResults{
+        for (entityType, entityArray) in cidsConnector.searchResults{
             for obj in entityArray {
                 obj.removeFromMapView(mapView);
             }
@@ -690,11 +690,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         
         cidsConnector.search(ewktMapExtent, leuchtenEnabled: "\(isLeuchtenEnabled)", mastenEnabled: "\(isMastenEnabled)", mauerlaschenEnabled: "\(isMauerlaschenEnabled)", leitungenEnabled: "\(isleitungenEnabled)",schaltstellenEnabled: "\(isSchaltstelleEnabled)" ) {
-            results in
-            self.searchResults=results
             self.tableView.reloadData();
             
-            for (entityType, objArray) in self.searchResults{
+            for (entityType, objArray) in self.cidsConnector.searchResults{
                 for obj in objArray {
                     
                     obj.addToMapView(self.mapView);
