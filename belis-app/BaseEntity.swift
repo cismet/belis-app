@@ -24,4 +24,8 @@ class BaseEntity : Mappable {
     
     }
     
+    func getType() -> Entity {
+        assert(false, "This method must be overridden")
+    }
+    
 }

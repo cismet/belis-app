@@ -29,7 +29,10 @@ class Schaltstelle : GeoBaseEntity , Mappable, CellInformationProviderProtocol,C
     required init?(_ map: Map) {
         super.init(map)
     }
-    
+    override func getType() -> Entity {
+        return Entity.SCHALTSTELLEN
+    }
+
     override func mapping(map: Map) {
         super.id <- map["id"];
         erstellungsjahr <- (map["erstellungsjahr"],DateTransformFromMillisecondsTimestamp())

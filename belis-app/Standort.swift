@@ -48,6 +48,10 @@ class Standort: GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOu
         super.init(map)
     }
     
+    override func getType() -> Entity {
+        return Entity.MASTEN
+    }
+
     override func mapping(map: Map) {
         super.id <- map["id"];
         plz  <- map["plz"]

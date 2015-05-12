@@ -10,18 +10,11 @@ import Foundation;
 import Alamofire;
 import ObjectMapper;
 
-class CidsConnector {
-   
-    let LEUCHTEN = 0
-    let MASTEN = 1
-    let MAUERLASCHEN = 2
-    let LEITUNGEN = 3
-    let SCHALTSTELLEN = 4
-    
+public class CidsConnector {
     private var user : String; //WendlingM@BELIS2"
     private var password : String; //kif
-    private var classes = [27:"TDTA_LEUCHTEN", 26:"TDTA_STANDORT_MAST", 52:"MAUERLASCHE",49:"LEITUNG", 51:"SCHALTSTELLE"] as [Int:String];
     let queue = NSOperationQueue()
+    var searchResults=[Entity: [GeoBaseEntity]]()
 
     let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
 //    var manager: Manager
@@ -33,9 +26,7 @@ class CidsConnector {
 //        manager=Alamofire.Manager(configuration: configuration)
 //        manager=NetworkManager().manager!
     }
-    var searchResults : [[GeoBaseEntity]] = [
-        [Leuchte](),[Standort](),[Mauerlasche](),[Leitung](),[Schaltstelle]()
-    ];
+    
     var start=CidsConnector.currentTimeMillis();
     
     func login() {
@@ -43,8 +34,9 @@ class CidsConnector {
 
     }
     
-    func search(ewktMapContent: String,leuchtenEnabled: String, mastenEnabled: String,mauerlaschenEnabled: String, leitungenEnabled: String, schaltstellenEnabled: String, handler: (searchResults : [[GeoBaseEntity]]) -> ()) {
+    func search(ewktMapContent: String,leuchtenEnabled: String, mastenEnabled: String,mauerlaschenEnabled: String, leitungenEnabled: String, schaltstellenEnabled: String, handler: () -> ()) {
         
+
         var qp=QueryParameters(list:[
             SingleQueryParameter(key: "LeuchteEnabled", value: leuchtenEnabled),
             SingleQueryParameter(key: "MastOhneLeuchtenEnabled", value: mastenEnabled),
@@ -70,12 +62,7 @@ class CidsConnector {
                     println(nodes.count);
                     self.queue.cancelAllOperations()
                     if (nodes.count>0){
-                        self.searchResults[0].removeAll(keepCapacity: false);
-                        self.searchResults[1].removeAll(keepCapacity: false);
-                        self.searchResults[2].removeAll(keepCapacity: false);
-                        self.searchResults[3].removeAll(keepCapacity: false);
-                        self.searchResults[4].removeAll(keepCapacity: false);
-
+                        self.searchResults=[Entity: [GeoBaseEntity]]()
                     }
                     self.start=CidsConnector.currentTimeMillis();
                     self.queue.maxConcurrentOperationCount = 10
@@ -95,35 +82,40 @@ class CidsConnector {
     }
 
     
-    func getBelisObject(#classId: Int!, objectId :Int!, handler: (searchResults : [[GeoBaseEntity]]) -> ()) -> NetworkOperation{
-        let classKey=classes[classId]!;
+    func getBelisObject(#classId: Int!, objectId :Int!, handler: () -> ()) -> NetworkOperation{
         //println("go for id:\(objectId)@\(classKey)");
         //let kif="http://kif:8890/BELIS2.\(classKey)/\(objectId)" //?role=all&omitNullValues=true&deduplicate=false
+        let rightEntity=Entity.byClassId(classId)!
+        let classKey=rightEntity.tableName()
         let publicUrl="http://belis-rest.cismet.de/BELIS2.\(classKey)/\(objectId)" //?role=all&omitNullValues=true&deduplicate=false
         let operation=NetworkOperation(method: Alamofire.Method.GET, URLString: publicUrl, user: user, password: password, parameters: ["role":"all","omitNullValues":"true","deduplicate":"false"]) {
             (urlRequest , response, responseObject, error) in
             if let jsonData: AnyObject=responseObject {
                 var json =  jsonData as! [String : AnyObject];
                 //                println(json);
-                let classKey=self.classes[classId] as String!
-                switch (classKey){
-                case "TDTA_LEUCHTEN":
-                    var leuchte = Mapper<Leuchte>().map(json)
-                    self.searchResults[self.LEUCHTEN].append(leuchte!)
-                case "TDTA_STANDORT_MAST":
-                    var mast = Mapper<Standort>().map(json)
-                    self.searchResults[self.MASTEN].append(mast!)
-                case "MAUERLASCHE":
-                    var mauerlasche = Mapper<Mauerlasche>().map(json)
-                    self.searchResults[self.MAUERLASCHEN].append(mauerlasche!)
-                case "LEITUNG":
-                    var leitung = Mapper<Leitung>().map(json)
-                    self.searchResults[self.LEITUNGEN].append(leitung!)
-                case "SCHALTSTELLE":
-                    var schaltstelle = Mapper<Schaltstelle>().map(json)
-                    self.searchResults[self.SCHALTSTELLEN].append(schaltstelle!)
+                
+                var gbEntity:GeoBaseEntity
+                
+                switch (rightEntity){
+                case .LEUCHTEN:
+                    gbEntity = Mapper<Leuchte>().map(json)!
+                case .MASTEN:
+                    gbEntity = Mapper<Standort>().map(json)!
+                case .MAUERLASCHEN:
+                    gbEntity = Mapper<Mauerlasche>().map(json)!
+                case .LEITUNGEN:
+                    gbEntity = Mapper<Leitung>().map(json)!
+                case .SCHALTSTELLEN:
+                    gbEntity = Mapper<Schaltstelle>().map(json)!
                 default:
                     println("could not find object with classid=\(classId)")
+                }
+                
+                if let array=self.searchResults[rightEntity]{
+                    self.searchResults[rightEntity]!.append(gbEntity)
+                }
+                else {
+                    self.searchResults.updateValue([gbEntity], forKey: rightEntity)
                 }
                 
                 //println("+")
@@ -131,18 +123,16 @@ class CidsConnector {
                 
                 if self.queue.operationCount==1 {
                     var duration=(CidsConnector.currentTimeMillis() - self.start)
-                    handler(searchResults: self.searchResults);
+                    handler();
                     println("loaded \(duration)");
                     
                 }
             }
             else {
-                println("-")
-                self.searchResults[0].append(Leuchte())
+                println("no json data")
+                //self.searchResults[0].append(Leuchte())
                 
             }
-            
-            
         }
         
         return operation;
@@ -155,4 +145,73 @@ class CidsConnector {
     }
 }
 
-
+enum Entity : String{
+    case LEUCHTEN="Leuchten"
+    case MASTEN="Masten"
+    case MAUERLASCHEN="Mauerlaschen"
+    case LEITUNGEN="Leitungen"
+    case SCHALTSTELLEN="Schaltstellen"
+    
+    static let allValues=[LEUCHTEN,MASTEN,MAUERLASCHEN,LEITUNGEN,SCHALTSTELLEN]
+    
+    static func byIndex(index: Int) -> Entity {
+        return allValues[index]
+    }
+    
+    func index() -> Int {
+        switch self {
+        case .LEUCHTEN:
+            return 0
+        case .MASTEN:
+            return 1
+        case .MAUERLASCHEN:
+            return 2
+        case .LEITUNGEN:
+            return 3
+        case .SCHALTSTELLEN:
+            return 4
+        }
+    }
+    
+    static func byClassId(cid: Int) -> Entity? {
+        let dict=[27:LEUCHTEN, 26:MASTEN, 52:MAUERLASCHEN, 49:LEITUNGEN,51:SCHALTSTELLEN]
+        return dict[cid]
+    }
+    func classId() -> Int{
+        switch self {
+        case .LEUCHTEN:
+            return 27
+        case .MASTEN:
+            return 26
+        case .MAUERLASCHEN:
+            return 52
+        case .LEITUNGEN:
+            return 39
+        case .SCHALTSTELLEN:
+            return 51
+        }
+        
+    }
+    
+    
+    func tableName() -> String {
+        switch self {
+        case .LEUCHTEN:
+            return "TDTA_LEUCHTEN"
+        case .MASTEN:
+            return "TDTA_STANDORT_MAST"
+        case .MAUERLASCHEN:
+            return "MAUERLASCHE"
+        case .LEITUNGEN:
+            return "LEITUNG"
+        case .SCHALTSTELLEN:
+            return "SCHALTSTELLE"
+        }
+    }
+    
+    func isInSearchResults() -> Bool {
+        return true
+    }
+    
+    
+}

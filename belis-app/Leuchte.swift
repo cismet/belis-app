@@ -82,6 +82,9 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         wgs84WKT <- map["fk_standort.fk_geom.wgs84_wkt"]
         
     }
+    override func getType() -> Entity {
+        return Entity.LEUCHTEN
+    }
     
     //CellDataProvider
     @objc func getAllData() -> [String: [CellData]] {
