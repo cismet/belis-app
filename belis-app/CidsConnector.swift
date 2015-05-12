@@ -13,7 +13,6 @@ import ObjectMapper;
 public class CidsConnector {
     private var user : String; //WendlingM@BELIS2"
     private var password : String; //kif
-    private var classes = [27:"TDTA_LEUCHTEN", 26:"TDTA_STANDORT_MAST", 52:"MAUERLASCHE",49:"LEITUNG", 51:"SCHALTSTELLE"] as [Int:String];
     let queue = NSOperationQueue()
     var searchResults=[Entity: [GeoBaseEntity]]()
 
@@ -28,10 +27,6 @@ public class CidsConnector {
 //        manager=NetworkManager().manager!
     }
     
-    
-//    var searchResults : [[GeoBaseEntity]] = [
-//        [Leuchte](),[Standort](),[Mauerlasche](),[Leitung](),[Schaltstelle]()
-//    ];
     var start=CidsConnector.currentTimeMillis();
     
     func login() {
@@ -73,7 +68,7 @@ public class CidsConnector {
                     self.queue.maxConcurrentOperationCount = 10
                     
                     for node in nodes {
-                        println("\(node.classId!) : \(node.objectId!)")
+                        //println("\(node.classId!) : \(node.objectId!)")
                         let op=self.getBelisObject(classId: node.classId!, objectId: node.objectId!,handler: handler)
                         self.queue.addOperation(op)
                     }

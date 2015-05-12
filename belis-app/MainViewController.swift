@@ -21,9 +21,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var focusToggle: UISwitch!
     @IBOutlet weak var textfieldGeoSearch: UITextField!
     
-    //var searchResults=[Entity: [GeoBaseEntity]]()
-
-    
     
     var matchingSearchItems: [MKMapItem] = [MKMapItem]()
     var matchingSearchItemsAnnotations: [MKPointAnnotation ] = [MKPointAnnotation]()
@@ -37,12 +34,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var selectedAnnotation : MKAnnotation?;
     
     var timer = NSTimer();
-    
-    //    var mappingLeuchte = RKObjectMapping(forClass: Leuchte.self);
-    //    mappingLeuchte.addAttributeMappingsFromDictionary([
-    //    "id":"id",
-    //    "geom": "wgs84WKT",
-    //    ]);
     
     var actInd : UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(0,0, 150, 150)) as UIActivityIndicatorView
     
@@ -68,17 +59,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         gotoUserLocationButton=MKUserTrackingBarButtonItem(mapView:mapView);
         
         mapToolbar.items!.insert(gotoUserLocationButton,atIndex:0 );
-        
-        //        var mappingLeitung = RKObjectMapping(forClass: Leitung.self);
-        //        mappingLeitung.addAttributeMappingsFromDictionary([
-        //            "id":"id",
-        //            "geom": "wgs84WKT",
-        //            "typ":"leitungstyp"
-        //            ]);
-        //
-        //        var jsonString="{"id"}";
-        
-        
         
         //delegate stuff
         locationManager.delegate=self;
@@ -111,7 +91,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("mapTapped:"))
         mapView.addGestureRecognizer(tapGestureRecognizer)
-        //mapView.gestureRecognizerShouldBegin(tapGestureRecognizer)
         
         UINavigationController(rootViewController: self)
         textfieldGeoSearch.delegate=self
