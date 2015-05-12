@@ -21,15 +21,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var focusToggle: UISwitch!
     @IBOutlet weak var textfieldGeoSearch: UITextField!
     
-    let LEUCHTEN = 0;
-    let MASTEN = 1;
-    let MAUERLASCHEN = 2;
-    let LEITUNGEN = 3;
-    let SCHALTSTELLEN = 4;
+    var searchResults=[Entity: [GeoBaseEntity]]()
+
     
-    var searchResults : [[GeoBaseEntity]] = [
-        [Leuchte](),[Standort](),[Mauerlasche](),[Leitung](), [Schaltstelle]()
-    ];
+    
     var matchingSearchItems: [MKMapItem] = [MKMapItem]()
     var matchingSearchItemsAnnotations: [MKPointAnnotation ] = [MKPointAnnotation]()
 
@@ -51,6 +46,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     var actInd : UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(0,0, 150, 150)) as UIActivityIndicatorView
     
+    var cidsConnector=CidsConnector(user: "WendlingM@BELIS2", password: "boxy")
     
     var gotoUserLocationButton:MKUserTrackingBarButtonItem!;
     var locationManager: CLLocationManager!
@@ -61,7 +57,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     override func viewDidLoad() {
         super.viewDidLoad();
-        
         locationManager=CLLocationManager();
         
         locationManager.desiredAccuracy=kCLLocationAccuracyBest;
@@ -198,81 +193,57 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     //UITableViewDataSource
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchResults[section].count;
+        return searchResults[Entity.byIndex(section)]?.count ?? 0
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell: TableViewCell = tableView.dequeueReusableCellWithIdentifier("firstCellPrototype")as! TableViewCell
         var cellInfoProvider: CellInformationProviderProtocol = NoCellInformation()
-        
-        if indexPath.section==LEUCHTEN {
-            //            println(indexPath.row);
-            let leuchte = searchResults[indexPath.section][indexPath.row] as! Leuchte;
-            cellInfoProvider=leuchte
-        }
-        if indexPath.section==MASTEN {
-            //            println(indexPath.row);
-            let standort = searchResults[indexPath.section][indexPath.row] as! Standort;
-            cellInfoProvider=standort
-        }
-        else if indexPath.section==MAUERLASCHEN {
-            let mauerlasche = searchResults[indexPath.section][indexPath.row] as! Mauerlasche;
-            cellInfoProvider=mauerlasche
-        }
-        else if indexPath.section==LEITUNGEN {
-            let leitung = searchResults[indexPath.section][indexPath.row]  as! Leitung;
-            cellInfoProvider=leitung
-        }
-        else if indexPath.section==SCHALTSTELLEN {
-            let schaltstelle = searchResults[indexPath.section][indexPath.row]  as! Schaltstelle;
-            cellInfoProvider=schaltstelle
+        if let obj=searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row] {
+            if let cellInfoProvider=obj as? CellInformationProviderProtocol {
+                cell.lblBezeichnung.text=cellInfoProvider.getMainTitle()
+                cell.lblStrasse.text=cellInfoProvider.getTertiaryInfo()
+                cell.lblSubText.text=cellInfoProvider.getSubTitle()
+            }
+            
         }
         
-        cell.lblBezeichnung.text=cellInfoProvider.getMainTitle()
-        cell.lblStrasse.text=cellInfoProvider.getTertiaryInfo()
-        cell.lblSubText.text=cellInfoProvider.getSubTitle()
-        
-        return cell;
+        return cell
     }
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 5;
+        return Entity.allValues.count
     }
     
     
     //UITableViewDelegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
         println("didSelectRowAtIndexPath")
-        selectOnMap(searchResults[indexPath.section][indexPath.row])
+        if let obj=searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row] {
+            selectOnMap(obj)
+        }
     }
     
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if (searchResults[section].count>0){
-            return 25;
+        if let array=searchResults[Entity.byIndex(section)]{
+            if (array.count>0){
+                return 25
+            }
         }
-        else {
-            return 0.0;
-        }
+        return 0.0
     }
     
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if (section==LEUCHTEN){
-            return "Leuchten \(searchResults[LEUCHTEN].count)";
+        var title=Entity.byIndex(section).rawValue
+        if let array=searchResults[Entity.byIndex(section)]{
+            return title + " \(array.count)"
         }
-        else if (section==MASTEN){
-            return "Masten \(searchResults[MASTEN].count)";
-        }
-        else if (section==MAUERLASCHEN){
-            return "Mauerlaschen \(searchResults[MAUERLASCHEN].count)";
-        }else if (section==SCHALTSTELLEN){
-            return "Schaltstellen \(searchResults[SCHALTSTELLEN].count)";
-        }else //LEITUNGEN
-        {
-            return "Leitungen \(searchResults[LEITUNGEN].count)";
+        else {
+            return title
+            
         }
     }
-    
     
     // CLLocationManagerDelegate
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
@@ -574,22 +545,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func selectInTable(geoBaseEntityToSelect : GeoBaseEntity?){
         if let geoBaseEntity = geoBaseEntityToSelect{
-            var kindOfGeoBaseEntity = 0;
-            if geoBaseEntity is Leuchte {
-                kindOfGeoBaseEntity=LEUCHTEN
-            } else if geoBaseEntity is Standort {
-                kindOfGeoBaseEntity=MASTEN
-            } else if geoBaseEntity is Leitung {
-                kindOfGeoBaseEntity=LEITUNGEN
-            } else if geoBaseEntity is Mauerlasche {
-                kindOfGeoBaseEntity=MAUERLASCHEN
-            }else if geoBaseEntity is Schaltstelle {
-                kindOfGeoBaseEntity=SCHALTSTELLEN
-            }
-            for i in 0...searchResults[kindOfGeoBaseEntity].count-1 {
-                var results : [GeoBaseEntity] = searchResults[kindOfGeoBaseEntity]
+            var entity=geoBaseEntity.getType()
+            
+            //need old fashioned loop for index
+            for i in 0...searchResults[entity]!.count-1 {
+                var results : [GeoBaseEntity] = searchResults[entity]!
                 if results[i].id == geoBaseEntity.id {
-                    tableView.selectRowAtIndexPath(NSIndexPath(forRow: i, inSection: kindOfGeoBaseEntity), animated: true, scrollPosition: UITableViewScrollPosition.Top)
+                    tableView.selectRowAtIndexPath(NSIndexPath(forRow: i, inSection: entity.index()), animated: true, scrollPosition: UITableViewScrollPosition.Top)
                     break;
                 }
             }
@@ -693,13 +655,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     //Actions
     
     @IBAction func searchButtonTabbed(sender: AnyObject) {
-        for entityClass in searchResults{
-            for entity in entityClass {
-                entity.removeFromMapView(mapView);
+        for (entityType, entityArray) in searchResults{
+            for obj in entityArray {
+                obj.removeFromMapView(mapView);
             }
         }
-        
-        searchResults=[[Leuchte](),[Standort](),[Mauerlasche](),[Leitung](),[Schaltstelle]()];
         
         self.tableView.reloadData();
         
@@ -729,15 +689,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let ewktMapExtent="SRID=4326;POLYGON((\(x1) \(y1),\(x1) \(y2),\(x2) \(y2),\(x2) \(y1),\(x1) \(y1)))";
         
         
-        CidsConnector(user: "WendlingM@BELIS2", password: "boxy").search(ewktMapExtent, leuchtenEnabled: "\(isLeuchtenEnabled)", mastenEnabled: "\(isMastenEnabled)", mauerlaschenEnabled: "\(isMauerlaschenEnabled)", leitungenEnabled: "\(isleitungenEnabled)",schaltstellenEnabled: "\(isSchaltstelleEnabled)" ) {
-            searchResults in
-            self.searchResults=searchResults
+        cidsConnector.search(ewktMapExtent, leuchtenEnabled: "\(isLeuchtenEnabled)", mastenEnabled: "\(isMastenEnabled)", mauerlaschenEnabled: "\(isMauerlaschenEnabled)", leitungenEnabled: "\(isleitungenEnabled)",schaltstellenEnabled: "\(isSchaltstelleEnabled)" ) {
+            results in
+            self.searchResults=results
             self.tableView.reloadData();
             
-            for entityClass in searchResults{
-                for entity in entityClass {
+            for (entityType, objArray) in self.searchResults{
+                for obj in objArray {
                     
-                    entity.addToMapView(self.mapView);
+                    obj.addToMapView(self.mapView);
                     
                 }
             }

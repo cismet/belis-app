@@ -57,3 +57,4 @@ class NoCellInformation : CellInformationProviderProtocol {
     func action(UIViewController)
 }
 
+

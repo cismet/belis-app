@@ -19,7 +19,9 @@ class Leitung : GeoBaseEntity , Mappable,CellInformationProviderProtocol, CellDa
     required init?(_ map: Map) {
         super.init(map)
     }
-   
+    override func getType() -> Entity {
+        return Entity.LEITUNGEN
+    }
     override func mapping(map: Map) {
         id <- map["id"];
         material <- map["fk_material"];
