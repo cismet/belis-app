@@ -47,6 +47,10 @@ class NoCellInformation : CellInformationProviderProtocol {
     func getAllData() -> [String: [CellData]]
 }
 
+@objc protocol ActionProvider {
+    func getAllActions() -> [BaseEntityAction]
+}
+
 @objc protocol CellDataUI {
     func fillFromCellData(cellData :CellData)
     func getPreferredCellHeight() -> CGFloat
@@ -56,5 +60,6 @@ class NoCellInformation : CellInformationProviderProtocol {
 @objc protocol SimpleCellActionProvider {
     func action(UIViewController)
 }
+
 
 

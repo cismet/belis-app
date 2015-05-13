@@ -82,6 +82,7 @@ public class CidsConnector {
     }
 
     
+    
     func getBelisObject(#classId: Int!, objectId :Int!, handler: () -> ()) -> NetworkOperation{
         //println("go for id:\(objectId)@\(classKey)");
         //let kif="http://kif:8890/BELIS2.\(classKey)/\(objectId)" //?role=all&omitNullValues=true&deduplicate=false
