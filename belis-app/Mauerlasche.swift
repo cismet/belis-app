@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, CellDataProvider {
+class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, CellDataProvider,ActionProvider {
     var erstellungsjahr: Int?
     var laufendeNummer: Int?
     var material: Mauerlaschenmaterial?
@@ -32,7 +32,11 @@ class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, Cel
     required init?(_ map: Map) {
         super.init(map)
     }
-           
+
+    override func getType() -> Entity {
+        return Entity.MAUERLASCHEN
+    }
+
     override func getAnnotationImageName() -> String{
         return "mauerlasche.png";
     }
@@ -102,7 +106,58 @@ class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, Cel
         
         return data
     }
-    // CellInformationProviderProtocol
+    
+    // Actions 
+    @objc func getAllActions() -> [BaseEntityAction] {
+        
+
+        var actions:[BaseEntityAction]=[]
+        
+        actions.append(BaseEntityAction(title: "Foto erstellen",style: UIAlertActionStyle.Default, handler: {
+            (action: UIAlertAction! , selfAction: BaseEntityAction, con: CidsConnector , obj: BaseEntity, detailVC: UIViewController)->Void in
+            
+            
+            if(UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
+                //load the camera interface
+                let picker = (detailVC as! DetailVC).mainVC.imagePicker
+                picker.sourceType = UIImagePickerControllerSourceType.Camera
+                picker.delegate = detailVC as! DetailVC
+                (detailVC as! DetailVC).callBacker=FotoPickerCallBacker()
+
+                picker.allowsEditing = true
+                //picker.showsCameraControls=true
+                picker.modalPresentationStyle = UIModalPresentationStyle.OverFullScreen
+                detailVC.presentViewController(picker, animated: true, completion: { () -> Void in  })
+            }else{
+                //no camera available
+                var alert = UIAlertController(title: "Error", message: "There is no camera available", preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: {(alertAction)in
+                    alert.dismissViewControllerAnimated(true, completion: nil)
+                }))
+                detailVC.presentViewController(alert, animated: true, completion: nil)
+            }
+            
+        }))
+        
+        actions.append(BaseEntityAction(title: "Foto auswählen",style: UIAlertActionStyle.Default, handler: {
+            (action: UIAlertAction! , selfAction: BaseEntityAction, con: CidsConnector , obj: BaseEntity, detailVC: UIViewController)->Void in
+            let picker = (detailVC as! DetailVC).mainVC.imagePicker
+            picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+            picker.mediaTypes = UIImagePickerController.availableMediaTypesForSourceType(.PhotoLibrary)!
+            picker.delegate = detailVC as! DetailVC
+            (detailVC as! DetailVC).callBacker=FotoPickerCallBacker()
+            picker.allowsEditing = true
+            picker.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+            detailVC.presentViewController(picker, animated: true, completion: nil)
+        }))
+        
+        return actions
+    }
+    
+    
+    
+    
+    // MARK: - CellInformationProviderProtocol
     
     func getMainTitle() -> String{
         if let lfdNr = laufendeNummer {
@@ -143,3 +198,34 @@ class Mauerlaschenmaterial : BaseEntity, Mappable{
 
     
 }
+class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    //UIImagePickerControllerDelegate
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        println("FotoPickerCallBacker FINISH")
+        picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
+        
+    }
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        println("FotoPickerCallBacker CANCEL")
+        picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
+        
+    }
+}
+
+//class FotoAction : BaseEntityAction, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+//    //UIImagePickerControllerDelegate
+//    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+//        println("FotoAction FINISH")
+//        picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
+//        
+//    }
+//    
+//    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+//        println("FotoAction CANCEL")
+//        picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
+//        
+//    }
+//}
+//

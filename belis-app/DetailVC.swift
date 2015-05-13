@@ -8,11 +8,15 @@
 
 import UIKit
 
-class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate{
+class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate{
 
     @IBOutlet weak var tableView: UITableView!
     var data: [String: [CellData]] = ["main":[]]
-    
+    var actions: [BaseEntityAction] = []
+    var objectToShow: BaseEntity!
+    var mainVC:MainViewController!
+    var callBacker: AnyObject?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate=self
@@ -34,6 +38,32 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate{
         self.data=data
     }
     
+    
+    
+    func moreAction() {
+        
+        if actions.count>0 {
+            let optionMenu = UIAlertController(title: nil, message: "Aktion auswählen", preferredStyle: UIAlertControllerStyle.ActionSheet)
+            
+            for action in actions {
+                let alertAction = UIAlertAction(title: action.title, style: action.style, handler: {
+                    (alert: UIAlertAction!) -> Void in
+                        println("Aktion: "+action.title)
+                        action.handler(alert, action, self.mainVC.cidsConnector,self.objectToShow,self)
+                    
+                    
+                })
+                optionMenu.addAction(alertAction)
+            }
+            
+            self.presentViewController(optionMenu, animated: true, completion: nil)
+        }
+        
+    }
+    
+    func doIt (alert: UIAlertAction!) {
+        println("mine")
+    }
     
 
     /*
@@ -111,10 +141,26 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate{
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return data.keys.array[section]
     }
+
+    //UIImagePickerControllerDelegate
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        println("DetailVC FINISH")
+        if let x = (callBacker as? UIImagePickerControllerDelegate) {
+            x.imagePickerController!(picker, didFinishPickingMediaWithInfo: info)
+        }
+        picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
+        
+    }
     
-    
-    
-    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        println("DetailVC XXXCANCEL")
+        if let x = (callBacker as? UIImagePickerControllerDelegate) {
+            x.imagePickerControllerDidCancel!(picker)
+        }
+        picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
+        
+    }
+
     
     
     

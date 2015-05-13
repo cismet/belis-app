@@ -24,7 +24,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     var matchingSearchItems: [MKMapItem] = [MKMapItem]()
     var matchingSearchItemsAnnotations: [MKPointAnnotation ] = [MKPointAnnotation]()
-
+    
     var isLeuchtenEnabled=true;
     var isMastenEnabled=true;
     var isMauerlaschenEnabled=true;
@@ -43,11 +43,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var locationManager: CLLocationManager!
     
     let focusRectShape = CAShapeLayer()
-    
+    var imagePicker : UIImagePickerController!
     
     
     override func viewDidLoad() {
         super.viewDidLoad();
+        
+        imagePicker = UIImagePickerController()
+        
         locationManager=CLLocationManager();
         
         locationManager.desiredAccuracy=kCLLocationAccuracyBest;
@@ -552,10 +555,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if let leuchte = geoBaseEntity as? Leuchte {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
             detailVC.setCellData(leuchte.getAllData())
+            detailVC.mainVC=self
+            detailVC.objectToShow=leuchte
             detailVC.title="Leuchte"
             var detailNC=UINavigationController(rootViewController: detailVC)
-//            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
-//            detailVC.navigationItem.rightBarButtonItem = action
+            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
+            detailVC.navigationItem.rightBarButtonItem = action
             let icon=UIBarButtonItem()
             icon.image=getGlyphedImage("icon-ceilinglight")
             detailVC.navigationItem.leftBarButtonItem = icon
@@ -567,10 +572,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         else if let standort = geoBaseEntity as? Standort {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
             detailVC.setCellData(standort.getAllData())
+            detailVC.mainVC=self
+            detailVC.objectToShow=standort
             detailVC.title="Mast"
             var detailNC=UINavigationController(rootViewController: detailVC)
-//            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
-//            detailVC.navigationItem.rightBarButtonItem = action
+            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
+            detailVC.navigationItem.rightBarButtonItem = action
             let icon=UIBarButtonItem()
             icon.image=getGlyphedImage("icon-horizontalexpand")
             detailVC.navigationItem.leftBarButtonItem = icon
@@ -582,9 +589,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         else if let leitung = geoBaseEntity as? Leitung {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
             detailVC.setCellData(leitung.getAllData())
+            detailVC.mainVC=self
+            detailVC.objectToShow=leitung
             detailVC.title="Leitung"
             var detailNC=UINavigationController(rootViewController: detailVC)
-            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
+            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
             detailVC.navigationItem.rightBarButtonItem = action
             let icon=UIBarButtonItem()
             icon.image=getGlyphedImage("icon-line")
@@ -597,10 +606,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else if let mauerlasche = geoBaseEntity as? Mauerlasche {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            detailVC.mainVC=self
+            detailVC.objectToShow=mauerlasche
             detailVC.setCellData(mauerlasche.getAllData())
             detailVC.title="Mauerlasche"
+            detailVC.actions=mauerlasche.getAllActions()
             var detailNC=UINavigationController(rootViewController: detailVC)
-            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
+            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
             detailVC.navigationItem.rightBarButtonItem = action
             let icon=UIBarButtonItem()
             icon.image=getGlyphedImage("icon-nut")
@@ -615,9 +627,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
             detailVC.setCellData(schaltstelle.getAllData())
             detailVC.title="Schaltstelle"
+            detailVC.objectToShow=schaltstelle
             var detailNC=UINavigationController(rootViewController: detailVC)
-//            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
-//            detailVC.navigationItem.rightBarButtonItem = action
+            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
+            detailVC.navigationItem.rightBarButtonItem = action
             let icon=UIBarButtonItem()
             icon.image=getGlyphedImage("icon-switch")
             detailVC.navigationItem.leftBarButtonItem = icon
@@ -627,8 +640,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             //popC.popoverContentSize = CGSizeMake(200, 70);
             popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
         }
-     }
-       
+    }
+    
     
     
     //Actions
