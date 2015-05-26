@@ -6,9 +6,11 @@
 //  Copyright (c) 2015 cismet. All rights reserved.
 //
 
-import Foundation;
-import Alamofire;
-import ObjectMapper;
+import Foundation
+import Alamofire
+import ObjectMapper
+import SwiftHTTP
+
 
 public class CidsConnector {
     private var user : String; //WendlingM@BELIS2"
@@ -136,6 +138,83 @@ public class CidsConnector {
         }
         
         return operation;
+    }
+    
+    func updateBelisObject(#classId: Int!, objectId :Int!,entity: BaseEntity, handler: () -> ()) {
+        let rightEntity=Entity.byClassId(classId)!
+        let classKey=rightEntity.tableName()
+        let publicUrl="http://belis-rest.cismet.de/BELIS2.\(classKey)/\(objectId)" //?role=all&omitNullValues=true&deduplicate=false
+        
+        let jsonRepresentationOfEntity=Mapper().toJSON(entity)
+        
+        let configuration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
+        let manager = Alamofire.Manager(configuration: configuration)
+        let alamoRequest=manager.request(.PUT, publicUrl, parameters: jsonRepresentationOfEntity, encoding: .JSON)
+            .authenticate(user: user, password: password)
+            .response { (request, response, data, error) in
+                if let errorObject: NSError=error {
+                    println(errorObject.debugDescription)
+                }
+        }
+   
+    }
+    
+    func executeSimpleServerAction(#actionName: String!, params: ActionParameterContainer, handler: () -> ()) {
+        if let jsonContent=Mapper().toJSONString(params, prettyPrint: false) {
+            let dat=jsonContent.dataUsingEncoding(NSUTF8StringEncoding)
+            let hup=HTTPUpload(data: dat!, fileName: "params.json", mimeType: "application/json")
+            let params:Dictionary<String,AnyObject>=["taskparams":hup]
+            
+            var request = HTTPTask()
+            //the auth closures will continually be called until a successful auth or rejection
+            var attempted = false
+            request.auth = {(challenge: NSURLAuthenticationChallenge) in
+                if !attempted {
+                    attempted = true
+                    return NSURLCredential(user: self.user, password: self.password, persistence: .ForSession)
+                }
+                return nil //auth failed, nil causes the request to be properly cancelled.
+            }
+            request.POST("http://belis-rest.cismet.de/actions/BELIS2.\(actionName)/tasks", parameters: params, success: {(response: HTTPResponse) -> Void in
+                println("Got data")
+                handler()
+                }
+                ,failure: {(error: NSError, response: HTTPResponse?) -> Void in
+                    println(error.debugDescription)
+            })
+        }
+    }
+    
+    
+    func executeTestServerAction() {
+        let actionName="AddDokument"
+
+        let s=NSString(string: "{\"parameters\":{\"OBJEKT_ID\":\"411\", \"OBJEKT_TYP\":\"schaltstelle\", \"DOKUMENT_URL\":\"http://lorempixel.com/400/200/\\nZufallTest\", \"DOKUMENT_url\":\"http://lorempixel.com/400/200/nature/\\nNaturTest\"}}")
+        
+        let dat=s.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        let hup=HTTPUpload(data: dat!, fileName: "params.json", mimeType: "application/json")
+            
+
+        
+        let params:Dictionary<String,AnyObject>=["taskparams":hup]
+        
+        var request = HTTPTask()
+        //the auth closures will continually be called until a successful auth or rejection
+        var attempted = false
+        request.auth = {(challenge: NSURLAuthenticationChallenge) in
+            if !attempted {
+                attempted = true
+                return NSURLCredential(user: self.user, password: self.password, persistence: .ForSession)
+            }
+            return nil //auth failed, nil causes the request to be properly cancelled.
+        }
+        request.POST("http://belis-rest.cismet.de/actions/BELIS2.\(actionName)/tasks", parameters: params, success: {(response: HTTPResponse) -> Void in
+                println("Got data")
+            }
+            ,failure: {(error: NSError, response: HTTPResponse?) -> Void in
+                println(error.debugDescription)
+        })
     }
     
     

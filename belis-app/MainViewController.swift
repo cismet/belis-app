@@ -719,6 +719,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //        tableView.selectRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 2), animated: true,scrollPosition: UITableViewScrollPosition.Middle);
         //        tableView(tableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 1, inSection: 2));
         
+        //cidsConnector.executeTestServerAction()
+        let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"411",
+                                                        "OBJEKT_TYP":"schaltstelle",
+                                                        "DOKUMENT_URL":"http://lorempixel.com/444/222/\nSchnapsTest"])
+        
+        cidsConnector.executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {() -> () in })
+        
     }
     
     @IBAction func focusItemTabbed(sender: AnyObject) {

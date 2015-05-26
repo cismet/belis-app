@@ -3,3 +3,7 @@ github "Hearst-DD/ObjectMapper"
 
 #Networking stuff
 github "Alamofire/Alamofire" >= 1.2
+
+#SwiftHTTP
+
+github "daltoniam/SwiftHTTP"

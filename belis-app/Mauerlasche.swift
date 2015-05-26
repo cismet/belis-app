@@ -32,8 +32,7 @@ class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, Cel
     required init?(_ map: Map) {
         super.init(map)
     }
-
-       
+           
     override func getAnnotationImageName() -> String{
         return "mauerlasche.png";
     }
@@ -130,6 +129,8 @@ class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, Cel
     func getQuaternaryInfo() -> String{
         return ""
     }
+    
+    
 }
 
 class Mauerlaschenmaterial : BaseEntity, Mappable{
