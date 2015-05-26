@@ -48,7 +48,7 @@ class SingleQueryParameter : Mappable {
 
 class QueryParameters : Mappable {
     var list: [SingleQueryParameter]?;
-
+    
     init(list: [SingleQueryParameter]) {
         self.list=list;
     }
@@ -57,6 +57,23 @@ class QueryParameters : Mappable {
     }
     func mapping(map: Map) {
         list <- map["list"];
+    }
+}
+
+
+
+
+class ActionParameterContainer : Mappable {
+    var params:[String : AnyObject] = [:];
+    
+    init(params: [String : AnyObject]) {
+        self.params=params;
+    }
+    required init?(_ map: Map) {
+        mapping(map)
+    }
+    func mapping(map: Map) {
+        params <- map["parameters"];
     }
 }
 
