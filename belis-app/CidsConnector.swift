@@ -175,13 +175,11 @@ public class CidsConnector {
                 }
                 return nil //auth failed, nil causes the request to be properly cancelled.
             }
-            request.POST("http://belis-rest.cismet.de/actions/BELIS2.\(actionName)/tasks", parameters: params, success: {(response: HTTPResponse) -> Void in
+            
+            request.POST("http://belis-rest.cismet.de/actions/BELIS2.\(actionName)/tasks", parameters: params, completionHandler: {(response: HTTPResponse) -> Void in
                 println("Got data")
                 handler()
-                }
-                ,failure: {(error: NSError, response: HTTPResponse?) -> Void in
-                    println(error.debugDescription)
-            })
+                })
         }
     }
     
@@ -209,11 +207,8 @@ public class CidsConnector {
             }
             return nil //auth failed, nil causes the request to be properly cancelled.
         }
-        request.POST("http://belis-rest.cismet.de/actions/BELIS2.\(actionName)/tasks", parameters: params, success: {(response: HTTPResponse) -> Void in
-                println("Got data")
-            }
-            ,failure: {(error: NSError, response: HTTPResponse?) -> Void in
-                println(error.debugDescription)
+        request.POST("http://belis-rest.cismet.de/actions/BELIS2.\(actionName)/tasks", parameters: params, completionHandler: {(response: HTTPResponse) -> Void in
+            println("Got data")
         })
     }
     

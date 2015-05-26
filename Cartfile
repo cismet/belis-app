@@ -1,9 +1,9 @@
 #Mapping of json files to objects
-github "Hearst-DD/ObjectMapper" 
+github "Hearst-DD/ObjectMapper" == 0.12
 
 #Networking stuff
-github "Alamofire/Alamofire" >= 1.2
+github "Alamofire/Alamofire" == 1.2.1
 
 #SwiftHTTP
 
-github "daltoniam/SwiftHTTP"
+github "daltoniam/SwiftHTTP" == 0.9.5
