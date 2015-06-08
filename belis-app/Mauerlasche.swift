@@ -150,7 +150,7 @@ class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, Cel
             picker.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
             detailVC.presentViewController(picker, animated: true, completion: nil)
         }))
-        
+               
         return actions
     }
     
@@ -202,7 +202,21 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
     
     //UIImagePickerControllerDelegate
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
-        println("FotoPickerCallBacker FINISH")
+        // var mediaType:String = info[UIImagePickerControllerEditedImage] as! String
+        var imageToSave:UIImage
+        
+        imageToSave = info[UIImagePickerControllerOriginalImage]as! UIImage
+
+        if picker.sourceType == UIImagePickerControllerSourceType.Camera {
+            UIImageWriteToSavedPhotosAlbum(imageToSave, nil, nil, nil)
+            println("FotoPickerCallBacker PICKED FROM Camera")
+        }
+        else {
+            //picked from CameraRoll
+            println("FotoPickerCallBacker PICKED FROM CameraRoll")
+        }
+
+
         picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
         
     }
