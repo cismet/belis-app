@@ -45,6 +45,7 @@ class NoCellInformation : CellInformationProviderProtocol {
 
 @objc protocol CellDataProvider {
     func getAllData() -> [String: [CellData]]
+    func getDataSectionKeys() -> [String]
 }
 
 @objc protocol ActionProvider {

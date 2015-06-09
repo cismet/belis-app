@@ -54,6 +54,9 @@ class Leitung : GeoBaseEntity , Mappable,CellInformationProviderProtocol, CellDa
 
         return data;
     }
+    @objc func getDataSectionKeys() -> [String] {
+        return ["main","Dokumente","DeveloperInfo"]
+    }
     
     override func getAnnotationTitle() -> String{
         return "\(getMainTitle()) - \(getSubTitle())"

@@ -12,6 +12,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
 
     @IBOutlet weak var tableView: UITableView!
     var data: [String: [CellData]] = ["main":[]]
+    var sections: [String]=[]
     var actions: [BaseEntityAction] = []
     var objectToShow: BaseEntity!
     var mainVC:MainViewController!
@@ -37,7 +38,6 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
     func setCellData(data:[String: [CellData]]){
         self.data=data
     }
-    
     
     
     func moreAction() {
@@ -79,14 +79,14 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
   
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionKey: String = data.keys.array[section]
-        return data[sectionKey]!.count
+        let sectionKey: String = sections[section]
+        return data[sectionKey]?.count ?? 0
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let row=indexPath.row
         let section = indexPath.section
-        let sectionKey: String = data.keys.array[section]
+        let sectionKey: String = sections[section]
         let dataItem: CellData = data[sectionKey]![row]
         let cellReuseId=dataItem.getCellReuseIdentifier()
         let cell: UITableViewCell  = tableView.dequeueReusableCellWithIdentifier(cellReuseId) as! UITableViewCell
@@ -100,11 +100,17 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section==0 {
-            return 0
+        if  sections.count>section{
+            let sectionKey: String = sections[section]
+            if section==0 || (data[sectionKey]?.count ?? 0)==0 {
+                return 0
+            }
+            else {
+                return 20
+            }
         }
         else {
-            return 20
+            return 0
         }
     }
     
@@ -112,7 +118,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         
         let row=indexPath.row
         let section = indexPath.section
-        let sectionKey: String = data.keys.array[section]
+        let sectionKey: String = sections[section]
         let dataItem: CellData = data[sectionKey]![row]
         let cellReuseId=dataItem.getCellReuseIdentifier()
         let cell: UITableViewCell  = tableView.dequeueReusableCellWithIdentifier(cellReuseId) as! UITableViewCell
@@ -123,7 +129,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return data.keys.array.count
+        return sections.count
     }
     
     
@@ -131,7 +137,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
         let row=indexPath.row
         let section = indexPath.section
-        let sectionKey: String = data.keys.array[section]
+        let sectionKey: String = sections[section]
         let dataItem: CellData = data[sectionKey]![row]
         if let actionProvider = dataItem as? SimpleCellActionProvider {
             (dataItem as! SimpleCellActionProvider).action(self)
@@ -139,7 +145,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return data.keys.array[section]
+        return sections[section]
     }
 
     //UIImagePickerControllerDelegate

@@ -554,6 +554,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         if let leuchte = geoBaseEntity as? Leuchte {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            detailVC.sections=leuchte.getDataSectionKeys()
             detailVC.setCellData(leuchte.getAllData())
             detailVC.mainVC=self
             detailVC.objectToShow=leuchte
@@ -571,6 +572,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else if let standort = geoBaseEntity as? Standort {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            detailVC.sections=standort.getDataSectionKeys()
             detailVC.setCellData(standort.getAllData())
             detailVC.mainVC=self
             detailVC.objectToShow=standort
@@ -588,6 +590,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else if let leitung = geoBaseEntity as? Leitung {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            detailVC.sections=leitung.getDataSectionKeys()
             detailVC.setCellData(leitung.getAllData())
             detailVC.mainVC=self
             detailVC.objectToShow=leitung
@@ -608,6 +611,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
             detailVC.mainVC=self
             detailVC.objectToShow=mauerlasche
+            detailVC.sections=mauerlasche.getDataSectionKeys()
             detailVC.setCellData(mauerlasche.getAllData())
             detailVC.title="Mauerlasche"
             detailVC.actions=mauerlasche.getAllActions()
@@ -625,6 +629,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else if let schaltstelle = geoBaseEntity as? Schaltstelle {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            detailVC.sections=schaltstelle.getDataSectionKeys()
             detailVC.setCellData(schaltstelle.getAllData())
             detailVC.title="Schaltstelle"
             detailVC.objectToShow=schaltstelle

@@ -149,10 +149,10 @@ class Schaltstelle : GeoBaseEntity , Mappable, CellInformationProviderProtocol,C
             }
             
             if let hausnr=hausnummer {
-                details["main"]?.append(DoubleTitledInfoCellDataWithDetails(titleLeft: "Strasse", dataLeft: strName, titleRight: "Hausnummer", dataRight: "\(hausnr)",details:strDetails))
+                details["main"]?.append(DoubleTitledInfoCellDataWithDetails(titleLeft: "Strasse", dataLeft: strName, titleRight: "Hausnummer", dataRight: "\(hausnr)",details:strDetails, sections: ["main","DeveloperInfo"]))
             }
             else {
-                details["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Strasse", data: strName,details:strDetails))
+                details["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Strasse", data: strName,details:strDetails, sections:["main","DeveloperInfo"]))
             }
         }
         
@@ -215,7 +215,9 @@ class Schaltstelle : GeoBaseEntity , Mappable, CellInformationProviderProtocol,C
         
         return details
     }
-    
+    @objc func getDataSectionKeys() -> [String] {
+        return ["main","Dokumente","DeveloperInfo"]
+    }
 }
 
 

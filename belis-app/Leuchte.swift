@@ -117,10 +117,10 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
             
             
             if let hausnr=standort?.hausnummer {
-                data["main"]?.append(DoubleTitledInfoCellDataWithDetails(titleLeft: "Strasse", dataLeft: strName, titleRight: "Hausnummer", dataRight: "\(hausnr)",details:strDetails))
+                data["main"]?.append(DoubleTitledInfoCellDataWithDetails(titleLeft: "Strasse", dataLeft: strName, titleRight: "Hausnummer", dataRight: "\(hausnr)",details:strDetails, sections: ["main","DeveloperInfo"]))
             }
             else {
-                data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Strasse", data: strName,details:strDetails))
+                data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Strasse", data: strName,details:strDetails, sections: ["main","DeveloperInfo"]))
                 
             }
             
@@ -136,7 +136,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         if mastVorhanden {
             if let s=standort {
                 var mastDetails: [String: [CellData]] = s.getAllData()
-                data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Mast",details: mastDetails))
+                data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Mast",details: mastDetails, sections: ["main","DeveloperInfo"]))
             }
             else {
                 //serious error
@@ -202,7 +202,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
             dkDetails["main"]?.append(SingleTitledInfoCellData(title: "Anzahl Doppelkommando 2", data: "\(anzahldk2)"))
         }
         if dkDetails["main"]?.count>0 {
-            data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Doppelkommandos",details: dkDetails))
+            data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Doppelkommandos",details: dkDetails, sections: ["main","DeveloperInfo"]))
         }
         //------------------------(DK)
         
@@ -234,10 +234,10 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         }
         if leuchtmittelDetails["main"]?.count>0 {
             if let lm=leuchtmittel?.hersteller {
-                data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Leuchtmittel", data: lm, details: leuchtmittelDetails))
+                data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Leuchtmittel", data: lm, details: leuchtmittelDetails, sections: ["main","DeveloperInfo"]))
             }
             else {
-                data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Leuchtmittel",details: leuchtmittelDetails))
+                data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Leuchtmittel",details: leuchtmittelDetails, sections: ["main","DeveloperInfo"]))
             }
         }
         //------------------------(LM)
@@ -250,7 +250,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
                 vsgDetails["main"]?.append(SingleTitledInfoCellData(title: "Erneuerung Vorschaltgerät", data: "\(vsgWe.toDateString())"))
             }
             if vsgDetails["main"]?.count>1 {
-                data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Vorschaltgerät", data: vsg, details: vsgDetails))
+                data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Vorschaltgerät", data: vsg, details: vsgDetails, sections: ["main","DeveloperInfo"]))
             }
             else {
                 data["main"]?.append(SingleTitledInfoCellData(title: "Vorschaltgerät", data: vsg))
@@ -275,7 +275,9 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         
         return data
     }
-    
+    @objc func getDataSectionKeys() -> [String] {
+        return ["main","Dokumente","DeveloperInfo"]
+    }
     
     
     override func getAnnotationImageName() -> String{

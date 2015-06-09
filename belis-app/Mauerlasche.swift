@@ -116,7 +116,9 @@ class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, Cel
 
         return data
     }
-    
+    @objc func getDataSectionKeys() -> [String] {
+        return ["main","Dokumente","DeveloperInfo"]
+    }
     // Actions 
     @objc func getAllActions() -> [BaseEntityAction] {
         

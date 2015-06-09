@@ -208,7 +208,7 @@ class Standort: GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOu
                 }
             }
             if mastDetails["main"]?.count>1 {
-                mastDetails["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Masttyp", data: typChecked ,details:mastTypDetails))
+                mastDetails["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Masttyp", data: typChecked ,details:mastTypDetails, sections: ["main","DeveloperInfo"]))
             }
             else {
                 mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Masttyp", data: typChecked))
@@ -285,7 +285,7 @@ class Standort: GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOu
         }
         
         if pruefDetails["main"]?.count>0 {
-            mastDetails["main"]?.append(SimpleInfoCellDataWithDetails(data: "Prüfungen",details: pruefDetails))
+            mastDetails["main"]?.append(SimpleInfoCellDataWithDetails(data: "Prüfungen",details: pruefDetails, sections: ["main","DeveloperInfo"]))
             
         }
         //------------------------(PR)
@@ -313,6 +313,9 @@ class Standort: GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOu
         
         
         return mastDetails
+    }
+    @objc func getDataSectionKeys() -> [String] {
+        return ["main","Dokumente","DeveloperInfo"]
     }
     
 }

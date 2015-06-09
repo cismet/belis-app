@@ -42,11 +42,12 @@ class SimpleInfoCellData : CellData {
 class SimpleInfoCellDataWithDetails : CellData,SimpleCellActionProvider {
     var data: String
     var details: [String: [CellData]] = ["main":[]]
+    var sections: [String]
 
-    init(data:String,details:[String: [CellData]]){
+    init(data:String,details:[String: [CellData]], sections: [String]){
         self.data=data
         self.details=details
-
+        self.sections=sections
     }
     
     @objc func getCellReuseIdentifier() -> String {
@@ -56,6 +57,7 @@ class SimpleInfoCellDataWithDetails : CellData,SimpleCellActionProvider {
     
     @objc func action(vc:UIViewController) {
         let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+        detailVC.sections=sections
         detailVC.setCellData(details)
         vc.navigationController?.pushViewController(detailVC, animated: true)
     }
