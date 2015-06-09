@@ -148,7 +148,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         if let x = (callBacker as? UIImagePickerControllerDelegate) {
             x.imagePickerController!(picker, didFinishPickingMediaWithInfo: info)
         }
-        picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
+        //picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
         
     }
     
@@ -157,7 +157,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         if let x = (callBacker as? UIImagePickerControllerDelegate) {
             x.imagePickerControllerDidCancel!(picker)
         }
-        picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
+        //picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
         
     }
 

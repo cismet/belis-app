@@ -10,7 +10,7 @@ import UIKit;
 import MapKit;
 import Alamofire;
 import ObjectMapper;
-
+import SwiftHTTP
 
 class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
     
@@ -732,12 +732,30 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //        tableView.selectRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 2), animated: true,scrollPosition: UITableViewScrollPosition.Middle);
         //        tableView(tableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 1, inSection: 2));
         
-        //cidsConnector.executeTestServerAction()
-        let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"411",
-                                                        "OBJEKT_TYP":"schaltstelle",
-                                                        "DOKUMENT_URL":"http://lorempixel.com/444/222/\nSchnapsTest"])
+        cidsConnector.executeTestServerAction()
         
-        cidsConnector.executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {() -> () in })
+        
+        
+        
+//        let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"411",
+//                                                        "OBJEKT_TYP":"schaltstelle",
+//                                                        "DOKUMENT_URL":"http://lorempixel.com/444/222/\nSchnapsTest"])
+//        
+//        cidsConnector.executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {() -> () in })
+//
+        
+        let image2 = UIImage(named: "testbild.png")
+        cidsConnector.uploadAndAddImageServerAction(image: image2!, entity: BaseEntity(), description: "again a test", completionHandler: {(response: HTTPResponse) -> Void in
+            if let err = response.error {
+                println("error: \(err.localizedDescription)")
+                return //also notify app of failure as needed
+            }
+            if let resp = response.responseObject as? NSData {
+                println(NSString(data: resp, encoding: NSUTF8StringEncoding))
+            }
+            println("Got data with no error")
+        })
+
         
     }
     

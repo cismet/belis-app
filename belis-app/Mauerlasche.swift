@@ -8,6 +8,7 @@
 
 import Foundation
 import ObjectMapper
+import SwiftHTTP
 
 class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, CellDataProvider,ActionProvider {
     var erstellungsjahr: Int?
@@ -97,12 +98,18 @@ class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, Cel
         if let bem=bemerkung {
             data["main"]?.append(MemoTitledInfoCellData(title: "Bemerkung", data: bem))
         }
-        
+
+        data["Dokumente"]=[]
+
         if let fotodok=foto {
-            data["Foto"]=[]
-            data["Foto"]?.append(SimpleUrlPreviewInfoCellData(title: fotodok.getTitle(), url: fotodok.getUrl()))
+            data["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: fotodok.getTitle(), url: fotodok.getUrl()))
         }
         
+        if dokumente.count>0 {
+            for doc in dokumente {
+                data["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: doc.getTitle(), url: doc.getUrl()))
+            }
+        }
         
         return data
     }
@@ -122,7 +129,7 @@ class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, Cel
                 let picker = (detailVC as! DetailVC).mainVC.imagePicker
                 picker.sourceType = UIImagePickerControllerSourceType.Camera
                 picker.delegate = detailVC as! DetailVC
-                (detailVC as! DetailVC).callBacker=FotoPickerCallBacker()
+                (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: self)
 
                 picker.allowsEditing = true
                 //picker.showsCameraControls=true
@@ -145,7 +152,7 @@ class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, Cel
             picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
             picker.mediaTypes = UIImagePickerController.availableMediaTypesForSourceType(.PhotoLibrary)!
             picker.delegate = detailVC as! DetailVC
-            (detailVC as! DetailVC).callBacker=FotoPickerCallBacker()
+            (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: self)
             picker.allowsEditing = true
             picker.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
             detailVC.presentViewController(picker, animated: true, completion: nil)
@@ -199,25 +206,87 @@ class Mauerlaschenmaterial : BaseEntity, Mappable{
     
 }
 class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    var selfEntity: BaseEntity
+    
+    init (yourself: BaseEntity){
+        selfEntity=yourself
+    }
     
     //UIImagePickerControllerDelegate
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         // var mediaType:String = info[UIImagePickerControllerEditedImage] as! String
-        var imageToSave:UIImage
         
-        imageToSave = info[UIImagePickerControllerOriginalImage]as! UIImage
-
-        if picker.sourceType == UIImagePickerControllerSourceType.Camera {
-            UIImageWriteToSavedPhotosAlbum(imageToSave, nil, nil, nil)
-            println("FotoPickerCallBacker PICKED FROM Camera")
+        var actInd : UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(0,0, 150, 150)) as UIActivityIndicatorView
+        actInd.center =  picker.view.center
+        actInd.hidesWhenStopped = true;
+        actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
+        picker.view.addSubview(actInd)
+        
+        var tField: UITextField!
+        
+        func configurationTextField(textField: UITextField!)
+        {
+            println("generating the TextField")
+            textField.placeholder = "Enter an item"
+            tField = textField
         }
-        else {
-            //picked from CameraRoll
-            println("FotoPickerCallBacker PICKED FROM CameraRoll")
+        
+        
+        func handleCancel(alertView: UIAlertAction!) {
+            picker.dismissViewControllerAnimated(true, completion: nil)
         }
+        
+        var alert = UIAlertController(title: "Enter Input", message: "", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alert.addTextFieldWithConfigurationHandler(configurationTextField)
+        alert.addAction(UIAlertAction(title: "Abbrechen", style: UIAlertActionStyle.Cancel, handler:handleCancel))
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler:{ (UIAlertAction)in
+            var imageToSave:UIImage
+            
+            imageToSave = info[UIImagePickerControllerOriginalImage]as! UIImage
+            actInd.startAnimating();
 
+            if picker.sourceType == UIImagePickerControllerSourceType.Camera {
+                UIImageWriteToSavedPhotosAlbum(imageToSave, nil, nil, nil)
+                println("FotoPickerCallBacker PICKED FROM Camera")
+            }
+            else {
+                //picked from CameraRoll
+                println("FotoPickerCallBacker PICKED FROM CameraRoll")
+            }
 
-        picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
+            let size = CGSizeApplyAffineTransform(imageToSave.size, CGAffineTransformMakeScale(0.3, 0.3))
+            let hasAlpha = false
+            let scale: CGFloat = 0.0 // Automatically use scale factor of main screen
+            UIGraphicsBeginImageContextWithOptions(size, !hasAlpha, scale)
+            imageToSave.drawInRect(CGRect(origin: CGPointZero, size: size))
+            let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            var png = UIImagePNGRepresentation(scaledImage)
+
+            var cidsConnector=CidsConnector(user: "WendlingM@BELIS2", password: "boxy")
+            cidsConnector.uploadAndAddImageServerAction(image: imageToSave, entity: self.selfEntity,description: tField.text, completionHandler: {(response: HTTPResponse) -> Void in
+                if let err = response.error {
+                    println("error: \(err.localizedDescription)")
+                    return //also notify app of failure as needed
+                }
+                if let resp = response.responseObject as? NSData {
+                    println(NSString(data: resp, encoding: NSUTF8StringEncoding))
+                }
+                actInd.stopAnimating()
+                actInd.removeFromSuperview()
+                picker.dismissViewControllerAnimated(true, completion: nil)
+                println("Got data with no error")
+            })
+
+        }))
+        picker.presentViewController(alert, animated: true, completion: {
+            println("completion block")
+        })
+        
+        
+        
+        
         
     }
     

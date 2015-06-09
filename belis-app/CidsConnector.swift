@@ -178,23 +178,26 @@ public class CidsConnector {
             }
             
             request.POST("http://belis-rest.cismet.de/actions/BELIS2.\(actionName)/tasks", parameters: params, completionHandler: {(response: HTTPResponse) -> Void in
-                println("Got data")
+                if let err = response.error {
+                    println("error: \(err.localizedDescription)")
+                    return //also notify app of failure as needed
+                }
+                println("Got data with no error")
                 handler()
                 })
         }
     }
-    
-    
     func executeTestServerAction() {
         let actionName="AddDokument"
-
+        let baseUrl="http://inspectb.in/4a0aa3be"
+//        let baseUrl="http://belis-rest.cismet.de"
         let s=NSString(string: "{\"parameters\":{\"OBJEKT_ID\":\"411\", \"OBJEKT_TYP\":\"schaltstelle\", \"DOKUMENT_URL\":\"http://lorempixel.com/400/200/\\nZufallTest\", \"DOKUMENT_url\":\"http://lorempixel.com/400/200/nature/\\nNaturTest\"}}")
         
         let dat=s.dataUsingEncoding(NSUTF8StringEncoding)
         
         let hup=HTTPUpload(data: dat!, fileName: "params.json", mimeType: "application/json")
-            
-
+        
+        
         
         let params:Dictionary<String,AnyObject>=["taskparams":hup]
         
@@ -208,10 +211,66 @@ public class CidsConnector {
             }
             return nil //auth failed, nil causes the request to be properly cancelled.
         }
-        request.POST("http://belis-rest.cismet.de/actions/BELIS2.\(actionName)/tasks", parameters: params, completionHandler: {(response: HTTPResponse) -> Void in
-            println("Got data")
-        })
+        request.POST("\(baseUrl)/actions/BELIS2.\(actionName)/tasks", parameters: params, completionHandler: {(response: HTTPResponse) -> Void in
+            if let err = response.error {
+                println("error: \(err.localizedDescription)")
+                return //also notify app of failure as needed
+            }
+            println("Got data with no error")        })
     }
+    
+    
+       
+    
+    func uploadAndAddImageServerAction(#image: UIImage, entity: BaseEntity, description: String, completionHandler: (response: HTTPResponse) -> Void ) {
+        let actionName="UploadDokument"
+        //let baseUrl="http://inspectb.in/4a0aa3be"
+        let baseUrl="http://belis-rest.cismet.de"
+
+        let objectId=entity.id
+        let objectTyp=entity.getType().tableName().lowercaseString
+        
+        let s=NSString(string: "{\"parameters\":{\"OBJEKT_ID\":\"\(objectId)\", \"OBJEKT_TYP\":\"\(objectTyp)\", \"UPLOAD_INFO\":\"png\\n\(description)\"}}")
+        
+        let dat=s.dataUsingEncoding(NSUTF8StringEncoding)
+        
+        let hup=HTTPUpload(data: dat!, fileName: "params.json", mimeType: "application/json")
+        
+        let png=UIImagePNGRepresentation(image)
+        
+        let imageUpload=HTTPUpload(data: png, fileName: "upload.png", mimeType: "image/png")
+        
+        
+        let params:Dictionary<String,AnyObject>=["file":imageUpload,"taskparams":hup]
+        
+        var request = HTTPTask()
+        //the auth closures will continually be called until a successful auth or rejection
+        var attempted = false
+        request.auth = {(challenge: NSURLAuthenticationChallenge) in
+            if !attempted {
+                attempted = true
+                return NSURLCredential(user: self.user, password: self.password, persistence: .ForSession)
+            }
+            return nil //auth failed, nil causes the request to be properly cancelled.
+        }
+        request.POST("\(baseUrl)/actions/BELIS2.\(actionName)/tasks?resultingInstanceType=result", parameters: params, completionHandler: completionHandler)
+//            {(response: HTTPResponse) -> Void in
+//            if let err = response.error {
+//                println("error: \(err.localizedDescription)")
+//                return //also notify app of failure as needed
+//            }
+//            if let resp = response.responseObject as? NSData {
+//                println(NSString(data: resp, encoding: NSUTF8StringEncoding))
+//            }
+//            println("Got data with no error")
+//        })
+        
+        
+    }
+    
+    
+    
+    
     
     
     class func currentTimeMillis() -> Int64{
