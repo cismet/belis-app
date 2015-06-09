@@ -13,6 +13,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
     @IBOutlet weak var tableView: UITableView!
     var data: [String: [CellData]] = ["main":[]]
     var sections: [String]=[]
+
     var actions: [BaseEntityAction] = []
     var objectToShow: BaseEntity!
     var mainVC:MainViewController!
@@ -38,7 +39,6 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
     func setCellData(data:[String: [CellData]]){
         self.data=data
     }
-    
     
     func moreAction() {
         
@@ -157,6 +157,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         //picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
         
     }
+
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         println("DetailVC XXXCANCEL")
@@ -166,22 +167,5 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         //picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
         
     }
-
-    
-    
-    
-    //    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-    //        if (section==0){
-    //            return "Leuchten \(searchResults[LEUCHTEN].count)";
-    //        }
-    //        else if (section==1){
-    //            return "Mauerlaschen \(searchResults[MAUERLASCHEN].count)";
-    //        }else
-    //        {
-    //            return "Leitungen \(searchResults[LEITUNGEN].count)";
-    //        }
-    //    }
-    
-    
 
 }

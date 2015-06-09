@@ -612,6 +612,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             detailVC.mainVC=self
             detailVC.objectToShow=mauerlasche
             detailVC.sections=mauerlasche.getDataSectionKeys()
+
             detailVC.setCellData(mauerlasche.getAllData())
             detailVC.title="Mauerlasche"
             detailVC.actions=mauerlasche.getAllActions()
