@@ -732,9 +732,29 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //        tableView.selectRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 2), animated: true,scrollPosition: UITableViewScrollPosition.Middle);
         //        tableView(tableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 1, inSection: 2));
         
-        cidsConnector.executeTestServerAction()
+        
+        var image=UIImage(named: "testbild.png")
+        
+        var thumb = image!.resizeToWidth(100.0)
         
         
+        let ctm=Int64(NSDate().timeIntervalSince1970*1000)
+        
+
+        func handleProgress(progress:Float) {
+            println(progress)
+        }
+        
+        func handleCompletion(request: NSURLRequest, response: NSHTTPURLResponse?, data: AnyObject?, error: NSError?) {
+            if let err = error {
+            println("error: \(err.localizedDescription)")
+            }
+            if let resp = data as? NSData {
+            println(NSString(data: resp, encoding: NSUTF8StringEncoding))
+            }
+        }
+        cidsConnector.uploadImageToWebDAV(image!, fileName: "iostestupload\(ctm).png",progressHandler: handleProgress, completionHandler: handleCompletion)
+//        cidsConnector.uploadImageToWebDAV(thumb, fileName: "iostestupload\(ctm)_thumb.png",progressHandler: handleProgress, completionHandler: handleCompletion)
         
         
 //        let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"411",
@@ -744,17 +764,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
 //        cidsConnector.executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {() -> () in })
 //
         
-        let image2 = UIImage(named: "testbild.png")
-        cidsConnector.uploadAndAddImageServerAction(image: image2!, entity: BaseEntity(), description: "again a test", completionHandler: {(response: HTTPResponse) -> Void in
-            if let err = response.error {
-                println("error: \(err.localizedDescription)")
-                return //also notify app of failure as needed
-            }
-            if let resp = response.responseObject as? NSData {
-                println(NSString(data: resp, encoding: NSUTF8StringEncoding))
-            }
-            println("Got data with no error")
-        })
+//        let image2 = UIImage(named: "testbild.png")
+//        cidsConnector.uploadAndAddImageServerAction(image: image2!, entity: BaseEntity(), description: "again a test", completionHandler: {(response: HTTPResponse) -> Void in
+        
+//            println("Got data with no error")
+//        })
 
         
     }

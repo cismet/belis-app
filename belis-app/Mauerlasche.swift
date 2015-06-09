@@ -111,6 +111,9 @@ class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, Cel
             }
         }
         
+        data["DeveloperInfo"]=[]
+        data["DeveloperInfo"]?.append(SingleTitledInfoCellData(title: "Key", data: "\(getType().tableName())/\(id)"))
+
         return data
     }
     
@@ -236,7 +239,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             picker.dismissViewControllerAnimated(true, completion: nil)
         }
         
-        var alert = UIAlertController(title: "Enter Input", message: "", preferredStyle: UIAlertControllerStyle.Alert)
+        var alert = UIAlertController(title: "Bildname", message: "", preferredStyle: UIAlertControllerStyle.Alert)
         
         alert.addTextFieldWithConfigurationHandler(configurationTextField)
         alert.addAction(UIAlertAction(title: "Abbrechen", style: UIAlertActionStyle.Cancel, handler:handleCancel))
@@ -262,23 +265,57 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             imageToSave.drawInRect(CGRect(origin: CGPointZero, size: size))
             let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
-            var png = UIImagePNGRepresentation(scaledImage)
 
             var cidsConnector=CidsConnector(user: "WendlingM@BELIS2", password: "boxy")
-            cidsConnector.uploadAndAddImageServerAction(image: imageToSave, entity: self.selfEntity,description: tField.text, completionHandler: {(response: HTTPResponse) -> Void in
-                if let err = response.error {
-                    println("error: \(err.localizedDescription)")
-                    return //also notify app of failure as needed
-                }
-                if let resp = response.responseObject as? NSData {
-                    println(NSString(data: resp, encoding: NSUTF8StringEncoding))
-                }
-                actInd.stopAnimating()
-                actInd.removeFromSuperview()
-                picker.dismissViewControllerAnimated(true, completion: nil)
-                println("Got data with no error")
-            })
+            
+            let ctm=Int64(NSDate().timeIntervalSince1970*1000)
+            let pictureName=tField.text
+            
+//            cidsConnector.uploadAndAddImageServerAction(image: imageToSave, entity: self.selfEntity,description: tField.text, completionHandler: {(response: HTTPResponse) -> Void in
+//                if let err = response.error {
+//                    println("error: \(err.localizedDescription)")
+//                    return //also notify app of failure as needed
+//                }
+//                if let resp = response.responseObject as? NSData {
+//                    println(NSString(data: resp, encoding: NSUTF8StringEncoding))
+//                }
+//                actInd.stopAnimating()
+//                actInd.removeFromSuperview()
+//                picker.dismissViewControllerAnimated(true, completion: nil)
+//                println("Got data with no error")
+//            })
 
+            let objectId=self.selfEntity.id
+            let objectTyp=self.selfEntity.getType().tableName().lowercaseString
+            
+            let fileName="uplod.from.ios.for.\(objectTyp).\(objectId)-\(ctm).png"
+            
+            func handleProgress(progress:Float) {
+                println(progress)
+            }
+            
+            func handleCompletion(request: NSURLRequest, response: NSHTTPURLResponse?, data: AnyObject?, error: NSError?) {
+                if let err = error {
+                    println("error: \(err.localizedDescription)")
+                }
+                if let resp = data as? NSData {
+                    println(NSString(data: resp, encoding: NSUTF8StringEncoding))
+                    let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"\(objectId)",
+                        "OBJEKT_TYP":objectTyp,
+                        "DOKUMENT_URL":"http://board.cismet.de/belis/\(fileName)\n\(pictureName)"])
+                    cidsConnector.executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {() -> () in })
+                    actInd.stopAnimating()
+                    actInd.removeFromSuperview()
+                    picker.dismissViewControllerAnimated(true, completion: nil)
+                    println("Everything is going to be 200-OK")
+                }
+            }
+            
+            cidsConnector.uploadImageToWebDAV(imageToSave, fileName: fileName ,progressHandler: handleProgress, completionHandler: handleCompletion)
+            
+            
+            
+            
         }))
         picker.presentViewController(alert, animated: true, completion: {
             println("completion block")

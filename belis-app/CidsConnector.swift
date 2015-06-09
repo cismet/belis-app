@@ -162,6 +162,7 @@ public class CidsConnector {
     
     func executeSimpleServerAction(#actionName: String!, params: ActionParameterContainer, handler: () -> ()) {
         if let jsonContent=Mapper().toJSONString(params, prettyPrint: false) {
+            println(jsonContent)
             let dat=jsonContent.dataUsingEncoding(NSUTF8StringEncoding)
             let hup=HTTPUpload(data: dat!, fileName: "params.json", mimeType: "application/json")
             let params:Dictionary<String,AnyObject>=["taskparams":hup]
@@ -182,6 +183,7 @@ public class CidsConnector {
                     println("error: \(err.localizedDescription)")
                     return //also notify app of failure as needed
                 }
+                
                 println("Got data with no error")
                 handler()
                 })
@@ -218,9 +220,46 @@ public class CidsConnector {
             }
             println("Got data with no error")        })
     }
+
+    func uploadImageToWebDAV(image: UIImage, fileName: String , progressHandler: (Float)->Void, completionHandler: (NSURLRequest, NSHTTPURLResponse?, AnyObject?, NSError?) -> Void) {
+        
+        let baseUrl="http://board.cismet.de/belis"
+        
+        let png=UIImagePNGRepresentation(image)
+        let jpg=UIImageJPEGRepresentation(image, CGFloat(0.9))
+//        let imageUpload=HTTPUpload(data: jpg, fileName: "iostestupload.jpg", mimeType: "image/jpg")
+//        let params:Dictionary<String,AnyObject>=["file":imageUpload]
+//        
+//        var request = HTTPTask()
+//        //the auth closures will continually be called until a successful auth or rejection
+//        var attempted = false
+//        request.auth = {(challenge: NSURLAuthenticationChallenge) in
+//            if !attempted {
+//                attempted = true
+//                return NSURLCredential(user: Secrets.getWebDavUser(), password: Secrets.getWebDavPass(), persistence: .ForSession)
+//            }
+//            return nil //auth failed, nil causes the request to be properly cancelled.
+//        }
+//        //
+//        request.upload("\(baseUrl)/\(fileName)", method: HTTPMethod.PUT, parameters: params,  progress: { (value: Double) in
+//            println("progress: \(value)")
+//        },  completionHandler: completionHandler)
+//        
+        
+        Alamofire.upload(.PUT, "\(baseUrl)/\(fileName)", png)
+            .authenticate(user: Secrets.getWebDavUser(), password: Secrets.getWebDavPass())
+            .progress {
+                (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
+                let f=Float(totalBytesWritten)/Float(totalBytesExpectedToWrite)
+                progressHandler(f)
+            }
+            .response {
+                (request, response, data, error) in
+                    completionHandler(request, response, data, error)
+            }
+    }
+
     
-    
-       
     
     func uploadAndAddImageServerAction(#image: UIImage, entity: BaseEntity, description: String, completionHandler: (response: HTTPResponse) -> Void ) {
         let actionName="UploadDokument"
