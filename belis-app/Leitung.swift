@@ -51,6 +51,8 @@ class Leitung : GeoBaseEntity , Mappable,CellInformationProviderProtocol, CellDa
                 data["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: doc.getTitle(), url: doc.getUrl()))
             }
         }
+        data["DeveloperInfo"]=[]
+        data["DeveloperInfo"]?.append(SingleTitledInfoCellData(title: "Key", data: "\(getType().tableName())/\(id)"))
 
         return data;
     }

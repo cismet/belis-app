@@ -311,7 +311,9 @@ class Standort: GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOu
             mastDetails["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
         }
         
-        
+        mastDetails["DeveloperInfo"]=[]
+        mastDetails["DeveloperInfo"]?.append(SingleTitledInfoCellData(title: "Key", data: "\(getType().tableName())/\(id)"))
+
         return mastDetails
     }
     @objc func getDataSectionKeys() -> [String] {

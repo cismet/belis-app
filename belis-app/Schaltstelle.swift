@@ -212,7 +212,9 @@ class Schaltstelle : GeoBaseEntity , Mappable, CellInformationProviderProtocol,C
         for url in dokumente {
             details["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
         }
-        
+        details["DeveloperInfo"]=[]
+        details["DeveloperInfo"]?.append(SingleTitledInfoCellData(title: "Key", data: "\(getType().tableName())/\(id)"))
+
         return details
     }
     @objc func getDataSectionKeys() -> [String] {
