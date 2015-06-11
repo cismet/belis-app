@@ -40,6 +40,15 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         self.data=data
     }
     
+    func refresh() {
+        if let provider=objectToShow as? CellDataProvider{
+            sections=provider.getDataSectionKeys()
+            setCellData(provider.getAllData())
+            dispatch_async(dispatch_get_main_queue(),{
+                self.tableView.reloadData()
+            });        }
+    }
+    
     func moreAction() {
         
         if actions.count>0 {

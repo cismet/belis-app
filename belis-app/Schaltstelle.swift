@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Schaltstelle : GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider{
+class Schaltstelle : GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider,ActionProvider, DocumentContainer{
     
     var erstellungsjahr: NSDate?
     var laufendeNummer: Int?
@@ -219,6 +219,21 @@ class Schaltstelle : GeoBaseEntity , Mappable, CellInformationProviderProtocol,C
     }
     @objc func getDataSectionKeys() -> [String] {
         return ["main","Dokumente","DeveloperInfo"]
+    }
+    // Actions
+    @objc func getAllActions() -> [BaseEntityAction] {
+        
+        
+        var actions:[BaseEntityAction]=[]
+        
+        actions.append(TakeFotoAction(yourself: self))
+        actions.append(ChooseFotoAction(yourself: self))
+        
+        return actions
+    }
+    
+    func addDocument(document: DMSUrl) {
+        dokumente.append(document)
     }
 }
 

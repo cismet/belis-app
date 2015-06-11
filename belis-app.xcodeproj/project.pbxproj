@@ -73,6 +73,7 @@
 		2D9D3AD61A9E23DD0049F46F /* AF+ImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9D3AD51A9E23DD0049F46F /* AF+ImageView+Extension.swift */; };
 		2D9D3B1A1A9F777D0049F46F /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D9D3B191A9F777D0049F46F /* QuickLook.framework */; };
 		2D9D3B1C1A9F77B50049F46F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D9D3B1B1A9F77B50049F46F /* UIKit.framework */; };
+		2DB10EE91B299CA200B78852 /* FotoActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB10EE81B299CA200B78852 /* FotoActions.swift */; };
 		2DB6E8BC1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */; };
 		2DB6E8BD1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */; };
 		2DB6E8C21A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */; };
@@ -179,6 +180,7 @@
 		2D9D3AD51A9E23DD0049F46F /* AF+ImageView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AF+ImageView+Extension.swift"; sourceTree = "<group>"; };
 		2D9D3B191A9F777D0049F46F /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		2D9D3B1B1A9F77B50049F46F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		2DB10EE81B299CA200B78852 /* FotoActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FotoActions.swift; sourceTree = "<group>"; };
 		2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "webhostinghub-glyphs.ttf"; sourceTree = "<group>"; };
 		2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebHostingGlyph.swift; sourceTree = "<group>"; };
 		2DB8E80D1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleUrlPreviewInfoCell.swift; sourceTree = "<group>"; };
@@ -342,7 +344,6 @@
 				2D3DC3591A94E2C60035575A /* DMSUrl.swift */,
 				2D3DC35E1A94EBA50035575A /* Timestamp.swift */,
 				2D0A979B1ADBC4C8005312BA /* Strasse.swift */,
-				2D68674F1B02397900B0C2EE /* BaseEntityAction.swift */,
 			);
 			name = data;
 			sourceTree = "<group>";
@@ -377,6 +378,7 @@
 		2D9D3AC41A9E18E90049F46F /* details */ = {
 			isa = PBXGroup;
 			children = (
+				2DB10EE71B299C7F00B78852 /* actions */,
 				2D0B7F5F1AB3447700E33A6C /* components */,
 				2D9952211AA5FFC600B5E02E /* DokumentPreviewVC.swift */,
 				2D9952221AA5FFC600B5E02E /* DokumentPreviewVC.xib */,
@@ -384,6 +386,15 @@
 				2D407C1F1AC2ECD40083013A /* DetailVC.xib */,
 			);
 			name = details;
+			sourceTree = "<group>";
+		};
+		2DB10EE71B299C7F00B78852 /* actions */ = {
+			isa = PBXGroup;
+			children = (
+				2D68674F1B02397900B0C2EE /* BaseEntityAction.swift */,
+				2DB10EE81B299CA200B78852 /* FotoActions.swift */,
+			);
+			name = actions;
 			sourceTree = "<group>";
 		};
 		2DB6E8C91A9DD5D500D4EA4E /* viewController */ = {
@@ -559,6 +570,7 @@
 				2D5FB3421A67CCEB0041020C /* Leuchte.swift in Sources */,
 				2D5FB32F1A67CCA60041020C /* WKTPolygonM.m in Sources */,
 				2D5FB3291A67CCA60041020C /* WKTLine.m in Sources */,
+				2DB10EE91B299CA200B78852 /* FotoActions.swift in Sources */,
 				2DB8E80E1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift in Sources */,
 				2D5FB30C1A67CC340041020C /* LoginViewController.swift in Sources */,
 				2D5FB3411A67CCEB0041020C /* Leitung.swift in Sources */,
@@ -708,7 +720,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "c5a0196a-160f-47fe-be08-1f291c36a3a4";
 				SWIFT_OBJC_BRIDGING_HEADER = "belis-app/belis-app-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 2;
@@ -730,7 +742,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "c5a0196a-160f-47fe-be08-1f291c36a3a4";
 				SWIFT_OBJC_BRIDGING_HEADER = "belis-app/belis-app-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 2;
 			};

@@ -16,6 +16,12 @@ class DMSUrl : BaseEntity, Mappable{
     var description: String?
     var name: String?
     
+    convenience init(name: String, fileName: String) {
+        self.init()
+        description=name
+        url=Url(webdavObjectName: fileName)
+    }
+    
     override func mapping(map: Map) {
         id <- map["id"];
         url <- map["url_id"]
@@ -42,6 +48,17 @@ class DMSUrl : BaseEntity, Mappable{
 }
 
 class Url : BaseEntity, Mappable{
+    init(webdavObjectName: String){
+        super.init()
+        objectName=webdavObjectName
+        urlBase=UrlBase.WEBDAVURLBASE
+    }
+    required init?(_ map: Map) {
+        super.init()
+        mapping(map)
+    }
+    
+    
     var urlBase: UrlBase?
     var objectName: String?
     override func mapping(map: Map) {
@@ -55,6 +72,21 @@ class UrlBase : BaseEntity, Mappable{
     var protPrefix: String?
     var server: String?
     var path: String?
+    static let WEBDAVURLBASE=UrlBase(protPrefix: "http://",server: "board.cismet.de/",path: "belis/")
+    
+    init(protPrefix:String, server: String, path:String){
+        super.init()
+        self.protPrefix=protPrefix
+        self.server=server
+        self.path=path
+    
+    }
+    
+    required init?(_ map: Map) {
+        super.init(map)
+    }
+
+    
     override func mapping(map: Map) {
         id <- map["id"];
         protPrefix <- map["prot_prefix"]

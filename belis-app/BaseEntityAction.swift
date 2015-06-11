@@ -19,3 +19,7 @@ class BaseEntityAction : NSObject{
         self.handler=handler
     }
 }
+
+protocol DocumentContainer {
+    func addDocument(document: DMSUrl)
+}

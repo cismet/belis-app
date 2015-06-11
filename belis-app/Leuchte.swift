@@ -8,7 +8,7 @@
 
 import Foundation
 import ObjectMapper
-class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, CellInformationProviderProtocol, CellDataProvider {
+class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
     var strasse: Strasse?
     var energielieferant: Energielieferant?
     var rundsteuerempfaenger: Rundsteuerempfaenger?
@@ -281,6 +281,22 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         return ["main","Dokumente","DeveloperInfo"]
     }
     
+    
+    // Actions
+    @objc func getAllActions() -> [BaseEntityAction] {
+        
+        
+        var actions:[BaseEntityAction]=[]
+        
+        actions.append(TakeFotoAction(yourself: self))
+        actions.append(ChooseFotoAction(yourself: self))
+        
+        return actions
+    }
+    
+    func addDocument(document: DMSUrl) {
+        dokumente.append(document)
+    }
     
     override func getAnnotationImageName() -> String{
         return "leuchte.png";

@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Leitung : GeoBaseEntity , Mappable,CellInformationProviderProtocol, CellDataProvider {
+class Leitung : GeoBaseEntity , Mappable,CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
     var material: Leitungsmaterial?
     var leitungstyp: Leitungstyp?
     var querschnitt: Querschnitt?
@@ -58,6 +58,22 @@ class Leitung : GeoBaseEntity , Mappable,CellInformationProviderProtocol, CellDa
     }
     @objc func getDataSectionKeys() -> [String] {
         return ["main","Dokumente","DeveloperInfo"]
+    }
+    
+    // Actions
+    @objc func getAllActions() -> [BaseEntityAction] {
+        
+        
+        var actions:[BaseEntityAction]=[]
+        
+        actions.append(TakeFotoAction(yourself: self))
+        actions.append(ChooseFotoAction(yourself: self))
+        
+        return actions
+    }
+    
+    func addDocument(document: DMSUrl) {
+        dokumente.append(document)
     }
     
     override func getAnnotationTitle() -> String{

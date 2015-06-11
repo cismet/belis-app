@@ -10,7 +10,7 @@ import Foundation
 import ObjectMapper
 
 
-class Standort: GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider{
+class Standort: GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider,ActionProvider, DocumentContainer{
     var plz : String?
     var strasse : Strasse?
     var bezirk : Stadtbezirk?
@@ -318,6 +318,21 @@ class Standort: GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOu
     }
     @objc func getDataSectionKeys() -> [String] {
         return ["main","Dokumente","DeveloperInfo"]
+    }
+    // Actions
+    @objc func getAllActions() -> [BaseEntityAction] {
+        
+        
+        var actions:[BaseEntityAction]=[]
+        
+        actions.append(TakeFotoAction(yourself: self))
+        actions.append(ChooseFotoAction(yourself: self))
+        
+        return actions
+    }
+    
+    func addDocument(document: DMSUrl) {
+        dokumente.append(document)
     }
     
 }

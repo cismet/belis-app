@@ -98,6 +98,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         UINavigationController(rootViewController: self)
         textfieldGeoSearch.delegate=self
         
+        println(UIDevice.currentDevice().identifierForVendor.UUIDString)
+        
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -557,6 +559,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             detailVC.sections=leuchte.getDataSectionKeys()
             detailVC.setCellData(leuchte.getAllData())
             detailVC.mainVC=self
+            detailVC.actions=leuchte.getAllActions()
+
             detailVC.objectToShow=leuchte
             detailVC.title="Leuchte"
             var detailNC=UINavigationController(rootViewController: detailVC)
@@ -575,6 +579,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             detailVC.sections=standort.getDataSectionKeys()
             detailVC.setCellData(standort.getAllData())
             detailVC.mainVC=self
+            detailVC.actions=standort.getAllActions()
+
             detailVC.objectToShow=standort
             detailVC.title="Mast"
             var detailNC=UINavigationController(rootViewController: detailVC)
@@ -593,6 +599,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             detailVC.sections=leitung.getDataSectionKeys()
             detailVC.setCellData(leitung.getAllData())
             detailVC.mainVC=self
+            detailVC.actions=leitung.getAllActions()
+
             detailVC.objectToShow=leitung
             detailVC.title="Leitung"
             var detailNC=UINavigationController(rootViewController: detailVC)
@@ -630,9 +638,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else if let schaltstelle = geoBaseEntity as? Schaltstelle {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            detailVC.mainVC=self
             detailVC.sections=schaltstelle.getDataSectionKeys()
             detailVC.setCellData(schaltstelle.getAllData())
             detailVC.title="Schaltstelle"
+            detailVC.actions=schaltstelle.getAllActions()
+
             detailVC.objectToShow=schaltstelle
             var detailNC=UINavigationController(rootViewController: detailVC)
             var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")

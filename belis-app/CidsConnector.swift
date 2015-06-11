@@ -227,24 +227,6 @@ public class CidsConnector {
         
         let png=UIImagePNGRepresentation(image)
         let jpg=UIImageJPEGRepresentation(image, CGFloat(0.9))
-//        let imageUpload=HTTPUpload(data: jpg, fileName: "iostestupload.jpg", mimeType: "image/jpg")
-//        let params:Dictionary<String,AnyObject>=["file":imageUpload]
-//        
-//        var request = HTTPTask()
-//        //the auth closures will continually be called until a successful auth or rejection
-//        var attempted = false
-//        request.auth = {(challenge: NSURLAuthenticationChallenge) in
-//            if !attempted {
-//                attempted = true
-//                return NSURLCredential(user: Secrets.getWebDavUser(), password: Secrets.getWebDavPass(), persistence: .ForSession)
-//            }
-//            return nil //auth failed, nil causes the request to be properly cancelled.
-//        }
-//        //
-//        request.upload("\(baseUrl)/\(fileName)", method: HTTPMethod.PUT, parameters: params,  progress: { (value: Double) in
-//            println("progress: \(value)")
-//        },  completionHandler: completionHandler)
-//        
         
         Alamofire.upload(.PUT, "\(baseUrl)/\(fileName)", png)
             .authenticate(user: Secrets.getWebDavUser(), password: Secrets.getWebDavPass())
