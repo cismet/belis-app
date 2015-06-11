@@ -66,7 +66,7 @@ class Schaltstelle : GeoBaseEntity , Mappable, CellInformationProviderProtocol,C
             s="Schaltstelle"
         }
         
-        if let nr=laufendeNummer {
+        if let nr=schaltstellenNummer {
             s=s+" - \(nr)"
         }
         return s

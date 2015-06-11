@@ -183,7 +183,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         }
         //Doppelkommandos
         var dkDetails: [String: [CellData]] = ["main":[]]
-        if let dk1=dk1?.beschreibung {
+        if let dk1=dk1?.key {
             dkDetails["main"]?.append(SingleTitledInfoCellData(title: "Doppelkommando 1", data: dk1))
         }
         if let anzahldk1=anzahl_1dk {
@@ -192,7 +192,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         if let pdk1=anschlussleistung_1dk {
             dkDetails["main"]?.append(SingleTitledInfoCellData(title: "Anschlussleistung DK1", data: "\(pdk1)"))
         }
-        if let dk2=dk2?.beschreibung {
+        if let dk2=dk2?.key {
             dkDetails["main"]?.append(SingleTitledInfoCellData(title: "Doppelkommando 2", data: dk2))
         }
         if let pdk2=anschlussleistung_2dk {
