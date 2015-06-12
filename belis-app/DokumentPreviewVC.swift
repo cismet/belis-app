@@ -99,23 +99,34 @@ class DokumentPreviewVC: UIViewController , UIWebViewDelegate {
     */
     
     func loadUrl(url: NSURL){
-        //var request = NSMutableURLRequest(URL: url, cachePolicy: NSURLRequestCachePolicy.ReturnCacheDataElseLoad, timeoutInterval: 100)
+        
+        if url.path!.endsWith(".jpg", caseSensitive: false) || url.path!.endsWith(".png", caseSensitive: false) {
+            var test="http://lorempixel.com/400/400/sports/1/"
+            var imageUrl="http://\(Secrets.getWebDavAuthString())@\(url.host!)\(url.path!)"
+            //        imageUrl=test
+            if imageUrl.endsWith(".jpg", caseSensitive: false) {
+                imageUrl=imageUrl+".thumbnail.jpg"
+            }
+            if imageUrl.endsWith(".png", caseSensitive: false) {
+                imageUrl=imageUrl+".thumbnail.png"
+            }
+            var body="<html><body><center><img src='\(imageUrl)' width='950'></center></body></html>"
+            println(body)
+            //NSURLConnection(request: request, delegate: self)
+            webview.loadHTMLString(body, baseURL: nil)
+        }
+        else {
+            var request = NSMutableURLRequest(URL: url, cachePolicy: NSURLRequestCachePolicy.ReturnCacheDataElseLoad, timeoutInterval: 100)
 
-//        let loginString = NSString(format: "%@", Secrets.getWebDavAuthString())
-//        let loginData: NSData = loginString.dataUsingEncoding(NSUTF8StringEncoding)!
-//        let base64LoginString = loginData.base64EncodedStringWithOptions(nil)
+        let loginString = NSString(format: "%@", Secrets.getWebDavAuthString())
+        let loginData: NSData = loginString.dataUsingEncoding(NSUTF8StringEncoding)!
+        let base64LoginString = loginData.base64EncodedStringWithOptions(nil)
 //        var defaultCredentials: NSURLCredential = NSURLCredential(user: login, password: password, persistence: NSURLCredentialPersistence.ForSession);
         
-     //   request.setValue("Basic \(base64LoginString)", forHTTPHeaderField: "Authorization")
-        var test="http://lorempixel.com/400/400/sports/1/"
-        var imageUrl="http://\(Secrets.getWebDavAuthString())@\(url.host!)\(url.path!)"
-//        imageUrl=test
-        var body="<html><body><center><img src='\(imageUrl)' width='950'></center></body></html>"
-        println(body)
-        //NSURLConnection(request: request, delegate: self)
-        webview.loadHTMLString(body, baseURL: nil)
-       // webview.loadRequest(request)
-
+       request.setValue("Basic \(base64LoginString)", forHTTPHeaderField: "Authorization")
+            NSURLConnection(request: request, delegate: self)
+            webview.loadRequest(request)
+        }
     }
     
 //    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {

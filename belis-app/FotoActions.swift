@@ -8,6 +8,7 @@
 
 import Foundation
 import AssetsLibrary
+import ImageIO
 
 class ChooseFotoAction : BaseEntityAction {
     init(yourself: BaseEntity) {
@@ -25,7 +26,6 @@ class ChooseFotoAction : BaseEntityAction {
     }
 }
 
-typealias CompletionHandler = (success:Bool!) -> Void
 class TakeFotoAction : BaseEntityAction {
     init(yourself: BaseEntity) {
         super.init(title: "Foto erstellen",style: UIAlertActionStyle.Default, handler: {
@@ -108,19 +108,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             actInd.startAnimating();
             let metadata = info[UIImagePickerControllerMediaMetadata] as? NSDictionary
             
-            if picker.sourceType == UIImagePickerControllerSourceType.Camera {
-                UIImageWriteToSavedPhotosAlbum(imageToSave, nil, nil, nil)
-                println("FotoPickerCallBacker PICKED FROM Camera")
-            }
-            else {
-                //picked from CameraRoll
-                println("FotoPickerCallBacker PICKED FROM CameraRoll")
-                var meta:[NSObject:AnyObject]=[:]
-                
-//                ALAssetsLibrary().writeImageToSavedPhotosAlbum(imageToSave.CGImage, metadata: <#[NSObject : AnyObject]!#>, completionBlock: <#ALAssetsLibraryWriteImageCompletionBlock!##(NSURL!, NSError!) -> Void#>)
-            }
 
-            
             var cidsConnector=CidsConnector(user: "WendlingM@BELIS2", password: "boxy")
             let ctm=Int64(NSDate().timeIntervalSince1970*1000)
             let pictureName=tField.text
@@ -128,8 +116,36 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             let objectId=self.selfEntity.id
             let objectTyp=self.selfEntity.getType().tableName().lowercaseString
             
-            let fileName="upload.from.ios.for.\(objectTyp).\(objectId)-\(ctm)_thumb.png"
+            let fileNameThumb="upload.from.ios.for.\(objectTyp).\(objectId)-\(ctm).jpg.thumbnail.jpg"
+            let fileName="upload.from.ios.for.\(objectTyp).\(objectId)-\(ctm).jpg"
+
             
+            
+            var newMetadata : [NSObject:AnyObject]
+            if let md = metadata as? Dictionary<NSObject,AnyObject> {
+                newMetadata=md
+            }
+            else {
+                newMetadata=[NSObject:AnyObject]()
+            }
+
+            var iptcMeta=[NSObject:AnyObject]()
+            iptcMeta.updateValue(pictureName, forKey: kCGImagePropertyIPTCObjectName)
+            iptcMeta.updateValue("BelIS", forKey: kCGImagePropertyIPTCKeywords)
+            iptcMeta.updateValue("upload to: \(fileName)", forKey: kCGImagePropertyIPTCSpecialInstructions)
+            kCGImagePropertyIPTCSpecialInstructions
+
+            var tiffMeta=[NSObject:AnyObject]()
+            tiffMeta.updateValue("http://www.cismet.de", forKey: kCGImagePropertyTIFFImageDescription)
+
+            
+            newMetadata.updateValue(iptcMeta, forKey:kCGImagePropertyIPTCDictionary )
+            newMetadata.updateValue(tiffMeta, forKey:kCGImagePropertyTIFFDictionary )
+
+
+            
+            self.library.saveImage(imageToSave, toAlbum: "BelIS-Dokumente",metadata : newMetadata, withCallback: nil)
+
             func handleProgress(progress:Float) {
                 println(progress)
             }
@@ -154,7 +170,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
                 }
             }
             let thumb=imageToSave.resizeToWidth(300.0)
-            cidsConnector.uploadImageToWebDAV(thumb, fileName: fileName ,progressHandler: handleProgress, completionHandler: handleCompletion)
+            cidsConnector.uploadImageToWebDAV(thumb, fileName: fileNameThumb ,progressHandler: handleProgress, completionHandler: handleCompletion)
             
             
             

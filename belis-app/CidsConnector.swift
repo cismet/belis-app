@@ -225,10 +225,10 @@ public class CidsConnector {
         
         let baseUrl="http://board.cismet.de/belis"
         
-        let png=UIImagePNGRepresentation(image)
+//        let png=UIImagePNGRepresentation(image)
         let jpg=UIImageJPEGRepresentation(image, CGFloat(0.9))
         
-        Alamofire.upload(.PUT, "\(baseUrl)/\(fileName)", png)
+        Alamofire.upload(.PUT, "\(baseUrl)/\(fileName)", jpg)
             .authenticate(user: Secrets.getWebDavUser(), password: Secrets.getWebDavPass())
             .progress {
                 (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
