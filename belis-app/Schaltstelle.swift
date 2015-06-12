@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Schaltstelle : GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider{
+class Schaltstelle : GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider,ActionProvider, DocumentContainer{
     
     var erstellungsjahr: NSDate?
     var laufendeNummer: Int?
@@ -66,7 +66,7 @@ class Schaltstelle : GeoBaseEntity , Mappable, CellInformationProviderProtocol,C
             s="Schaltstelle"
         }
         
-        if let nr=laufendeNummer {
+        if let nr=schaltstellenNummer {
             s=s+" - \(nr)"
         }
         return s
@@ -149,10 +149,10 @@ class Schaltstelle : GeoBaseEntity , Mappable, CellInformationProviderProtocol,C
             }
             
             if let hausnr=hausnummer {
-                details["main"]?.append(DoubleTitledInfoCellDataWithDetails(titleLeft: "Strasse", dataLeft: strName, titleRight: "Hausnummer", dataRight: "\(hausnr)",details:strDetails))
+                details["main"]?.append(DoubleTitledInfoCellDataWithDetails(titleLeft: "Strasse", dataLeft: strName, titleRight: "Hausnummer", dataRight: "\(hausnr)",details:strDetails, sections: ["main","DeveloperInfo"]))
             }
             else {
-                details["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Strasse", data: strName,details:strDetails))
+                details["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Strasse", data: strName,details:strDetails, sections:["main","DeveloperInfo"]))
             }
         }
         
@@ -212,10 +212,29 @@ class Schaltstelle : GeoBaseEntity , Mappable, CellInformationProviderProtocol,C
         for url in dokumente {
             details["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
         }
-        
+        details["DeveloperInfo"]=[]
+        details["DeveloperInfo"]?.append(SingleTitledInfoCellData(title: "Key", data: "\(getType().tableName())/\(id)"))
+
         return details
     }
+    @objc func getDataSectionKeys() -> [String] {
+        return ["main","Dokumente","DeveloperInfo"]
+    }
+    // Actions
+    @objc func getAllActions() -> [BaseEntityAction] {
+        
+        
+        var actions:[BaseEntityAction]=[]
+        
+        actions.append(TakeFotoAction(yourself: self))
+        actions.append(ChooseFotoAction(yourself: self))
+        
+        return actions
+    }
     
+    func addDocument(document: DMSUrl) {
+        dokumente.append(document)
+    }
 }
 
 

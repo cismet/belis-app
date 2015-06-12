@@ -8,7 +8,7 @@
 
 import Foundation
 import ObjectMapper
-class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, CellInformationProviderProtocol, CellDataProvider {
+class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
     var strasse: Strasse?
     var energielieferant: Energielieferant?
     var rundsteuerempfaenger: Rundsteuerempfaenger?
@@ -117,10 +117,10 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
             
             
             if let hausnr=standort?.hausnummer {
-                data["main"]?.append(DoubleTitledInfoCellDataWithDetails(titleLeft: "Strasse", dataLeft: strName, titleRight: "Hausnummer", dataRight: "\(hausnr)",details:strDetails))
+                data["main"]?.append(DoubleTitledInfoCellDataWithDetails(titleLeft: "Strasse", dataLeft: strName, titleRight: "Hausnummer", dataRight: "\(hausnr)",details:strDetails, sections: ["main","DeveloperInfo"]))
             }
             else {
-                data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Strasse", data: strName,details:strDetails))
+                data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Strasse", data: strName,details:strDetails, sections: ["main","DeveloperInfo"]))
                 
             }
             
@@ -136,7 +136,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         if mastVorhanden {
             if let s=standort {
                 var mastDetails: [String: [CellData]] = s.getAllData()
-                data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Mast",details: mastDetails))
+                data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Mast",details: mastDetails, sections: ["main","DeveloperInfo"]))
             }
             else {
                 //serious error
@@ -183,7 +183,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         }
         //Doppelkommandos
         var dkDetails: [String: [CellData]] = ["main":[]]
-        if let dk1=dk1?.beschreibung {
+        if let dk1=dk1?.key {
             dkDetails["main"]?.append(SingleTitledInfoCellData(title: "Doppelkommando 1", data: dk1))
         }
         if let anzahldk1=anzahl_1dk {
@@ -192,7 +192,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         if let pdk1=anschlussleistung_1dk {
             dkDetails["main"]?.append(SingleTitledInfoCellData(title: "Anschlussleistung DK1", data: "\(pdk1)"))
         }
-        if let dk2=dk2?.beschreibung {
+        if let dk2=dk2?.key {
             dkDetails["main"]?.append(SingleTitledInfoCellData(title: "Doppelkommando 2", data: dk2))
         }
         if let pdk2=anschlussleistung_2dk {
@@ -202,7 +202,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
             dkDetails["main"]?.append(SingleTitledInfoCellData(title: "Anzahl Doppelkommando 2", data: "\(anzahldk2)"))
         }
         if dkDetails["main"]?.count>0 {
-            data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Doppelkommandos",details: dkDetails))
+            data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Doppelkommandos",details: dkDetails, sections: ["main","DeveloperInfo"]))
         }
         //------------------------(DK)
         
@@ -234,10 +234,10 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         }
         if leuchtmittelDetails["main"]?.count>0 {
             if let lm=leuchtmittel?.hersteller {
-                data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Leuchtmittel", data: lm, details: leuchtmittelDetails))
+                data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Leuchtmittel", data: lm, details: leuchtmittelDetails, sections: ["main","DeveloperInfo"]))
             }
             else {
-                data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Leuchtmittel",details: leuchtmittelDetails))
+                data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Leuchtmittel",details: leuchtmittelDetails, sections: ["main","DeveloperInfo"]))
             }
         }
         //------------------------(LM)
@@ -250,7 +250,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
                 vsgDetails["main"]?.append(SingleTitledInfoCellData(title: "Erneuerung Vorschaltgerät", data: "\(vsgWe.toDateString())"))
             }
             if vsgDetails["main"]?.count>1 {
-                data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Vorschaltgerät", data: vsg, details: vsgDetails))
+                data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Vorschaltgerät", data: vsg, details: vsgDetails, sections: ["main","DeveloperInfo"]))
             }
             else {
                 data["main"]?.append(SingleTitledInfoCellData(title: "Vorschaltgerät", data: vsg))
@@ -271,12 +271,32 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
                 data["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
             }
         }
-        
+        data["DeveloperInfo"]=[]
+        data["DeveloperInfo"]?.append(SingleTitledInfoCellData(title: "Key", data: "\(getType().tableName())/\(id)"))
+
         
         return data
     }
+    @objc func getDataSectionKeys() -> [String] {
+        return ["main","Dokumente","DeveloperInfo"]
+    }
     
     
+    // Actions
+    @objc func getAllActions() -> [BaseEntityAction] {
+        
+        
+        var actions:[BaseEntityAction]=[]
+        
+        actions.append(TakeFotoAction(yourself: self))
+        actions.append(ChooseFotoAction(yourself: self))
+        
+        return actions
+    }
+    
+    func addDocument(document: DMSUrl) {
+        dokumente.append(document)
+    }
     
     override func getAnnotationImageName() -> String{
         return "leuchte.png";

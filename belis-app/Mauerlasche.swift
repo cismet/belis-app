@@ -8,8 +8,9 @@
 
 import Foundation
 import ObjectMapper
+import SwiftHTTP
 
-class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, CellDataProvider {
+class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
     var erstellungsjahr: Int?
     var laufendeNummer: Int?
     var material: Mauerlaschenmaterial?
@@ -32,7 +33,11 @@ class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, Cel
     required init?(_ map: Map) {
         super.init(map)
     }
-           
+
+    override func getType() -> Entity {
+        return Entity.MAUERLASCHEN
+    }
+
     override func getAnnotationImageName() -> String{
         return "mauerlasche.png";
     }
@@ -67,6 +72,7 @@ class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, Cel
         
     }
     
+    
     @objc func getAllData() -> [String: [CellData]] {
         var data: [String: [CellData]] = ["main":[]]
         if let mat=material?.bezeichnung {
@@ -93,16 +99,46 @@ class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, Cel
         if let bem=bemerkung {
             data["main"]?.append(MemoTitledInfoCellData(title: "Bemerkung", data: bem))
         }
-        
+
+        data["Dokumente"]=[]
+
         if let fotodok=foto {
-            data["Foto"]=[]
-            data["Foto"]?.append(SimpleUrlPreviewInfoCellData(title: fotodok.getTitle(), url: fotodok.getUrl()))
+            data["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: fotodok.getTitle(), url: fotodok.getUrl()))
         }
         
+        if dokumente.count>0 {
+            for doc in dokumente {
+                data["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: doc.getTitle(), url: doc.getUrl()))
+            }
+        }
         
+        data["DeveloperInfo"]=[]
+        data["DeveloperInfo"]?.append(SingleTitledInfoCellData(title: "Key", data: "\(getType().tableName())/\(id)"))
+
         return data
     }
-    // CellInformationProviderProtocol
+    @objc func getDataSectionKeys() -> [String] {
+        return ["main","Dokumente","DeveloperInfo"]
+    }
+    // Actions 
+    @objc func getAllActions() -> [BaseEntityAction] {
+        
+
+        var actions:[BaseEntityAction]=[]
+        
+        actions.append(TakeFotoAction(yourself: self))
+        actions.append(ChooseFotoAction(yourself: self))
+
+        return actions
+    }
+    
+    func addDocument(document: DMSUrl) {
+        dokumente.append(document)
+    }
+
+    
+    
+    // MARK: - CellInformationProviderProtocol
     
     func getMainTitle() -> String{
         if let lfdNr = laufendeNummer {
@@ -143,3 +179,19 @@ class Mauerlaschenmaterial : BaseEntity, Mappable{
 
     
 }
+
+//class FotoAction : BaseEntityAction, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+//    //UIImagePickerControllerDelegate
+//    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+//        println("FotoAction FINISH")
+//        picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
+//        
+//    }
+//    
+//    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+//        println("FotoAction CANCEL")
+//        picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
+//        
+//    }
+//}
+//

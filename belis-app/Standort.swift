@@ -10,7 +10,7 @@ import Foundation
 import ObjectMapper
 
 
-class Standort: GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider{
+class Standort: GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider,ActionProvider, DocumentContainer{
     var plz : String?
     var strasse : Strasse?
     var bezirk : Stadtbezirk?
@@ -208,7 +208,7 @@ class Standort: GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOu
                 }
             }
             if mastDetails["main"]?.count>1 {
-                mastDetails["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Masttyp", data: typChecked ,details:mastTypDetails))
+                mastDetails["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Masttyp", data: typChecked ,details:mastTypDetails, sections: ["main","DeveloperInfo"]))
             }
             else {
                 mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Masttyp", data: typChecked))
@@ -285,7 +285,7 @@ class Standort: GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOu
         }
         
         if pruefDetails["main"]?.count>0 {
-            mastDetails["main"]?.append(SimpleInfoCellDataWithDetails(data: "Prüfungen",details: pruefDetails))
+            mastDetails["main"]?.append(SimpleInfoCellDataWithDetails(data: "Prüfungen",details: pruefDetails, sections: ["main","DeveloperInfo"]))
             
         }
         //------------------------(PR)
@@ -311,8 +311,28 @@ class Standort: GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOu
             mastDetails["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
         }
         
-        
+        mastDetails["DeveloperInfo"]=[]
+        mastDetails["DeveloperInfo"]?.append(SingleTitledInfoCellData(title: "Key", data: "\(getType().tableName())/\(id)"))
+
         return mastDetails
+    }
+    @objc func getDataSectionKeys() -> [String] {
+        return ["main","Dokumente","DeveloperInfo"]
+    }
+    // Actions
+    @objc func getAllActions() -> [BaseEntityAction] {
+        
+        
+        var actions:[BaseEntityAction]=[]
+        
+        actions.append(TakeFotoAction(yourself: self))
+        actions.append(ChooseFotoAction(yourself: self))
+        
+        return actions
+    }
+    
+    func addDocument(document: DMSUrl) {
+        dokumente.append(document)
     }
     
 }

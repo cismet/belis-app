@@ -45,6 +45,11 @@ class NoCellInformation : CellInformationProviderProtocol {
 
 @objc protocol CellDataProvider {
     func getAllData() -> [String: [CellData]]
+    func getDataSectionKeys() -> [String]
+}
+
+@objc protocol ActionProvider {
+    func getAllActions() -> [BaseEntityAction]
 }
 
 @objc protocol CellDataUI {
@@ -56,5 +61,6 @@ class NoCellInformation : CellInformationProviderProtocol {
 @objc protocol SimpleCellActionProvider {
     func action(UIViewController)
 }
+
 
 

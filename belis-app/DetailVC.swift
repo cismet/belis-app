@@ -8,11 +8,17 @@
 
 import UIKit
 
-class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate{
+class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate{
 
     @IBOutlet weak var tableView: UITableView!
     var data: [String: [CellData]] = ["main":[]]
-    
+    var sections: [String]=[]
+
+    var actions: [BaseEntityAction] = []
+    var objectToShow: BaseEntity!
+    var mainVC:MainViewController!
+    var callBacker: AnyObject?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate=self
@@ -34,6 +40,39 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate{
         self.data=data
     }
     
+    func refresh() {
+        if let provider=objectToShow as? CellDataProvider{
+            sections=provider.getDataSectionKeys()
+            setCellData(provider.getAllData())
+            dispatch_async(dispatch_get_main_queue(),{
+                self.tableView.reloadData()
+            });        }
+    }
+    
+    func moreAction() {
+        
+        if actions.count>0 {
+            let optionMenu = UIAlertController(title: nil, message: "Aktion auswählen", preferredStyle: UIAlertControllerStyle.ActionSheet)
+            
+            for action in actions {
+                let alertAction = UIAlertAction(title: action.title, style: action.style, handler: {
+                    (alert: UIAlertAction!) -> Void in
+                        println("Aktion: "+action.title)
+                        action.handler(alert, action, self.mainVC.cidsConnector,self.objectToShow,self)
+                    
+                    
+                })
+                optionMenu.addAction(alertAction)
+            }
+            
+            self.presentViewController(optionMenu, animated: true, completion: nil)
+        }
+        
+    }
+    
+    func doIt (alert: UIAlertAction!) {
+        println("mine")
+    }
     
 
     /*
@@ -49,14 +88,14 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate{
   
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionKey: String = data.keys.array[section]
-        return data[sectionKey]!.count
+        let sectionKey: String = sections[section]
+        return data[sectionKey]?.count ?? 0
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let row=indexPath.row
         let section = indexPath.section
-        let sectionKey: String = data.keys.array[section]
+        let sectionKey: String = sections[section]
         let dataItem: CellData = data[sectionKey]![row]
         let cellReuseId=dataItem.getCellReuseIdentifier()
         let cell: UITableViewCell  = tableView.dequeueReusableCellWithIdentifier(cellReuseId) as! UITableViewCell
@@ -70,11 +109,17 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate{
     }
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section==0 {
-            return 0
+        if  sections.count>section{
+            let sectionKey: String = sections[section]
+            if section==0 || (data[sectionKey]?.count ?? 0)==0 {
+                return 0
+            }
+            else {
+                return 20
+            }
         }
         else {
-            return 20
+            return 0
         }
     }
     
@@ -82,7 +127,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate{
         
         let row=indexPath.row
         let section = indexPath.section
-        let sectionKey: String = data.keys.array[section]
+        let sectionKey: String = sections[section]
         let dataItem: CellData = data[sectionKey]![row]
         let cellReuseId=dataItem.getCellReuseIdentifier()
         let cell: UITableViewCell  = tableView.dequeueReusableCellWithIdentifier(cellReuseId) as! UITableViewCell
@@ -93,7 +138,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate{
     }
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return data.keys.array.count
+        return sections.count
     }
     
     
@@ -101,7 +146,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate{
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
         let row=indexPath.row
         let section = indexPath.section
-        let sectionKey: String = data.keys.array[section]
+        let sectionKey: String = sections[section]
         let dataItem: CellData = data[sectionKey]![row]
         if let actionProvider = dataItem as? SimpleCellActionProvider {
             (dataItem as! SimpleCellActionProvider).action(self)
@@ -109,27 +154,27 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate{
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return data.keys.array[section]
+        return sections[section]
     }
+
+    //UIImagePickerControllerDelegate
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+        println("DetailVC FINISH")
+        if let x = (callBacker as? UIImagePickerControllerDelegate) {
+            x.imagePickerController!(picker, didFinishPickingMediaWithInfo: info)
+        }
+        //picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
+        
+    }
+
     
-    
-    
-    
-    
-    
-    
-    //    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-    //        if (section==0){
-    //            return "Leuchten \(searchResults[LEUCHTEN].count)";
-    //        }
-    //        else if (section==1){
-    //            return "Mauerlaschen \(searchResults[MAUERLASCHEN].count)";
-    //        }else
-    //        {
-    //            return "Leitungen \(searchResults[LEITUNGEN].count)";
-    //        }
-    //    }
-    
-    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        println("DetailVC XXXCANCEL")
+        if let x = (callBacker as? UIImagePickerControllerDelegate) {
+            x.imagePickerControllerDidCancel!(picker)
+        }
+        //picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
+        
+    }
 
 }

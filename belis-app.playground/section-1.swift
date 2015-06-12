@@ -1,38 +1,12 @@
-
 import Foundation
+import XCPlayground
 
 
-
-class GeoBaseEntity {
-    var id=random()
-    
-}
+var s="http://belis:Mq9YepySeY@board.cismet.de/belis/upload.from.ios.for.mauerlasche.6021-1434028002561.png"
+var x=NSURL(string: s)
 
 
-var searchResults=[String: [GeoBaseEntity]]()
-
-var e1=GeoBaseEntity()
-var e2=GeoBaseEntity()
+x?.parameterString
 
 
-
-searchResults.updateValue([e1], forKey: "aa")
-searchResults.updateValue([e1], forKey: "ab")
-searchResults.updateValue([e1], forKey: "xb")
-
-searchResults
-
-
-if let arr=searchResults["aa"] {
-    var xx=searchResults["aa"]!
-    xx.append(e2)
-}
-
-searchResults["aa"]
-
-
-if let arr=searchResults["aa"] {
-    searchResults["aa"]!.append(e2)
-}
-
-searchResults["aa"]
+x?.path

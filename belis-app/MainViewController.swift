@@ -10,7 +10,7 @@ import UIKit;
 import MapKit;
 import Alamofire;
 import ObjectMapper;
-
+import SwiftHTTP
 
 class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
     
@@ -24,7 +24,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     var matchingSearchItems: [MKMapItem] = [MKMapItem]()
     var matchingSearchItemsAnnotations: [MKPointAnnotation ] = [MKPointAnnotation]()
-
+    
     var isLeuchtenEnabled=true;
     var isMastenEnabled=true;
     var isMauerlaschenEnabled=true;
@@ -43,11 +43,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var locationManager: CLLocationManager!
     
     let focusRectShape = CAShapeLayer()
-    
+    var imagePicker : UIImagePickerController!
     
     
     override func viewDidLoad() {
         super.viewDidLoad();
+        
+        imagePicker = UIImagePickerController()
+        
         locationManager=CLLocationManager();
         
         locationManager.desiredAccuracy=kCLLocationAccuracyBest;
@@ -94,6 +97,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         UINavigationController(rootViewController: self)
         textfieldGeoSearch.delegate=self
+        
+        println(UIDevice.currentDevice().identifierForVendor.UUIDString)
         
     }
     
@@ -551,11 +556,16 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         if let leuchte = geoBaseEntity as? Leuchte {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            detailVC.sections=leuchte.getDataSectionKeys()
             detailVC.setCellData(leuchte.getAllData())
+            detailVC.mainVC=self
+            detailVC.actions=leuchte.getAllActions()
+
+            detailVC.objectToShow=leuchte
             detailVC.title="Leuchte"
             var detailNC=UINavigationController(rootViewController: detailVC)
-//            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
-//            detailVC.navigationItem.rightBarButtonItem = action
+            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
+            detailVC.navigationItem.rightBarButtonItem = action
             let icon=UIBarButtonItem()
             icon.image=getGlyphedImage("icon-ceilinglight")
             detailVC.navigationItem.leftBarButtonItem = icon
@@ -566,11 +576,16 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else if let standort = geoBaseEntity as? Standort {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            detailVC.sections=standort.getDataSectionKeys()
             detailVC.setCellData(standort.getAllData())
+            detailVC.mainVC=self
+            detailVC.actions=standort.getAllActions()
+
+            detailVC.objectToShow=standort
             detailVC.title="Mast"
             var detailNC=UINavigationController(rootViewController: detailVC)
-//            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
-//            detailVC.navigationItem.rightBarButtonItem = action
+            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
+            detailVC.navigationItem.rightBarButtonItem = action
             let icon=UIBarButtonItem()
             icon.image=getGlyphedImage("icon-horizontalexpand")
             detailVC.navigationItem.leftBarButtonItem = icon
@@ -581,10 +596,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else if let leitung = geoBaseEntity as? Leitung {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            detailVC.sections=leitung.getDataSectionKeys()
             detailVC.setCellData(leitung.getAllData())
+            detailVC.mainVC=self
+            detailVC.actions=leitung.getAllActions()
+
+            detailVC.objectToShow=leitung
             detailVC.title="Leitung"
             var detailNC=UINavigationController(rootViewController: detailVC)
-            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
+            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
             detailVC.navigationItem.rightBarButtonItem = action
             let icon=UIBarButtonItem()
             icon.image=getGlyphedImage("icon-line")
@@ -597,10 +617,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else if let mauerlasche = geoBaseEntity as? Mauerlasche {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            detailVC.mainVC=self
+            detailVC.objectToShow=mauerlasche
+            detailVC.sections=mauerlasche.getDataSectionKeys()
+
             detailVC.setCellData(mauerlasche.getAllData())
             detailVC.title="Mauerlasche"
+            detailVC.actions=mauerlasche.getAllActions()
             var detailNC=UINavigationController(rootViewController: detailVC)
-            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
+            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
             detailVC.navigationItem.rightBarButtonItem = action
             let icon=UIBarButtonItem()
             icon.image=getGlyphedImage("icon-nut")
@@ -613,11 +638,16 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else if let schaltstelle = geoBaseEntity as? Schaltstelle {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            detailVC.mainVC=self
+            detailVC.sections=schaltstelle.getDataSectionKeys()
             detailVC.setCellData(schaltstelle.getAllData())
             detailVC.title="Schaltstelle"
+            detailVC.actions=schaltstelle.getAllActions()
+
+            detailVC.objectToShow=schaltstelle
             var detailNC=UINavigationController(rootViewController: detailVC)
-//            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"someAction")
-//            detailVC.navigationItem.rightBarButtonItem = action
+            var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
+            detailVC.navigationItem.rightBarButtonItem = action
             let icon=UIBarButtonItem()
             icon.image=getGlyphedImage("icon-switch")
             detailVC.navigationItem.leftBarButtonItem = icon
@@ -627,8 +657,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             //popC.popoverContentSize = CGSizeMake(200, 70);
             popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
         }
-     }
-       
+    }
+    
     
     
     //Actions
@@ -719,12 +749,44 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //        tableView.selectRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 2), animated: true,scrollPosition: UITableViewScrollPosition.Middle);
         //        tableView(tableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 1, inSection: 2));
         
-        //cidsConnector.executeTestServerAction()
-        let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"411",
-                                                        "OBJEKT_TYP":"schaltstelle",
-                                                        "DOKUMENT_URL":"http://lorempixel.com/444/222/\nSchnapsTest"])
         
-        cidsConnector.executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {() -> () in })
+        var image=UIImage(named: "testbild.png")
+        
+        var thumb = image!.resizeToWidth(100.0)
+        
+        
+        let ctm=Int64(NSDate().timeIntervalSince1970*1000)
+        
+
+        func handleProgress(progress:Float) {
+            println(progress)
+        }
+        
+        func handleCompletion(request: NSURLRequest, response: NSHTTPURLResponse?, data: AnyObject?, error: NSError?) {
+            if let err = error {
+            println("error: \(err.localizedDescription)")
+            }
+            if let resp = data as? NSData {
+            println(NSString(data: resp, encoding: NSUTF8StringEncoding))
+            }
+        }
+        cidsConnector.uploadImageToWebDAV(image!, fileName: "iostestupload\(ctm).png",progressHandler: handleProgress, completionHandler: handleCompletion)
+//        cidsConnector.uploadImageToWebDAV(thumb, fileName: "iostestupload\(ctm)_thumb.png",progressHandler: handleProgress, completionHandler: handleCompletion)
+        
+        
+//        let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"411",
+//                                                        "OBJEKT_TYP":"schaltstelle",
+//                                                        "DOKUMENT_URL":"http://lorempixel.com/444/222/\nSchnapsTest"])
+//        
+//        cidsConnector.executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {() -> () in })
+//
+        
+//        let image2 = UIImage(named: "testbild.png")
+//        cidsConnector.uploadAndAddImageServerAction(image: image2!, entity: BaseEntity(), description: "again a test", completionHandler: {(response: HTTPResponse) -> Void in
+        
+//            println("Got data with no error")
+//        })
+
         
     }
     
