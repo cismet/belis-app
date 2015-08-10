@@ -32,12 +32,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var isSchaltstelleEnabled=true;
     var highlightedLine : HighlightedMkPolyline?;
     var selectedAnnotation : MKAnnotation?;
-    
+    var user="";
+    var pass="";
     var timer = NSTimer();
     
     var actInd : UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(0,0, 150, 150)) as UIActivityIndicatorView
-    
-    var cidsConnector=CidsConnector(user: "WendlingM@BELIS2", password: "boxy")
     
     var gotoUserLocationButton:MKUserTrackingBarButtonItem!;
     var locationManager: CLLocationManager!
@@ -45,7 +44,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     let focusRectShape = CAShapeLayer()
     var imagePicker : UIImagePickerController!
     
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad();
         
@@ -177,13 +176,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     //UITableViewDataSource
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cidsConnector.searchResults[Entity.byIndex(section)]?.count ?? 0
+        return CidsConnector.sharedInstance().searchResults[Entity.byIndex(section)]?.count ?? 0
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell: TableViewCell = tableView.dequeueReusableCellWithIdentifier("firstCellPrototype")as! TableViewCell
         var cellInfoProvider: CellInformationProviderProtocol = NoCellInformation()
-        if let obj=cidsConnector.searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row] {
+        if let obj=CidsConnector.sharedInstance().searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row] {
             if let cellInfoProvider=obj as? CellInformationProviderProtocol {
                 cell.lblBezeichnung.text=cellInfoProvider.getMainTitle()
                 cell.lblStrasse.text=cellInfoProvider.getTertiaryInfo()
@@ -202,14 +201,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     //UITableViewDelegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
         println("didSelectRowAtIndexPath")
-        if let obj=cidsConnector.searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row] {
+        if let obj=CidsConnector.sharedInstance().searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row] {
             selectOnMap(obj)
         }
     }
     
     
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if let array=cidsConnector.searchResults[Entity.byIndex(section)]{
+        if let array=CidsConnector.sharedInstance().searchResults[Entity.byIndex(section)]{
             if (array.count>0){
                 return 25
             }
@@ -220,7 +219,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         var title=Entity.byIndex(section).rawValue
-        if let array=cidsConnector.searchResults[Entity.byIndex(section)]{
+        if let array=CidsConnector.sharedInstance().searchResults[Entity.byIndex(section)]{
             return title + " \(array.count)"
         }
         else {
@@ -532,8 +531,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             var entity=geoBaseEntity.getType()
             
             //need old fashioned loop for index
-            for i in 0...cidsConnector.searchResults[entity]!.count-1 {
-                var results : [GeoBaseEntity] = cidsConnector.searchResults[entity]!
+            for i in 0...CidsConnector.sharedInstance().searchResults[entity]!.count-1 {
+                var results : [GeoBaseEntity] = CidsConnector.sharedInstance().searchResults[entity]!
                 if results[i].id == geoBaseEntity.id {
                     tableView.selectRowAtIndexPath(NSIndexPath(forRow: i, inSection: entity.index()), animated: true, scrollPosition: UITableViewScrollPosition.Top)
                     break;
@@ -664,7 +663,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     //Actions
     
     @IBAction func searchButtonTabbed(sender: AnyObject) {
-        for (entityType, entityArray) in cidsConnector.searchResults{
+        for (entityType, entityArray) in CidsConnector.sharedInstance().searchResults{
             for obj in entityArray {
                 obj.removeFromMapView(mapView);
             }
@@ -698,10 +697,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let ewktMapExtent="SRID=4326;POLYGON((\(x1) \(y1),\(x1) \(y2),\(x2) \(y2),\(x2) \(y1),\(x1) \(y1)))";
         
         
-        cidsConnector.search(ewktMapExtent, leuchtenEnabled: "\(isLeuchtenEnabled)", mastenEnabled: "\(isMastenEnabled)", mauerlaschenEnabled: "\(isMauerlaschenEnabled)", leitungenEnabled: "\(isleitungenEnabled)",schaltstellenEnabled: "\(isSchaltstelleEnabled)" ) {
+        CidsConnector.sharedInstance().search(ewktMapExtent, leuchtenEnabled: isLeuchtenEnabled, mastenEnabled: isMastenEnabled, mauerlaschenEnabled: isMauerlaschenEnabled, leitungenEnabled: isleitungenEnabled,schaltstellenEnabled: isSchaltstelleEnabled ) {
             self.tableView.reloadData();
             
-            for (entityType, objArray) in self.cidsConnector.searchResults{
+            for (entityType, objArray) in CidsConnector.sharedInstance().searchResults{
                 for obj in objArray {
                     
                     obj.addToMapView(self.mapView);
@@ -770,19 +769,19 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             println(NSString(data: resp, encoding: NSUTF8StringEncoding))
             }
         }
-        cidsConnector.uploadImageToWebDAV(image!, fileName: "iostestupload\(ctm).png",progressHandler: handleProgress, completionHandler: handleCompletion)
-//        cidsConnector.uploadImageToWebDAV(thumb, fileName: "iostestupload\(ctm)_thumb.png",progressHandler: handleProgress, completionHandler: handleCompletion)
+        CidsConnector.sharedInstance().uploadImageToWebDAV(image!, fileName: "iostestupload\(ctm).png",progressHandler: handleProgress, completionHandler: handleCompletion)
+//        CidsConnector.sharedInstance().uploadImageToWebDAV(thumb, fileName: "iostestupload\(ctm)_thumb.png",progressHandler: handleProgress, completionHandler: handleCompletion)
         
         
 //        let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"411",
 //                                                        "OBJEKT_TYP":"schaltstelle",
 //                                                        "DOKUMENT_URL":"http://lorempixel.com/444/222/\nSchnapsTest"])
 //        
-//        cidsConnector.executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {() -> () in })
+//        CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {() -> () in })
 //
         
 //        let image2 = UIImage(named: "testbild.png")
-//        cidsConnector.uploadAndAddImageServerAction(image: image2!, entity: BaseEntity(), description: "again a test", completionHandler: {(response: HTTPResponse) -> Void in
+//        CidsConnector.sharedInstance().uploadAndAddImageServerAction(image: image2!, entity: BaseEntity(), description: "again a test", completionHandler: {(response: HTTPResponse) -> Void in
         
 //            println("Got data with no error")
 //        })

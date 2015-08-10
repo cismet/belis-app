@@ -63,6 +63,8 @@
 		2D5FB3451A67CCEB0041020C /* Standort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB33A1A67CCEB0041020C /* Standort.swift */; };
 		2D5FB3461A67CCEB0041020C /* Veranlassung.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB33B1A67CCEB0041020C /* Veranlassung.swift */; };
 		2D65AABC1AB09B8E00621A0A /* cismetSignet2k.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D65AABB1AB09B8E00621A0A /* cismetSignet2k.png */; };
+		2D67D92F1B5965FD0076979E /* server.cert.der in Resources */ = {isa = PBXBuildFile; fileRef = 2D67D92E1B5965FD0076979E /* server.cert.der */; };
+		2D67D9301B5965FD0076979E /* server.cert.der in Resources */ = {isa = PBXBuildFile; fileRef = 2D67D92E1B5965FD0076979E /* server.cert.der */; };
 		2D6867501B02397900B0C2EE /* BaseEntityAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D68674F1B02397900B0C2EE /* BaseEntityAction.swift */; };
 		2D81C2A51AA84B710051876C /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D81C2A41AA84B710051876C /* Secrets.swift */; };
 		2D939DDB1A6905D500FB2AFB /* CidsConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */; };
@@ -169,6 +171,7 @@
 		2D5FB33A1A67CCEB0041020C /* Standort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Standort.swift; sourceTree = "<group>"; };
 		2D5FB33B1A67CCEB0041020C /* Veranlassung.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Veranlassung.swift; sourceTree = "<group>"; };
 		2D65AABB1AB09B8E00621A0A /* cismetSignet2k.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cismetSignet2k.png; sourceTree = "<group>"; };
+		2D67D92E1B5965FD0076979E /* server.cert.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.cert.der; sourceTree = "<group>"; };
 		2D68674F1B02397900B0C2EE /* BaseEntityAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseEntityAction.swift; sourceTree = "<group>"; };
 		2D81C2A41AA84B710051876C /* Secrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		2D939DD31A67D5D200FB2AFB /* belis-app.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "belis-app.playground"; sourceTree = "<group>"; };
@@ -275,6 +278,7 @@
 		2D5FB2CC1A67C7320041020C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2D67D92E1B5965FD0076979E /* server.cert.der */,
 				2D65AABB1AB09B8E00621A0A /* cismetSignet2k.png */,
 				2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */,
 				2D2934261A84D4BF0034181F /* handle.png */,
@@ -511,6 +515,7 @@
 				2DE8B1A41B25C3EA00FCEBA7 /* testbild.png in Resources */,
 				2D5FB30B1A67CC340041020C /* LaunchScreen.xib in Resources */,
 				2D5FB2FB1A67CB120041020C /* mauerlasche.png in Resources */,
+				2D67D92F1B5965FD0076979E /* server.cert.der in Resources */,
 				2DF5EBCC1AFB6F9100062669 /* mast.png in Resources */,
 				2D2934271A84D4BF0034181F /* handle.png in Resources */,
 				2D5FB2FA1A67CB120041020C /* leuchte.png in Resources */,
@@ -523,6 +528,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2DB6E8BD1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */,
+				2D67D9301B5965FD0076979E /* server.cert.der in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

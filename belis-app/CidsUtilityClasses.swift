@@ -27,7 +27,7 @@ class CidsObjectNode : Mappable {
 
 class SingleQueryParameter : Mappable {
     var key: String?;
-    var value: String?;
+    var value: AnyObject?;
     init(){
         self.key="?";
         self.value="?";
@@ -35,7 +35,7 @@ class SingleQueryParameter : Mappable {
     required init?(_ map: Map) {
         mapping(map)
     }
-    init(key: String, value: String) {
+    init(key: String, value: AnyObject) {
         self.key=key;
         self.value=value;
     }

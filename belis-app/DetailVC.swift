@@ -58,7 +58,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
                 let alertAction = UIAlertAction(title: action.title, style: action.style, handler: {
                     (alert: UIAlertAction!) -> Void in
                         println("Aktion: "+action.title)
-                        action.handler(alert, action, self.mainVC.cidsConnector,self.objectToShow,self)
+                        action.handler(alert, action, self.objectToShow,self)
                     
                     
                 })

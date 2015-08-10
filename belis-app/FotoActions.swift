@@ -13,7 +13,7 @@ import ImageIO
 class ChooseFotoAction : BaseEntityAction {
     init(yourself: BaseEntity) {
         super.init(title: "Foto auswählen",style: UIAlertActionStyle.Default, handler: {
-            (action: UIAlertAction! , selfAction: BaseEntityAction, con: CidsConnector , obj: BaseEntity, detailVC: UIViewController)->Void in
+            (action: UIAlertAction! , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
             let picker = (detailVC as! DetailVC).mainVC.imagePicker
             picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
             picker.mediaTypes = UIImagePickerController.availableMediaTypesForSourceType(.PhotoLibrary)!
@@ -29,7 +29,7 @@ class ChooseFotoAction : BaseEntityAction {
 class TakeFotoAction : BaseEntityAction {
     init(yourself: BaseEntity) {
         super.init(title: "Foto erstellen",style: UIAlertActionStyle.Default, handler: {
-            (action: UIAlertAction! , selfAction: BaseEntityAction, con: CidsConnector , obj: BaseEntity, detailVC: UIViewController)->Void in
+            (action: UIAlertAction! , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
             if(UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
                 //load the camera interface
                 let picker = (detailVC as! DetailVC).mainVC.imagePicker
@@ -109,7 +109,6 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             let metadata = info[UIImagePickerControllerMediaMetadata] as? NSDictionary
             
 
-            var cidsConnector=CidsConnector(user: "WendlingM@BELIS2", password: "boxy")
             let ctm=Int64(NSDate().timeIntervalSince1970*1000)
             let pictureName=tField.text
             
@@ -159,7 +158,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
                     let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"\(objectId)",
                         "OBJEKT_TYP":objectTyp,
                         "DOKUMENT_URL":"http://board.cismet.de/belis/\(fileName)\n\(pictureName)"])
-                    cidsConnector.executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {() -> () in
+                    CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {() -> () in
                         actInd.stopAnimating()
                         actInd.removeFromSuperview()
                         picker.dismissViewControllerAnimated(true, completion: nil)
@@ -170,7 +169,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
                 }
             }
             let thumb=imageToSave.resizeToWidth(300.0)
-            cidsConnector.uploadImageToWebDAV(thumb, fileName: fileNameThumb ,progressHandler: handleProgress, completionHandler: handleCompletion)
+            CidsConnector.sharedInstance().uploadImageToWebDAV(thumb, fileName: fileNameThumb ,progressHandler: handleProgress, completionHandler: handleCompletion)
             
             
             
