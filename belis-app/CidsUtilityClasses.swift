@@ -76,10 +76,3 @@ class ActionParameterContainer : Mappable {
         params <- map["parameters"];
     }
 }
-
-//class CollectionResult : MapperProtocol {
-//    var collection : [ ]
-//}
-
-
-

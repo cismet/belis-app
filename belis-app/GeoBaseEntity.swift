@@ -58,21 +58,6 @@ class GeoBaseEntity : BaseEntity, Mappable{
 
             }
         }
-//        if  ( mapObject != nil ) {
-//            if (mapObject is GeoBaseEntityPointAnnotation){
-//                
-//                mapView.addAnnotation(mapObject! as! GeoBaseEntityPointAnnotation);
-//                
-//                // mapView.showAnnotations([mapObject as GeoBaseEntityPointAnnotation], animated: true)
-//                
-//            }
-//            else if (mapObject! is GeoBaseEntityStyledMkPolylineAnnotation){
-//                mapView.addOverlay(mapObject! as! GeoBaseEntityStyledMkPolylineAnnotation);
-//                mapView.addAnnotation(mapObject! as! GeoBaseEntityStyledMkPolylineAnnotation);
-//            }
-//            
-//        }
-        
     }
     
     
@@ -85,15 +70,6 @@ class GeoBaseEntity : BaseEntity, Mappable{
                 mapView.removeOverlay(moLine)
             }
         }
-        
-//        if ( mapObject != nil ){
-//            if (mapObject is GeoBaseEntityPointAnnotation){
-//                mapView.removeAnnotation(mapObject as! MKAnnotation);
-//            }
-//            else if (mapObject is GeoBaseEntityStyledMkPolylineAnnotation){
-//                mapView.removeOverlay(mapObject as! GeoBaseEntityStyledMkPolylineAnnotation);
-//            }
-//        }
     }
     
     func getAnnotationTitle() -> String{

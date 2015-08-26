@@ -356,14 +356,3 @@ class WebDavUploadImageOperation: CidsRequestOperation {
     }
 }
 
-
-//class UpdateEntityOperation: CidsRequestOperation {
-//    init(baseUrl: String, user: String, pass:String, fileName: String, entity: BaseEntity) {
-//        super.init(user:user, pass:pass)
-//        url="\(baseUrl)/\(fileName)"
-//
-//    }
-//
-//}
-
-

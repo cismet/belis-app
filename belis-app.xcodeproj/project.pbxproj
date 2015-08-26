@@ -14,7 +14,6 @@
 		2D0B7F6A1AB3454100E33A6C /* DoubleTitledInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D0B7F681AB3454100E33A6C /* DoubleTitledInfoCell.xib */; };
 		2D0B7F6D1AB3456D00E33A6C /* MemoTitledInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0B7F6B1AB3456D00E33A6C /* MemoTitledInfoCell.swift */; };
 		2D0B7F6E1AB3456D00E33A6C /* MemoTitledInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D0B7F6C1AB3456D00E33A6C /* MemoTitledInfoCell.xib */; };
-		2D16C0C51A7011F000A61982 /* NetworkStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D16C0C41A7011F000A61982 /* NetworkStuff.swift */; };
 		2D1ED1851B8344BD0004AAFA /* CidsOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1ED1841B8344BD0004AAFA /* CidsOperations.swift */; };
 		2D1ED1871B8344C80004AAFA /* CidsSessionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1ED1861B8344C80004AAFA /* CidsSessionFactory.swift */; };
 		2D1ED18A1B8349CB0004AAFA /* client.cert.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 2D1ED1891B8349B70004AAFA /* client.cert.p12 */; };
@@ -83,7 +82,6 @@
 		2DB6E8C21A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */; };
 		2DB6E8C31A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */; };
 		2DB8E80E1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB8E80D1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift */; };
-		2DBA35091AA5A8D500BCAE5A /* UrlSessionBackgroundDownload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DBA35081AA5A8D500BCAE5A /* UrlSessionBackgroundDownload.swift */; };
 		2DE8B1A41B25C3EA00FCEBA7 /* testbild.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DE8B1A31B25C3EA00FCEBA7 /* testbild.png */; };
 		2DEDB58B1AFCCDC9004ADC92 /* schaltstelle.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DEDB58A1AFCCDC9004ADC92 /* schaltstelle.png */; };
 		2DF2C7DD1AB6E2FE00F3A2FC /* SimpleInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF2C7DC1AB6E2FE00F3A2FC /* SimpleInfoCell.swift */; };
@@ -109,7 +107,6 @@
 		2D0B7F681AB3454100E33A6C /* DoubleTitledInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DoubleTitledInfoCell.xib; path = "table-cell-guis/DoubleTitledInfoCell.xib"; sourceTree = "<group>"; };
 		2D0B7F6B1AB3456D00E33A6C /* MemoTitledInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MemoTitledInfoCell.swift; path = "table-cell-guis/MemoTitledInfoCell.swift"; sourceTree = "<group>"; };
 		2D0B7F6C1AB3456D00E33A6C /* MemoTitledInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MemoTitledInfoCell.xib; path = "table-cell-guis/MemoTitledInfoCell.xib"; sourceTree = "<group>"; };
-		2D16C0C41A7011F000A61982 /* NetworkStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkStuff.swift; sourceTree = "<group>"; };
 		2D1ED1841B8344BD0004AAFA /* CidsOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsOperations.swift; sourceTree = "<group>"; };
 		2D1ED1861B8344C80004AAFA /* CidsSessionFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsSessionFactory.swift; sourceTree = "<group>"; };
 		2D1ED1881B8349AD0004AAFA /* server.cert.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.cert.der; sourceTree = "<group>"; };
@@ -192,7 +189,6 @@
 		2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "webhostinghub-glyphs.ttf"; sourceTree = "<group>"; };
 		2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebHostingGlyph.swift; sourceTree = "<group>"; };
 		2DB8E80D1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleUrlPreviewInfoCell.swift; sourceTree = "<group>"; };
-		2DBA35081AA5A8D500BCAE5A /* UrlSessionBackgroundDownload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlSessionBackgroundDownload.swift; sourceTree = "<group>"; };
 		2DE8B1A31B25C3EA00FCEBA7 /* testbild.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testbild.png; sourceTree = "<group>"; };
 		2DEDB58A1AFCCDC9004ADC92 /* schaltstelle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = schaltstelle.png; sourceTree = "<group>"; };
 		2DF2C7DC1AB6E2FE00F3A2FC /* SimpleInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleInfoCell.swift; sourceTree = "<group>"; };
@@ -327,13 +323,11 @@
 				2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */,
 				2D1ED1841B8344BD0004AAFA /* CidsOperations.swift */,
 				2D939DEE1A690A6300FB2AFB /* CidsUtilityClasses.swift */,
-				2D16C0C41A7011F000A61982 /* NetworkStuff.swift */,
 				2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */,
 				2D3DC3601A94F65E0035575A /* SwiftTools.swift */,
 				2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */,
 				2D9D3AD31A9E239A0049F46F /* AF+Image+Extension.swift */,
 				2D9D3AD51A9E23DD0049F46F /* AF+ImageView+Extension.swift */,
-				2DBA35081AA5A8D500BCAE5A /* UrlSessionBackgroundDownload.swift */,
 			);
 			name = tools;
 			sourceTree = "<group>";
@@ -616,8 +610,6 @@
 				2D1ED1871B8344C80004AAFA /* CidsSessionFactory.swift in Sources */,
 				2D939DEF1A690A6300FB2AFB /* CidsUtilityClasses.swift in Sources */,
 				2D5FB30F1A67CC340041020C /* SelectionPopoverViewController.swift in Sources */,
-				2DBA35091AA5A8D500BCAE5A /* UrlSessionBackgroundDownload.swift in Sources */,
-				2D16C0C51A7011F000A61982 /* NetworkStuff.swift in Sources */,
 				2D3DC3611A94F65E0035575A /* SwiftTools.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
