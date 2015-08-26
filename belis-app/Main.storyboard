@@ -131,6 +131,9 @@
                                         <include reference="wA2-Wk-0ux"/>
                                     </mask>
                                 </variation>
+                                <connections>
+                                    <action selector="moreButtonTabbed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="jVD-Vc-SZy"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

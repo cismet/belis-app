@@ -19,8 +19,8 @@ class CidsObjectNode : Mappable {
         mapping(map)
     }
     func mapping(map: Map) {
-        classId <- map["classId"];
-        objectId <- map["objectId"];
+        classId <- map["LEGACY_CLASS_ID"];
+        objectId <- map["LEGACY_OBJECT_ID"];
     }
 }
 

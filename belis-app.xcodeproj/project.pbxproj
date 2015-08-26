@@ -15,6 +15,10 @@
 		2D0B7F6D1AB3456D00E33A6C /* MemoTitledInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0B7F6B1AB3456D00E33A6C /* MemoTitledInfoCell.swift */; };
 		2D0B7F6E1AB3456D00E33A6C /* MemoTitledInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D0B7F6C1AB3456D00E33A6C /* MemoTitledInfoCell.xib */; };
 		2D16C0C51A7011F000A61982 /* NetworkStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D16C0C41A7011F000A61982 /* NetworkStuff.swift */; };
+		2D1ED1851B8344BD0004AAFA /* CidsOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1ED1841B8344BD0004AAFA /* CidsOperations.swift */; };
+		2D1ED1871B8344C80004AAFA /* CidsSessionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1ED1861B8344C80004AAFA /* CidsSessionFactory.swift */; };
+		2D1ED18A1B8349CB0004AAFA /* client.cert.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 2D1ED1891B8349B70004AAFA /* client.cert.p12 */; };
+		2D1ED18B1B8349CF0004AAFA /* server.cert.der in Resources */ = {isa = PBXBuildFile; fileRef = 2D1ED1881B8349AD0004AAFA /* server.cert.der */; };
 		2D2934271A84D4BF0034181F /* handle.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D2934261A84D4BF0034181F /* handle.png */; };
 		2D3DC3561A8BA86E0035575A /* UIProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3DC3551A8BA86E0035575A /* UIProtocols.swift */; };
 		2D3DC35A1A94E2C60035575A /* DMSUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3DC3591A94E2C60035575A /* DMSUrl.swift */; };
@@ -63,8 +67,6 @@
 		2D5FB3451A67CCEB0041020C /* Standort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB33A1A67CCEB0041020C /* Standort.swift */; };
 		2D5FB3461A67CCEB0041020C /* Veranlassung.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB33B1A67CCEB0041020C /* Veranlassung.swift */; };
 		2D65AABC1AB09B8E00621A0A /* cismetSignet2k.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D65AABB1AB09B8E00621A0A /* cismetSignet2k.png */; };
-		2D67D92F1B5965FD0076979E /* server.cert.der in Resources */ = {isa = PBXBuildFile; fileRef = 2D67D92E1B5965FD0076979E /* server.cert.der */; };
-		2D67D9301B5965FD0076979E /* server.cert.der in Resources */ = {isa = PBXBuildFile; fileRef = 2D67D92E1B5965FD0076979E /* server.cert.der */; };
 		2D6867501B02397900B0C2EE /* BaseEntityAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D68674F1B02397900B0C2EE /* BaseEntityAction.swift */; };
 		2D81C2A51AA84B710051876C /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D81C2A41AA84B710051876C /* Secrets.swift */; };
 		2D939DDB1A6905D500FB2AFB /* CidsConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */; };
@@ -108,6 +110,10 @@
 		2D0B7F6B1AB3456D00E33A6C /* MemoTitledInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MemoTitledInfoCell.swift; path = "table-cell-guis/MemoTitledInfoCell.swift"; sourceTree = "<group>"; };
 		2D0B7F6C1AB3456D00E33A6C /* MemoTitledInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MemoTitledInfoCell.xib; path = "table-cell-guis/MemoTitledInfoCell.xib"; sourceTree = "<group>"; };
 		2D16C0C41A7011F000A61982 /* NetworkStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkStuff.swift; sourceTree = "<group>"; };
+		2D1ED1841B8344BD0004AAFA /* CidsOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsOperations.swift; sourceTree = "<group>"; };
+		2D1ED1861B8344C80004AAFA /* CidsSessionFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsSessionFactory.swift; sourceTree = "<group>"; };
+		2D1ED1881B8349AD0004AAFA /* server.cert.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.cert.der; sourceTree = "<group>"; };
+		2D1ED1891B8349B70004AAFA /* client.cert.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = client.cert.p12; sourceTree = "<group>"; };
 		2D2934261A84D4BF0034181F /* handle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = handle.png; sourceTree = "<group>"; };
 		2D3DC3551A8BA86E0035575A /* UIProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIProtocols.swift; sourceTree = "<group>"; };
 		2D3DC3591A94E2C60035575A /* DMSUrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DMSUrl.swift; sourceTree = "<group>"; };
@@ -171,7 +177,6 @@
 		2D5FB33A1A67CCEB0041020C /* Standort.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Standort.swift; sourceTree = "<group>"; };
 		2D5FB33B1A67CCEB0041020C /* Veranlassung.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Veranlassung.swift; sourceTree = "<group>"; };
 		2D65AABB1AB09B8E00621A0A /* cismetSignet2k.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cismetSignet2k.png; sourceTree = "<group>"; };
-		2D67D92E1B5965FD0076979E /* server.cert.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.cert.der; sourceTree = "<group>"; };
 		2D68674F1B02397900B0C2EE /* BaseEntityAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseEntityAction.swift; sourceTree = "<group>"; };
 		2D81C2A41AA84B710051876C /* Secrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		2D939DD31A67D5D200FB2AFB /* belis-app.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "belis-app.playground"; sourceTree = "<group>"; };
@@ -278,7 +283,8 @@
 		2D5FB2CC1A67C7320041020C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				2D67D92E1B5965FD0076979E /* server.cert.der */,
+				2D1ED1891B8349B70004AAFA /* client.cert.p12 */,
+				2D1ED1881B8349AD0004AAFA /* server.cert.der */,
 				2D65AABB1AB09B8E00621A0A /* cismetSignet2k.png */,
 				2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */,
 				2D2934261A84D4BF0034181F /* handle.png */,
@@ -317,7 +323,9 @@
 			isa = PBXGroup;
 			children = (
 				2D5FB3111A67CC780041020C /* MyOSMMKTileOverlay.swift */,
+				2D1ED1861B8344C80004AAFA /* CidsSessionFactory.swift */,
 				2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */,
+				2D1ED1841B8344BD0004AAFA /* CidsOperations.swift */,
 				2D939DEE1A690A6300FB2AFB /* CidsUtilityClasses.swift */,
 				2D16C0C41A7011F000A61982 /* NetworkStuff.swift */,
 				2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */,
@@ -500,6 +508,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D1ED18B1B8349CF0004AAFA /* server.cert.der in Resources */,
+				2D1ED18A1B8349CB0004AAFA /* client.cert.p12 in Resources */,
 				2D5FB2F41A67CAA60041020C /* wupp.gpx in Resources */,
 				2D0B7F661AB3451700E33A6C /* SingleTitledInfoCell.xib in Resources */,
 				2D65AABC1AB09B8E00621A0A /* cismetSignet2k.png in Resources */,
@@ -515,7 +525,6 @@
 				2DE8B1A41B25C3EA00FCEBA7 /* testbild.png in Resources */,
 				2D5FB30B1A67CC340041020C /* LaunchScreen.xib in Resources */,
 				2D5FB2FB1A67CB120041020C /* mauerlasche.png in Resources */,
-				2D67D92F1B5965FD0076979E /* server.cert.der in Resources */,
 				2DF5EBCC1AFB6F9100062669 /* mast.png in Resources */,
 				2D2934271A84D4BF0034181F /* handle.png in Resources */,
 				2D5FB2FA1A67CB120041020C /* leuchte.png in Resources */,
@@ -528,7 +537,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2DB6E8BD1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */,
-				2D67D9301B5965FD0076979E /* server.cert.der in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -592,6 +600,7 @@
 				2D5FB3451A67CCEB0041020C /* Standort.swift in Sources */,
 				2D5FB3271A67CCA60041020C /* WKTGeometry.m in Sources */,
 				2D5FB3441A67CCEB0041020C /* Schaltstelle.swift in Sources */,
+				2D1ED1851B8344BD0004AAFA /* CidsOperations.swift in Sources */,
 				2D5FB2D21A67C7320041020C /* belis_app.xcdatamodeld in Sources */,
 				2D5FB32C1A67CCA60041020C /* WKTPoint.m in Sources */,
 				2D9952231AA5FFC600B5E02E /* DokumentPreviewVC.swift in Sources */,
@@ -604,6 +613,7 @@
 				2D5FB3281A67CCA60041020C /* WKTGeometryCollection.m in Sources */,
 				2D5FB32D1A67CCA60041020C /* WKTPointM.m in Sources */,
 				2D939DDB1A6905D500FB2AFB /* CidsConnector.swift in Sources */,
+				2D1ED1871B8344C80004AAFA /* CidsSessionFactory.swift in Sources */,
 				2D939DEF1A690A6300FB2AFB /* CidsUtilityClasses.swift in Sources */,
 				2D5FB30F1A67CC340041020C /* SelectionPopoverViewController.swift in Sources */,
 				2DBA35091AA5A8D500BCAE5A /* UrlSessionBackgroundDownload.swift in Sources */,

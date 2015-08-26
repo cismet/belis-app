@@ -8,6 +8,7 @@
 
 import UIKit
 import QuartzCore
+import ObjectMapper
 
 
 class LoginViewController: UIViewController {
@@ -23,8 +24,8 @@ class LoginViewController: UIViewController {
         if let storedUserString=storedLogin as? String {
             txtLogin.text=storedUserString
         }
-
-
+        
+        
         
         
         setBackground();
@@ -91,8 +92,59 @@ class LoginViewController: UIViewController {
             }
         }
         
-        CidsConnector.sharedInstance().login(txtLogin.text, password: txtPass.text,handler: loginhandler)
+        //        CidsConnector.sharedInstance().login(txtLogin.text, password: txtPass.text,handler: loginhandler)
+        CidsConnector.sharedInstance().login(txtLogin.text, password: "wmbelis",handler: loginhandler)
         
     }
+    
+    @IBAction func moreButtonTabbed(sender: AnyObject) {
+        //        func completionHandler(operation:GetEntityOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue) -> (){
+        //            if (error == nil) {
+        //                // Success
+        //                let statusCode = (response as! NSHTTPURLResponse).statusCode
+        //                println("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+        //                var err: NSError?
+        //                if let json: [String : AnyObject]=NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &err) as? [String: AnyObject] {
+        //
+        //                    var l = Mapper<Leitung>().map(json)!
+        //                    println(l.wgs84WKT)
+        //                }else {
+        //                    println("no json data for \(operation.url)")
+        //                    //self.searchResults[0].append(Leuchte())
+        //
+        //                }
+        //            }else {
+        //                // Failure
+        //                println("URL Session Task Failed: %@", error.localizedDescription);
+        //            }
+        //        }
+        //        var op=GetEntityOperation(baseUrl: "https://localhost:8890", domain: "BELIS2", entityName: "LEITUNG", id: 11439, user: "WendlingM@BELIS2", pass: "wmbelis", queue: queue, completionHandler: completionHandler)
+        //        queue.addOperation(op)
+        
+        //
+        //        var paramString="{\"parameters\":{\"OBJEKT_ID\":\"6605\",\"OBJEKT_TYP\":\"mauerlasche\",\"DOKUMENT_URL\":\"http://board.cismet.de/belis/iostestupload1436853189014.png\ncismettest-ignore\"}}"
+        //        var params=Mapper<ActionParameterContainer>().map(paramString)!
+        //
+        
+        //        let params=ActionParameterContainer(params: [   "OBJEKT_ID":"6605",
+        //            "OBJEKT_TYP":"mauerlasche",
+        //            "DOKUMENT_URL":"http://board.cismet.de/belis/iostestupload1436853189014.png\ncismettest-ignore112"])
+        //        var op=ServerActionOperation(baseUrl: "https://localhost:8890", user: "WendlingM@BELIS2", pass: "wmbelis", actionName: "AddDokument",params:params)
+        //        op.enqueue()
+        var image=UIImage(named: "testbild.png")
+        
+        var thumb = image!.resizeToWidth(100.0)
+        
+        
+        var op=WebDavUploadImageOperation(baseUrl: "http://board.cismet.de/belis", user: Secrets.getWebDavUser(), pass: Secrets.getWebDavPass(), fileName: "uploadTestomat.jpg", image:image!) {
+            (data, response, error) -> Void in
+            
+            
+            
+        }
+        op.enqueue()
+        
+    }
+    
+    var queue=NSOperationQueue()
 }
-

@@ -8,9 +8,7 @@
 
 import UIKit;
 import MapKit;
-import Alamofire;
 import ObjectMapper;
-import SwiftHTTP
 
 class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
     
@@ -44,7 +42,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     let focusRectShape = CAShapeLayer()
     var imagePicker : UIImagePickerController!
     
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad();
         
@@ -559,7 +557,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             detailVC.setCellData(leuchte.getAllData())
             detailVC.mainVC=self
             detailVC.actions=leuchte.getAllActions()
-
+            
             detailVC.objectToShow=leuchte
             detailVC.title="Leuchte"
             var detailNC=UINavigationController(rootViewController: detailVC)
@@ -579,7 +577,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             detailVC.setCellData(standort.getAllData())
             detailVC.mainVC=self
             detailVC.actions=standort.getAllActions()
-
+            
             detailVC.objectToShow=standort
             detailVC.title="Mast"
             var detailNC=UINavigationController(rootViewController: detailVC)
@@ -599,7 +597,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             detailVC.setCellData(leitung.getAllData())
             detailVC.mainVC=self
             detailVC.actions=leitung.getAllActions()
-
+            
             detailVC.objectToShow=leitung
             detailVC.title="Leitung"
             var detailNC=UINavigationController(rootViewController: detailVC)
@@ -619,7 +617,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             detailVC.mainVC=self
             detailVC.objectToShow=mauerlasche
             detailVC.sections=mauerlasche.getDataSectionKeys()
-
+            
             detailVC.setCellData(mauerlasche.getAllData())
             detailVC.title="Mauerlasche"
             detailVC.actions=mauerlasche.getAllActions()
@@ -642,7 +640,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             detailVC.setCellData(schaltstelle.getAllData())
             detailVC.title="Schaltstelle"
             detailVC.actions=schaltstelle.getAllActions()
-
+            
             detailVC.objectToShow=schaltstelle
             var detailNC=UINavigationController(rootViewController: detailVC)
             var action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
@@ -698,18 +696,21 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         
         CidsConnector.sharedInstance().search(ewktMapExtent, leuchtenEnabled: isLeuchtenEnabled, mastenEnabled: isMastenEnabled, mauerlaschenEnabled: isMauerlaschenEnabled, leitungenEnabled: isleitungenEnabled,schaltstellenEnabled: isSchaltstelleEnabled ) {
-            self.tableView.reloadData();
             
-            for (entityType, objArray) in CidsConnector.sharedInstance().searchResults{
-                for obj in objArray {
-                    
-                    obj.addToMapView(self.mapView);
-                    
+            assert(!NSThread.isMainThread() )
+            dispatch_async(dispatch_get_main_queue()) {
+                self.tableView.reloadData();
+                
+                for (entityType, objArray) in CidsConnector.sharedInstance().searchResults{
+                    for obj in objArray {
+                        
+                        obj.addToMapView(self.mapView);
+                        
+                    }
                 }
+                self.actInd.stopAnimating();
+                self.actInd.removeFromSuperview();
             }
-            self.actInd.stopAnimating();
-            self.actInd.removeFromSuperview();
-            
         }
         
     }
@@ -749,44 +750,69 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //        tableView(tableView, didSelectRowAtIndexPath: NSIndexPath(forRow: 1, inSection: 2));
         
         
+        //        var image=UIImage(named: "testbild.png")
+        //
+        //        var thumb = image!.resizeToWidth(100.0)
+        //
+        //
+        //        let ctm=Int64(NSDate().timeIntervalSince1970*1000)
+        //
+        //
+        //        func handleProgress(progress:Float) {
+        //            println(progress)
+        //        }
+        //
+        //        func handleCompletion(request: NSURLRequest, response: NSHTTPURLResponse?, data: AnyObject?, error: NSError?) {
+        //            if let err = error {
+        //            println("error: \(err.localizedDescription)")
+        //            }
+        //            if let resp = data as? NSData {
+        //            println(NSString(data: resp, encoding: NSUTF8StringEncoding))
+        //            }
+        //        }
+        //        CidsConnector.sharedInstance().uploadImageToWebDAV(image!, fileName: "iostestupload\(ctm).png",progressHandler: handleProgress, completionHandler: handleCompletion)
+        //        CidsConnector.sharedInstance().uploadImageToWebDAV(thumb, fileName: "iostestupload\(ctm)_thumb.png",progressHandler: handleProgress, completionHandler: handleCompletion)
+        
+        
+        //        let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"411",
+        //                                                        "OBJEKT_TYP":"schaltstelle",
+        //                                                        "DOKUMENT_URL":"http://lorempixel.com/444/222/\nSchnapsTest"])
+        //
+        //        CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {() -> () in })
+        //
+        
+        //        let image2 = UIImage(named: "testbild.png")
+        //        CidsConnector.sharedInstance().uploadAndAddImageServerAction(image: image2!, entity: BaseEntity(), description: "again a test", completionHandler: {(response: HTTPResponse) -> Void in
+        
+        //            println("Got data with no error")
+        //        })
+        //        self.tableView.reloadData();
+        //
+        //        for (entityType, objArray) in CidsConnector.sharedInstance().searchResults{
+        //            for obj in objArray {
+        //
+        //                obj.addToMapView(self.mapView);
+        //
+        //            }
+        //        }
+        //        self.actInd.stopAnimating();
+        //        self.actInd.removeFromSuperview();
+        
+        
         var image=UIImage(named: "testbild.png")
         
         var thumb = image!.resizeToWidth(100.0)
-        
-        
         let ctm=Int64(NSDate().timeIntervalSince1970*1000)
         
-
-        func handleProgress(progress:Float) {
-            println(progress)
-        }
-        
-        func handleCompletion(request: NSURLRequest, response: NSHTTPURLResponse?, data: AnyObject?, error: NSError?) {
+        func handleCompletion(data : NSData!, response : NSURLResponse!, error : NSError!) {
             if let err = error {
-            println("error: \(err.localizedDescription)")
+                println("error: \(err.localizedDescription)")
             }
-            if let resp = data as? NSData {
-            println(NSString(data: resp, encoding: NSUTF8StringEncoding))
+            if let resp = data {
+                println(NSString(data: resp, encoding: NSUTF8StringEncoding))
             }
         }
-        CidsConnector.sharedInstance().uploadImageToWebDAV(image!, fileName: "iostestupload\(ctm).png",progressHandler: handleProgress, completionHandler: handleCompletion)
-//        CidsConnector.sharedInstance().uploadImageToWebDAV(thumb, fileName: "iostestupload\(ctm)_thumb.png",progressHandler: handleProgress, completionHandler: handleCompletion)
-        
-        
-//        let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"411",
-//                                                        "OBJEKT_TYP":"schaltstelle",
-//                                                        "DOKUMENT_URL":"http://lorempixel.com/444/222/\nSchnapsTest"])
-//        
-//        CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {() -> () in })
-//
-        
-//        let image2 = UIImage(named: "testbild.png")
-//        CidsConnector.sharedInstance().uploadAndAddImageServerAction(image: image2!, entity: BaseEntity(), description: "again a test", completionHandler: {(response: HTTPResponse) -> Void in
-        
-//            println("Got data with no error")
-//        })
-
-        
+        CidsConnector.sharedInstance().uploadImageToWebDAV(image!, fileName: "iostestupload\(ctm).png", completionHandler: handleCompletion)
     }
     
     @IBAction func focusItemTabbed(sender: AnyObject) {

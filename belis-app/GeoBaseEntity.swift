@@ -27,13 +27,17 @@ class GeoBaseEntity : BaseEntity, Mappable{
                 if ( geom is WKTPoint){
                     let point=geom as! WKTPoint;
                     mapObject=GeoBaseEntityPointAnnotation(geoBaseEntity: self, point: point)
+//                    println("GeoBaseEntityPointAnnotation set")
+                
                 }
                 else if (geom is WKTLine) {
                     let line=geom as! WKTLine;
                     let temp=self;
                     mapObject=GeoBaseEntityStyledMkPolylineAnnotation(line: line, geoBaseEntity: self)
-                    (mapObject as! GeoBaseEntityStyledMkPolylineAnnotation).geoBaseEntity=self
+                    (mapObject! as! GeoBaseEntityStyledMkPolylineAnnotation).geoBaseEntity=self
+//                    println("GeoBaseEntityStyledMkPolylineAnnotation set")
                 }
+                
             }
             else{
                 println("\(self) - id : \(self.id)");
@@ -44,33 +48,52 @@ class GeoBaseEntity : BaseEntity, Mappable{
     }
     
     func addToMapView(mapView:MKMapView) {
-        if  ( mapObject != nil ) {
-            if (mapObject is GeoBaseEntityPointAnnotation){
-                
-                mapView.addAnnotation(mapObject as! GeoBaseEntityPointAnnotation);
-                
-                // mapView.showAnnotations([mapObject as GeoBaseEntityPointAnnotation], animated: true)
-                
+        if let mo=mapObject {
+            if let moPoint=mo as? GeoBaseEntityPointAnnotation {
+                mapView.addAnnotation(moPoint)
             }
-            else if (mapObject is GeoBaseEntityStyledMkPolylineAnnotation){
-                mapView.addOverlay(mapObject as! GeoBaseEntityStyledMkPolylineAnnotation);
-                mapView.addAnnotation(mapObject as! GeoBaseEntityStyledMkPolylineAnnotation);
+            else if let moLine=mo as? GeoBaseEntityStyledMkPolylineAnnotation {
+                mapView.addOverlay(moLine)
+                mapView.addAnnotation(moLine)
+
             }
-            
         }
+//        if  ( mapObject != nil ) {
+//            if (mapObject is GeoBaseEntityPointAnnotation){
+//                
+//                mapView.addAnnotation(mapObject! as! GeoBaseEntityPointAnnotation);
+//                
+//                // mapView.showAnnotations([mapObject as GeoBaseEntityPointAnnotation], animated: true)
+//                
+//            }
+//            else if (mapObject! is GeoBaseEntityStyledMkPolylineAnnotation){
+//                mapView.addOverlay(mapObject! as! GeoBaseEntityStyledMkPolylineAnnotation);
+//                mapView.addAnnotation(mapObject! as! GeoBaseEntityStyledMkPolylineAnnotation);
+//            }
+//            
+//        }
         
     }
     
     
     func removeFromMapView(mapView:MKMapView) {
-        if ( mapObject != nil ){
-            if (mapObject is GeoBaseEntityPointAnnotation){
-                mapView.removeAnnotation(mapObject as! MKAnnotation);
+        if let mo=mapObject {
+            if let moPoint=mo as? GeoBaseEntityPointAnnotation {
+                mapView.removeAnnotation(moPoint)
             }
-            else if (mapObject is GeoBaseEntityStyledMkPolylineAnnotation){
-                mapView.removeOverlay(mapObject as! GeoBaseEntityStyledMkPolylineAnnotation);
+            else if let moLine=mo as? GeoBaseEntityStyledMkPolylineAnnotation {
+                mapView.removeOverlay(moLine)
             }
         }
+        
+//        if ( mapObject != nil ){
+//            if (mapObject is GeoBaseEntityPointAnnotation){
+//                mapView.removeAnnotation(mapObject as! MKAnnotation);
+//            }
+//            else if (mapObject is GeoBaseEntityStyledMkPolylineAnnotation){
+//                mapView.removeOverlay(mapObject as! GeoBaseEntityStyledMkPolylineAnnotation);
+//            }
+//        }
     }
     
     func getAnnotationTitle() -> String{
