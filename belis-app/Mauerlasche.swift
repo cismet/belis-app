@@ -8,7 +8,6 @@
 
 import Foundation
 import ObjectMapper
-import SwiftHTTP
 
 class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
     var erstellungsjahr: Int?
