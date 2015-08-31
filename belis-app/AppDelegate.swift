@@ -106,6 +106,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    
+    
+    func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
+        println("OPEN DOC")
+        return true
+    }
 
 }
 
