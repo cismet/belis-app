@@ -16,6 +16,7 @@ public class CidsConnector {
     
     //let baseUrl="http://belis-rest.cismet.de:80"
     let baseUrl="https://192.168.178.38:8890"
+    //let baseUrl="https://192.168.178.47:8890"
     //let baseUrl="https://leo:8890"
     // SHARED INSTANCE
     class func sharedInstance() -> CidsConnector {
