@@ -19,15 +19,15 @@ class CidsObjectNode : Mappable {
         mapping(map)
     }
     func mapping(map: Map) {
-        classId <- map["classId"];
-        objectId <- map["objectId"];
+        classId <- map["LEGACY_CLASS_ID"];
+        objectId <- map["LEGACY_OBJECT_ID"];
     }
 }
 
 
 class SingleQueryParameter : Mappable {
     var key: String?;
-    var value: String?;
+    var value: AnyObject?;
     init(){
         self.key="?";
         self.value="?";
@@ -35,7 +35,7 @@ class SingleQueryParameter : Mappable {
     required init?(_ map: Map) {
         mapping(map)
     }
-    init(key: String, value: String) {
+    init(key: String, value: AnyObject) {
         self.key=key;
         self.value=value;
     }
@@ -76,10 +76,3 @@ class ActionParameterContainer : Mappable {
         params <- map["parameters"];
     }
 }
-
-//class CollectionResult : MapperProtocol {
-//    var collection : [ ]
-//}
-
-
-

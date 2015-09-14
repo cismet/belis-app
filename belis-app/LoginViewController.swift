@@ -8,43 +8,81 @@
 
 import UIKit
 import QuartzCore
+import ObjectMapper
 
 
 class LoginViewController: UIViewController {
-
+    
+    @IBOutlet weak var txtLogin: UITextField!
+    
+    @IBOutlet weak var txtPass: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setBackground();
+        var storedLogin: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("login")
+        if let storedUserString=storedLogin as? String {
+            txtLogin.text=storedUserString
+        }
         // Do any additional setup after loading the view, typically from a nib.
     }
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-       
+        
     }
     override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
-        setBackground();
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    func setBackground() {
-//        var background:CAGradientLayer = CAGradientLayer();
-//        background.frame = view.bounds
-//        let cor1 = UIColor.blackColor().CGColor
-//        let cor2 = UIColor.whiteColor().CGColor
-//        let arrayColors = [cor1, cor2]
-//        background.colors = arrayColors
-//        view.layer.insertSublayer(background, atIndex: 0)
-//        println(view.layer.sublayers)
-    }
-
+    
+    
+    
     @IBAction func loginButtonTabbed(sender: AnyObject) {
-        let mainView = self.storyboard?.instantiateViewControllerWithIdentifier("mainView") as! MainViewController;
-        self.presentViewController(mainView, animated: true, completion: {} );
+        NSUserDefaults.standardUserDefaults().setObject(txtLogin.text, forKey: "login")
+        let waiting = UIAlertController(title: "Anmeldung", message: "Sie werden am System angemeldet...", preferredStyle: UIAlertControllerStyle.Alert)
+        self.presentViewController(waiting, animated: true, completion: nil)
+        
+        func loginhandler(success: Bool) {
+            if (success) {
+                let mainView = self.storyboard?.instantiateViewControllerWithIdentifier("mainView") as! MainViewController;
+                dispatch_async(dispatch_get_main_queue(),{
+                    waiting.dismissViewControllerAnimated(true, completion: {
+                        self.presentViewController(mainView, animated: true, completion: {} );
+                    })
+                    
+                })
+                
+            }
+            else {
+                dispatch_async(dispatch_get_main_queue(),{
+                    self.txtPass.text="";
+                    waiting.dismissViewControllerAnimated(true, completion: {
+                        
+                        var alert = UIAlertController(title: "Login fehlgeschlagen", message: "Oh, die Anmeldung hat nicht funktioniert. Probieren Sie es einfach nocheinmal.", preferredStyle: UIAlertControllerStyle.Alert)
+                        
+                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler:{ (ACTION :UIAlertAction!)in
+                        }))
+                        
+                        self.presentViewController(alert, animated: true, completion: nil)
+                        
+                        
+                    })
+                    
+                })
+                
+                
+            }
+        }
+        CidsConnector.sharedInstance().login(txtLogin.text, password: txtPass.text,handler: loginhandler)
         
     }
+    
+    @IBAction func moreButtonTabbed(sender: AnyObject) {
+        
+        
+    }
+    
+    var queue=NSOperationQueue()
 }
-

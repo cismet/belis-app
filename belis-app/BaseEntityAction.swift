@@ -12,8 +12,8 @@ import Foundation
 class BaseEntityAction : NSObject{
     var title:String
     var style:UIAlertActionStyle
-    var handler: (UIAlertAction!, BaseEntityAction, CidsConnector, BaseEntity,UIViewController)->Void
-    init(title: String, style: UIAlertActionStyle, handler: (UIAlertAction!, BaseEntityAction, CidsConnector, BaseEntity,UIViewController)->Void){
+    var handler: (UIAlertAction!, BaseEntityAction, BaseEntity,UIViewController)->Void
+    init(title: String, style: UIAlertActionStyle, handler: (UIAlertAction!, BaseEntityAction, BaseEntity,UIViewController)->Void){
         self.title=title
         self.style=style
         self.handler=handler

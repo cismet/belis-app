@@ -8,7 +8,6 @@
 
 import Foundation
 import ObjectMapper
-import SwiftHTTP
 
 class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
     var erstellungsjahr: Int?
@@ -179,19 +178,3 @@ class Mauerlaschenmaterial : BaseEntity, Mappable{
 
     
 }
-
-//class FotoAction : BaseEntityAction, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-//    //UIImagePickerControllerDelegate
-//    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
-//        println("FotoAction FINISH")
-//        picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
-//        
-//    }
-//    
-//    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-//        println("FotoAction CANCEL")
-//        picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
-//        
-//    }
-//}
-//

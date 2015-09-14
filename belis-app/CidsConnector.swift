@@ -7,38 +7,178 @@
 //
 
 import Foundation
-import Alamofire
 import ObjectMapper
-import SwiftHTTP
-
+import Security
 
 public class CidsConnector {
-    private var user : String; //WendlingM@BELIS2"
-    private var password : String; //kif
+    
+    static var instance: CidsConnector!
+    
+    #if arch(i386) || arch(x86_64)
+    let simulator=true
+    #else
+    let simulator=false
+    #endif
+    
+    var tlsEnabled=false {
+        didSet {
+            NSUserDefaults.standardUserDefaults().setObject(tlsEnabled, forKey: "tlsEnabled")
+        }
+    }
+    var pureBaseUrl="192.168.178.38" {
+        didSet {
+            NSUserDefaults.standardUserDefaults().setObject(pureBaseUrl, forKey: "cidsPureBaseURL")
+        }
+    }
+    var baseUrlport="8890" {
+        didSet {
+            NSUserDefaults.standardUserDefaults().setObject(baseUrlport, forKey: "cidsBaseURLPort")
+        }
+    }
+    
+    var baseUrl:String {
+        get {
+            var prot="http://"
+            if tlsEnabled {
+                prot="https://"
+            }
+            return "\(prot)\(pureBaseUrl):\(baseUrlport)"
+        }
+
+    }
+    
+    var docFolder: String {
+        get {
+            return NSSearchPathForDirectoriesInDomains(.DocumentDirectory,.UserDomainMask,true)[0] as! String
+        }
+    }
+    
+    var serverCert: String?{
+        didSet {
+            NSUserDefaults.standardUserDefaults().setObject(serverCert, forKey: "serverCert")
+        }
+    }
+    var serverCertPath: String {
+        get {
+            if !simulator {
+                if let cert=serverCert {
+                    return docFolder+cert
+                }
+                else {
+                    return ""
+                }
+            }
+            else {
+                return NSBundle.mainBundle().pathForResource("server.cert.dev", ofType:"der")!
+            }
+        }
+    }
+    
+    var clientCert: String? {
+        didSet {
+            NSUserDefaults.standardUserDefaults().setObject(clientCert, forKey: "clientCert")
+        }
+    }
+    
+    var clientCertPath: String {
+        get {
+            if !simulator {
+                if let cert=clientCert {
+                    return docFolder+cert
+                }
+                else {
+                    return ""
+                }
+            }
+            else {
+                return NSBundle.mainBundle().pathForResource("client.cert.dev", ofType: "p12")!
+            }
+        }
+    }
+    
+    var clientCertContainerPass: String = ""{
+        didSet {
+            NSUserDefaults.standardUserDefaults().setObject(clientCertContainerPass, forKey: "clientCertContainerPass")
+        }
+    }
+    
+    
+    // SHARED INSTANCE
+    class func sharedInstance() -> CidsConnector {
+        self.instance = (self.instance ?? CidsConnector())
+        return self.instance
+    }
+    
+    private var login : String!
+    private var password : String!
+    private let domain = "BELIS2"
     let queue = NSOperationQueue()
     var searchResults=[Entity: [GeoBaseEntity]]()
-
+    
     let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
-//    var manager: Manager
-    init(user :String, password :String){
-        self.user=user;
-        self.password=password;
-//        configuration.HTTPMaximumConnectionsPerHost = 1
-//        configuration.timeoutIntervalForRequest = 30
-//        manager=Alamofire.Manager(configuration: configuration)
-//        manager=NetworkManager().manager!
+    
+    
+    init(){
+        
+        let storedTLSEnabled: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("tlsEnabled")
+        if let storedTLSEnabledAsBool=storedTLSEnabled as? Bool {
+            tlsEnabled=storedTLSEnabledAsBool
+        }
+        let storedPureUrlBase: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("cidsPureBaseURL")
+        if let storedPureUrlBaseAsString=storedPureUrlBase as? String {
+            pureBaseUrl=storedPureUrlBaseAsString
+        }
+        
+        let storedPort: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("cidsBaseURLPort")
+        if let storedPortAsString=storedPort as? String {
+            baseUrlport=storedPortAsString
+        }
+        
+        let storedServerCertPath: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("serverCert")
+        if let storedServerCertPathString=storedServerCertPath as? String {
+            serverCert=storedServerCertPathString
+        }
+                let storedClientCertPath: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("clientCert")
+        if let storedClientCertPathString=storedClientCertPath as? String {
+            clientCert=storedClientCertPathString
+        }
+        let storedClientCertContainerPass: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("clientCertContainerPass")
+        if let storedClientCertContainerPassString=storedClientCertContainerPass as? String {
+            clientCertContainerPass=storedClientCertContainerPassString
+        }
+        else if simulator{
+            clientCertContainerPass="123456"
+        }
     }
+    
+    
+    
     
     var start=CidsConnector.currentTimeMillis();
+    var loggedIn=false
     
-    func login() {
-        
-
+    
+    func login(user :String, password :String, handler: (Bool) -> ()) {
+        self.login=user+"@"+domain
+        self.password=password
+        func cH(loggedIn: Bool, error: NSError?) -> () {
+            self.loggedIn=loggedIn
+            
+            if loggedIn {
+                println("logged in")
+            }
+            else {
+                println("Error\(error)")
+            }
+            
+            handler(loggedIn)
+        }
+        var loginOp=LoginOperation(baseUrl: baseUrl, domain: domain,user: login, pass: password,completionHandler: cH)
+        loginOp.enqueue()
     }
     
-    func search(ewktMapContent: String,leuchtenEnabled: String, mastenEnabled: String,mauerlaschenEnabled: String, leitungenEnabled: String, schaltstellenEnabled: String, handler: () -> ()) {
-        
-
+    func search(ewktMapContent: String,leuchtenEnabled: Bool, mastenEnabled: Bool,mauerlaschenEnabled: Bool, leitungenEnabled: Bool, schaltstellenEnabled: Bool, handler: () -> ()) {
+        assert(loggedIn)
         var qp=QueryParameters(list:[
             SingleQueryParameter(key: "LeuchteEnabled", value: leuchtenEnabled),
             SingleQueryParameter(key: "MastOhneLeuchtenEnabled", value: mastenEnabled),
@@ -48,18 +188,15 @@ public class CidsConnector {
             SingleQueryParameter(key: "GeometryFromWkt", value: ewktMapContent)
             ]);
         
-        let y = Mapper().toJSON(qp);
-        
-        //var kif="http://kif:8890/searches/BELIS2.de.cismet.belis2.server.search.BelisObjectsWktSearch/results?role=all&limit=100&offset";
-        var publicURL="http://belis-rest.cismet.de/searches/BELIS2.de.cismet.belis2.server.search.BelisObjectsWktSearch/results?role=all&limit=100&offset";
-        var bin="http://requestb.in/11yncui1";
-        let configuration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
-        let manager = Alamofire.Manager(configuration: configuration)
-        let alamoRequest=manager.request(.POST, publicURL, parameters: y, encoding: .JSON)
-            .authenticate(user: user, password: password)
-            .responseJSON { (request, response, data, error) in
-                if let checkeddata: AnyObject=data {
-                    var json =  data!.valueForKeyPath("$collection") as! [[String : AnyObject]];
+        func mySearchCompletionHandler(data : NSData!, response : NSURLResponse!, error : NSError!) -> Void {
+            if (error == nil) {
+                // Success
+                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                println("URL Session Task Succeeded: HTTP \(statusCode)")
+                var err: NSError?
+                
+                if let checkeddata: [String : AnyObject]=NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &err) as? [String: AnyObject] {
+                    var json =  checkeddata["$collection"] as! [[String : AnyObject]];
                     var nodes = Mapper<CidsObjectNode>().mapArray(json)
                     println(nodes.count);
                     self.queue.cancelAllOperations()
@@ -70,9 +207,65 @@ public class CidsConnector {
                     self.queue.maxConcurrentOperationCount = 10
                     
                     for node in nodes {
-                        //println("\(node.classId!) : \(node.objectId!)")
-                        let op=self.getBelisObject(classId: node.classId!, objectId: node.objectId!,handler: handler)
-                        self.queue.addOperation(op)
+                        println("\(node.classId!) : \(node.objectId!)")
+                        let rightEntity=Entity.byClassId(node.classId!)!
+                        let classKey=rightEntity.tableName()
+                        
+                        
+                        func completionHandler(operation:GetEntityOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue) -> (){
+                            if (error == nil) {
+                                // Success
+                                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                                println("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                                var err: NSError?
+                                if let json: [String : AnyObject]=NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &err) as? [String: AnyObject] {
+                                    var gbEntity:GeoBaseEntity
+                                    
+                                    switch (rightEntity){
+                                    case .LEUCHTEN:
+                                        gbEntity = Mapper<Leuchte>().map(json)!
+                                    case .MASTEN:
+                                        gbEntity = Mapper<Standort>().map(json)!
+                                    case .MAUERLASCHEN:
+                                        gbEntity = Mapper<Mauerlasche>().map(json)!
+                                    case .LEITUNGEN:
+                                        gbEntity = Mapper<Leitung>().map(json)!
+                                    case .SCHALTSTELLEN:
+                                        gbEntity = Mapper<Schaltstelle>().map(json)!
+                                    default:
+                                        println("could not find object from entity \(operation.entityName)")
+                                    }
+                                    
+                                    if let array=self.searchResults[rightEntity]{
+                                        self.searchResults[rightEntity]!.append(gbEntity)
+                                    }
+                                    else {
+                                        self.searchResults.updateValue([gbEntity], forKey: rightEntity)
+                                    }
+                                    
+                                    //println("+")
+                                    //println("\(leuchte.id)==>\(leuchte.leuchtenNummer):\(leuchte.typ)@\(leuchte.standort?.strasse)->\(leuchte.wgs84WKT)");
+                                    
+                                    if self.queue.operationCount==1 {
+                                        var duration=(CidsConnector.currentTimeMillis() - self.start)
+                                        handler();
+                                        println("loaded \(duration)");
+                                        
+                                    }
+                                    
+                                }else {
+                                    println("no json data for \(operation.url)")
+                                    //self.searchResults[0].append(Leuchte())
+                                    
+                                }
+                            }else {
+                                // Failure
+                                println("URL Session Task Failed: %@", error.localizedDescription);
+                            }
+                        }
+                        var op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: queue, completionHandler: completionHandler)
+                        
+                        op.enqueue()
                     }
                 }
                 else {
@@ -80,218 +273,61 @@ public class CidsConnector {
                 }
                 
             }
-        println(alamoRequest.debugDescription)
+            else {
+                // Failure
+                println("URL Session Task Failed: %@", error.localizedDescription);
+            }
+            
+        }
+        
+        var sop=SearchOperation(baseUrl: self.baseUrl, user: self.login, pass: self.password, parameters: qp, completionHandler: mySearchCompletionHandler)
+        
+        sop.enqueue()
+        
     }
-
     
     
-    func getBelisObject(#classId: Int!, objectId :Int!, handler: () -> ()) -> NetworkOperation{
-        //println("go for id:\(objectId)@\(classKey)");
-        //let kif="http://kif:8890/BELIS2.\(classKey)/\(objectId)" //?role=all&omitNullValues=true&deduplicate=false
-        let rightEntity=Entity.byClassId(classId)!
-        let classKey=rightEntity.tableName()
-        let publicUrl="http://belis-rest.cismet.de/BELIS2.\(classKey)/\(objectId)" //?role=all&omitNullValues=true&deduplicate=false
-        let operation=NetworkOperation(method: Alamofire.Method.GET, URLString: publicUrl, user: user, password: password, parameters: ["role":"all","omitNullValues":"true","deduplicate":"false"]) {
-            (urlRequest , response, responseObject, error) in
-            if let jsonData: AnyObject=responseObject {
-                var json =  jsonData as! [String : AnyObject];
-                //                println(json);
-                
-                var gbEntity:GeoBaseEntity
-                
-                switch (rightEntity){
-                case .LEUCHTEN:
-                    gbEntity = Mapper<Leuchte>().map(json)!
-                case .MASTEN:
-                    gbEntity = Mapper<Standort>().map(json)!
-                case .MAUERLASCHEN:
-                    gbEntity = Mapper<Mauerlasche>().map(json)!
-                case .LEITUNGEN:
-                    gbEntity = Mapper<Leitung>().map(json)!
-                case .SCHALTSTELLEN:
-                    gbEntity = Mapper<Schaltstelle>().map(json)!
-                default:
-                    println("could not find object with classid=\(classId)")
-                }
-                
-                if let array=self.searchResults[rightEntity]{
-                    self.searchResults[rightEntity]!.append(gbEntity)
+    func executeSimpleServerAction(#actionName: String!, params: ActionParameterContainer, handler: (success:Bool) -> ()) {
+        assert(loggedIn)
+        
+        func myActionCompletionHandler(data : NSData!, response : NSURLResponse!, error : NSError!) -> Void {
+            if (error == nil) {
+                // Success
+                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                println("Action-URL Session Task no Error: HTTP Status Code\(statusCode)")
+                if statusCode == 200 {
+                    handler(success:true)
                 }
                 else {
-                    self.searchResults.updateValue([gbEntity], forKey: rightEntity)
-                }
-                
-                //println("+")
-                //println("\(leuchte.id)==>\(leuchte.leuchtenNummer):\(leuchte.typ)@\(leuchte.standort?.strasse)->\(leuchte.wgs84WKT)");
-                
-                if self.queue.operationCount==1 {
-                    var duration=(CidsConnector.currentTimeMillis() - self.start)
-                    handler();
-                    println("loaded \(duration)");
-                    
+                    handler(success:false)
                 }
             }
             else {
-                println("no json data")
-                //self.searchResults[0].append(Leuchte())
-                
-            }
-        }
-        
-        return operation;
-    }
-    
-    func updateBelisObject(#classId: Int!, objectId :Int!,entity: BaseEntity, handler: () -> ()) {
-        let rightEntity=Entity.byClassId(classId)!
-        let classKey=rightEntity.tableName()
-        let publicUrl="http://belis-rest.cismet.de/BELIS2.\(classKey)/\(objectId)" //?role=all&omitNullValues=true&deduplicate=false
-        
-        let jsonRepresentationOfEntity=Mapper().toJSON(entity)
-        
-        let configuration = NSURLSessionConfiguration.ephemeralSessionConfiguration()
-        let manager = Alamofire.Manager(configuration: configuration)
-        let alamoRequest=manager.request(.PUT, publicUrl, parameters: jsonRepresentationOfEntity, encoding: .JSON)
-            .authenticate(user: user, password: password)
-            .response { (request, response, data, error) in
-                if let errorObject: NSError=error {
-                    println(errorObject.debugDescription)
-                }
-        }
-   
-    }
-    
-    func executeSimpleServerAction(#actionName: String!, params: ActionParameterContainer, handler: () -> ()) {
-        if let jsonContent=Mapper().toJSONString(params, prettyPrint: false) {
-            println(jsonContent)
-            let dat=jsonContent.dataUsingEncoding(NSUTF8StringEncoding)
-            let hup=HTTPUpload(data: dat!, fileName: "params.json", mimeType: "application/json")
-            let params:Dictionary<String,AnyObject>=["taskparams":hup]
-            
-            var request = HTTPTask()
-            //the auth closures will continually be called until a successful auth or rejection
-            var attempted = false
-            request.auth = {(challenge: NSURLAuthenticationChallenge) in
-                if !attempted {
-                    attempted = true
-                    return NSURLCredential(user: self.user, password: self.password, persistence: .ForSession)
-                }
-                return nil //auth failed, nil causes the request to be properly cancelled.
+                // Failure
+                println("ActionURL Session Task Failed: %@", error.localizedDescription);
+                handler(success:false)
             }
             
-            request.POST("http://belis-rest.cismet.de/actions/BELIS2.\(actionName)/tasks", parameters: params, completionHandler: {(response: HTTPResponse) -> Void in
-                if let err = response.error {
-                    println("error: \(err.localizedDescription)")
-                    return //also notify app of failure as needed
-                }
-                
-                println("Got data with no error")
-                handler()
-                })
         }
+        
+        var op=ServerActionOperation(baseUrl: baseUrl, user: login, pass: password, actionName: actionName,params:params, completionHandler: myActionCompletionHandler)
+        op.enqueue()
     }
-    func executeTestServerAction() {
-        let actionName="AddDokument"
-        let baseUrl="http://inspectb.in/4a0aa3be"
-//        let baseUrl="http://belis-rest.cismet.de"
-        let s=NSString(string: "{\"parameters\":{\"OBJEKT_ID\":\"411\", \"OBJEKT_TYP\":\"schaltstelle\", \"DOKUMENT_URL\":\"http://lorempixel.com/400/200/\\nZufallTest\", \"DOKUMENT_url\":\"http://lorempixel.com/400/200/nature/\\nNaturTest\"}}")
-        
-        let dat=s.dataUsingEncoding(NSUTF8StringEncoding)
-        
-        let hup=HTTPUpload(data: dat!, fileName: "params.json", mimeType: "application/json")
-        
-        
-        
-        let params:Dictionary<String,AnyObject>=["taskparams":hup]
-        
-        var request = HTTPTask()
-        //the auth closures will continually be called until a successful auth or rejection
-        var attempted = false
-        request.auth = {(challenge: NSURLAuthenticationChallenge) in
-            if !attempted {
-                attempted = true
-                return NSURLCredential(user: self.user, password: self.password, persistence: .ForSession)
-            }
-            return nil //auth failed, nil causes the request to be properly cancelled.
-        }
-        request.POST("\(baseUrl)/actions/BELIS2.\(actionName)/tasks", parameters: params, completionHandler: {(response: HTTPResponse) -> Void in
-            if let err = response.error {
-                println("error: \(err.localizedDescription)")
-                return //also notify app of failure as needed
-            }
-            println("Got data with no error")        })
-    }
-
-    func uploadImageToWebDAV(image: UIImage, fileName: String , progressHandler: (Float)->Void, completionHandler: (NSURLRequest, NSHTTPURLResponse?, AnyObject?, NSError?) -> Void) {
+    
+    
+    func uploadImageToWebDAV(image: UIImage, fileName: String , completionHandler: (data : NSData!, response : NSURLResponse!, error : NSError!) -> Void) {
+        assert(loggedIn)
         
         let baseUrl="http://board.cismet.de/belis"
         
-//        let png=UIImagePNGRepresentation(image)
-        let jpg=UIImageJPEGRepresentation(image, CGFloat(0.9))
-        
-        Alamofire.upload(.PUT, "\(baseUrl)/\(fileName)", jpg)
-            .authenticate(user: Secrets.getWebDavUser(), password: Secrets.getWebDavPass())
-            .progress {
-                (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
-                let f=Float(totalBytesWritten)/Float(totalBytesExpectedToWrite)
-                progressHandler(f)
-            }
-            .response {
-                (request, response, data, error) in
-                    completionHandler(request, response, data, error)
-            }
-    }
-
-    
-    
-    func uploadAndAddImageServerAction(#image: UIImage, entity: BaseEntity, description: String, completionHandler: (response: HTTPResponse) -> Void ) {
-        let actionName="UploadDokument"
-        //let baseUrl="http://inspectb.in/4a0aa3be"
-        let baseUrl="http://belis-rest.cismet.de"
-
-        let objectId=entity.id
-        let objectTyp=entity.getType().tableName().lowercaseString
-        
-        let s=NSString(string: "{\"parameters\":{\"OBJEKT_ID\":\"\(objectId)\", \"OBJEKT_TYP\":\"\(objectTyp)\", \"UPLOAD_INFO\":\"png\\n\(description)\"}}")
-        
-        let dat=s.dataUsingEncoding(NSUTF8StringEncoding)
-        
-        let hup=HTTPUpload(data: dat!, fileName: "params.json", mimeType: "application/json")
-        
-        let png=UIImagePNGRepresentation(image)
-        
-        let imageUpload=HTTPUpload(data: png, fileName: "upload.png", mimeType: "image/png")
-        
-        
-        let params:Dictionary<String,AnyObject>=["file":imageUpload,"taskparams":hup]
-        
-        var request = HTTPTask()
-        //the auth closures will continually be called until a successful auth or rejection
-        var attempted = false
-        request.auth = {(challenge: NSURLAuthenticationChallenge) in
-            if !attempted {
-                attempted = true
-                return NSURLCredential(user: self.user, password: self.password, persistence: .ForSession)
-            }
-            return nil //auth failed, nil causes the request to be properly cancelled.
+        var up=WebDavUploadImageOperation(baseUrl: baseUrl, user: Secrets.getWebDavUser(), pass: Secrets.getWebDavPass(), fileName: fileName, image:image) {
+            (data, response, error) -> Void in
+            
+            completionHandler(data: data, response: response, error: error)
         }
-        request.POST("\(baseUrl)/actions/BELIS2.\(actionName)/tasks?resultingInstanceType=result", parameters: params, completionHandler: completionHandler)
-//            {(response: HTTPResponse) -> Void in
-//            if let err = response.error {
-//                println("error: \(err.localizedDescription)")
-//                return //also notify app of failure as needed
-//            }
-//            if let resp = response.responseObject as? NSData {
-//                println(NSString(data: resp, encoding: NSUTF8StringEncoding))
-//            }
-//            println("Got data with no error")
-//        })
         
-        
+        up.enqueue()
     }
-    
-    
-    
-    
     
     
     class func currentTimeMillis() -> Int64{

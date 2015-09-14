@@ -106,6 +106,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    
+    
+    func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
+        if let fileName=url.lastPathComponent {
+            if fileName.endsWith("beliscc", caseSensitive: false) {
+                CidsConnector.sharedInstance().clientCert="/Inbox/\(url.lastPathComponent!)"
+                return true
+            }
+            else if fileName.endsWith("belissc", caseSensitive: false) {
+                CidsConnector.sharedInstance().serverCert="/Inbox/\(url.lastPathComponent!)"
+                return true
+            }
+        }
+        return false
+    }
 
 }
 

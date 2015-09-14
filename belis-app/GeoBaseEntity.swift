@@ -10,6 +10,10 @@ import Foundation
 import ObjectMapper
 
 class GeoBaseEntity : BaseEntity, Mappable{
+    var mapObject : NSObject?;
+    private var geom :WKTGeometry?
+
+    
     override init(){
         super.init()
     }
@@ -18,18 +22,22 @@ class GeoBaseEntity : BaseEntity, Mappable{
         {
         didSet {
             //println("geoString="+wgs84WKT!);
-            if let wgs85WKTSTring=wgs84WKT {
-                let geom=WKTParser.parseGeometry(wgs84WKT);
+            if let wgs84WKTSTring=wgs84WKT {
+                geom=WKTParser.parseGeometry(wgs84WKTSTring);
                 if ( geom is WKTPoint){
                     let point=geom as! WKTPoint;
                     mapObject=GeoBaseEntityPointAnnotation(geoBaseEntity: self, point: point)
+//                    println("GeoBaseEntityPointAnnotation set")
+                
                 }
                 else if (geom is WKTLine) {
                     let line=geom as! WKTLine;
                     let temp=self;
                     mapObject=GeoBaseEntityStyledMkPolylineAnnotation(line: line, geoBaseEntity: self)
-                    (mapObject as! GeoBaseEntityStyledMkPolylineAnnotation).geoBaseEntity=self
+                    (mapObject! as! GeoBaseEntityStyledMkPolylineAnnotation).geoBaseEntity=self
+//                    println("GeoBaseEntityStyledMkPolylineAnnotation set")
                 }
+                
             }
             else{
                 println("\(self) - id : \(self.id)");
@@ -38,35 +46,28 @@ class GeoBaseEntity : BaseEntity, Mappable{
         }
         
     }
-    var mapObject : NSObject?;
-    private var geom :WKTGeometry?
     
-        func addToMapView(mapView:MKMapView) {
-        if  ( mapObject != nil ) {
-            if (mapObject is GeoBaseEntityPointAnnotation){
-                
-                mapView.addAnnotation(mapObject as! GeoBaseEntityPointAnnotation);
-                
-               // mapView.showAnnotations([mapObject as GeoBaseEntityPointAnnotation], animated: true)
+    func addToMapView(mapView:MKMapView) {
+        if let mo=mapObject {
+            if let moPoint=mo as? GeoBaseEntityPointAnnotation {
+                mapView.addAnnotation(moPoint)
+            }
+            else if let moLine=mo as? GeoBaseEntityStyledMkPolylineAnnotation {
+                mapView.addOverlay(moLine)
+                mapView.addAnnotation(moLine)
 
             }
-            else if (mapObject is GeoBaseEntityStyledMkPolylineAnnotation){
-                mapView.addOverlay(mapObject as! GeoBaseEntityStyledMkPolylineAnnotation);
-                mapView.addAnnotation(mapObject as! GeoBaseEntityStyledMkPolylineAnnotation);
-            }
-            
         }
-
     }
     
     
     func removeFromMapView(mapView:MKMapView) {
-        if ( mapObject != nil ){
-            if (mapObject is GeoBaseEntityPointAnnotation){
-                mapView.removeAnnotation(mapObject as! MKAnnotation);
+        if let mo=mapObject {
+            if let moPoint=mo as? GeoBaseEntityPointAnnotation {
+                mapView.removeAnnotation(moPoint)
             }
-            else if (mapObject is GeoBaseEntityStyledMkPolylineAnnotation){
-                mapView.removeOverlay(mapObject as! GeoBaseEntityStyledMkPolylineAnnotation);
+            else if let moLine=mo as? GeoBaseEntityStyledMkPolylineAnnotation {
+                mapView.removeOverlay(moLine)
             }
         }
     }
@@ -83,7 +84,7 @@ class GeoBaseEntity : BaseEntity, Mappable{
     func getAnnotationCalloutGlyphIconName() -> String {
         return "";
     }
-
+    
     
     func liesIn(coordinateRegion: MKCoordinateRegion ) -> Bool{
         let region = coordinateRegion;
@@ -96,11 +97,11 @@ class GeoBaseEntity : BaseEntity, Mappable{
         northWestCorner.longitude = center.longitude - (region.span.longitudeDelta / 2.0);
         southEastCorner.latitude  = center.latitude  + (region.span.latitudeDelta  / 2.0);
         southEastCorner.longitude = center.longitude + (region.span.longitudeDelta / 2.0);
-
+        
         if (mapObject is MKAnnotation){
             var anno = mapObject as! MKAnnotation;
             return (
-                    anno.coordinate.latitude  >= northWestCorner.latitude &&
+                anno.coordinate.latitude  >= northWestCorner.latitude &&
                     anno.coordinate.latitude  <= southEastCorner.latitude &&
                     
                     anno.coordinate.longitude >= northWestCorner.longitude &&
@@ -120,7 +121,7 @@ class GeoBaseEntity : BaseEntity, Mappable{
                     coord.longitude <= southEastCorner.longitude) {
                         return true;
                 }
-
+                
             }
             return false;
         }
@@ -155,7 +156,7 @@ class GeoBaseEntityPointAnnotation:MKPointAnnotation, GeoBaseEntityProvider{
         imageName=geoBaseEntity.getAnnotationImageName();
         glyphName=geoBaseEntity.getAnnotationCalloutGlyphIconName();
         title=geoBaseEntity.getAnnotationTitle();
-//        subtitle=geoBaseEntity.getAnnotationSubTitle();
+        //        subtitle=geoBaseEntity.getAnnotationSubTitle();
         shouldShowCallout=geoBaseEntity.canShowCallout();
     }
     
@@ -170,7 +171,7 @@ class GeoBaseEntityStyledMkPolylineAnnotation:MKPolyline{
     var glyphName: String!
     var shouldShowCallout = false
     var geoBaseEntity: GeoBaseEntity
-
+    
     override init() {
         geoBaseEntity = GeoBaseEntity()
     }
@@ -183,13 +184,13 @@ class GeoBaseEntityStyledMkPolylineAnnotation:MKPolyline{
         imageName=geoBaseEntity.getAnnotationImageName();
         glyphName=geoBaseEntity.getAnnotationCalloutGlyphIconName();
         title=geoBaseEntity.getAnnotationTitle();
-//        subtitle=geoBaseEntity.getAnnotationSubTitle();
+        //        subtitle=geoBaseEntity.getAnnotationSubTitle();
         shouldShowCallout=geoBaseEntity.canShowCallout();
     }
     func getGeoBaseEntity() -> GeoBaseEntity {
         return geoBaseEntity
     }
-
+    
 }
 
 class HighlightedMkPolyline:MKPolyline{

@@ -3,7 +3,45 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>de_DE</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeIconFiles</key>
+			<array>
+				<string>belis-app/Images.xcassets/AppIcon.appiconset/Icon-60@3x.png</string>
+				<string>belis-app/Images.xcassets/AppIcon.appiconset/Icon-40.png</string>
+				<string>belis-app/Images.xcassets/AppIcon.appiconset/Icon-Small.png</string>
+				<string>belis-app/Images.xcassets/AppIcon.appiconset/Icon-76@2x.png</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Belis Client Certificate Import</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>de.cismet.cids.belis.mobile.clientcert</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeIconFiles</key>
+			<array>
+				<string>belis-app/Images.xcassets/AppIcon.appiconset/Icon-76@2x.png</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Belis Server Certificate Import</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>de.cismet.cids.belis.mobile.servercert</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -11,7 +49,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>$(PRODUCT_NAME)</string>
+	<string>BelIS</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -52,6 +90,43 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Belis Client Certificate Import</string>
+			<key>UTTypeIdentifier</key>
+			<string>de.cismet.cids.belis.mobile.clientcert</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>beliscc</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Belis Server Certificate Import</string>
+			<key>UTTypeIdentifier</key>
+			<string>de.cismet.cids.belis.mobile.servercert</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>belissc</string>
+				</array>
+			</dict>
+		</dict>
 	</array>
 </dict>
 </plist>

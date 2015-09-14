@@ -13,7 +13,7 @@ import ImageIO
 class ChooseFotoAction : BaseEntityAction {
     init(yourself: BaseEntity) {
         super.init(title: "Foto auswählen",style: UIAlertActionStyle.Default, handler: {
-            (action: UIAlertAction! , selfAction: BaseEntityAction, con: CidsConnector , obj: BaseEntity, detailVC: UIViewController)->Void in
+            (action: UIAlertAction! , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
             let picker = (detailVC as! DetailVC).mainVC.imagePicker
             picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
             picker.mediaTypes = UIImagePickerController.availableMediaTypesForSourceType(.PhotoLibrary)!
@@ -29,7 +29,7 @@ class ChooseFotoAction : BaseEntityAction {
 class TakeFotoAction : BaseEntityAction {
     init(yourself: BaseEntity) {
         super.init(title: "Foto erstellen",style: UIAlertActionStyle.Default, handler: {
-            (action: UIAlertAction! , selfAction: BaseEntityAction, con: CidsConnector , obj: BaseEntity, detailVC: UIViewController)->Void in
+            (action: UIAlertAction! , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
             if(UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
                 //load the camera interface
                 let picker = (detailVC as! DetailVC).mainVC.imagePicker
@@ -57,7 +57,7 @@ class TakeFotoAction : BaseEntityAction {
 
 class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     var library = ALAssetsLibrary()
-
+    
     var selfEntity: BaseEntity
     var detailVC: DetailVC
     init (yourself: BaseEntity, detailVC: DetailVC){
@@ -108,8 +108,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             actInd.startAnimating();
             let metadata = info[UIImagePickerControllerMediaMetadata] as? NSDictionary
             
-
-            var cidsConnector=CidsConnector(user: "WendlingM@BELIS2", password: "boxy")
+            
             let ctm=Int64(NSDate().timeIntervalSince1970*1000)
             let pictureName=tField.text
             
@@ -118,7 +117,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             
             let fileNameThumb="upload.from.ios.for.\(objectTyp).\(objectId)-\(ctm).jpg.thumbnail.jpg"
             let fileName="upload.from.ios.for.\(objectTyp).\(objectId)-\(ctm).jpg"
-
+            
             
             
             var newMetadata : [NSObject:AnyObject]
@@ -128,49 +127,55 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             else {
                 newMetadata=[NSObject:AnyObject]()
             }
-
+            
             var iptcMeta=[NSObject:AnyObject]()
             iptcMeta.updateValue(pictureName, forKey: kCGImagePropertyIPTCObjectName)
             iptcMeta.updateValue("BelIS", forKey: kCGImagePropertyIPTCKeywords)
             iptcMeta.updateValue("upload to: \(fileName)", forKey: kCGImagePropertyIPTCSpecialInstructions)
             kCGImagePropertyIPTCSpecialInstructions
-
+            
             var tiffMeta=[NSObject:AnyObject]()
             tiffMeta.updateValue("http://www.cismet.de", forKey: kCGImagePropertyTIFFImageDescription)
-
+            
             
             newMetadata.updateValue(iptcMeta, forKey:kCGImagePropertyIPTCDictionary )
             newMetadata.updateValue(tiffMeta, forKey:kCGImagePropertyTIFFDictionary )
-
-
+            
+            
             
             self.library.saveImage(imageToSave, toAlbum: "BelIS-Dokumente",metadata : newMetadata, withCallback: nil)
-
+            
             func handleProgress(progress:Float) {
                 println(progress)
             }
             
-            func handleCompletion(request: NSURLRequest, response: NSHTTPURLResponse?, data: AnyObject?, error: NSError?) {
+            func handleCompletion(data : NSData!, response : NSURLResponse!, error : NSError!) {
                 if let err = error {
                     println("error: \(err.localizedDescription)")
                 }
-                if let resp = data as? NSData {
+                if let resp = data  {
                     println(NSString(data: resp, encoding: NSUTF8StringEncoding))
                     let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"\(objectId)",
                         "OBJEKT_TYP":objectTyp,
                         "DOKUMENT_URL":"http://board.cismet.de/belis/\(fileName)\n\(pictureName)"])
-                    cidsConnector.executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {() -> () in
+                    CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {(success:Bool) -> () in
+                        
                         actInd.stopAnimating()
                         actInd.removeFromSuperview()
                         picker.dismissViewControllerAnimated(true, completion: nil)
-                        println("Everything is going to be 200-OK")
-                        (self.selfEntity as! DocumentContainer).addDocument(DMSUrl(name:pictureName, fileName:fileName))
-                        self.detailVC.refresh()
+                        if success {
+                            println("Everything is going to be 200-OK")
+                            (self.selfEntity as! DocumentContainer).addDocument(DMSUrl(name:pictureName, fileName:fileName))
+                            self.detailVC.refresh()
+                        }
+                        else {
+                            
+                        }
                     })
                 }
             }
             let thumb=imageToSave.resizeToWidth(300.0)
-            cidsConnector.uploadImageToWebDAV(thumb, fileName: fileNameThumb ,progressHandler: handleProgress, completionHandler: handleCompletion)
+            CidsConnector.sharedInstance().uploadImageToWebDAV(thumb, fileName: fileNameThumb , completionHandler: handleCompletion)
             
             
             
