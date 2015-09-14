@@ -87,6 +87,16 @@ class CidsRequestOperation: NSOperation {
     
 }
 
+class PingOperation: CidsRequestOperation {
+//    init(baseUrl: String, domain: String,entityName:String, id: Int, user: String, pass:String, queue: NSOperationQueue, completionHandler: (operation:GetEntityOperation, data : NSData!, response : NSURLResponse!, error : NSError!, queue: NSOperationQueue) -> ()) {
+//        super.init(user:user,pass:pass)
+//        self.id=id
+//        self.qu=queue
+//        self.completionHandler=completionHandler
+//        url="\(baseUrl)/\(domain).\(entityName)/\(id)"
+//    }
+}
+
 
 
 class GetEntityOperation: CidsRequestOperation {

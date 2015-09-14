@@ -25,7 +25,8 @@ struct WebHostingGlyps {
         "icon-chevron-right":"\u{f488}",
         "icon-camera":"\u{f19b}",
         "icon-horizontalexpand":"\u{f578}",
-        "icon-switch":"\u{f28a}"
+        "icon-switch":"\u{f28a}",
+        "icon-certificatealt":"\u{f058}",
     ]
     
 }

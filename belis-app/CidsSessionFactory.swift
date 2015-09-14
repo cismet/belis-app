@@ -15,13 +15,11 @@ class CidsSessionFactory : NSObject, NSURLSessionDelegate{
     override init() {
         super.init()
         queue.maxConcurrentOperationCount=1
-
-        let path = NSBundle.mainBundle().pathForResource("server.cert", ofType:"der")!
-        localServerCertData = NSData(contentsOfFile: path)!
-        let bundle:NSBundle = NSBundle(forClass: self.dynamicType);
-        let bundleCertPath:NSString = bundle.pathForResource("client.cert", ofType: "p12")!;
-        let clientCertData = NSData(contentsOfFile: bundleCertPath as String)!;
-        identityAndTrustForCSC = self.extractIdentity(clientCertData, certPassword: "123456");
+        localServerCertData = NSData(contentsOfFile: CidsConnector.sharedInstance().serverCertPath)!
+        let clientCertData = NSData(contentsOfFile: CidsConnector.sharedInstance().clientCertPath);
+        if let ccert=clientCertData {
+            identityAndTrustForCSC = self.extractIdentity(ccert, certPassword: CidsConnector.sharedInstance().clientCertContainerPass)
+        }
 
     }
     
@@ -34,7 +32,7 @@ class CidsSessionFactory : NSObject, NSURLSessionDelegate{
     func getPickyNewCidsSession() -> NSURLSession{
         let sessionConfig = NSURLSessionConfiguration.ephemeralSessionConfiguration()
         sessionConfig.requestCachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData
-        sessionConfig.timeoutIntervalForResource=8
+        sessionConfig.timeoutIntervalForResource=10
         return NSURLSession(configuration: sessionConfig, delegate: self, delegateQueue: queue)
     }
     
@@ -72,22 +70,22 @@ class CidsSessionFactory : NSObject, NSURLSessionDelegate{
             }
         } else if authMethod==NSURLAuthenticationMethodClientCertificate {
             println("provide client cert")
-            
-            
-            let urlCredential:NSURLCredential = NSURLCredential(
-                identity: identityAndTrustForCSC!.identityRef,
-                certificates: identityAndTrustForCSC!.certArray as [AnyObject],
-                persistence: NSURLCredentialPersistence.ForSession);
-            
-            completionHandler(NSURLSessionAuthChallengeDisposition.UseCredential, urlCredential);
+            if let clientCert=identityAndTrustForCSC {
+                
+                let urlCredential:NSURLCredential = NSURLCredential(
+                    identity: clientCert.identityRef,
+                    certificates: identityAndTrustForCSC!.certArray as [AnyObject],
+                    persistence: NSURLCredentialPersistence.ForSession);
+                
+                completionHandler(NSURLSessionAuthChallengeDisposition.UseCredential, urlCredential);
+            }
         }
     }
     
     func URLSession(session: NSURLSession, didBecomeInvalidWithError error: NSError?) {
-        println("dhgsafdsgdsahgf")
     }
     
-    private func extractIdentity(certData:NSData, certPassword:String) -> IdentityAndTrust {
+    private func extractIdentity(certData:NSData, certPassword:String) -> IdentityAndTrust? {
         
         var identityAndTrust:IdentityAndTrust!
         var securityError:OSStatus = errSecSuccess

@@ -332,6 +332,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         return nil;
     }
+
+   
+
+    
     func getGlyphedLabel(glyphName: String) -> UILabel? {
         if let glyph=WebHostingGlyps.glyphs[glyphName] {
             var label=UILabel(frame: CGRectMake(0, 0, 25,25))

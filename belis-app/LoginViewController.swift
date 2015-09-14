@@ -19,12 +19,10 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         var storedLogin: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("login")
         if let storedUserString=storedLogin as? String {
             txtLogin.text=storedUserString
         }
-
         // Do any additional setup after loading the view, typically from a nib.
     }
     
@@ -39,7 +37,7 @@ class LoginViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-   
+    
     
     @IBAction func loginButtonTabbed(sender: AnyObject) {
         NSUserDefaults.standardUserDefaults().setObject(txtLogin.text, forKey: "login")
@@ -77,12 +75,12 @@ class LoginViewController: UIViewController {
                 
             }
         }
-        CidsConnector.sharedInstance().login(txtLogin.text, password: "wmbelis",handler: loginhandler)
+        CidsConnector.sharedInstance().login(txtLogin.text, password: txtPass.text,handler: loginhandler)
         
     }
     
     @IBAction func moreButtonTabbed(sender: AnyObject) {
-
+        
         
     }
     

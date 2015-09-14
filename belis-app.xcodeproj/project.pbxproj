@@ -14,10 +14,12 @@
 		2D0B7F6A1AB3454100E33A6C /* DoubleTitledInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D0B7F681AB3454100E33A6C /* DoubleTitledInfoCell.xib */; };
 		2D0B7F6D1AB3456D00E33A6C /* MemoTitledInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0B7F6B1AB3456D00E33A6C /* MemoTitledInfoCell.swift */; };
 		2D0B7F6E1AB3456D00E33A6C /* MemoTitledInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D0B7F6C1AB3456D00E33A6C /* MemoTitledInfoCell.xib */; };
+		2D0E2C551B9EF05C0092FA9B /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D0E2C541B9EF05C0092FA9B /* Icon-76@2x.png */; };
+		2D0E2C571B9EF0620092FA9B /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D0E2C561B9EF0620092FA9B /* Icon-76@2x.png */; };
 		2D1ED1851B8344BD0004AAFA /* CidsOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1ED1841B8344BD0004AAFA /* CidsOperations.swift */; };
 		2D1ED1871B8344C80004AAFA /* CidsSessionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1ED1861B8344C80004AAFA /* CidsSessionFactory.swift */; };
-		2D1ED18A1B8349CB0004AAFA /* client.cert.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 2D1ED1891B8349B70004AAFA /* client.cert.p12 */; };
-		2D1ED18B1B8349CF0004AAFA /* server.cert.der in Resources */ = {isa = PBXBuildFile; fileRef = 2D1ED1881B8349AD0004AAFA /* server.cert.der */; };
+		2D1ED18A1B8349CB0004AAFA /* client.cert.dev.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 2D1ED1891B8349B70004AAFA /* client.cert.dev.p12 */; };
+		2D1ED18B1B8349CF0004AAFA /* server.cert.dev.der in Resources */ = {isa = PBXBuildFile; fileRef = 2D1ED1881B8349AD0004AAFA /* server.cert.dev.der */; };
 		2D2934271A84D4BF0034181F /* handle.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D2934261A84D4BF0034181F /* handle.png */; };
 		2D3DC3561A8BA86E0035575A /* UIProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3DC3551A8BA86E0035575A /* UIProtocols.swift */; };
 		2D3DC35A1A94E2C60035575A /* DMSUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3DC3591A94E2C60035575A /* DMSUrl.swift */; };
@@ -74,6 +76,7 @@
 		2D939DEF1A690A6300FB2AFB /* CidsUtilityClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D939DEE1A690A6300FB2AFB /* CidsUtilityClasses.swift */; };
 		2D9952231AA5FFC600B5E02E /* DokumentPreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9952211AA5FFC600B5E02E /* DokumentPreviewVC.swift */; };
 		2D9952241AA5FFC600B5E02E /* DokumentPreviewVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D9952221AA5FFC600B5E02E /* DokumentPreviewVC.xib */; };
+		2D9CAD611B94A05A00A3EB07 /* CidsConnectionSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9CAD601B94A05A00A3EB07 /* CidsConnectionSettingsViewController.swift */; };
 		2D9D3AD41A9E239A0049F46F /* AF+Image+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9D3AD31A9E239A0049F46F /* AF+Image+Extension.swift */; };
 		2D9D3AD61A9E23DD0049F46F /* AF+ImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9D3AD51A9E23DD0049F46F /* AF+ImageView+Extension.swift */; };
 		2D9D3B1A1A9F777D0049F46F /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D9D3B191A9F777D0049F46F /* QuickLook.framework */; };
@@ -109,10 +112,12 @@
 		2D0B7F681AB3454100E33A6C /* DoubleTitledInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DoubleTitledInfoCell.xib; path = "table-cell-guis/DoubleTitledInfoCell.xib"; sourceTree = "<group>"; };
 		2D0B7F6B1AB3456D00E33A6C /* MemoTitledInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MemoTitledInfoCell.swift; path = "table-cell-guis/MemoTitledInfoCell.swift"; sourceTree = "<group>"; };
 		2D0B7F6C1AB3456D00E33A6C /* MemoTitledInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MemoTitledInfoCell.xib; path = "table-cell-guis/MemoTitledInfoCell.xib"; sourceTree = "<group>"; };
+		2D0E2C541B9EF05C0092FA9B /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-76@2x.png"; sourceTree = "<group>"; };
+		2D0E2C561B9EF0620092FA9B /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-76@2x.png"; sourceTree = "<group>"; };
 		2D1ED1841B8344BD0004AAFA /* CidsOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsOperations.swift; sourceTree = "<group>"; };
 		2D1ED1861B8344C80004AAFA /* CidsSessionFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsSessionFactory.swift; sourceTree = "<group>"; };
-		2D1ED1881B8349AD0004AAFA /* server.cert.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.cert.der; sourceTree = "<group>"; };
-		2D1ED1891B8349B70004AAFA /* client.cert.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = client.cert.p12; sourceTree = "<group>"; };
+		2D1ED1881B8349AD0004AAFA /* server.cert.dev.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.cert.dev.der; sourceTree = "<group>"; };
+		2D1ED1891B8349B70004AAFA /* client.cert.dev.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = client.cert.dev.p12; sourceTree = "<group>"; };
 		2D2934261A84D4BF0034181F /* handle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = handle.png; sourceTree = "<group>"; };
 		2D3DC3551A8BA86E0035575A /* UIProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIProtocols.swift; sourceTree = "<group>"; };
 		2D3DC3591A94E2C60035575A /* DMSUrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DMSUrl.swift; sourceTree = "<group>"; };
@@ -185,6 +190,7 @@
 		2D939DEE1A690A6300FB2AFB /* CidsUtilityClasses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsUtilityClasses.swift; sourceTree = "<group>"; };
 		2D9952211AA5FFC600B5E02E /* DokumentPreviewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DokumentPreviewVC.swift; sourceTree = "<group>"; };
 		2D9952221AA5FFC600B5E02E /* DokumentPreviewVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DokumentPreviewVC.xib; sourceTree = "<group>"; };
+		2D9CAD601B94A05A00A3EB07 /* CidsConnectionSettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsConnectionSettingsViewController.swift; sourceTree = "<group>"; };
 		2D9D3AD31A9E239A0049F46F /* AF+Image+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AF+Image+Extension.swift"; sourceTree = "<group>"; };
 		2D9D3AD51A9E23DD0049F46F /* AF+ImageView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AF+ImageView+Extension.swift"; sourceTree = "<group>"; };
 		2D9D3B191A9F777D0049F46F /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
@@ -240,6 +246,8 @@
 		2D5FB2C01A67C7320041020C = {
 			isa = PBXGroup;
 			children = (
+				2D0E2C561B9EF0620092FA9B /* Icon-76@2x.png */,
+				2D0E2C541B9EF05C0092FA9B /* Icon-76@2x.png */,
 				2D53983D1B945C63001C865F /* Icon-Small.png */,
 				2D53983B1B945C58001C865F /* Icon-40.png */,
 				2D5398391B945C4C001C865F /* Icon-60@3x.png */,
@@ -284,8 +292,8 @@
 		2D5FB2CC1A67C7320041020C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				2D1ED1891B8349B70004AAFA /* client.cert.p12 */,
-				2D1ED1881B8349AD0004AAFA /* server.cert.der */,
+				2D1ED1891B8349B70004AAFA /* client.cert.dev.p12 */,
+				2D1ED1881B8349AD0004AAFA /* server.cert.dev.der */,
 				2D65AABB1AB09B8E00621A0A /* cismetSignet2k.png */,
 				2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */,
 				2D2934261A84D4BF0034181F /* handle.png */,
@@ -414,6 +422,7 @@
 				2D9D3AC41A9E18E90049F46F /* details */,
 				2D5FB3081A67CC340041020C /* TableViewCell.swift */,
 				2D5FB3071A67CC340041020C /* SelectionPopoverViewController.swift */,
+				2D9CAD601B94A05A00A3EB07 /* CidsConnectionSettingsViewController.swift */,
 				2D5FB3061A67CC340041020C /* MainViewController.swift */,
 				2D5FB3041A67CC340041020C /* LoginViewController.swift */,
 			);
@@ -507,8 +516,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D1ED18B1B8349CF0004AAFA /* server.cert.der in Resources */,
-				2D1ED18A1B8349CB0004AAFA /* client.cert.p12 in Resources */,
+				2D1ED18B1B8349CF0004AAFA /* server.cert.dev.der in Resources */,
+				2D1ED18A1B8349CB0004AAFA /* client.cert.dev.p12 in Resources */,
 				2D5FB2F41A67CAA60041020C /* wupp.gpx in Resources */,
 				2D0B7F661AB3451700E33A6C /* SingleTitledInfoCell.xib in Resources */,
 				2D65AABC1AB09B8E00621A0A /* cismetSignet2k.png in Resources */,
@@ -523,8 +532,10 @@
 				2D5FB2FC1A67CB120041020C /* ml.png in Resources */,
 				2D5FB2F91A67CB120041020C /* belisBack.png in Resources */,
 				2DB6E8BC1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */,
+				2D0E2C571B9EF0620092FA9B /* Icon-76@2x.png in Resources */,
 				2D5FB30D1A67CC340041020C /* Main.storyboard in Resources */,
 				2DE8B1A41B25C3EA00FCEBA7 /* testbild.png in Resources */,
+				2D0E2C551B9EF05C0092FA9B /* Icon-76@2x.png in Resources */,
 				2D5FB30B1A67CC340041020C /* LaunchScreen.xib in Resources */,
 				2D5FB2FB1A67CB120041020C /* mauerlasche.png in Resources */,
 				2DF5EBCC1AFB6F9100062669 /* mast.png in Resources */,
@@ -582,6 +593,7 @@
 				2D5FB3401A67CCEB0041020C /* GeoBaseEntity.swift in Sources */,
 				2D3DC35F1A94EBA50035575A /* Timestamp.swift in Sources */,
 				2D5FB3421A67CCEB0041020C /* Leuchte.swift in Sources */,
+				2D9CAD611B94A05A00A3EB07 /* CidsConnectionSettingsViewController.swift in Sources */,
 				2D5FB32F1A67CCA60041020C /* WKTPolygonM.m in Sources */,
 				2D5FB3291A67CCA60041020C /* WKTLine.m in Sources */,
 				2DB10EE91B299CA200B78852 /* FotoActions.swift in Sources */,

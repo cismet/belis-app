@@ -14,10 +14,95 @@ public class CidsConnector {
     
     static var instance: CidsConnector!
     
-    //let baseUrl="http://belis-rest.cismet.de:80"
-    let baseUrl="https://192.168.178.38:8890"
-    //let baseUrl="https://192.168.178.47:8890"
-    //let baseUrl="https://leo:8890"
+    #if arch(i386) || arch(x86_64)
+    let simulator=true
+    #else
+    let simulator=false
+    #endif
+    
+    var tlsEnabled=false {
+        didSet {
+            NSUserDefaults.standardUserDefaults().setObject(tlsEnabled, forKey: "tlsEnabled")
+        }
+    }
+    var pureBaseUrl="192.168.178.38" {
+        didSet {
+            NSUserDefaults.standardUserDefaults().setObject(pureBaseUrl, forKey: "cidsPureBaseURL")
+        }
+    }
+    var baseUrlport="8890" {
+        didSet {
+            NSUserDefaults.standardUserDefaults().setObject(baseUrlport, forKey: "cidsBaseURLPort")
+        }
+    }
+    
+    var baseUrl:String {
+        get {
+            var prot="http://"
+            if tlsEnabled {
+                prot="https://"
+            }
+            return "\(prot)\(pureBaseUrl):\(baseUrlport)"
+        }
+
+    }
+    
+    var docFolder: String {
+        get {
+            return NSSearchPathForDirectoriesInDomains(.DocumentDirectory,.UserDomainMask,true)[0] as! String
+        }
+    }
+    
+    var serverCert: String?{
+        didSet {
+            NSUserDefaults.standardUserDefaults().setObject(serverCert, forKey: "serverCert")
+        }
+    }
+    var serverCertPath: String {
+        get {
+            if !simulator {
+                if let cert=serverCert {
+                    return docFolder+cert
+                }
+                else {
+                    return ""
+                }
+            }
+            else {
+                return NSBundle.mainBundle().pathForResource("server.cert.dev", ofType:"der")!
+            }
+        }
+    }
+    
+    var clientCert: String? {
+        didSet {
+            NSUserDefaults.standardUserDefaults().setObject(clientCert, forKey: "clientCert")
+        }
+    }
+    
+    var clientCertPath: String {
+        get {
+            if !simulator {
+                if let cert=clientCert {
+                    return docFolder+cert
+                }
+                else {
+                    return ""
+                }
+            }
+            else {
+                return NSBundle.mainBundle().pathForResource("client.cert.dev", ofType: "p12")!
+            }
+        }
+    }
+    
+    var clientCertContainerPass: String = ""{
+        didSet {
+            NSUserDefaults.standardUserDefaults().setObject(clientCertContainerPass, forKey: "clientCertContainerPass")
+        }
+    }
+    
+    
     // SHARED INSTANCE
     class func sharedInstance() -> CidsConnector {
         self.instance = (self.instance ?? CidsConnector())
@@ -32,11 +117,42 @@ public class CidsConnector {
     
     let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
     
-    var certData:NSData!
     
     init(){
         
+        let storedTLSEnabled: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("tlsEnabled")
+        if let storedTLSEnabledAsBool=storedTLSEnabled as? Bool {
+            tlsEnabled=storedTLSEnabledAsBool
+        }
+        let storedPureUrlBase: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("cidsPureBaseURL")
+        if let storedPureUrlBaseAsString=storedPureUrlBase as? String {
+            pureBaseUrl=storedPureUrlBaseAsString
+        }
+        
+        let storedPort: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("cidsBaseURLPort")
+        if let storedPortAsString=storedPort as? String {
+            baseUrlport=storedPortAsString
+        }
+        
+        let storedServerCertPath: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("serverCert")
+        if let storedServerCertPathString=storedServerCertPath as? String {
+            serverCert=storedServerCertPathString
+        }
+                let storedClientCertPath: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("clientCert")
+        if let storedClientCertPathString=storedClientCertPath as? String {
+            clientCert=storedClientCertPathString
+        }
+        let storedClientCertContainerPass: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("clientCertContainerPass")
+        if let storedClientCertContainerPassString=storedClientCertContainerPass as? String {
+            clientCertContainerPass=storedClientCertContainerPassString
+        }
+        else if simulator{
+            clientCertContainerPass="123456"
+        }
     }
+    
+    
+    
     
     var start=CidsConnector.currentTimeMillis();
     var loggedIn=false
@@ -211,8 +327,8 @@ public class CidsConnector {
         }
         
         up.enqueue()
-     }
-      
+    }
+    
     
     class func currentTimeMillis() -> Int64{
         var nowDouble = NSDate().timeIntervalSince1970
