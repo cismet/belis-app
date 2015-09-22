@@ -10,7 +10,7 @@ import Foundation
 import ObjectMapper
 
 
-class DMSUrl : BaseEntity, Mappable{
+class DMSUrl : BaseEntity{
     var typ: String?
     var url: Url?
     var description: String?
@@ -47,7 +47,7 @@ class DMSUrl : BaseEntity, Mappable{
     }
 }
 
-class Url : BaseEntity, Mappable{
+class Url : BaseEntity{
     init(webdavObjectName: String){
         super.init()
         objectName=webdavObjectName
@@ -68,7 +68,7 @@ class Url : BaseEntity, Mappable{
     }
 }
 
-class UrlBase : BaseEntity, Mappable{
+class UrlBase : BaseEntity{
     var protPrefix: String?
     var server: String?
     var path: String?

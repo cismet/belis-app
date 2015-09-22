@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Schaltstelle : GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider,ActionProvider, DocumentContainer{
+class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider,ActionProvider, DocumentContainer{
     
     var erstellungsjahr: NSDate?
     var laufendeNummer: Int?
@@ -238,7 +238,7 @@ class Schaltstelle : GeoBaseEntity , Mappable, CellInformationProviderProtocol,C
 }
 
 
-class Schaltstellenbauart: BaseEntity, Mappable{
+class Schaltstellenbauart: BaseEntity {
     var bezeichnung: String?
     override func mapping(map: Map) {
         super.id <- map["id"]

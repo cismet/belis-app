@@ -22,7 +22,7 @@ class CidsRequestOperation: NSOperation {
         self.qu=NSOperationQueue.mainQueue()
         let loginString = NSString(format: "%@:%@", user, pass)
         let loginData: NSData = loginString.dataUsingEncoding(NSUTF8StringEncoding)!
-        let base64LoginString = loginData.base64EncodedStringWithOptions(nil)
+        let base64LoginString = loginData.base64EncodedStringWithOptions([])
         authHeader="Basic \(base64LoginString)"
     }
     override var executing : Bool {
@@ -62,12 +62,12 @@ class CidsRequestOperation: NSOperation {
     func stringFromQueryParameters(queryParameters : Dictionary<String, String>) -> String {
         var parts: [String] = []
         for (name, value) in queryParameters {
-            var part = NSString(format: "%@=%@",
+            let part = NSString(format: "%@=%@",
                 name.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!,
                 value.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!)
             parts.append(part as String)
         }
-        return "&".join(parts)
+        return parts.joinWithSeparator("&")
     }
     
     /**
@@ -77,7 +77,7 @@ class CidsRequestOperation: NSOperation {
     @return A new NSURL.
     */
     func NSURLByAppendingQueryParameters(URL : NSURL!, queryParameters : Dictionary<String, String>) -> NSURL {
-        let URLString : NSString = NSString(format: "%@?%@", URL.absoluteString!, self.stringFromQueryParameters(queryParameters))
+        let URLString : NSString = NSString(format: "%@?%@", URL.absoluteString, self.stringFromQueryParameters(queryParameters))
         return NSURL(string: URLString as String)!
     }
     
@@ -119,9 +119,9 @@ class GetEntityOperation: CidsRequestOperation {
             return
         }
         else  {
-            var nsurl = NSURL(string: url)
+            let nsurl = NSURL(string: url)
             
-            var request = NSMutableURLRequest(URL: nsurl!)
+            let request = NSMutableURLRequest(URL: nsurl!)
             request.HTTPMethod = "GET"
             
             request.addValue(authHeader, forHTTPHeaderField: "Authorization") //correct passwd
@@ -129,7 +129,7 @@ class GetEntityOperation: CidsRequestOperation {
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             let session=sessionFactory.getNewCidsSession()
             /* Start a new Task */
-            task = session.dataTaskWithRequest(request, completionHandler: { (data : NSData!, response : NSURLResponse!, error : NSError!) -> Void in
+            task = session.dataTaskWithRequest(request, completionHandler: { (data : NSData?, response : NSURLResponse?, error : NSError?) -> Void in
                 if let handler=self.completionHandler {
                     handler(operation: self, data: data, response: response, error: error, queue: self.qu)
                 }
@@ -137,11 +137,11 @@ class GetEntityOperation: CidsRequestOperation {
                     if (error == nil) {
                         // Success
                         let statusCode = (response as! NSHTTPURLResponse).statusCode
-                        println("URL Session Task Succeeded: HTTP \(statusCode)")
+                        print("URL Session Task Succeeded: HTTP \(statusCode)")
                     }
                     else {
                         // Failure
-                        println("URL Session Task Failed: %@", error.localizedDescription);
+                        print("URL Session Task Failed: %@", error!.localizedDescription);
                     }
                 }
                 
@@ -169,8 +169,8 @@ class LoginOperation: CidsRequestOperation {
             return
         }
         else  {
-            var nsurl = NSURL(string: url)
-            var request = NSMutableURLRequest(URL: nsurl!)
+            let nsurl = NSURL(string: url)
+            let request = NSMutableURLRequest(URL: nsurl!)
             request.HTTPMethod = "GET"
             
             request.addValue(authHeader, forHTTPHeaderField: "Authorization") //correct passwd
@@ -178,13 +178,13 @@ class LoginOperation: CidsRequestOperation {
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             let session=sessionFactory.getPickyNewCidsSession()
             /* Start a new Task */
-            task = session.dataTaskWithRequest(request, completionHandler: { (data : NSData!, response : NSURLResponse!, error : NSError!) -> Void in
+            task = session.dataTaskWithRequest(request, completionHandler: { (data : NSData?, response : NSURLResponse?, error : NSError?) -> Void in
                 if let err=error {
                     self.completionHandler!(loggedIn: false,error: err)
                 }
                 else {
                     let statusCode = (response as! NSHTTPURLResponse).statusCode
-                    println("URL Session Task Succeeded: HTTP \(statusCode) for \(self.url)")
+                    print("URL Session Task Succeeded: HTTP \(statusCode) for \(self.url)")
                     
                     if statusCode==200 {
                         self.completionHandler!(loggedIn: true,error: nil)
@@ -217,7 +217,7 @@ class SearchOperation: CidsRequestOperation {
     
     override func main() {
         let session=sessionFactory.getNewCidsSession()
-        println(url)
+        print(url)
         var URL = NSURL(string: url)
         let URLParams = [
             "role": "all",
@@ -232,10 +232,10 @@ class SearchOperation: CidsRequestOperation {
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
         
         let y = Mapper().toJSON(parameters!)
-        request.HTTPBody=NSJSONSerialization.dataWithJSONObject(y, options: NSJSONWritingOptions.allZeros, error: nil)
+        request.HTTPBody=try? NSJSONSerialization.dataWithJSONObject(y, options: NSJSONWritingOptions())
         
         /* Start a new Task */
-        let task = session.dataTaskWithRequest(request, completionHandler: { (data : NSData!, response : NSURLResponse!, error : NSError!) -> Void in
+        let task = session.dataTaskWithRequest(request, completionHandler: { (data : NSData?, response : NSURLResponse?, error : NSError?) -> Void in
             if let handler=self.completionHandler {
                 handler(data: data, response: response, error: error)
             }
@@ -244,11 +244,11 @@ class SearchOperation: CidsRequestOperation {
                 if (error == nil) {
                     // Success
                     let statusCode = (response as! NSHTTPURLResponse).statusCode
-                    println("URL Session Task Succeeded: HTTP \(statusCode)")
+                    print("URL Session Task Succeeded: HTTP \(statusCode)")
                 }
                 else {
                     // Failure
-                    println("URL Session Task Failed: %@", error.localizedDescription);
+                    print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
             }
             self.executing=false
@@ -295,7 +295,7 @@ class ServerActionOperation: CidsRequestOperation {
         
         
         request.HTTPBody = bodyString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-        let task = session.dataTaskWithRequest(request, completionHandler: { (data : NSData!, response : NSURLResponse!, error : NSError!) -> Void in
+        let task = session.dataTaskWithRequest(request, completionHandler: { (data : NSData?, response : NSURLResponse?, error : NSError?) -> Void in
             if let handler=self.completionHandler {
                 handler(data: data, response: response, error: error)
             }
@@ -304,11 +304,11 @@ class ServerActionOperation: CidsRequestOperation {
                 if (error == nil) {
                     // Success
                     let statusCode = (response as! NSHTTPURLResponse).statusCode
-                    println("URL Session Task Succeeded: HTTP \(statusCode)")
+                    print("URL Session Task Succeeded: HTTP \(statusCode)")
                 }
                 else {
                     // Failure
-                    println("URL Session Task Failed: %@", error.localizedDescription);
+                    print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
             }
             
@@ -332,7 +332,7 @@ class WebDavUploadImageOperation: CidsRequestOperation {
     }
     override func main() {
         let session=sessionFactory.getNewWebDavSession()
-        var URL = NSURL(string: url)
+        let URL = NSURL(string: url)
         
         let request = NSMutableURLRequest(URL: URL!)
         request.HTTPMethod = "PUT"
@@ -350,11 +350,11 @@ class WebDavUploadImageOperation: CidsRequestOperation {
                 if (error == nil) {
                     // Success
                     let statusCode = (response as! NSHTTPURLResponse).statusCode
-                    println("URL Session Task Succeeded: HTTP \(statusCode)")
+                    print("URL Session Task Succeeded: HTTP \(statusCode)")
                 }
                 else {
                     // Failure
-                    println("URL Session Task Failed: %@", error.localizedDescription);
+                    print("URL Session Task Failed: %@", error!.localizedDescription);
                 }
             }
             self.executing=false

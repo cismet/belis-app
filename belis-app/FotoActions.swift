@@ -43,7 +43,7 @@ class TakeFotoAction : BaseEntityAction {
                 detailVC.presentViewController(picker, animated: true, completion: { () -> Void in  })
             }else{
                 //no camera available
-                var alert = UIAlertController(title: "Error", message: "There is no camera available", preferredStyle: .Alert)
+                let alert = UIAlertController(title: "Error", message: "There is no camera available", preferredStyle: .Alert)
                 alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: {(alertAction)in
                     alert.dismissViewControllerAnimated(true, completion: nil)
                 }))
@@ -63,7 +63,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
     init (yourself: BaseEntity, detailVC: DetailVC){
         selfEntity=yourself
         self.detailVC=detailVC
-        if let container=selfEntity as? DocumentContainer {
+        if let _ = selfEntity as? DocumentContainer {
             
         }
         else  {
@@ -74,7 +74,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
     
     
     //UIImagePickerControllerDelegate
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         // var mediaType:String = info[UIImagePickerControllerEditedImage] as! String
         
         var actInd : UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(0,0, 150, 150)) as UIActivityIndicatorView
@@ -87,7 +87,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
         
         func configurationTextField(textField: UITextField!)
         {
-            println("generating the TextField")
+            print("generating the TextField")
             textField.placeholder = "Name hier eingeben"
             tField = textField
         }
@@ -110,7 +110,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             
             
             let ctm=Int64(NSDate().timeIntervalSince1970*1000)
-            let pictureName=tField.text
+            let pictureName=tField.text!
             
             let objectId=self.selfEntity.id
             let objectTyp=self.selfEntity.getType().tableName().lowercaseString
@@ -146,30 +146,32 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             self.library.saveImage(imageToSave, toAlbum: "BelIS-Dokumente",metadata : newMetadata, withCallback: nil)
             
             func handleProgress(progress:Float) {
-                println(progress)
+                print(progress)
             }
             
             func handleCompletion(data : NSData!, response : NSURLResponse!, error : NSError!) {
                 if let err = error {
-                    println("error: \(err.localizedDescription)")
+                    print("error: \(err.localizedDescription)")
                 }
                 if let resp = data  {
-                    println(NSString(data: resp, encoding: NSUTF8StringEncoding))
+                    print(NSString(data: resp, encoding: NSUTF8StringEncoding))
                     let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"\(objectId)",
                         "OBJEKT_TYP":objectTyp,
                         "DOKUMENT_URL":"http://board.cismet.de/belis/\(fileName)\n\(pictureName)"])
                     CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {(success:Bool) -> () in
-                        
-                        actInd.stopAnimating()
-                        actInd.removeFromSuperview()
-                        picker.dismissViewControllerAnimated(true, completion: nil)
-                        if success {
-                            println("Everything is going to be 200-OK")
-                            (self.selfEntity as! DocumentContainer).addDocument(DMSUrl(name:pictureName, fileName:fileName))
-                            self.detailVC.refresh()
-                        }
-                        else {
-                            
+                        assert(!NSThread.isMainThread() )
+                        dispatch_async(dispatch_get_main_queue()) {
+                            actInd.stopAnimating()
+                            actInd.removeFromSuperview()
+                            picker.dismissViewControllerAnimated(true, completion: nil)
+                            if success {
+                                print("Everything is going to be 200-OK")
+                                (self.selfEntity as! DocumentContainer).addDocument(DMSUrl(name:pictureName, fileName:fileName))
+                                self.detailVC.refresh()
+                            }
+                            else {
+                                
+                            }
                         }
                     })
                 }
@@ -182,7 +184,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             
         }))
         picker.presentViewController(alert, animated: true, completion: {
-            println("completion block")
+            print("completion block")
         })
         
         
@@ -192,7 +194,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        println("FotoPickerCallBacker CANCEL")
+        print("FotoPickerCallBacker CANCEL")
         picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
         
     }

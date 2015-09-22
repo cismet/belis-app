@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
+class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
     var erstellungsjahr: Int?
     var laufendeNummer: Int?
     var material: Mauerlaschenmaterial?
@@ -168,7 +168,7 @@ class Mauerlasche : GeoBaseEntity, Mappable,CellInformationProviderProtocol, Cel
     
 }
 
-class Mauerlaschenmaterial : BaseEntity, Mappable{
+class Mauerlaschenmaterial : BaseEntity{
     var bezeichnung: String?
     
     override func mapping(map: Map) {

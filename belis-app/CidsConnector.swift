@@ -49,7 +49,7 @@ public class CidsConnector {
     
     var docFolder: String {
         get {
-            return NSSearchPathForDirectoriesInDomains(.DocumentDirectory,.UserDomainMask,true)[0] as! String
+            return NSSearchPathForDirectoriesInDomains(.DocumentDirectory,.UserDomainMask,true)[0] 
         }
     }
     
@@ -165,17 +165,30 @@ public class CidsConnector {
             self.loggedIn=loggedIn
             
             if loggedIn {
-                println("logged in")
+                print("logged in")
             }
             else {
-                println("Error\(error)")
+                print("Error\(error)")
             }
             
             handler(loggedIn)
         }
-        var loginOp=LoginOperation(baseUrl: baseUrl, domain: domain,user: login, pass: password,completionHandler: cH)
+        let loginOp=LoginOperation(baseUrl: baseUrl, domain: domain,user: login, pass: password,completionHandler: cH)
         loginOp.enqueue()
     }
+    
+    
+    
+    
+    func getJson(data: NSData) -> [String: AnyObject]?{
+        do {
+            return try NSJSONSerialization.JSONObjectWithData(data, options: []) as? [String: AnyObject]
+        }
+        catch {
+            return nil
+        }
+    }
+    
     
     func search(ewktMapContent: String,leuchtenEnabled: Bool, mastenEnabled: Bool,mauerlaschenEnabled: Bool, leitungenEnabled: Bool, schaltstellenEnabled: Bool, handler: () -> ()) {
         assert(loggedIn)
@@ -192,109 +205,111 @@ public class CidsConnector {
             if (error == nil) {
                 // Success
                 let statusCode = (response as! NSHTTPURLResponse).statusCode
-                println("URL Session Task Succeeded: HTTP \(statusCode)")
+                print("URL Session Task Succeeded: HTTP \(statusCode)")
                 var err: NSError?
                 
-                if let checkeddata: [String : AnyObject]=NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &err) as? [String: AnyObject] {
+                if let checkeddata: [String : AnyObject] = getJson(data) {
                     var json =  checkeddata["$collection"] as! [[String : AnyObject]];
                     var nodes = Mapper<CidsObjectNode>().mapArray(json)
-                    println(nodes.count);
+                    print(nodes.count);
                     self.queue.cancelAllOperations()
-                    if (nodes.count>0){
-                        self.searchResults=[Entity: [GeoBaseEntity]]()
-                    }
+                    self.searchResults=[Entity: [GeoBaseEntity]]()
                     self.start=CidsConnector.currentTimeMillis();
                     self.queue.maxConcurrentOperationCount = 10
-                    
-                    for node in nodes {
-                        println("\(node.classId!) : \(node.objectId!)")
-                        let rightEntity=Entity.byClassId(node.classId!)!
-                        let classKey=rightEntity.tableName()
-                        
-                        
-                        func completionHandler(operation:GetEntityOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue) -> (){
-                            if (error == nil) {
-                                // Success
-                                let statusCode = (response as! NSHTTPURLResponse).statusCode
-                                println("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
-                                var err: NSError?
-                                if let json: [String : AnyObject]=NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &err) as? [String: AnyObject] {
-                                    var gbEntity:GeoBaseEntity
+                    if nodes.count==0 {
+                        handler()
+                    }
+                    else {
+                        for node in nodes {
+                            print("\(node.classId!) : \(node.objectId!)")
+                            let rightEntity=Entity.byClassId(node.classId!)!
+                            let classKey=rightEntity.tableName()
+                            
+                            
+                            func completionHandler(operation:GetEntityOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue) -> (){
+                                if (error == nil) {
+                                    // Success
+                                    let statusCode = (response as! NSHTTPURLResponse).statusCode
+                                    print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                                     
-                                    switch (rightEntity){
-                                    case .LEUCHTEN:
-                                        gbEntity = Mapper<Leuchte>().map(json)!
-                                    case .MASTEN:
-                                        gbEntity = Mapper<Standort>().map(json)!
-                                    case .MAUERLASCHEN:
-                                        gbEntity = Mapper<Mauerlasche>().map(json)!
-                                    case .LEITUNGEN:
-                                        gbEntity = Mapper<Leitung>().map(json)!
-                                    case .SCHALTSTELLEN:
-                                        gbEntity = Mapper<Schaltstelle>().map(json)!
-                                    default:
-                                        println("could not find object from entity \(operation.entityName)")
-                                    }
-                                    
-                                    if let array=self.searchResults[rightEntity]{
-                                        self.searchResults[rightEntity]!.append(gbEntity)
-                                    }
-                                    else {
-                                        self.searchResults.updateValue([gbEntity], forKey: rightEntity)
-                                    }
-                                    
-                                    //println("+")
-                                    //println("\(leuchte.id)==>\(leuchte.leuchtenNummer):\(leuchte.typ)@\(leuchte.standort?.strasse)->\(leuchte.wgs84WKT)");
-                                    
-                                    if self.queue.operationCount==1 {
-                                        var duration=(CidsConnector.currentTimeMillis() - self.start)
-                                        handler();
-                                        println("loaded \(duration)");
+                                    if let json: [String : AnyObject] = getJson(data) {
+                                        var gbEntity:GeoBaseEntity
+                                        
+                                        switch (rightEntity){
+                                        case .LEUCHTEN:
+                                            gbEntity = Mapper<Leuchte>().map(json)!
+                                        case .MASTEN:
+                                            gbEntity = Mapper<Standort>().map(json)!
+                                        case .MAUERLASCHEN:
+                                            gbEntity = Mapper<Mauerlasche>().map(json)!
+                                        case .LEITUNGEN:
+                                            gbEntity = Mapper<Leitung>().map(json)!
+                                        case .SCHALTSTELLEN:
+                                            gbEntity = Mapper<Schaltstelle>().map(json)!
+                                        default:
+                                            print("could not find object from entity \(operation.entityName)")
+                                        }
+                                        
+                                        if let _=self.searchResults[rightEntity]{
+                                            self.searchResults[rightEntity]!.append(gbEntity)
+                                        }
+                                        else {
+                                            self.searchResults.updateValue([gbEntity], forKey: rightEntity)
+                                        }
+                                        
+                                        //println("+")
+                                        //println("\(leuchte.id)==>\(leuchte.leuchtenNummer):\(leuchte.typ)@\(leuchte.standort?.strasse)->\(leuchte.wgs84WKT)");
+                                        
+                                        if self.queue.operationCount==1 {
+                                            let duration = (CidsConnector.currentTimeMillis() - self.start)
+                                            handler();
+                                            print("loaded \(duration)");
+                                            
+                                        }
+                                        
+                                    }else {
+                                        print("no json data for \(operation.url)")
+                                        //self.searchResults[0].append(Leuchte())
                                         
                                     }
-                                    
                                 }else {
-                                    println("no json data for \(operation.url)")
-                                    //self.searchResults[0].append(Leuchte())
-                                    
+                                    // Failure
+                                    print("URL Session Task Failed: %@", error.localizedDescription);
                                 }
-                            }else {
-                                // Failure
-                                println("URL Session Task Failed: %@", error.localizedDescription);
                             }
+                            let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: queue, completionHandler: completionHandler)
+                            
+                            op.enqueue()
                         }
-                        var op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: queue, completionHandler: completionHandler)
-                        
-                        op.enqueue()
                     }
                 }
                 else {
-                    println("Problem in Request")
+                    print("Problem in Request")
                 }
                 
             }
             else {
                 // Failure
-                println("URL Session Task Failed: %@", error.localizedDescription);
+                print("URL Session Task Failed: %@", error.localizedDescription);
             }
             
         }
         
-        var sop=SearchOperation(baseUrl: self.baseUrl, user: self.login, pass: self.password, parameters: qp, completionHandler: mySearchCompletionHandler)
+        let sop=SearchOperation(baseUrl: self.baseUrl, user: self.login, pass: self.password, parameters: qp, completionHandler: mySearchCompletionHandler)
         
         sop.enqueue()
         
     }
     
     
-    func executeSimpleServerAction(#actionName: String!, params: ActionParameterContainer, handler: (success:Bool) -> ()) {
+    func executeSimpleServerAction(actionName actionName: String!, params: ActionParameterContainer, handler: (success:Bool) -> ()) {
         assert(loggedIn)
         
         func myActionCompletionHandler(data : NSData!, response : NSURLResponse!, error : NSError!) -> Void {
             if (error == nil) {
                 // Success
                 let statusCode = (response as! NSHTTPURLResponse).statusCode
-                println("Action-URL Session Task no Error: HTTP Status Code\(statusCode)")
+                print("Action-URL Session Task no Error: HTTP Status Code\(statusCode)")
                 if statusCode == 200 {
                     handler(success:true)
                 }
@@ -304,13 +319,13 @@ public class CidsConnector {
             }
             else {
                 // Failure
-                println("ActionURL Session Task Failed: %@", error.localizedDescription);
+                print("ActionURL Session Task Failed: %@", error.localizedDescription);
                 handler(success:false)
             }
             
         }
         
-        var op=ServerActionOperation(baseUrl: baseUrl, user: login, pass: password, actionName: actionName,params:params, completionHandler: myActionCompletionHandler)
+        let op=ServerActionOperation(baseUrl: baseUrl, user: login, pass: password, actionName: actionName,params:params, completionHandler: myActionCompletionHandler)
         op.enqueue()
     }
     
@@ -320,7 +335,7 @@ public class CidsConnector {
         
         let baseUrl="http://board.cismet.de/belis"
         
-        var up=WebDavUploadImageOperation(baseUrl: baseUrl, user: Secrets.getWebDavUser(), pass: Secrets.getWebDavPass(), fileName: fileName, image:image) {
+        let up=WebDavUploadImageOperation(baseUrl: baseUrl, user: Secrets.getWebDavUser(), pass: Secrets.getWebDavPass(), fileName: fileName, image:image) {
             (data, response, error) -> Void in
             
             completionHandler(data: data, response: response, error: error)
@@ -331,7 +346,7 @@ public class CidsConnector {
     
     
     class func currentTimeMillis() -> Int64{
-        var nowDouble = NSDate().timeIntervalSince1970
+        let nowDouble = NSDate().timeIntervalSince1970
         return Int64(nowDouble*1000) + Int64(nowDouble/1000)
     }
 }

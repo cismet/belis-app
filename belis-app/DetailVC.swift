@@ -56,8 +56,8 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
             
             for action in actions {
                 let alertAction = UIAlertAction(title: action.title, style: action.style, handler: {
-                    (alert: UIAlertAction!) -> Void in
-                        println("Aktion: "+action.title)
+                    (alert: UIAlertAction) -> Void in
+                        print("Aktion: "+action.title)
                         action.handler(alert, action, self.objectToShow,self)
                     
                     
@@ -71,7 +71,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
     }
     
     func doIt (alert: UIAlertAction!) {
-        println("mine")
+        print("mine")
     }
     
 
@@ -98,12 +98,12 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         let sectionKey: String = sections[section]
         let dataItem: CellData = data[sectionKey]![row]
         let cellReuseId=dataItem.getCellReuseIdentifier()
-        let cell: UITableViewCell  = tableView.dequeueReusableCellWithIdentifier(cellReuseId) as! UITableViewCell
+        let cell: UITableViewCell  = tableView.dequeueReusableCellWithIdentifier(cellReuseId)! as UITableViewCell
         if let filler = cell as? CellDataUI {
             filler.fillFromCellData(dataItem)
         }
         else {
-            println("NO CELLDATAUI")
+            print("NO CELLDATAUI")
         }
         return cell
     }
@@ -130,7 +130,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         let sectionKey: String = sections[section]
         let dataItem: CellData = data[sectionKey]![row]
         let cellReuseId=dataItem.getCellReuseIdentifier()
-        let cell: UITableViewCell  = tableView.dequeueReusableCellWithIdentifier(cellReuseId) as! UITableViewCell
+        let cell: UITableViewCell  = tableView.dequeueReusableCellWithIdentifier(cellReuseId)! as UITableViewCell
         if let heightProvider = cell as? CellDataUI {
             return heightProvider.getPreferredCellHeight()
         }
@@ -149,7 +149,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         let sectionKey: String = sections[section]
         let dataItem: CellData = data[sectionKey]![row]
         if let actionProvider = dataItem as? SimpleCellActionProvider {
-            (dataItem as! SimpleCellActionProvider).action(self)
+            actionProvider.action(self)
         }
     }
     
@@ -158,8 +158,8 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
     }
 
     //UIImagePickerControllerDelegate
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
-        println("DetailVC FINISH")
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        print("DetailVC FINISH")
         if let x = (callBacker as? UIImagePickerControllerDelegate) {
             x.imagePickerController!(picker, didFinishPickingMediaWithInfo: info)
         }
@@ -169,7 +169,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
 
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        println("DetailVC XXXCANCEL")
+        print("DetailVC XXXCANCEL")
         if let x = (callBacker as? UIImagePickerControllerDelegate) {
             x.imagePickerControllerDidCancel!(picker)
         }

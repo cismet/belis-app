@@ -10,7 +10,7 @@ import Foundation
 import ObjectMapper
 
 
-class Standort: GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider,ActionProvider, DocumentContainer{
+class Standort: GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider,ActionProvider, DocumentContainer{
     var plz : String?
     var strasse : Strasse?
     var bezirk : Stadtbezirk?
@@ -296,7 +296,7 @@ class Standort: GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOu
         if let bem=bemerkung {
             mastDetails["main"]?.append(SingleTitledInfoCellData(title: "Bemerkung", data: bem))
         }
-        var docCount=0
+        let docCount=0
         if let fotoChecked=foto {
             mastDetails["Dokumente"]=[]
             mastDetails["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: "Foto", url: fotoChecked.getUrl()))
@@ -337,14 +337,14 @@ class Standort: GeoBaseEntity , Mappable, CellInformationProviderProtocol,CallOu
     
 }
 
-class Stadtbezirk : BaseEntity, Mappable{
+class Stadtbezirk : BaseEntity{
     var name: String?
     override func mapping(map: Map) {
         super.id <- map["id"]
         name <- map["bezirk"]
     }
 }
-class Mastart : BaseEntity, Mappable{
+class Mastart : BaseEntity{
     var pk: String?
     var name: String?
     
@@ -354,7 +354,7 @@ class Mastart : BaseEntity, Mappable{
         name <- map["mastart"]
     }
 }
-class Mastklassifizierung : BaseEntity, Mappable{
+class Mastklassifizierung : BaseEntity{
     var pk: String?
     var name: String?
     override func mapping(map: Map) {
@@ -363,7 +363,7 @@ class Mastklassifizierung : BaseEntity, Mappable{
         name <- map["klassifizierung"]
     }
 }
-class MastUnterhaltspflicht : BaseEntity, Mappable{
+class MastUnterhaltspflicht : BaseEntity{
     var pk: String?
     var name: String?
     override func mapping(map: Map) {
@@ -372,7 +372,7 @@ class MastUnterhaltspflicht : BaseEntity, Mappable{
         name <- map["unterhalt_mast"]
     }
 }
-class Masttyp : BaseEntity, Mappable{
+class Masttyp : BaseEntity{
     var typ: String?
     var bezeichnung: String?
     var lph: Double?
@@ -393,7 +393,7 @@ class Masttyp : BaseEntity, Mappable{
     }
 }
 
-class MastKennziffer : BaseEntity, Mappable{
+class MastKennziffer : BaseEntity{
     var kennziffer: Int?
     var beschreibung: String?
     
@@ -403,7 +403,7 @@ class MastKennziffer : BaseEntity, Mappable{
         beschreibung <- map["beschreibung"]
     }
 }
-class MastAnlagengruppe : BaseEntity, Mappable{
+class MastAnlagengruppe : BaseEntity{
     var nummer: Int?
     var bezeichnung: String?
     override func mapping(map: Map) {

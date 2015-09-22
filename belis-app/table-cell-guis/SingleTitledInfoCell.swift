@@ -42,7 +42,7 @@ class SingleTitledInfoCell: UITableViewCell, CellDataUI{
 
 }
 
-@objc class SingleTitledInfoCellData:CellData {
+class SingleTitledInfoCellData:CellData {
     var title: String
     var data: String
     
@@ -51,7 +51,7 @@ class SingleTitledInfoCell: UITableViewCell, CellDataUI{
         self.data=data
     }
     
-    func getCellReuseIdentifier() -> String {
+    @objc func getCellReuseIdentifier() -> String {
         return "singleTitled"
     }
     

@@ -59,7 +59,7 @@ class NoCellInformation : CellInformationProviderProtocol {
 }
 
 @objc protocol SimpleCellActionProvider {
-    func action(UIViewController)
+    func action(_: UIViewController)
 }
 
 

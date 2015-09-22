@@ -44,32 +44,31 @@ class CidsSessionFactory : NSObject, NSURLSessionDelegate{
     
 
     
-    func URLSession(session: NSURLSession, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential!) -> Void) {
+    func URLSession(session: NSURLSession, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
         
-        var authMethod=challenge.protectionSpace.authenticationMethod
+        let authMethod=challenge.protectionSpace.authenticationMethod
         
-        SecTrustEvaluate(challenge.protectionSpace.serverTrust, nil);
+        //SecTrustEvaluate(challenge.protectionSpace.serverTrust!, nil);
         
         if authMethod==NSURLAuthenticationMethodServerTrust {
-            println("check server cert")
+            print("check server cert")
             let serverTrust=challenge.protectionSpace.serverTrust
-            let serverCert=SecTrustGetCertificateAtIndex(serverTrust, 0).takeUnretainedValue()
-            
-            let remoteCertificateData = NSData(data:SecCertificateCopyData(serverCert).takeRetainedValue())
-            
+            let serverCert=SecTrustGetCertificateAtIndex(serverTrust!, 0)! //.takeUnretainedValue()
+            let remoteCertificateData = NSData(data:SecCertificateCopyData(serverCert)) //.takeRetainedValue())
+
             
             
             if  remoteCertificateData.isEqualToData(localServerCertData!) {
-                println("YAY")
+                print("YAY")
                 
-                completionHandler(NSURLSessionAuthChallengeDisposition.UseCredential, NSURLCredential(forTrust: challenge.protectionSpace.serverTrust))
-                
+              //  completionHandler(NSURLSessionAuthChallengeDisposition.UseCredential, NSURLCredential(forTrust: challenge.protectionSpace.serverTrust!))                
+                completionHandler(.UseCredential, NSURLCredential(trust: challenge.protectionSpace.serverTrust!))
             }
             else {
-                println("NAY")
+                print("NAY")
             }
         } else if authMethod==NSURLAuthenticationMethodClientCertificate {
-            println("provide client cert")
+            print("provide client cert")
             if let clientCert=identityAndTrustForCSC {
                 
                 let urlCredential:NSURLCredential = NSURLCredential(
@@ -90,15 +89,18 @@ class CidsSessionFactory : NSObject, NSURLSessionDelegate{
         var identityAndTrust:IdentityAndTrust!
         var securityError:OSStatus = errSecSuccess
         
-        var items:Unmanaged<CFArray>?
-        let certOptions:CFDictionary = [ kSecImportExportPassphrase.takeRetainedValue() as String: certPassword ];
+        //var items:Unmanaged<CFArray>?
+        var items: UnsafeMutablePointer<CFArray?> = UnsafeMutablePointer<CFArray?>.alloc(1)
+        
+//        let certOptions:CFDictionary = [ kSecImportExportPassphrase.takeRetainedValue() as String: certPassword ];
+        let certOptions:CFDictionary = [ kSecImportExportPassphrase as String: certPassword ];
         
         // import certificate to read its entries
-        securityError = SecPKCS12Import(certData, certOptions, &items);
+        securityError = SecPKCS12Import(certData, certOptions, items);
         
         if securityError == errSecSuccess {
             
-            let certItems:CFArray = items?.takeUnretainedValue() as CFArray!;
+            let certItems:CFArray = items.memory as CFArray!;
             let certItemsArray:Array = certItems as Array
             let dict:AnyObject? = certItemsArray.first;
             
@@ -113,11 +115,11 @@ class CidsSessionFactory : NSObject, NSURLSessionDelegate{
                 let trustRef:SecTrustRef = trustPointer as! SecTrustRef;
                 
                 // grab the certificate chain
-                var certRef:Unmanaged<SecCertificate>?
-                SecIdentityCopyCertificate(secIdentityRef, &certRef);
-                let clientCert=certRef?.takeRetainedValue()
+                var certRef:UnsafeMutablePointer<SecCertificate?>=UnsafeMutablePointer<SecCertificate?>.alloc(1)
+                SecIdentityCopyCertificate(secIdentityRef, certRef);
+                //let clientCert=certRef?.takeRetainedValue()
                 let certArray:NSMutableArray = NSMutableArray();
-                certArray.addObject(certRef?.takeRetainedValue() as SecCertificateRef!);
+                certArray.addObject(certRef.memory as SecCertificateRef!);
                 
                 identityAndTrust = IdentityAndTrust(identityRef: secIdentityRef, trust: trustRef, certArray: certArray);
             }
@@ -137,8 +139,8 @@ struct IdentityAndTrust {
 
 
 class WebDavUrlSessionDelegate:NSObject, NSURLSessionTaskDelegate {
-    func URLSession(session: NSURLSession, task: NSURLSessionTask, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential!) -> Void) {
-        var authMethod=challenge.protectionSpace.authenticationMethod
+    func URLSession(session: NSURLSession, task: NSURLSessionTask, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
+        let authMethod=challenge.protectionSpace.authenticationMethod
         
         if authMethod == NSURLAuthenticationMethodHTTPDigest {
             let urlCredential:NSURLCredential = NSURLCredential(user: Secrets.getWebDavUser(), password: Secrets.getWebDavPass(), persistence: NSURLCredentialPersistence.ForSession)

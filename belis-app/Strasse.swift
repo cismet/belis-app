@@ -10,7 +10,7 @@ import Foundation
 import ObjectMapper
 
 
-class Strasse : BaseEntity, Mappable{
+class Strasse : BaseEntity{
     var name: String?
     var key: String?
     override func mapping(map: Map) {
