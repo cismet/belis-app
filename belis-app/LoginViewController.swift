@@ -75,8 +75,8 @@ class LoginViewController: UIViewController {
                 
             }
         }
-//        CidsConnector.sharedInstance().login(txtLogin.text!, password: txtPass.text!,handler: loginhandler)
-        CidsConnector.sharedInstance().login(txtLogin.text!, password: "wmbelis",handler: loginhandler)
+        CidsConnector.sharedInstance().login(txtLogin.text!, password: txtPass.text!,handler: loginhandler)
+
         
     }
     

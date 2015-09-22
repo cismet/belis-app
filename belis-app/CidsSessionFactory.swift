@@ -90,7 +90,7 @@ class CidsSessionFactory : NSObject, NSURLSessionDelegate{
         var securityError:OSStatus = errSecSuccess
         
         //var items:Unmanaged<CFArray>?
-        var items: UnsafeMutablePointer<CFArray?> = UnsafeMutablePointer<CFArray?>.alloc(1)
+        let items: UnsafeMutablePointer<CFArray?> = UnsafeMutablePointer<CFArray?>.alloc(1)
         
 //        let certOptions:CFDictionary = [ kSecImportExportPassphrase.takeRetainedValue() as String: certPassword ];
         let certOptions:CFDictionary = [ kSecImportExportPassphrase as String: certPassword ];
@@ -115,7 +115,7 @@ class CidsSessionFactory : NSObject, NSURLSessionDelegate{
                 let trustRef:SecTrustRef = trustPointer as! SecTrustRef;
                 
                 // grab the certificate chain
-                var certRef:UnsafeMutablePointer<SecCertificate?>=UnsafeMutablePointer<SecCertificate?>.alloc(1)
+                let certRef:UnsafeMutablePointer<SecCertificate?>=UnsafeMutablePointer<SecCertificate?>.alloc(1)
                 SecIdentityCopyCertificate(secIdentityRef, certRef);
                 //let clientCert=certRef?.takeRetainedValue()
                 let certArray:NSMutableArray = NSMutableArray();

@@ -246,8 +246,8 @@ public class CidsConnector {
                                             gbEntity = Mapper<Leitung>().map(json)!
                                         case .SCHALTSTELLEN:
                                             gbEntity = Mapper<Schaltstelle>().map(json)!
-                                        default:
-                                            print("could not find object from entity \(operation.entityName)")
+//                                        default:
+//                                            print("could not find object from entity \(operation.entityName)")
                                         }
                                         
                                         if let _=self.searchResults[rightEntity]{

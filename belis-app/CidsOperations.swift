@@ -62,9 +62,10 @@ class CidsRequestOperation: NSOperation {
     func stringFromQueryParameters(queryParameters : Dictionary<String, String>) -> String {
         var parts: [String] = []
         for (name, value) in queryParameters {
+            //let part = NSString(format: "%@=%@",name.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!, value.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!)
             let part = NSString(format: "%@=%@",
-                name.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!,
-                value.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!)
+                    name.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!,
+                    value.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!)
             parts.append(part as String)
         }
         return parts.joinWithSeparator("&")
