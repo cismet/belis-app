@@ -19,7 +19,7 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        var storedLogin: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("login")
+        let storedLogin: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("login")
         if let storedUserString=storedLogin as? String {
             txtLogin.text=storedUserString
         }
@@ -40,7 +40,7 @@ class LoginViewController: UIViewController {
     
     
     @IBAction func loginButtonTabbed(sender: AnyObject) {
-        NSUserDefaults.standardUserDefaults().setObject(txtLogin.text, forKey: "login")
+        NSUserDefaults.standardUserDefaults().setObject(txtLogin.text!, forKey: "login")
         let waiting = UIAlertController(title: "Anmeldung", message: "Sie werden am System angemeldet...", preferredStyle: UIAlertControllerStyle.Alert)
         self.presentViewController(waiting, animated: true, completion: nil)
         
@@ -60,9 +60,9 @@ class LoginViewController: UIViewController {
                     self.txtPass.text="";
                     waiting.dismissViewControllerAnimated(true, completion: {
                         
-                        var alert = UIAlertController(title: "Login fehlgeschlagen", message: "Oh, die Anmeldung hat nicht funktioniert. Probieren Sie es einfach nocheinmal.", preferredStyle: UIAlertControllerStyle.Alert)
+                        let alert = UIAlertController(title: "Login fehlgeschlagen", message: "Oh, die Anmeldung hat nicht funktioniert. Probieren Sie es einfach nocheinmal.", preferredStyle: UIAlertControllerStyle.Alert)
                         
-                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler:{ (ACTION :UIAlertAction!)in
+                        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler:{ (ACTION :UIAlertAction)in
                         }))
                         
                         self.presentViewController(alert, animated: true, completion: nil)
@@ -75,7 +75,8 @@ class LoginViewController: UIViewController {
                 
             }
         }
-        CidsConnector.sharedInstance().login(txtLogin.text, password: txtPass.text,handler: loginhandler)
+        CidsConnector.sharedInstance().login(txtLogin.text!, password: txtPass.text!,handler: loginhandler)
+
         
     }
     

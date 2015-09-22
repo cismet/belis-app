@@ -8,7 +8,7 @@
 
 import Foundation
 import ObjectMapper
-class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
+class Leuchte : GeoBaseEntity, CallOutInformationProviderProtocol, CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
     var strasse: Strasse?
     var energielieferant: Energielieferant?
     var rundsteuerempfaenger: Rundsteuerempfaenger?
@@ -135,7 +135,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
         //Mast
         if mastVorhanden {
             if let s=standort {
-                var mastDetails: [String: [CellData]] = s.getAllData()
+                let mastDetails: [String: [CellData]] = s.getAllData()
                 data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Mast",details: mastDetails, sections: ["main","DeveloperInfo"]))
             }
             else {
@@ -378,7 +378,7 @@ class Leuchte : GeoBaseEntity, Mappable,CallOutInformationProviderProtocol, Cell
 }
 
 
-class Energielieferant : BaseEntity, Mappable{
+class Energielieferant : BaseEntity{
     var name: String?
     var key: Int?
     
@@ -389,7 +389,7 @@ class Energielieferant : BaseEntity, Mappable{
     }
 }
 
-class Rundsteuerempfaenger : BaseEntity, Mappable{
+class Rundsteuerempfaenger : BaseEntity{
     var herrsteller_rs: String?
     var rs_typ: String?
     var anschlusswert: Float?
@@ -406,7 +406,7 @@ class Rundsteuerempfaenger : BaseEntity, Mappable{
     }
 }
 
-class LeuchtenTyp : BaseEntity, Mappable{
+class LeuchtenTyp : BaseEntity{
     var leuchtenTyp: String?
     var bestueckung: Float?
     var leistung: Float?
@@ -441,7 +441,7 @@ class LeuchtenTyp : BaseEntity, Mappable{
     }
 }
 
-class Unterhaltspflicht : BaseEntity, Mappable{
+class Unterhaltspflicht : BaseEntity{
     var unterhaltspflichtiger: String?
     var key: Int?
     override func mapping(map: Map) {
@@ -451,7 +451,7 @@ class Unterhaltspflicht : BaseEntity, Mappable{
     }
 }
 
-class Doppelkommando : BaseEntity, Mappable{
+class Doppelkommando : BaseEntity{
     var key: String?
     var beschreibung: String?
     override func mapping(map: Map) {
@@ -461,7 +461,7 @@ class Doppelkommando : BaseEntity, Mappable{
     }
 }
 
-class Kennziffer : BaseEntity, Mappable{
+class Kennziffer : BaseEntity{
     var beschreibung: String?
     var kennziffer: Int?
     override func mapping(map: Map) {
@@ -472,7 +472,7 @@ class Kennziffer : BaseEntity, Mappable{
 }
 
 
-class Leuchtmittel : BaseEntity, Mappable{
+class Leuchtmittel : BaseEntity{
     var hersteller: String?
     var lichtfarbe: String?
     

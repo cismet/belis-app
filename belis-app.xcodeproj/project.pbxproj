@@ -14,7 +14,6 @@
 		2D0B7F6A1AB3454100E33A6C /* DoubleTitledInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D0B7F681AB3454100E33A6C /* DoubleTitledInfoCell.xib */; };
 		2D0B7F6D1AB3456D00E33A6C /* MemoTitledInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0B7F6B1AB3456D00E33A6C /* MemoTitledInfoCell.swift */; };
 		2D0B7F6E1AB3456D00E33A6C /* MemoTitledInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D0B7F6C1AB3456D00E33A6C /* MemoTitledInfoCell.xib */; };
-		2D0E2C551B9EF05C0092FA9B /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D0E2C541B9EF05C0092FA9B /* Icon-76@2x.png */; };
 		2D0E2C571B9EF0620092FA9B /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D0E2C561B9EF0620092FA9B /* Icon-76@2x.png */; };
 		2D1ED1851B8344BD0004AAFA /* CidsOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1ED1841B8344BD0004AAFA /* CidsOperations.swift */; };
 		2D1ED1871B8344C80004AAFA /* CidsSessionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1ED1861B8344C80004AAFA /* CidsSessionFactory.swift */; };
@@ -474,7 +473,9 @@
 		2D5FB2C11A67C7320041020C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = cismet;
 				TargetAttributes = {
 					2D5FB2C81A67C7320041020C = {
@@ -535,7 +536,6 @@
 				2D0E2C571B9EF0620092FA9B /* Icon-76@2x.png in Resources */,
 				2D5FB30D1A67CC340041020C /* Main.storyboard in Resources */,
 				2DE8B1A41B25C3EA00FCEBA7 /* testbild.png in Resources */,
-				2D0E2C551B9EF05C0092FA9B /* Icon-76@2x.png in Resources */,
 				2D5FB30B1A67CC340041020C /* LaunchScreen.xib in Resources */,
 				2D5FB2FB1A67CB120041020C /* mauerlasche.png in Resources */,
 				2DF5EBCC1AFB6F9100062669 /* mast.png in Resources */,
@@ -672,6 +672,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -686,9 +687,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -723,8 +725,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -745,6 +748,7 @@
 				INFOPLIST_FILE = "belis-app/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "de.cismet.cids.belis.mobile.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "belis-app/belis-app-Bridging-Header.h";
@@ -767,6 +771,7 @@
 				INFOPLIST_FILE = "belis-app/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "de.cismet.cids.belis.mobile.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "belis-app/belis-app-Bridging-Header.h";
@@ -778,16 +783,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "belis-appTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "de.cismet.cids.belis.mobile.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/belis-app.app/belis-app";
 			};
@@ -797,12 +799,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
 				INFOPLIST_FILE = "belis-appTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "de.cismet.cids.belis.mobile.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/belis-app.app/belis-app";
 			};

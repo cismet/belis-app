@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Leitung : GeoBaseEntity , Mappable,CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
+class Leitung : GeoBaseEntity ,CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
     var material: Leitungsmaterial?
     var leitungstyp: Leitungstyp?
     var querschnitt: Querschnitt?
@@ -126,7 +126,7 @@ class Leitung : GeoBaseEntity , Mappable,CellInformationProviderProtocol, CellDa
 
 }
 
-class Leitungsmaterial : BaseEntity, Mappable{
+class Leitungsmaterial : BaseEntity{
     var bezeichnung: String?
     
    
@@ -136,7 +136,7 @@ class Leitungsmaterial : BaseEntity, Mappable{
     }
 }
 
-class Querschnitt : BaseEntity, Mappable {
+class Querschnitt : BaseEntity {
     var groesse: Float?
     
     override func mapping(map: Map) {
@@ -145,7 +145,7 @@ class Querschnitt : BaseEntity, Mappable {
     }
 }
 
-class Leitungstyp : BaseEntity, Mappable{
+class Leitungstyp : BaseEntity{
     var bezeichnung: String?
     
     override func mapping(map: Map) {

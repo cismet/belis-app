@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class GeoBaseEntity : BaseEntity, Mappable{
+class GeoBaseEntity : BaseEntity{
     var mapObject : NSObject?;
     private var geom :WKTGeometry?
 
@@ -32,7 +32,6 @@ class GeoBaseEntity : BaseEntity, Mappable{
                 }
                 else if (geom is WKTLine) {
                     let line=geom as! WKTLine;
-                    let temp=self;
                     mapObject=GeoBaseEntityStyledMkPolylineAnnotation(line: line, geoBaseEntity: self)
                     (mapObject! as! GeoBaseEntityStyledMkPolylineAnnotation).geoBaseEntity=self
 //                    println("GeoBaseEntityStyledMkPolylineAnnotation set")
@@ -40,7 +39,7 @@ class GeoBaseEntity : BaseEntity, Mappable{
                 
             }
             else{
-                println("\(self) - id : \(self.id)");
+                print("\(self) - id : \(self.id)");
             }
             
         }
@@ -99,7 +98,7 @@ class GeoBaseEntity : BaseEntity, Mappable{
         southEastCorner.longitude = center.longitude + (region.span.longitudeDelta / 2.0);
         
         if (mapObject is MKAnnotation){
-            var anno = mapObject as! MKAnnotation;
+            let anno = mapObject as! MKAnnotation;
             return (
                 anno.coordinate.latitude  >= northWestCorner.latitude &&
                     anno.coordinate.latitude  <= southEastCorner.latitude &&
@@ -110,7 +109,7 @@ class GeoBaseEntity : BaseEntity, Mappable{
             
         }
         else if mapObject is MKPolyline {
-            var line = mapObject as! MKPolyline;
+            let line = mapObject as! MKPolyline;
             var coords = [CLLocationCoordinate2D](count: line.pointCount, repeatedValue: kCLLocationCoordinate2DInvalid);
             line.getCoordinates(&coords, range: NSMakeRange(0, line.pointCount));
             

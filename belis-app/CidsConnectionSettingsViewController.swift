@@ -52,7 +52,7 @@ class CidsConnectionSettingsViewController: UIViewController {
     }
     
     func checkAndColor() {
-        if let cert=CidsConnector.sharedInstance().serverCert {
+        if CidsConnector.sharedInstance().serverCertPath != "" {
             serverCertIconLabel.textColor=black
             serverCertTextLabel.textColor=black
             serverCertTextLabel.text="Serverzertifikat"
@@ -69,7 +69,7 @@ class CidsConnectionSettingsViewController: UIViewController {
             chkTLS.on=false
             
         }
-        if let cert=CidsConnector.sharedInstance().clientCert {
+        if CidsConnector.sharedInstance().clientCertPath != "" {
             clientCertIconLabel.textColor=black
             clientCertTextLabel.textColor=black
             clientCertTextLabel.text="Clientzertifikat"
@@ -89,19 +89,19 @@ class CidsConnectionSettingsViewController: UIViewController {
         let serverCertData = NSData(contentsOfFile: CidsConnector.sharedInstance().serverCertPath)
         let clientCertData = NSData(contentsOfFile: CidsConnector.sharedInstance().clientCertPath)
         
-        println("ServerCert: \(CidsConnector.sharedInstance().serverCertPath) \(serverCertData)")
-        println("ClientCert: \(CidsConnector.sharedInstance().clientCertPath) \(clientCertData)")
+        print("ServerCert: \(CidsConnector.sharedInstance().serverCertPath) \(serverCertData)")
+        print("ClientCert: \(CidsConnector.sharedInstance().clientCertPath) \(clientCertData)")
 
         
 
-        println("connect to: \(CidsConnector.sharedInstance().baseUrl)")
+        print("connect to: \(CidsConnector.sharedInstance().baseUrl)")
 
         
         
     }
     
     @IBAction func passwordChanged(sender: AnyObject) {
-        CidsConnector.sharedInstance().clientCertContainerPass=certPassTextField.text
+        CidsConnector.sharedInstance().clientCertContainerPass=certPassTextField.text!
         checkAndColor()
     }
     
@@ -114,9 +114,9 @@ class CidsConnectionSettingsViewController: UIViewController {
         if chkTLS.on {
             defaultport="443"
         }
-        if txtServerURL.text.contains(":") {
-            var urlAndPort = split(txtServerURL.text) {$0 == ":"}
-            var url=urlAndPort[0]
+        if txtServerURL.text!.contains(":") {
+            var urlAndPort = txtServerURL.text!.characters.split {$0 == ":"}.map { String($0) }
+            let url=urlAndPort[0]
             CidsConnector.sharedInstance().pureBaseUrl=url
             if urlAndPort.count>1 {
                 CidsConnector.sharedInstance().baseUrlport=urlAndPort[1]
@@ -126,7 +126,7 @@ class CidsConnectionSettingsViewController: UIViewController {
             }
         }
         else {
-            CidsConnector.sharedInstance().pureBaseUrl=txtServerURL.text
+            CidsConnector.sharedInstance().pureBaseUrl=txtServerURL.text!
             CidsConnector.sharedInstance().baseUrlport=defaultport
         }
         CidsConnector.sharedInstance().tlsEnabled=chkTLS.on
@@ -135,10 +135,17 @@ class CidsConnectionSettingsViewController: UIViewController {
     @IBAction func removeServerCertTabbed(sender: AnyObject) {
         
         var error:NSError?
-        let ok:Bool =  NSFileManager().removeItemAtPath(CidsConnector.sharedInstance().serverCertPath, error: &error)
+        let ok:Bool
+        do {
+            try NSFileManager().removeItemAtPath(CidsConnector.sharedInstance().serverCertPath)
+            ok = true
+        } catch let error1 as NSError {
+            error = error1
+            ok = false
+        }
         
         if error != nil {
-            println(error)
+            print(error)
         }
         if (ok) {
             CidsConnector.sharedInstance().serverCert=nil
@@ -148,10 +155,17 @@ class CidsConnectionSettingsViewController: UIViewController {
     
     @IBAction func removeClientCertTabbed(sender: AnyObject) {
         var error:NSError?
-        let ok:Bool =  NSFileManager().removeItemAtPath(CidsConnector.sharedInstance().clientCertPath, error: &error)
+        let ok:Bool
+        do {
+            try NSFileManager().removeItemAtPath(CidsConnector.sharedInstance().clientCertPath)
+            ok = true
+        } catch let error1 as NSError {
+            error = error1
+            ok = false
+        }
         
         if error != nil {
-            println(error)
+            print(error)
         }
         if (ok) {
             CidsConnector.sharedInstance().clientCert=nil
