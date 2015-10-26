@@ -233,6 +233,7 @@ class SearchOperation: CidsRequestOperation {
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
         
         let y = Mapper().toJSON(parameters!)
+        print(Mapper().toJSONString(parameters!, prettyPrint: true)!)
         request.HTTPBody=try? NSJSONSerialization.dataWithJSONObject(y, options: NSJSONWritingOptions())
         
         /* Start a new Task */
