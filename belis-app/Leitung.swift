@@ -72,6 +72,8 @@ class Leitung : GeoBaseEntity ,CellInformationProviderProtocol, CellDataProvider
         return actions
     }
     
+    
+    
     func addDocument(document: DMSUrl) {
         dokumente.append(document)
     }

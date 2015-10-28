@@ -231,7 +231,7 @@ class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInf
         
         return actions
     }
-    
+
     func addDocument(document: DMSUrl) {
         dokumente.append(document)
     }

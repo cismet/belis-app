@@ -19,10 +19,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var focusToggle: UISwitch!
     @IBOutlet weak var textfieldGeoSearch: UITextField!
     
+    @IBOutlet weak var bbiMoreFunctionality: UIBarButtonItem!
     
     var matchingSearchItems: [MKMapItem] = [MKMapItem]()
     var matchingSearchItemsAnnotations: [MKPointAnnotation ] = [MKPointAnnotation]()
-    
+    var loginViewController: LoginViewController?
     var isLeuchtenEnabled=true;
     var isMastenEnabled=true;
     var isMauerlaschenEnabled=true;
@@ -94,7 +95,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         //UINavigationController(rootViewController: self)
         textfieldGeoSearch.delegate=self
-        
+        bbiMoreFunctionality.setTitleTextAttributes([
+            NSFontAttributeName : UIFont(name: "WebHostingHub-Glyphs", size: 16)!],
+            forState: UIControlState.Normal)
+        bbiMoreFunctionality.title=WebHostingGlyps.glyphs["icon-chevron-down"]
         print(UIDevice.currentDevice().identifierForVendor!.UUIDString)
         
     }
@@ -114,8 +118,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // Pass the selected object to the new view controller.
         
         if (segue.identifier == "showSearchSelectionPopover") {
-            let selectionVC = segue.destinationViewController as! SelectionPopoverViewController;
+            let selectionVC = segue.destinationViewController as! SelectionPopoverViewController
             selectionVC.mainVC=self;
+        }
+        else if (segue.identifier == "showAdditionalFunctionalityPopover") {
+            let additionalFuncVC = segue.destinationViewController as! AdditionalFunctionalityPopoverViewController
+            additionalFuncVC.mainVC=self;
         }
         
     }

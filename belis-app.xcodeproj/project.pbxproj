@@ -86,6 +86,7 @@
 		2DB6E8C21A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */; };
 		2DB6E8C31A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */; };
 		2DB8E80E1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB8E80D1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift */; };
+		2DDF34FB1BDE1F5D00C3047D /* AdditionalFunctionalityPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DDF34FA1BDE1F5D00C3047D /* AdditionalFunctionalityPopoverViewController.swift */; };
 		2DE8B1A41B25C3EA00FCEBA7 /* testbild.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DE8B1A31B25C3EA00FCEBA7 /* testbild.png */; };
 		2DEDB58B1AFCCDC9004ADC92 /* schaltstelle.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DEDB58A1AFCCDC9004ADC92 /* schaltstelle.png */; };
 		2DF2C7DD1AB6E2FE00F3A2FC /* SimpleInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF2C7DC1AB6E2FE00F3A2FC /* SimpleInfoCell.swift */; };
@@ -198,6 +199,7 @@
 		2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "webhostinghub-glyphs.ttf"; sourceTree = "<group>"; };
 		2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebHostingGlyph.swift; sourceTree = "<group>"; };
 		2DB8E80D1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleUrlPreviewInfoCell.swift; sourceTree = "<group>"; };
+		2DDF34FA1BDE1F5D00C3047D /* AdditionalFunctionalityPopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdditionalFunctionalityPopoverViewController.swift; sourceTree = "<group>"; };
 		2DE8B1A31B25C3EA00FCEBA7 /* testbild.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testbild.png; sourceTree = "<group>"; };
 		2DEDB58A1AFCCDC9004ADC92 /* schaltstelle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = schaltstelle.png; sourceTree = "<group>"; };
 		2DF2C7DC1AB6E2FE00F3A2FC /* SimpleInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleInfoCell.swift; sourceTree = "<group>"; };
@@ -424,6 +426,7 @@
 				2D9CAD601B94A05A00A3EB07 /* CidsConnectionSettingsViewController.swift */,
 				2D5FB3061A67CC340041020C /* MainViewController.swift */,
 				2D5FB3041A67CC340041020C /* LoginViewController.swift */,
+				2DDF34FA1BDE1F5D00C3047D /* AdditionalFunctionalityPopoverViewController.swift */,
 			);
 			name = viewController;
 			sourceTree = "<group>";
@@ -583,6 +586,7 @@
 				2D81C2A51AA84B710051876C /* Secrets.swift in Sources */,
 				2D5FB33C1A67CCEB0041020C /* Abzweigdose.swift in Sources */,
 				2D3DC3561A8BA86E0035575A /* UIProtocols.swift in Sources */,
+				2DDF34FB1BDE1F5D00C3047D /* AdditionalFunctionalityPopoverViewController.swift in Sources */,
 				2DF6A9BC1A82541900E20FBF /* MappingStuff.swift in Sources */,
 				2D407C201AC2ECD40083013A /* DetailVC.swift in Sources */,
 				2D9D3AD61A9E23DD0049F46F /* AF+ImageView+Extension.swift in Sources */,

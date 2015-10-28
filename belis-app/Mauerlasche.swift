@@ -130,7 +130,7 @@ class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProv
 
         return actions
     }
-    
+        
     func addDocument(document: DMSUrl) {
         dokumente.append(document)
     }

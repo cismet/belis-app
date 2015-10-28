@@ -30,11 +30,10 @@ class CidsSessionFactory : NSObject, NSURLSessionDelegate{
     }
     
     func getPickyNewCidsSession() -> NSURLSession{
-        return getNewCidsSession()
-//        let sessionConfig = NSURLSessionConfiguration.ephemeralSessionConfiguration()
-//        sessionConfig.requestCachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData
-//        sessionConfig.timeoutIntervalForResource=10
-//        return NSURLSession(configuration: sessionConfig, delegate: self, delegateQueue: queue)
+        let sessionConfig = NSURLSessionConfiguration.ephemeralSessionConfiguration()
+        sessionConfig.requestCachePolicy = NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData
+        sessionConfig.timeoutIntervalForResource=10
+        return NSURLSession(configuration: sessionConfig, delegate: self, delegateQueue: queue)
     }
     
     func getNewWebDavSession() -> NSURLSession{

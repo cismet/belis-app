@@ -48,19 +48,18 @@ class NoCellInformation : CellInformationProviderProtocol {
     func getDataSectionKeys() -> [String]
 }
 
-@objc protocol ActionProvider {
-    func getAllActions() -> [BaseEntityAction]
-}
 
 @objc protocol CellDataUI {
     func fillFromCellData(cellData :CellData)
     func getPreferredCellHeight() -> CGFloat
-
 }
 
 @objc protocol SimpleCellActionProvider {
     func action(_: UIViewController)
 }
 
+@objc protocol ActionProvider {
+    func getAllActions() -> [BaseEntityAction]
+}
 
 

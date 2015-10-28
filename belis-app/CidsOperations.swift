@@ -126,7 +126,6 @@ class GetEntityOperation: CidsRequestOperation {
             request.HTTPMethod = "GET"
             
             request.addValue(authHeader, forHTTPHeaderField: "Authorization") //correct passwd
-            //            request.addValue("Basic V2VuZGxpbmdNQEJFTElTMjp3bWJlbGlzeHh4eA==", forHTTPHeaderField: "Authorization") //wrong passwd
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             let session=sessionFactory.getNewCidsSession()
             /* Start a new Task */
@@ -175,7 +174,6 @@ class LoginOperation: CidsRequestOperation {
             request.HTTPMethod = "GET"
             
             request.addValue(authHeader, forHTTPHeaderField: "Authorization") //correct passwd
-            //            request.addValue("Basic V2VuZGxpbmdNQEJFTElTMjp3bWJlbGlzeHh4eA==", forHTTPHeaderField: "Authorization") //wrong passwd
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             let session=sessionFactory.getPickyNewCidsSession()
             /* Start a new Task */
@@ -283,7 +281,8 @@ class ServerActionOperation: CidsRequestOperation {
         URL = self.NSURLByAppendingQueryParameters(URL, queryParameters: URLParams)
         let request = NSMutableURLRequest(URL: URL!)
         request.HTTPMethod = "POST"
-        request.addValue("Basic V2VuZGxpbmdNQEJFTElTMjp3bWJlbGlz", forHTTPHeaderField: "Authorization")
+        //request.addValue("Basic V2VuZGxpbmdNQEJFTElTMjp3bWJlbGlz", forHTTPHeaderField: "Authorization")
+        request.addValue(authHeader, forHTTPHeaderField: "Authorization")
         request.addValue("multipart/form-data; boundary=nFcUS6GTpcRsBnbvYHhdwyggifFtKeLm", forHTTPHeaderField: "Content-Type")
         
         let paramsAsJSON:String=Mapper().toJSONString(params!, prettyPrint: false)!

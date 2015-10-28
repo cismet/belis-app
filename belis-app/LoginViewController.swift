@@ -47,6 +47,7 @@ class LoginViewController: UIViewController {
         func loginhandler(success: Bool) {
             if (success) {
                 let mainView = self.storyboard?.instantiateViewControllerWithIdentifier("mainView") as! MainViewController;
+                mainView.loginViewController=self
                 dispatch_async(dispatch_get_main_queue(),{
                     waiting.dismissViewControllerAnimated(true, completion: {
                         self.presentViewController(mainView, animated: true, completion: {} );
