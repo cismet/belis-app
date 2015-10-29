@@ -135,8 +135,9 @@ class Leuchte : GeoBaseEntity, CallOutInformationProviderProtocol, CellInformati
         //Mast
         if mastVorhanden {
             if let s=standort {
-                let mastDetails: [String: [CellData]] = s.getAllData()
-                data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Mast",details: mastDetails, sections: ["main","DeveloperInfo"]))
+                // let mastDetails: [String: [CellData]] = s.getAllData()
+                // data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Mast",details: mastDetails, sections: "main","DeveloperInfo"]))
+                data["main"]?.append(SimpleInfoCellDataWithDetailsDrivenByWholeObject(data: "Mast",detailObject: s, showSubActions: true))
             }
             else {
                 //serious error

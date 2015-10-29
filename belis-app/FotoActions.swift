@@ -14,7 +14,7 @@ class ChooseFotoAction : BaseEntityAction {
     init(yourself: BaseEntity) {
         super.init(title: "Foto auswählen",style: UIAlertActionStyle.Default, handler: {
             (action: UIAlertAction! , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
-            let picker = (detailVC as! DetailVC).mainVC.imagePicker
+            let picker = MainViewController.IMAGE_PICKER
             picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
             picker.mediaTypes = UIImagePickerController.availableMediaTypesForSourceType(.PhotoLibrary)!
             picker.delegate = detailVC as! DetailVC
@@ -32,7 +32,7 @@ class TakeFotoAction : BaseEntityAction {
             (action: UIAlertAction! , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
             if(UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
                 //load the camera interface
-                let picker = (detailVC as! DetailVC).mainVC.imagePicker
+                let picker = MainViewController.IMAGE_PICKER
                 picker.sourceType = UIImagePickerControllerSourceType.Camera
                 picker.delegate = detailVC as! DetailVC
                 (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: yourself,detailVC: (detailVC as! DetailVC))

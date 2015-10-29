@@ -41,13 +41,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var locationManager: CLLocationManager!
     
     let focusRectShape = CAShapeLayer()
-    var imagePicker : UIImagePickerController!
+    static let IMAGE_PICKER=UIImagePickerController()
     
     
     override func viewDidLoad() {
         super.viewDidLoad();
-        
-        imagePicker = UIImagePickerController()
         
         locationManager=CLLocationManager();
         
@@ -570,7 +568,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
             detailVC.sections=leuchte.getDataSectionKeys()
             detailVC.setCellData(leuchte.getAllData())
-            detailVC.mainVC=self
             detailVC.actions=leuchte.getAllActions()
             
             detailVC.objectToShow=leuchte
@@ -590,7 +587,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
             detailVC.sections=standort.getDataSectionKeys()
             detailVC.setCellData(standort.getAllData())
-            detailVC.mainVC=self
             detailVC.actions=standort.getAllActions()
             
             detailVC.objectToShow=standort
@@ -610,7 +606,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
             detailVC.sections=leitung.getDataSectionKeys()
             detailVC.setCellData(leitung.getAllData())
-            detailVC.mainVC=self
             detailVC.actions=leitung.getAllActions()
             
             detailVC.objectToShow=leitung
@@ -629,7 +624,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else if let mauerlasche = geoBaseEntity as? Mauerlasche {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
-            detailVC.mainVC=self
             detailVC.objectToShow=mauerlasche
             detailVC.sections=mauerlasche.getDataSectionKeys()
             
@@ -650,7 +644,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else if let schaltstelle = geoBaseEntity as? Schaltstelle {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
-            detailVC.mainVC=self
             detailVC.sections=schaltstelle.getDataSectionKeys()
             detailVC.setCellData(schaltstelle.getAllData())
             detailVC.title="Schaltstelle"

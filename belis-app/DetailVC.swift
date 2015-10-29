@@ -16,7 +16,6 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
 
     var actions: [BaseEntityAction] = []
     var objectToShow: BaseEntity!
-    var mainVC:MainViewController!
     var callBacker: AnyObject?
 
     override func viewDidLoad() {
@@ -169,7 +168,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
 
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        print("DetailVC XXXCANCEL")
+        print("DetailVC CANCEL")
         if let x = (callBacker as? UIImagePickerControllerDelegate) {
             x.imagePickerControllerDidCancel!(picker)
         }

@@ -18,6 +18,9 @@ class SimpleInfoCell : UITableViewCell, CellDataUI {
             super.textLabel!.text=d.data
             accessoryType=UITableViewCellAccessoryType.DisclosureIndicator
 
+        }else if let d=cellData as? SimpleInfoCellDataWithDetailsDrivenByWholeObject{
+            super.textLabel!.text=d.data
+            accessoryType=UITableViewCellAccessoryType.DisclosureIndicator
         }
     }
     func getPreferredCellHeight() -> CGFloat {
@@ -44,17 +47,12 @@ class SimpleInfoCellDataWithDetails : CellData,SimpleCellActionProvider {
     var details: [String: [CellData]] = ["main":[]]
     var sections: [String]
     var actions: [BaseEntityAction]?
-    
+   
+
     init(data:String,details:[String: [CellData]], sections: [String]){
         self.data=data
         self.details=details
         self.sections=sections
-    }
-    init(data:String,details:[String: [CellData]], sections: [String], actions: [BaseEntityAction]){
-        self.data=data
-        self.details=details
-        self.sections=sections
-        self.actions=actions
     }
     
     @objc func getCellReuseIdentifier() -> String {
@@ -66,12 +64,50 @@ class SimpleInfoCellDataWithDetails : CellData,SimpleCellActionProvider {
         let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
         detailVC.sections=sections
         detailVC.setCellData(details)
-        if let detailActions=actions {
-            let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
-            detailVC.navigationItem.rightBarButtonItem = action
-            detailVC.actions=detailActions
+        vc.navigationController?.pushViewController(detailVC, animated: true)
+    }
+    
+}
+
+class SimpleInfoCellDataWithDetailsDrivenByWholeObject : CellData,SimpleCellActionProvider {
+    var detailObject: BaseEntity?
+    var data: String
+    var showSubActions: Bool
+    //var mvc: MainViewController
+    init(data:String,detailObject: BaseEntity, showSubActions:Bool){
+        assert(detailObject is CellDataProvider)
+        self.data=data
+        self.detailObject=detailObject
+        self.showSubActions=showSubActions
+    }
+    
+    @objc func getCellReuseIdentifier() -> String {
+        return "simple"
+    }
+    
+    
+    @objc func action(vc:UIViewController) {
+        let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+        detailVC.sections=(detailObject as! CellDataProvider).getDataSectionKeys()
+        detailVC.setCellData((detailObject as! CellDataProvider).getAllData())
+
+
+        detailVC.objectToShow=detailObject
+        if showSubActions {
+            if let actionProvider = detailObject as? ActionProvider  {
+                let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
+                detailVC.navigationItem.rightBarButtonItem = action
+                detailVC.actions=actionProvider.getAllActions()
+            }
         }
         vc.navigationController?.pushViewController(detailVC, animated: true)
     }
     
 }
+
+
+
+
+
+
+
