@@ -15,6 +15,27 @@ class Arbeitsauftrag : GeoBaseEntity {
     var nummer: String?
     var protokolle: [Arbeitsprotokoll]?
     var zugewiesenAn: Team?
+    
+    required init?(_ map: Map) {
+        super.init(map)
+    }
+    override func getType() -> Entity {
+        return Entity.ARBEITSAUFTRAEGE
+    }
+    
+    override func mapping(map: Map) {
+        id <- map["id"];
+        angelegtVon <- map["angelegt_von"];
+        angelegtAm <- map["angelegt_am"];
+        nummer <- map["nummer"];
+        protokolle <- map["ar_protokolle"]
+        zugewiesenAn <- map["zugewiesen_an"]
+        
+        //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
+        wgs84WKT <- map["fk_geom.wgs84_wkt"]
+        
+        
+    }
 }
 
 class Team : BaseEntity {

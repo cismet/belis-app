@@ -235,7 +235,7 @@ public class CidsConnector {
                                         print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                                         
                                         if let json: [String : AnyObject] = getJson(data) {
-                                            var gbEntity:GeoBaseEntity
+                                            var gbEntity:GeoBaseEntity?
                                             
                                             switch (rightEntity){
                                             case .LEUCHTEN:
@@ -248,17 +248,18 @@ public class CidsConnector {
                                                 gbEntity = Mapper<Leitung>().map(json)!
                                             case .SCHALTSTELLEN:
                                                 gbEntity = Mapper<Schaltstelle>().map(json)!
-                                                //                                        default:
-                                                //                                            print("could not find object from entity \(operation.entityName)")
+                                                                                        default:
+                                                                                            print("could not find object from entity \(operation.entityName)")
                                             }
                                             
-                                            if let _=self.searchResults[rightEntity]{
-                                                self.searchResults[rightEntity]!.append(gbEntity)
+                                            if let gbe=gbEntity {
+                                                if let _=self.searchResults[rightEntity] {
+                                                    self.searchResults[rightEntity]!.append(gbe)
+                                                }
+                                                else {
+                                                    self.searchResults.updateValue([gbe], forKey: rightEntity)
+                                                }
                                             }
-                                            else {
-                                                self.searchResults.updateValue([gbEntity], forKey: rightEntity)
-                                            }
-                                            
                                             //println("+")
                                             //println("\(leuchte.id)==>\(leuchte.leuchtenNummer):\(leuchte.typ)@\(leuchte.standort?.strasse)->\(leuchte.wgs84WKT)");
                                             
@@ -366,8 +367,10 @@ enum Entity : String{
     case MAUERLASCHEN="Mauerlaschen"
     case LEITUNGEN="Leitungen"
     case SCHALTSTELLEN="Schaltstellen"
+    case ARBEITSAUFTRAEGE="Arbeitsaufträge"
+    case VERANLASSUNGEN="Veranlassungen"
     
-    static let allValues=[LEUCHTEN,MASTEN,MAUERLASCHEN,LEITUNGEN,SCHALTSTELLEN]
+    static let allValues=[LEUCHTEN,MASTEN,MAUERLASCHEN,LEITUNGEN,SCHALTSTELLEN,VERANLASSUNGEN,ARBEITSAUFTRAEGE]
     
     static func byIndex(index: Int) -> Entity {
         return allValues[index]
@@ -385,11 +388,15 @@ enum Entity : String{
             return 3
         case .SCHALTSTELLEN:
             return 4
+        case .ARBEITSAUFTRAEGE:
+            return 5
+        case .VERANLASSUNGEN:
+            return 6
         }
     }
     
     static func byClassId(cid: Int) -> Entity? {
-        let dict=[27:LEUCHTEN, 26:MASTEN, 52:MAUERLASCHEN, 49:LEITUNGEN,51:SCHALTSTELLEN]
+        let dict=[27:LEUCHTEN, 26:MASTEN, 52:MAUERLASCHEN, 49:LEITUNGEN,51:SCHALTSTELLEN, 35:VERANLASSUNGEN, 47:ARBEITSAUFTRAEGE]
         return dict[cid]
     }
     func classId() -> Int{
@@ -404,6 +411,11 @@ enum Entity : String{
             return 39
         case .SCHALTSTELLEN:
             return 51
+        case .ARBEITSAUFTRAEGE:
+            return 47
+        case .VERANLASSUNGEN:
+            return 35
+
         }
         
     }
@@ -421,6 +433,10 @@ enum Entity : String{
             return "LEITUNG"
         case .SCHALTSTELLEN:
             return "SCHALTSTELLE"
+        case .ARBEITSAUFTRAEGE:
+            return "ARBEITSAUFTRAG"
+        case .VERANLASSUNGEN:
+            return "VERANLASSUNG"
         }
     }
     
