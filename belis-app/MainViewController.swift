@@ -747,7 +747,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     @IBAction func lookUpButtonTabbed(sender: AnyObject) {
-        
+        CidsConnector.sharedInstance().searchArbeitsauftraegeForTeam("") { () -> () in
+            
+            
+        }
         
     }
     

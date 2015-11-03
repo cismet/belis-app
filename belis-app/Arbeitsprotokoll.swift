@@ -50,7 +50,6 @@ class Arbeitsprotokoll : BaseEntity {
         abzweigdose <- map["fk_abzweigdose"]
         schaltstelle <- map["fk_schaltstelle"]
         standaloneGeom <- map["fk_geometrie"]
-
     }
 
 }

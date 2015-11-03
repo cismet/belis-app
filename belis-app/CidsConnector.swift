@@ -190,6 +190,93 @@ public class CidsConnector {
     }
     
     
+    func searchArbeitsauftraegeForTeam(team: String, handler: () -> ()) {
+        assert(loggedIn)
+        var qp=QueryParameters(list:[
+            SingleQueryParameter(key: "arbeitsauftragEnabled", value: true),
+            SingleQueryParameter(key: "activeObjectsOnly", value: true),
+             SingleQueryParameter(key: "zugewiesenAn", value: 39)
+        ]);
+        func mySearchCompletionHandler(data : NSData!, response : NSURLResponse!, error : NSError!) -> Void {
+            if (error == nil) {
+                print("Arbeitsaufträge Search kein Fehler")
+                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                print("URL Session Task Succeeded: HTTP \(statusCode)")
+                
+                if let checkeddata: [String : AnyObject] = getJson(data) {
+                    let json =  checkeddata["$collection"] as! [[String : AnyObject]];
+                    if let nodes = Mapper<CidsObjectNode>().mapArray(json) {
+                        
+                        
+                        print(nodes.count);
+                        self.queue.cancelAllOperations()
+                        self.searchResults=[Entity: [GeoBaseEntity]]()
+                        self.start=CidsConnector.currentTimeMillis();
+                        self.queue.maxConcurrentOperationCount = 10
+                        if nodes.count==0 {
+                            handler()
+                        }
+                        else {
+                            for node in nodes {
+                                print("\(node.classId!) : \(node.objectId!)")
+                                let rightEntity=Entity.byClassId(node.classId!)!
+                                assert(rightEntity==Entity.ARBEITSAUFTRAEGE)
+                                let classKey=rightEntity.tableName()
+                                func getAACompletionHandler(operation:GetEntityOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue) -> (){
+                                    if (error == nil) {
+                                        // Success
+                                        let statusCode = (response as! NSHTTPURLResponse).statusCode
+                                        print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                                        
+                                        if let json: [String : AnyObject] = getJson(data) {
+                                            var aa:Arbeitsauftrag?
+                                            aa = Mapper<Arbeitsauftrag>().map(json)!
+                                            
+                                            if let auftrag=aa {
+                                                print(auftrag.nummer)
+                                                print(auftrag.wgs84WKT)
+                                            }
+                                            
+                                            
+                                            if self.queue.operationCount==1 {
+                                                let duration = (CidsConnector.currentTimeMillis() - self.start)
+                                                handler();
+                                                print("loaded \(duration)");
+                                                
+                                            }
+                                            
+                                        }else {
+                                            print("no json data for \(operation.url)")
+                                            //self.searchResults[0].append(Leuchte())
+                                            
+                                        }
+                                    }else {
+                                        // Failure
+                                        print("URL Session Task Failed: %@", error.localizedDescription);
+                                    }
+                                }
+                                let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: queue, completionHandler: getAACompletionHandler)
+                                
+                                op.enqueue()
+                            }
+                        }
+                    }
+                }
+            }
+            else {
+                print("Arbeitsaufträge Search Fehler")
+            }
+            
+        }
+        let sop=SearchOperation(baseUrl: self.baseUrl,searchKey: "BELIS2.de.cismet.belis2.server.search.ArbeitsauftragSearchStatement" , user: self.login, pass: self.password, parameters: qp, completionHandler: mySearchCompletionHandler)
+        
+        sop.enqueue()
+        
+    }
+    
+   
+
+    
     func search(ewktMapContent: String,leuchtenEnabled: Bool, mastenEnabled: Bool,mauerlaschenEnabled: Bool, leitungenEnabled: Bool, schaltstellenEnabled: Bool, handler: () -> ()) {
         assert(loggedIn)
         var qp=QueryParameters(list:[
@@ -299,16 +386,13 @@ public class CidsConnector {
             
         }
         
-        let sop=SearchOperation(baseUrl: self.baseUrl, user: self.login, pass: self.password, parameters: qp, completionHandler: mySearchCompletionHandler)
+        let sop=SearchOperation(baseUrl: self.baseUrl, searchKey: "BELIS2.de.cismet.belis2.server.search.BelisObjectsWktSearch", user: self.login, pass: self.password, parameters: qp, completionHandler: mySearchCompletionHandler)
         
         sop.enqueue()
         
     }
     
     
-    func getOpenArbeitsauftraege(teamName teamName: String!, handler: (success:Bool) -> ()) {
-        
-    }
     
     
     

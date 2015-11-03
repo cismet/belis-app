@@ -203,14 +203,15 @@ class LoginOperation: CidsRequestOperation {
     }
 }
 
+
 class SearchOperation: CidsRequestOperation {
     var parameters:QueryParameters?
     var completionHandler: ((data : NSData!, response : NSURLResponse!, error : NSError!) -> Void)?
     
-    init(baseUrl: String, user: String, pass:String, parameters:QueryParameters,completionHandler: ((data : NSData!, response : NSURLResponse!, error : NSError!) -> Void)!) {
+    init(baseUrl: String, searchKey:String, user: String, pass:String, parameters:QueryParameters,completionHandler: ((data : NSData!, response : NSURLResponse!, error : NSError!) -> Void)!) {
         super.init(user: user, pass: pass)
         self.parameters=parameters
-        url="\(baseUrl)/searches/BELIS2.de.cismet.belis2.server.search.BelisObjectsWktSearch/results"
+        url="\(baseUrl)/searches/\(searchKey)/results"
         self.completionHandler=completionHandler
     }
     

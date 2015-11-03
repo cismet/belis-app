@@ -32,7 +32,7 @@ class Arbeitsauftrag : GeoBaseEntity {
         zugewiesenAn <- map["zugewiesen_an"]
         
         //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
-        wgs84WKT <- map["fk_geom.wgs84_wkt"]
+        wgs84WKT <- map["ausdehnung_wgs84"]
         
         
     }
