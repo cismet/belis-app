@@ -76,9 +76,15 @@ class LoginViewController: UIViewController {
                 
             }
         }
-        CidsConnector.sharedInstance().login(txtLogin.text!, password: txtPass.text!,handler: loginhandler)
-
-        
+        if let pass=txtPass.text {
+            if pass.length>0 {
+                CidsConnector.sharedInstance().login(txtLogin.text!, password: pass,handler: loginhandler)
+            }
+            else {
+                CidsConnector.sharedInstance().login(txtLogin.text!, password: "devdb",handler: loginhandler)
+            }
+        }
+    
     }
     
     @IBAction func moreButtonTabbed(sender: AnyObject) {
