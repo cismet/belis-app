@@ -207,14 +207,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return Entity.allValues.count
     }
     
-//    var lastSelection:BaseEntity?
+    //    var lastSelection:BaseEntity?
     //UITableViewDelegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
         print("didSelectRowAtIndexPath")
         
         if let obj=CidsConnector.sharedInstance().searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row] {
             selectOnMap(obj)
-  //          lastSelection=obj
+            //          lastSelection=obj
         }
         
     }
@@ -383,7 +383,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             return anView
             
         }
-
+        
         
         
         return nil;
@@ -616,126 +616,32 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             geoBaseEntity=polygonAnnotation.geoBaseEntity
         }
         
-        
-        if let leuchte = geoBaseEntity as? Leuchte {
-            let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
-            detailVC.sections=leuchte.getDataSectionKeys()
-            detailVC.setCellData(leuchte.getAllData())
-            detailVC.actions=leuchte.getAllActions()
+        if let gbe = geoBaseEntity  {
             
-            detailVC.objectToShow=leuchte
-            detailVC.title="Leuchte"
+            let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            
+            if let cellDataProvider=gbe as? CellDataProvider {
+                detailVC.sections=cellDataProvider.getDataSectionKeys()
+                detailVC.setCellData(cellDataProvider.getAllData())
+                detailVC.objectToShow=gbe
+                detailVC.title=cellDataProvider.getTitle()
+                let icon=UIBarButtonItem()
+                icon.image=getGlyphedImage(cellDataProvider.getDetailGlyphIconString())
+                detailVC.navigationItem.leftBarButtonItem = icon
+            }
+            if let actionProvider=gbe as? ActionProvider {
+                detailVC.actions=actionProvider.getAllActions()
+                let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
+                detailVC.navigationItem.rightBarButtonItem = action
+            }
+            
             let detailNC=UINavigationController(rootViewController: detailVC)
-            let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
-            detailVC.navigationItem.rightBarButtonItem = action
-            let icon=UIBarButtonItem()
-            icon.image=getGlyphedImage("icon-ceilinglight")
-            detailVC.navigationItem.leftBarButtonItem = icon
             selectedAnnotation=nil
+            
             mapView.deselectAnnotation(view.annotation, animated: false)
             let popC=UIPopoverController(contentViewController: detailNC)
             popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
         }
-        else if let standort = geoBaseEntity as? Standort {
-            let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
-            detailVC.sections=standort.getDataSectionKeys()
-            detailVC.setCellData(standort.getAllData())
-            detailVC.actions=standort.getAllActions()
-            
-            detailVC.objectToShow=standort
-            detailVC.title="Mast"
-            let detailNC=UINavigationController(rootViewController: detailVC)
-            let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
-            detailVC.navigationItem.rightBarButtonItem = action
-            let icon=UIBarButtonItem()
-            icon.image=getGlyphedImage("icon-horizontalexpand")
-            detailVC.navigationItem.leftBarButtonItem = icon
-            selectedAnnotation=nil
-            mapView.deselectAnnotation(view.annotation, animated: false)
-            let popC=UIPopoverController(contentViewController: detailNC)
-            popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
-        }
-        else if let leitung = geoBaseEntity as? Leitung {
-            let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
-            detailVC.sections=leitung.getDataSectionKeys()
-            detailVC.setCellData(leitung.getAllData())
-            detailVC.actions=leitung.getAllActions()
-            
-            detailVC.objectToShow=leitung
-            detailVC.title="Leitung"
-            let detailNC=UINavigationController(rootViewController: detailVC)
-            let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
-            detailVC.navigationItem.rightBarButtonItem = action
-            let icon=UIBarButtonItem()
-            icon.image=getGlyphedImage("icon-line")
-            detailVC.navigationItem.leftBarButtonItem = icon
-            selectedAnnotation=nil
-            mapView.deselectAnnotation(view.annotation, animated: false)
-            let popC=UIPopoverController(contentViewController: detailNC)
-            //popC.popoverContentSize = CGSizeMake(200, 70);
-            popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
-        }
-        else if let mauerlasche = geoBaseEntity as? Mauerlasche {
-            let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
-            detailVC.objectToShow=mauerlasche
-            detailVC.sections=mauerlasche.getDataSectionKeys()
-            
-            detailVC.setCellData(mauerlasche.getAllData())
-            detailVC.title="Mauerlasche"
-            detailVC.actions=mauerlasche.getAllActions()
-            let detailNC=UINavigationController(rootViewController: detailVC)
-            let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
-            detailVC.navigationItem.rightBarButtonItem = action
-            let icon=UIBarButtonItem()
-            icon.image=getGlyphedImage("icon-nut")
-            detailVC.navigationItem.leftBarButtonItem = icon
-            selectedAnnotation=nil
-            mapView.deselectAnnotation(view.annotation, animated: false)
-            let popC=UIPopoverController(contentViewController: detailNC)
-            //popC.popoverContentSize = CGSizeMake(200, 70);
-            popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
-        }
-        else if let schaltstelle = geoBaseEntity as? Schaltstelle {
-            let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
-            detailVC.sections=schaltstelle.getDataSectionKeys()
-            detailVC.setCellData(schaltstelle.getAllData())
-            detailVC.title="Schaltstelle"
-            detailVC.actions=schaltstelle.getAllActions()
-            
-            detailVC.objectToShow=schaltstelle
-            let detailNC=UINavigationController(rootViewController: detailVC)
-            let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
-            detailVC.navigationItem.rightBarButtonItem = action
-            let icon=UIBarButtonItem()
-            icon.image=getGlyphedImage("icon-switch")
-            detailVC.navigationItem.leftBarButtonItem = icon
-            selectedAnnotation=nil
-            mapView.deselectAnnotation(view.annotation, animated: false)
-            let popC=UIPopoverController(contentViewController: detailNC)
-            //popC.popoverContentSize = CGSizeMake(200, 70);
-            popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
-        }
-        else if let arbeitsauftrag = geoBaseEntity as? Arbeitsauftrag {
-            let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
-            detailVC.sections=arbeitsauftrag.getDataSectionKeys()
-            detailVC.setCellData(arbeitsauftrag.getAllData())
-            detailVC.title="Arbeitsauftrag"
-           // detailVC.actions=arbeitsauftrag.getAllActions()
-            
-            detailVC.objectToShow=arbeitsauftrag
-            let detailNC=UINavigationController(rootViewController: detailVC)
-            let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
-            detailVC.navigationItem.rightBarButtonItem = action
-            let icon=UIBarButtonItem()
-            icon.image=getGlyphedImage("icon-switch")
-            detailVC.navigationItem.leftBarButtonItem = icon
-            selectedAnnotation=nil
-            mapView.deselectAnnotation(view.annotation, animated: false)
-            let popC=UIPopoverController(contentViewController: detailNC)
-            //popC.popoverContentSize = CGSizeMake(200, 70);
-            popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
-        }
-
     }
     
     

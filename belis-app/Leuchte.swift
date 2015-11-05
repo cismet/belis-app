@@ -8,7 +8,7 @@
 
 import Foundation
 import ObjectMapper
-class Leuchte : GeoBaseEntity, CallOutInformationProviderProtocol, CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
+class Leuchte : GeoBaseEntity,  CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
     var strasse: Strasse?
     var energielieferant: Energielieferant?
     var rundsteuerempfaenger: Rundsteuerempfaenger?
@@ -87,6 +87,14 @@ class Leuchte : GeoBaseEntity, CallOutInformationProviderProtocol, CellInformati
     }
     
     //CellDataProvider
+    @objc func getTitle() -> String {
+        return "Leuchte"
+    }
+    
+    @objc func getDetailGlyphIconString() -> String {
+        return "icon-ceilinglight"
+    }
+
     @objc func getAllData() -> [String: [CellData]] {
         var data: [String: [CellData]] = ["main":[]]
         data["main"]?.append(SimpleInfoCellData(data: getSubTitle()))
@@ -315,7 +323,7 @@ class Leuchte : GeoBaseEntity, CallOutInformationProviderProtocol, CellInformati
     }
     
     
-    func getTitle() -> String {
+    func getCallOutTitle() -> String {
         return getAnnotationTitle()
     }
     func getGlyphIconName() -> String {

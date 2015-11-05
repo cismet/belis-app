@@ -87,7 +87,7 @@ class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInf
     
     //CallOutInformationProviderProtocol
     
-    func getTitle() -> String {
+    func getCalloutTitle() -> String {
         return getAnnotationTitle()
     }
     func getGlyphIconName() -> String {
@@ -122,6 +122,15 @@ class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInf
     
     
     //CellDataProvider
+    
+    @objc func getTitle() -> String {
+        return "Schaltstelle"
+    }
+    
+    @objc func getDetailGlyphIconString() -> String {
+        return "icon-switch"
+    }
+
     @objc func getAllData() -> [String: [CellData]] {
         var details: [String: [CellData]] = ["main":[]]
         details["main"]?.append(SimpleInfoCellData(data: getMainTitle()))

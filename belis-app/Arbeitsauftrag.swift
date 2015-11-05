@@ -81,6 +81,15 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataPr
     }
     
     
+    @objc func getTitle() -> String {
+        return "Arbeitsauftrag"
+    }
+    
+    @objc func getDetailGlyphIconString() -> String {
+        return "icon-switch"
+    }
+
+    
     @objc func getAllData() -> [String: [CellData]] {    
         var data: [String: [CellData]] = ["main":[]]
         data["main"]?.append(SingleTitledInfoCellData(title: "Nummer",data: getMainTitle()))

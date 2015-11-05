@@ -71,7 +71,13 @@ class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProv
         
     }
     
+    @objc func getTitle() -> String {
+        return "Mauerlasche"
+    }
     
+    @objc func getDetailGlyphIconString() -> String {
+        return "icon-nut"
+    }
     @objc func getAllData() -> [String: [CellData]] {
         var data: [String: [CellData]] = ["main":[]]
         if let mat=material?.bezeichnung {

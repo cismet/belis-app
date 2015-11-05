@@ -35,6 +35,17 @@ class Leitung : GeoBaseEntity ,CellInformationProviderProtocol, CellDataProvider
         
         
     }
+    
+    
+    @objc func getTitle() -> String {
+        return "Leitung"
+    }
+    
+    @objc func getDetailGlyphIconString() -> String {
+        return "icon-line"
+    }
+
+    
     @objc func getAllData() -> [String: [CellData]] {
         var data: [String: [CellData]] = ["main":[]]
         data["main"]?.append(SimpleInfoCellData(data: leitungstyp?.bezeichnung ?? "Leitung"))

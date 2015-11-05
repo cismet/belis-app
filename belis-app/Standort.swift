@@ -10,7 +10,7 @@ import Foundation
 import ObjectMapper
 
 
-class Standort: GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider,ActionProvider, DocumentContainer{
+class Standort: GeoBaseEntity ,  CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer{
     var plz : String?
     var strasse : Strasse?
     var bezirk : Stadtbezirk?
@@ -125,7 +125,7 @@ class Standort: GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInformat
     
     //CallOutInformationProviderProtocol
     
-    func getTitle() -> String {
+    func getCallOutTitle() -> String {
         return getAnnotationTitle()
     }
     func getGlyphIconName() -> String {
@@ -160,6 +160,16 @@ class Standort: GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInformat
     
     
     //CellDataProvider
+    
+    
+    @objc func getTitle() -> String {
+        return "Mast"
+    }
+    
+    @objc func getDetailGlyphIconString() -> String {
+        return "icon-horizontalexpand"
+    }
+
     @objc func getAllData() -> [String: [CellData]] {
         var mastDetails: [String: [CellData]] = ["main":[]]
         

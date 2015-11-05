@@ -9,7 +9,7 @@
 import Foundation
 
 protocol CallOutInformationProviderProtocol {
-    func getTitle() -> String
+    func getCalloutTitle() -> String
     func getGlyphIconName() -> String
     func getDetailViewID() -> String
     func canShowDetailInformation() -> Bool
@@ -46,6 +46,8 @@ class NoCellInformation : CellInformationProviderProtocol {
 @objc protocol CellDataProvider {
     func getAllData() -> [String: [CellData]]
     func getDataSectionKeys() -> [String]
+    func getTitle() -> String
+    func getDetailGlyphIconString() -> String
 }
 
 
