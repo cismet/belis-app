@@ -195,7 +195,7 @@ public class CidsConnector {
         var qp=QueryParameters(list:[
             SingleQueryParameter(key: "arbeitsauftragEnabled", value: true),
             SingleQueryParameter(key: "activeObjectsOnly", value: true),
-             SingleQueryParameter(key: "zugewiesenAn", value: 39)
+             SingleQueryParameter(key: "zugewiesenAn", value: 18) //39
         ]);
         func mySearchCompletionHandler(data : NSData!, response : NSURLResponse!, error : NSError!) -> Void {
             if (error == nil) {
@@ -233,8 +233,6 @@ public class CidsConnector {
                                             aa = Mapper<Arbeitsauftrag>().map(json)!
                                             
                                             if let auftrag=aa {
-                                                print(auftrag.nummer)
-                                                print(auftrag.wgs84WKT)
                                                 if let _=self.searchResults[Entity.ARBEITSAUFTRAEGE] {
                                                     self.searchResults[Entity.ARBEITSAUFTRAEGE]!.append(auftrag)
                                                 }

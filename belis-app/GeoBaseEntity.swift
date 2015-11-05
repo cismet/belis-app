@@ -23,18 +23,20 @@ class GeoBaseEntity : BaseEntity{
         didSet {
             //println("geoString="+wgs84WKT!);
             if let wgs84WKTSTring=wgs84WKT {
-                geom=WKTParser.parseGeometry(wgs84WKTSTring);
+                geom=WKTParser.parseGeometry(wgs84WKTSTring)
                 if ( geom is WKTPoint){
                     let point=geom as! WKTPoint;
                     mapObject=GeoBaseEntityPointAnnotation(geoBaseEntity: self, point: point)
-//                    println("GeoBaseEntityPointAnnotation set")
-                
                 }
                 else if (geom is WKTLine) {
                     let line=geom as! WKTLine;
                     mapObject=GeoBaseEntityStyledMkPolylineAnnotation(line: line, geoBaseEntity: self)
                     (mapObject! as! GeoBaseEntityStyledMkPolylineAnnotation).geoBaseEntity=self
-//                    println("GeoBaseEntityStyledMkPolylineAnnotation set")
+                }
+                else if (geom is WKTPolygon) {
+                    let polygon=geom as! WKTPolygon
+                    mapObject=GeoBaseEntityStyledMkPolygonAnnotation(polyg: polygon, geoBaseEntity: self)
+                     (mapObject! as! GeoBaseEntityStyledMkPolygonAnnotation).geoBaseEntity=self
                 }
                 
             }
@@ -54,6 +56,10 @@ class GeoBaseEntity : BaseEntity{
             else if let moLine=mo as? GeoBaseEntityStyledMkPolylineAnnotation {
                 mapView.addOverlay(moLine)
                 mapView.addAnnotation(moLine)
+            }
+            else if let moPolygon=mo as? GeoBaseEntityStyledMkPolygonAnnotation {
+                mapView.addOverlay(moPolygon)
+                mapView.addAnnotation(moPolygon)
 
             }
         }
@@ -67,6 +73,9 @@ class GeoBaseEntity : BaseEntity{
             }
             else if let moLine=mo as? GeoBaseEntityStyledMkPolylineAnnotation {
                 mapView.removeOverlay(moLine)
+            }
+            else if let moPoly=mo as? GeoBaseEntityStyledMkPolygonAnnotation {
+                mapView.removeOverlay(moPoly)
             }
         }
     }
@@ -180,6 +189,34 @@ class GeoBaseEntityStyledMkPolylineAnnotation:MKPolyline{
         let mLine=line.toMapLine();
         mLine.title="."
         self.init(points: mLine.points(), count: mLine.pointCount)
+        imageName=geoBaseEntity.getAnnotationImageName();
+        glyphName=geoBaseEntity.getAnnotationCalloutGlyphIconName();
+        title=geoBaseEntity.getAnnotationTitle();
+        //        subtitle=geoBaseEntity.getAnnotationSubTitle();
+        shouldShowCallout=geoBaseEntity.canShowCallout();
+    }
+    func getGeoBaseEntity() -> GeoBaseEntity {
+        return geoBaseEntity
+    }
+    
+}
+
+
+class GeoBaseEntityStyledMkPolygonAnnotation:MKPolygon{
+      var shouldShowCallout = false
+    var geoBaseEntity: GeoBaseEntity
+    var imageName: String!
+    var glyphName: String!
+ 
+    override init() {
+        geoBaseEntity = GeoBaseEntity()
+    }
+    
+    convenience init(polyg: WKTPolygon, geoBaseEntity: GeoBaseEntity) {
+        self.init()
+        let mPolyg=polyg.toMapPolygon()
+        mPolyg.title="."
+        self.init(points: mPolyg.points(), count: mPolyg.pointCount)
         imageName=geoBaseEntity.getAnnotationImageName();
         glyphName=geoBaseEntity.getAnnotationCalloutGlyphIconName();
         title=geoBaseEntity.getAnnotationTitle();

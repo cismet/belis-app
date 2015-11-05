@@ -99,6 +99,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         bbiMoreFunctionality.title=WebHostingGlyps.glyphs["icon-chevron-down"]
         print(UIDevice.currentDevice().identifierForVendor!.UUIDString)
         
+        
+        
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
@@ -194,6 +196,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 cell.lblBezeichnung.text=cellInfoProvider.getMainTitle()
                 cell.lblStrasse.text=cellInfoProvider.getTertiaryInfo()
                 cell.lblSubText.text=cellInfoProvider.getSubTitle()
+                cell.lblZusatzinfo.text=cellInfoProvider.getQuaternaryInfo()
             }
             
         }
@@ -204,13 +207,16 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return Entity.allValues.count
     }
     
-    
+//    var lastSelection:BaseEntity?
     //UITableViewDelegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
         print("didSelectRowAtIndexPath")
+        
         if let obj=CidsConnector.sharedInstance().searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row] {
             selectOnMap(obj)
+  //          lastSelection=obj
         }
+        
     }
     
     
@@ -243,6 +249,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     
     
+    
     //NKMapViewDelegates
     
     func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
@@ -261,6 +268,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 return polylineRenderer
                 
             }
+        }
+        else if overlay is GeoBaseEntityStyledMkPolygonAnnotation {
+            let polygonRenderer = MKPolygonRenderer(overlay: overlay)
+            
+            polygonRenderer.strokeColor =  UIColor(red: 255.0/255.0, green: 224.0/255.0, blue: 110.0/255.0, alpha: 0.8);
+            polygonRenderer.lineWidth = 10
+            polygonRenderer.fillColor=UIColor(red: 86.0/255.0, green: 109.0/255.0, blue: 128.0/255.0, alpha: 0.8);
+            return polygonRenderer
+            
         }
         else if (overlay is MKTileOverlay){
             
@@ -338,7 +354,37 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             anView!.alpha=0.9
             return anView
             
+        } else if (annotation is GeoBaseEntityStyledMkPolygonAnnotation){
+            let gbeSPGA=annotation as! GeoBaseEntityStyledMkPolygonAnnotation;
+            let reuseId = "belisAnnotation"
+            var anView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId)
+            if anView == nil {
+                anView = MKAnnotationView(annotation: gbeSPGA, reuseIdentifier: reuseId)
+                
+            }
+            else {
+                anView!.annotation = gbeSPGA
+            }
+            
+            if let label=getGlyphedLabel(gbeSPGA.glyphName) {
+                label.textColor=UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)
+                anView!.leftCalloutAccessoryView=label
+            }
+            if let btn=getGlyphedButton("icon-chevron-right"){
+                btn.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0), forState: UIControlState.Normal)
+                anView!.rightCalloutAccessoryView=btn
+            }
+            
+            //Set annotation-specific properties **AFTER**
+            //the view is dequeued or created...
+            anView!.image = UIImage(named: gbeSPGA.imageName);
+            anView!.canShowCallout = gbeSPGA.shouldShowCallout;
+            anView!.alpha=0.9
+            return anView
+            
         }
+
+        
         
         return nil;
     }
@@ -530,6 +576,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 mapView.addOverlay(highlightedLine!);
                 mapView.addOverlay(line); //bring the highlightedLine below the line
                 
+            } else if mapObj is GeoBaseEntityStyledMkPolygonAnnotation {
+                //let polygon=mapObj as! GeoBaseEntityStyledMkPolygonAnnotation
+                //let annos=[polygon]
+                //zoomToFitMapAnnotations(annos)
             }
         } else {
             selectedAnnotation=nil
@@ -562,7 +612,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else if let lineAnnotation = view.annotation as? GeoBaseEntityStyledMkPolylineAnnotation {
             geoBaseEntity=lineAnnotation.geoBaseEntity
+        }else if let polygonAnnotation = view.annotation as? GeoBaseEntityStyledMkPolygonAnnotation {
+            geoBaseEntity=polygonAnnotation.geoBaseEntity
         }
+        
         
         if let leuchte = geoBaseEntity as? Leuchte {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
@@ -662,6 +715,27 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             //popC.popoverContentSize = CGSizeMake(200, 70);
             popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
         }
+        else if let arbeitsauftrag = geoBaseEntity as? Arbeitsauftrag {
+            let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            detailVC.sections=arbeitsauftrag.getDataSectionKeys()
+            detailVC.setCellData(arbeitsauftrag.getAllData())
+            detailVC.title="Arbeitsauftrag"
+           // detailVC.actions=arbeitsauftrag.getAllActions()
+            
+            detailVC.objectToShow=arbeitsauftrag
+            let detailNC=UINavigationController(rootViewController: detailVC)
+            let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
+            detailVC.navigationItem.rightBarButtonItem = action
+            let icon=UIBarButtonItem()
+            icon.image=getGlyphedImage("icon-switch")
+            detailVC.navigationItem.leftBarButtonItem = icon
+            selectedAnnotation=nil
+            mapView.deselectAnnotation(view.annotation, animated: false)
+            let popC=UIPopoverController(contentViewController: detailNC)
+            //popC.popoverContentSize = CGSizeMake(200, 70);
+            popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
+        }
+
     }
     
     
@@ -670,7 +744,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             for obj in entityArray {
                 dispatch_async(dispatch_get_main_queue()) {
                     obj.removeFromMapView(self.mapView);
-                }            }
+                }
+            }
         }
         CidsConnector.sharedInstance().searchResults=[Entity: [GeoBaseEntity]]()
         dispatch_async(dispatch_get_main_queue()) {
@@ -756,15 +831,87 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     @IBAction func lookUpButtonTabbed(sender: AnyObject) {
         removeAllEntityObjects()
-
+        actInd.center = mapView.center;
+        actInd.hidesWhenStopped = true;
+        actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
+        self.view.addSubview(actInd);
+        actInd.startAnimating();
+        
         CidsConnector.sharedInstance().searchArbeitsauftraegeForTeam("") { () -> () in
             dispatch_async(dispatch_get_main_queue()) {
                 self.tableView.reloadData();
+                var annos: [MKAnnotation]=[]
+                
+                for (_, objArray) in CidsConnector.sharedInstance().searchResults{
+                    for obj in objArray {
+                        obj.addToMapView(self.mapView);
+                        if let anno=obj.mapObject as? MKAnnotation {
+                            annos.append(anno)
+                        }
+                    }
+                }
+                
+                self.actInd.stopAnimating();
+                self.actInd.removeFromSuperview();
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.zoomToFitMapAnnotations(annos)
+                }
+            }
+        }
+        
+    }
+    
+    
+    func zoomToFitMapAnnotations(annos: [MKAnnotation]) {
+        if annos.count == 0 {return}
+        
+        var topLeftCoordinate = CLLocationCoordinate2D(latitude: -90, longitude: 180)
+        var bottomRightCoordinate = CLLocationCoordinate2D(latitude: 90, longitude: -180)
+        
+        for annotation in annos {
+            if let poly=annotation as? MKMultiPoint {
+                let points=poly.points()
+                print(poly.pointCount)
+                for i in  0 ... poly.pointCount-1 { //last point is jwd (dono why)
+                    let coord = MKCoordinateForMapPoint(points[i])
+                    //print("CO: \(coord.longitude),\(coord.latitude)")
+                    topLeftCoordinate.longitude = fmin(topLeftCoordinate.longitude, coord.longitude)
+                    topLeftCoordinate.latitude = fmax(topLeftCoordinate.latitude, coord.latitude)
+                    bottomRightCoordinate.longitude = fmax(bottomRightCoordinate.longitude, coord.longitude)
+                    bottomRightCoordinate.latitude = fmin(bottomRightCoordinate.latitude, coord.latitude)
+                    //print("TL: \(topLeftCoordinate.longitude),\(topLeftCoordinate.latitude)")
+                    //belis selprint("BR: \(bottomRightCoordinate.longitude),\(bottomRightCoordinate.latitude)")
+                    
+                }
+                
+            }
+            else {
+                
+                topLeftCoordinate.longitude = fmin(topLeftCoordinate.longitude, annotation.coordinate.longitude)
+                topLeftCoordinate.latitude = fmax(topLeftCoordinate.latitude, annotation.coordinate.latitude)
+                bottomRightCoordinate.longitude = fmax(bottomRightCoordinate.longitude, annotation.coordinate.longitude)
+                bottomRightCoordinate.latitude = fmin(bottomRightCoordinate.latitude, annotation.coordinate.latitude)
             }
             
         }
         
+        let center = CLLocationCoordinate2D(latitude: topLeftCoordinate.latitude - (topLeftCoordinate.latitude - bottomRightCoordinate.latitude) * 0.5, longitude: topLeftCoordinate.longitude - (topLeftCoordinate.longitude - bottomRightCoordinate.longitude) * 0.5)
+        
+        print("\ncenter:\(center.latitude) \(center.longitude)")
+        // Add a little extra space on the sides
+        let span = MKCoordinateSpanMake(fabs(topLeftCoordinate.latitude - bottomRightCoordinate.latitude) * 1.01, fabs(bottomRightCoordinate.longitude - topLeftCoordinate.longitude) * 1.01)
+        print("\nspan:\(span.latitudeDelta) \(span.longitudeDelta)")
+        
+        var region = MKCoordinateRegion(center: center, span: span)
+        
+        
+        region = self.mapView.regionThatFits(region)
+        
+        self.mapView.setRegion(region, animated: true)
+        
     }
+    
+    
     
     @IBAction func focusItemTabbed(sender: AnyObject) {
         focusToggle.setOn(!focusToggle.on, animated: true)

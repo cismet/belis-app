@@ -16,6 +16,7 @@ class TableViewCell: UITableViewCell {
     
     @IBOutlet weak var lblSubText: UILabel!
     
+    @IBOutlet weak var lblZusatzinfo: UILabel!
     
     
     override func awakeFromNib() {

@@ -22,6 +22,38 @@ extension NSDate
     }
 }
 
+class DateTransformFromString : TransformType {
+    var dateFormat:String
+    init(format: String) {
+        dateFormat=format
+    }
+    func transformFromJSON(value: AnyObject?) -> NSDate? {
+        if let s = value as? String {
+            let dateStringFormatter = NSDateFormatter()
+            dateStringFormatter.dateFormat = dateFormat
+
+            if let ret=dateStringFormatter.dateFromString(s) {
+                return ret
+            }
+            else {
+                //error
+            }
+            
+        }
+        
+        return nil
+    }
+    func transformToJSON(value: NSDate?) -> Int? {
+        if let d=value {
+            let ms:Int = Int(d.timeIntervalSince1970*1000.0)
+            return ms
+        }
+        return nil
+    }
+
+}
+
+
 class DateTransformFromMillisecondsTimestamp : TransformType {
     
     func transformFromJSON(value: AnyObject?) -> NSDate? {
@@ -29,6 +61,7 @@ class DateTransformFromMillisecondsTimestamp : TransformType {
             let dms=Double(ms)
             return NSDate(timeIntervalSince1970: NSTimeInterval(dms/1000.0))
         }
+        
        return nil
     }
     func transformToJSON(value: NSDate?) -> Int? {

@@ -226,12 +226,23 @@
                                                         <rect key="frame" x="8" y="8" width="260" height="21"/>
                                                     </variation>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="444" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4M8-1G-yBd" userLabel="Quaternary">
+                                                    <rect key="frame" x="8" y="28" width="260" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <variation key="heightClass=regular-widthClass=regular" fixedFrame="YES">
+                                                        <rect key="frame" x="8" y="29" width="260" height="21"/>
+                                                    </variation>
+                                                </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <accessibility key="accessibilityConfiguration" label="444"/>
                                         <connections>
                                             <outlet property="lblBezeichnung" destination="fAi-yZ-iib" id="ves-83-7uT"/>
                                             <outlet property="lblStrasse" destination="jCl-Bq-sbj" id="Q9x-8w-Z8Q"/>
                                             <outlet property="lblSubText" destination="M0b-ma-Qz1" id="OCi-dp-3mP"/>
+                                            <outlet property="lblZusatzinfo" destination="4M8-1G-yBd" id="eSE-9P-6qx"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -298,6 +309,7 @@
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="LYr-cg-vAH"/>
                                     <barButtonItem title="Kein Arbeitsauftrag ausgewählt" id="gaw-Jb-8bG"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="BtE-3Q-gu8"/>
                                     <barButtonItem systemItem="bookmarks" id="CYg-ry-sRN">
                                         <connections>
                                             <action selector="lookUpButtonTabbed:" destination="Kou-sk-bUr" id="Dvx-ij-MTN"/>

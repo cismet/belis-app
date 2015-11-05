@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol {
+class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvider {
     var angelegtVon:String?
     var angelegtAm: NSDate?
     var nummer: String?
@@ -25,9 +25,9 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol {
     
     override func mapping(map: Map) {
         id <- map["id"];
-        angelegtVon <- map["angelegt_von"];
-        angelegtAm <- map["angelegt_am"];
-        nummer <- map["nummer"];
+        angelegtVon <- map["angelegt_von"]
+        angelegtAm <- (map["angelegt_am"], DateTransformFromString(format: "yyyy-MM-dd"))
+        nummer <- map["nummer"]
         protokolle <- map["ar_protokolle"]
         zugewiesenAn <- map["zugewiesen_an"]
         
@@ -64,6 +64,32 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol {
             return "\(prot.count)"
         }
         return "?"
+    }
+    
+    
+    
+    override func getAnnotationTitle() -> String{
+        return "\(getMainTitle()) - \(getSubTitle())"
+    }
+    
+    override func canShowCallout() -> Bool{
+        return true;
+    }
+    
+    override func getAnnotationCalloutGlyphIconName() -> String {
+        return "icon-line";
+    }
+    
+    
+    @objc func getAllData() -> [String: [CellData]] {    
+        var data: [String: [CellData]] = ["main":[]]
+        data["main"]?.append(SingleTitledInfoCellData(title: "Nummer",data: getMainTitle()))
+        data["DeveloperInfo"]=[]
+        data["DeveloperInfo"]?.append(SingleTitledInfoCellData(title: "Key", data: "\(getType().tableName())/\(id)"))
+        return data
+    }
+    @objc func getDataSectionKeys() -> [String] {
+        return ["main","DeveloperInfo"]
     }
     
 }
