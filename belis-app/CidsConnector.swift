@@ -235,8 +235,13 @@ public class CidsConnector {
                                             if let auftrag=aa {
                                                 print(auftrag.nummer)
                                                 print(auftrag.wgs84WKT)
+                                                if let _=self.searchResults[Entity.ARBEITSAUFTRAEGE] {
+                                                    self.searchResults[Entity.ARBEITSAUFTRAEGE]!.append(auftrag)
+                                                }
+                                                else {
+                                                    self.searchResults.updateValue([auftrag], forKey: Entity.ARBEITSAUFTRAEGE)
+                                                }
                                             }
-                                            
                                             
                                             if self.queue.operationCount==1 {
                                                 let duration = (CidsConnector.currentTimeMillis() - self.start)

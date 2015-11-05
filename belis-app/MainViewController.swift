@@ -665,15 +665,23 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     
+    func removeAllEntityObjects(){
+        for (_, entityArray) in CidsConnector.sharedInstance().searchResults{
+            for obj in entityArray {
+                dispatch_async(dispatch_get_main_queue()) {
+                    obj.removeFromMapView(self.mapView);
+                }            }
+        }
+        CidsConnector.sharedInstance().searchResults=[Entity: [GeoBaseEntity]]()
+        dispatch_async(dispatch_get_main_queue()) {
+            self.tableView.reloadData();
+        }
+    }
     
     //Actions
     
     @IBAction func searchButtonTabbed(sender: AnyObject) {
-        for (_, entityArray) in CidsConnector.sharedInstance().searchResults{
-            for obj in entityArray {
-                obj.removeFromMapView(mapView);
-            }
-        }
+        removeAllEntityObjects()
         
         self.tableView.reloadData();
         
@@ -747,8 +755,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     @IBAction func lookUpButtonTabbed(sender: AnyObject) {
+        removeAllEntityObjects()
+
         CidsConnector.sharedInstance().searchArbeitsauftraegeForTeam("") { () -> () in
-            
+            dispatch_async(dispatch_get_main_queue()) {
+                self.tableView.reloadData();
+            }
             
         }
         
