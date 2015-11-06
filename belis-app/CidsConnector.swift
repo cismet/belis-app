@@ -457,7 +457,7 @@ enum Entity : String{
     case ARBEITSAUFTRAEGE="Arbeitsaufträge"
     case VERANLASSUNGEN="Veranlassungen"
     
-    static let allValues=[LEUCHTEN,MASTEN,MAUERLASCHEN,LEITUNGEN,SCHALTSTELLEN,VERANLASSUNGEN,ARBEITSAUFTRAEGE]
+    static let allValues=[LEUCHTEN,MASTEN,MAUERLASCHEN,LEITUNGEN,SCHALTSTELLEN,ARBEITSAUFTRAEGE,VERANLASSUNGEN]
     
     static func byIndex(index: Int) -> Entity {
         return allValues[index]

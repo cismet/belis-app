@@ -203,11 +203,10 @@ class GeoBaseEntityStyledMkPolylineAnnotation:MKPolyline{
 
 
 class GeoBaseEntityStyledMkPolygonAnnotation:MKPolygon{
-      var shouldShowCallout = false
+    var shouldShowCallout = false
     var geoBaseEntity: GeoBaseEntity
     var imageName: String!
     var glyphName: String!
- 
     override init() {
         geoBaseEntity = GeoBaseEntity()
     }

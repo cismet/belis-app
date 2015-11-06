@@ -1,3 +1,4 @@
+
 //
 //  MainViewController.swift
 //  BelIS
@@ -482,6 +483,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     // MARK: - Use mark to logically organize your code
     func mapTapped(sender: UITapGestureRecognizer) {
         let touchPt = sender.locationInView(mapView)
+
         //let hittedUI = mapView.hitTest(touchPt, withEvent: nil)
         //        println(hittedUI)
         print("mapTabbed")
@@ -491,7 +493,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         var foundPolyline: GeoBaseEntityStyledMkPolylineAnnotation?
         var foundPoint: GeoBaseEntityPointAnnotation?
-        
+        var foundPolygon: GeoBaseEntityStyledMkPolygonAnnotation?
         
         
         
@@ -537,12 +539,33 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                         break
                     }
                 }
+                if let polygonAnnotation  = overlay as? GeoBaseEntityStyledMkPolygonAnnotation {
+                    let path  = CGPathCreateMutable()
+                    for i in 0...polygonAnnotation.pointCount-1 {
+                        let mapPoint = polygonAnnotation.points()[i]
+                        
+                        let cgPoint = mapView.convertCoordinate(MKCoordinateForMapPoint(mapPoint), toPointToView: mapView)
+                        if i==0 {
+                            CGPathMoveToPoint(path, nil, cgPoint.x, cgPoint.y)
+                        }
+                        else {
+                            CGPathAddLineToPoint(path, nil, cgPoint.x, cgPoint.y)
+                        }
+                    }
+                    if (CGPathContainsPoint(path, nil, touchPt, false)) {
+                        foundPolygon=polygonAnnotation
+                        break
+                    }
+                }
             }
             
             if let hitPolyline = foundPolyline {
                 selectOnMap(hitPolyline.getGeoBaseEntity())
                 selectInTable(hitPolyline.getGeoBaseEntity())
-                print("selected Line with \(hitPolyline.pointCount) points")
+            }
+            else if let hitPolygon=foundPolygon{
+                selectOnMap(hitPolygon.getGeoBaseEntity())
+                selectInTable(hitPolygon.getGeoBaseEntity())
             }
             else {
                 selectOnMap(nil)
@@ -590,7 +613,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func selectInTable(geoBaseEntityToSelect : GeoBaseEntity?){
         if let geoBaseEntity = geoBaseEntityToSelect{
             let entity=geoBaseEntity.getType()
-            
+
             //need old fashioned loop for index
             for i in 0...CidsConnector.sharedInstance().searchResults[entity]!.count-1 {
                 var results : [GeoBaseEntity] = CidsConnector.sharedInstance().searchResults[entity]!
