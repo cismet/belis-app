@@ -8,8 +8,9 @@
 
 import Foundation
 import ObjectMapper
+import MGSwipeTableCell
 
-class GeoBaseEntity : BaseEntity{
+class GeoBaseEntity : BaseEntity, LeftSwipeActionProvider{
     var mapObject : NSObject?;
     private var geom :WKTGeometry?
 
@@ -146,7 +147,19 @@ class GeoBaseEntity : BaseEntity{
     override func mapping(map: Map) {
         
     }
-    
+
+    func getLeftSwipeActions() -> [MGSwipeButton] {
+        let zoomC=UIColor(red: 193.0/255.0, green: 237.0/255.0, blue: 46.0/255.0, alpha: 1.0)
+        
+        let zoom=MGSwipeButton(title: "Zoom", backgroundColor: zoomC ,callback: {
+            (sender: MGSwipeTableCell!) -> Bool in
+            if let anno=self.mapObject as? MKAnnotation, mainVC=CidsConnector.sharedInstance().mainVC {
+                 mainVC.zoomToFitMapAnnotations([anno])
+            }
+            return true
+        })
+        return [zoom]
+    }
     
 }
 

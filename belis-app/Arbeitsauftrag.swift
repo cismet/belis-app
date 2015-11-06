@@ -8,8 +8,9 @@
 
 import Foundation
 import ObjectMapper
+import MGSwipeTableCell
 
-class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvider {
+class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvider, RightSwipeActionProvider {
     var angelegtVon:String?
     var angelegtAm: NSDate?
     var nummer: String?
@@ -100,6 +101,22 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataPr
     @objc func getDataSectionKeys() -> [String] {
         return ["main","DeveloperInfo"]
     }
+    
+
+    func getRightSwipeActions() -> [MGSwipeButton] {
+        let selC=UIColor(red: 91.0/255.0, green: 152.0/255.0, blue: 246.0/255.0, alpha: 1.0)
+        
+        let select=MGSwipeButton(title: "Auswählen", backgroundColor: selC ,callback: {
+            (sender: MGSwipeTableCell!) -> Bool in
+            if let mainVC=CidsConnector.sharedInstance().mainVC {
+                //mainVC.zoomToFitMapAnnotations([anno])
+            }
+            
+            return true
+        })
+        return [select]
+    }
+    
     
 }
 

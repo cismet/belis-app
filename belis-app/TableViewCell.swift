@@ -7,9 +7,12 @@
 //
 
 import UIKit
+import MGSwipeTableCell
 
-class TableViewCell: UITableViewCell {
+class TableViewCell: MGSwipeTableCell {
 
+    var baseEntity:BaseEntity?
+    
     @IBOutlet weak var lblBezeichnung: UILabel!
     
     @IBOutlet weak var lblStrasse: UILabel!

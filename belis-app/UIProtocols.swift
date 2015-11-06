@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import MGSwipeTableCell
 protocol CallOutInformationProviderProtocol {
     func getCalloutTitle() -> String
     func getGlyphIconName() -> String
@@ -64,4 +64,11 @@ class NoCellInformation : CellInformationProviderProtocol {
     func getAllActions() -> [BaseEntityAction]
 }
 
+
+protocol LeftSwipeActionProvider {
+    func getLeftSwipeActions()->[MGSwipeButton]
+}
+protocol RightSwipeActionProvider {
+    func getRightSwipeActions()->[MGSwipeButton]
+}
 

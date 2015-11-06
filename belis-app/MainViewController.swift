@@ -10,8 +10,9 @@
 import UIKit;
 import MapKit;
 import ObjectMapper;
+import MGSwipeTableCell
 
-class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate {
+class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate, MGSwipeTableCellDelegate {
     
     @IBOutlet weak var mapView: MKMapView!;
     @IBOutlet weak var tableView: UITableView!;
@@ -49,6 +50,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     override func viewDidLoad() {
         super.viewDidLoad();
+        CidsConnector.sharedInstance().mainVC=self
         
         locationManager=CLLocationManager();
         
@@ -193,21 +195,64 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell: TableViewCell = tableView.dequeueReusableCellWithIdentifier("firstCellPrototype")as! TableViewCell
         //        var cellInfoProvider: CellInformationProviderProtocol = NoCellInformation()
-        if let obj=CidsConnector.sharedInstance().searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row] {
+        cell.baseEntity=CidsConnector.sharedInstance().searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row]
+        
+        if let obj=cell.baseEntity {
             if let cellInfoProvider=obj as? CellInformationProviderProtocol {
                 cell.lblBezeichnung.text=cellInfoProvider.getMainTitle()
                 cell.lblStrasse.text=cellInfoProvider.getTertiaryInfo()
                 cell.lblSubText.text=cellInfoProvider.getSubTitle()
                 cell.lblZusatzinfo.text=cellInfoProvider.getQuaternaryInfo()
             }
-            
         }
+        cell.delegate=self
+
+        if let left=cell.baseEntity as? LeftSwipeActionProvider {
+            cell.leftButtons=left.getLeftSwipeActions()
+        }
+        if let right=cell.baseEntity as? RightSwipeActionProvider {
+            cell.rightButtons=right.getRightSwipeActions()
+        }
+        
+        
+        
+                //let fav=MGSwipeButton(title: "Fav", backgroundColor: UIColor.blueColor())
+        
+
+        cell.leftSwipeSettings.transition = MGSwipeTransition.Static
+        
+        //configure right buttons
+        
+//        let delete=MGSwipeButton(title: "Delete", backgroundColor: UIColor.redColor())
+//        let more=MGSwipeButton(title: "More",backgroundColor: UIColor.lightGrayColor())
+//        
+//        cell.rightButtons = [delete,more]
+//        cell.rightSwipeSettings.transition =  MGSwipeTransition.Static
+
+        cell.leftExpansion.threshold=1.5
+        cell.leftExpansion.fillOnTrigger=true
+        //cell.leftExpansion.buttonIndex=0
+
         
         return cell
     }
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return Entity.allValues.count
     }
+    
+    
+    func swipeTableCell(cell: MGSwipeTableCell!, shouldHideSwipeOnTap point: CGPoint) -> Bool {
+        return true
+    }
+    func swipeTableCellWillBeginSwiping(cell: MGSwipeTableCell!) {
+        if let myTableViewCell=cell as? TableViewCell, gbe=myTableViewCell.baseEntity as? GeoBaseEntity {
+            self.selectOnMap(gbe)
+            self.selectInTable(gbe, scrollToShow: false)
+        }
+    }
+    
+    
+    
     
     //    var lastSelection:BaseEntity?
     //UITableViewDelegate
@@ -273,10 +318,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else if overlay is GeoBaseEntityStyledMkPolygonAnnotation {
             let polygonRenderer = MKPolygonRenderer(overlay: overlay)
-            
-            polygonRenderer.strokeColor =  UIColor(red: 255.0/255.0, green: 224.0/255.0, blue: 110.0/255.0, alpha: 0.8);
+            polygonRenderer.strokeColor =  UIColor(red: 196.0/255.0, green: 77.0/255.0, blue: 88.0/255.0, alpha: 0.8);
             polygonRenderer.lineWidth = 10
-            polygonRenderer.fillColor=UIColor(red: 86.0/255.0, green: 109.0/255.0, blue: 128.0/255.0, alpha: 0.8);
+            polygonRenderer.fillColor=UIColor(red: 255.0/255.0, green: 107.0/255.0, blue: 107.0/255.0, alpha: 0.8);
             return polygonRenderer
             
         }
@@ -610,7 +654,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     
-    func selectInTable(geoBaseEntityToSelect : GeoBaseEntity?){
+    func selectInTable(geoBaseEntityToSelect : GeoBaseEntity?, scrollToShow: Bool=true){
         if let geoBaseEntity = geoBaseEntityToSelect{
             let entity=geoBaseEntity.getType()
 
@@ -618,7 +662,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             for i in 0...CidsConnector.sharedInstance().searchResults[entity]!.count-1 {
                 var results : [GeoBaseEntity] = CidsConnector.sharedInstance().searchResults[entity]!
                 if results[i].id == geoBaseEntity.id {
+                    if scrollToShow {
                     tableView.selectRowAtIndexPath(NSIndexPath(forRow: i, inSection: entity.index()), animated: true, scrollPosition: UITableViewScrollPosition.Top)
+                    }
+                    else {
+                        tableView.selectRowAtIndexPath(NSIndexPath(forRow: i, inSection: entity.index()), animated: true, scrollPosition: UITableViewScrollPosition.None)
+                    }
                     break;
                 }
             }

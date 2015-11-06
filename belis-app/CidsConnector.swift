@@ -117,6 +117,7 @@ public class CidsConnector {
     
     let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
     
+    var mainVC:MainViewController?
     
     init(){
         
@@ -456,8 +457,9 @@ enum Entity : String{
     case SCHALTSTELLEN="Schaltstellen"
     case ARBEITSAUFTRAEGE="Arbeitsaufträge"
     case VERANLASSUNGEN="Veranlassungen"
+    case PROTOKOLLE="Protokolle"
     
-    static let allValues=[LEUCHTEN,MASTEN,MAUERLASCHEN,LEITUNGEN,SCHALTSTELLEN,ARBEITSAUFTRAEGE,VERANLASSUNGEN]
+    static let allValues=[LEUCHTEN,MASTEN,MAUERLASCHEN,LEITUNGEN,SCHALTSTELLEN,ARBEITSAUFTRAEGE,VERANLASSUNGEN,PROTOKOLLE]
     
     static func byIndex(index: Int) -> Entity {
         return allValues[index]
@@ -479,11 +481,13 @@ enum Entity : String{
             return 5
         case .VERANLASSUNGEN:
             return 6
+        case .PROTOKOLLE:
+            return 7
         }
     }
     
     static func byClassId(cid: Int) -> Entity? {
-        let dict=[27:LEUCHTEN, 26:MASTEN, 52:MAUERLASCHEN, 49:LEITUNGEN,51:SCHALTSTELLEN, 35:VERANLASSUNGEN, 47:ARBEITSAUFTRAEGE]
+        let dict=[27:LEUCHTEN, 26:MASTEN, 52:MAUERLASCHEN, 49:LEITUNGEN,51:SCHALTSTELLEN, 47:ARBEITSAUFTRAEGE,35:VERANLASSUNGEN,54:PROTOKOLLE]
         return dict[cid]
     }
     func classId() -> Int{
@@ -502,6 +506,8 @@ enum Entity : String{
             return 47
         case .VERANLASSUNGEN:
             return 35
+        case .PROTOKOLLE:
+            return 54
 
         }
         
@@ -524,6 +530,8 @@ enum Entity : String{
             return "ARBEITSAUFTRAG"
         case .VERANLASSUNGEN:
             return "VERANLASSUNG"
+        case .PROTOKOLLE:
+            return "ARBEITSPROTOKOLL"
         }
     }
     
