@@ -19,6 +19,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var mapToolbar: UIToolbar!;
     @IBOutlet weak var focusToggle: UISwitch!
     @IBOutlet weak var textfieldGeoSearch: UITextField!
+    @IBOutlet weak var brightenToggle: UISwitch!
     
     @IBOutlet weak var bbiMoreFunctionality: UIBarButtonItem!
     
@@ -43,7 +44,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     let focusRectShape = CAShapeLayer()
     static let IMAGE_PICKER=UIImagePickerController()
-    
+    var brightOverlay=MyBrightOverlay()
+
     
     override func viewDidLoad() {
         super.viewDidLoad();
@@ -66,8 +68,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.delegate=self;
         
         
-        
-        //        var tileOverlay = MyOSMMKTileOverlay()
+        //var tileOverlay = MyOSMMKTileOverlay()
         //        mapView.addOverlay(tileOverlay);
         
         
@@ -279,9 +280,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             return polygonRenderer
             
         }
-        else if (overlay is MKTileOverlay){
-            
-            let renderer =  MyDesperateMKTileOverlayRenderer(tileOverlay: overlay as! MKTileOverlay);
+        else if (overlay is MyBrightOverlay){
+            let renderer =  MyBrightOverlayRenderer(tileOverlay: overlay as! MKTileOverlay);
             return renderer;
         }
         return MKOverlayRenderer()
@@ -844,12 +844,34 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     @IBAction func focusItemTabbed(sender: AnyObject) {
         focusToggle.setOn(!focusToggle.on, animated: true)
+        focusToggleValueChanged(self)
     }
     
     @IBAction func focusToggleValueChanged(sender: AnyObject) {
         ensureFocusRectangleIsDisplayedWhenAndWhereItShould()
     }
     
+    
+    @IBAction func brightenItemTabbed(sender: AnyObject) {
+        brightenToggle.setOn(!brightenToggle.on, animated: true)
+        brightenToggleValueChanged(self)
+    }
+    
+    
+    @IBAction func brightenToggleValueChanged(sender: AnyObject) {
+        ensureBrightOverlayIsDisplayedWhenItShould()
+    }
+    private func ensureBrightOverlayIsDisplayedWhenItShould(){
+        if brightenToggle.on {
+            let overlays=mapView.overlays
+            mapView.removeOverlays(overlays)
+            mapView.addOverlay(brightOverlay)
+            mapView.addOverlays(overlays)
+        }
+        else {
+            mapView.removeOverlay(brightOverlay)
+        }
+    }
     private func ensureFocusRectangleIsDisplayedWhenAndWhereItShould(){
         focusRectShape.removeFromSuperlayer()
         if focusToggle.on {

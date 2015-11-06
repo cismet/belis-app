@@ -46,7 +46,7 @@
 		2D5FB30E1A67CC340041020C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3061A67CC340041020C /* MainViewController.swift */; };
 		2D5FB30F1A67CC340041020C /* SelectionPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3071A67CC340041020C /* SelectionPopoverViewController.swift */; };
 		2D5FB3101A67CC340041020C /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3081A67CC340041020C /* TableViewCell.swift */; };
-		2D5FB3121A67CC780041020C /* MyOSMMKTileOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3111A67CC780041020C /* MyOSMMKTileOverlay.swift */; };
+		2D5FB3121A67CC780041020C /* MyOverlays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3111A67CC780041020C /* MyOverlays.swift */; };
 		2D5FB3271A67CCA60041020C /* WKTGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3141A67CCA60041020C /* WKTGeometry.m */; };
 		2D5FB3281A67CCA60041020C /* WKTGeometryCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3161A67CCA60041020C /* WKTGeometryCollection.m */; };
 		2D5FB3291A67CCA60041020C /* WKTLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3181A67CCA60041020C /* WKTLine.m */; };
@@ -150,7 +150,7 @@
 		2D5FB3061A67CC340041020C /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		2D5FB3071A67CC340041020C /* SelectionPopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectionPopoverViewController.swift; sourceTree = "<group>"; };
 		2D5FB3081A67CC340041020C /* TableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
-		2D5FB3111A67CC780041020C /* MyOSMMKTileOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyOSMMKTileOverlay.swift; sourceTree = "<group>"; };
+		2D5FB3111A67CC780041020C /* MyOverlays.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyOverlays.swift; sourceTree = "<group>"; };
 		2D5FB3131A67CCA60041020C /* WKTGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKTGeometry.h; sourceTree = "<group>"; };
 		2D5FB3141A67CCA60041020C /* WKTGeometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKTGeometry.m; sourceTree = "<group>"; };
 		2D5FB3151A67CCA60041020C /* WKTGeometryCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKTGeometryCollection.h; sourceTree = "<group>"; };
@@ -332,7 +332,7 @@
 		2D5FB2FD1A67CB870041020C /* tools */ = {
 			isa = PBXGroup;
 			children = (
-				2D5FB3111A67CC780041020C /* MyOSMMKTileOverlay.swift */,
+				2D5FB3111A67CC780041020C /* MyOverlays.swift */,
 				2D1ED1861B8344C80004AAFA /* CidsSessionFactory.swift */,
 				2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */,
 				2D1ED1841B8344BD0004AAFA /* CidsOperations.swift */,
@@ -592,7 +592,7 @@
 				2D9D3AD61A9E23DD0049F46F /* AF+ImageView+Extension.swift in Sources */,
 				2D5FB32A1A67CCA60041020C /* WKTLineM.m in Sources */,
 				2DB6E8C21A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */,
-				2D5FB3121A67CC780041020C /* MyOSMMKTileOverlay.swift in Sources */,
+				2D5FB3121A67CC780041020C /* MyOverlays.swift in Sources */,
 				2DF2C7DD1AB6E2FE00F3A2FC /* SimpleInfoCell.swift in Sources */,
 				2D5FB3401A67CCEB0041020C /* GeoBaseEntity.swift in Sources */,
 				2D3DC35F1A94EBA50035575A /* Timestamp.swift in Sources */,

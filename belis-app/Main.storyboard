@@ -256,14 +256,14 @@
                                 <rect key="frame" x="192" y="556" width="408" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="krF-89-wbM"/>
-                                    <barButtonItem title="Fokus" id="c5K-sY-RnT">
+                                    <barButtonItem title="Fokus" width="40" id="c5K-sY-RnT">
                                         <connections>
                                             <action selector="focusItemTabbed:" destination="Kou-sk-bUr" id="wGp-ci-cJ8"/>
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" id="FEy-dZ-rhg">
                                         <switch key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="W8A-zI-q3t">
-                                            <rect key="frame" x="97" y="7" width="51" height="31"/>
+                                            <rect key="frame" x="60" y="7" width="51" height="31"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <connections>
                                                 <action selector="focusToggleValueChanged:" destination="Kou-sk-bUr" eventType="valueChanged" id="gaC-vp-KN1"/>
@@ -271,7 +271,23 @@
                                         </switch>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="TZp-tF-5Dr"/>
+                                    <barButtonItem title="Blass " width="38" id="Eyo-wC-13h">
+                                        <connections>
+                                            <action selector="brightenItemTabbed:" destination="Kou-sk-bUr" id="opP-5i-TiV"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" id="oCJ-cp-fOw">
+                                        <switch key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="gCr-QR-WvU" userLabel="Whitey Toggle">
+                                            <rect key="frame" x="160" y="7" width="51" height="31"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <accessibility key="accessibilityConfiguration" label=""/>
+                                            <connections>
+                                                <action selector="brightenToggleValueChanged:" destination="Kou-sk-bUr" eventType="valueChanged" id="3RD-ct-3a4"/>
+                                            </connections>
+                                        </switch>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="pBi-QW-CS9"/>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="S2o-Ne-r6a"/>
                                     <barButtonItem width="187" style="plain" id="Xvf-cP-qxk">
                                         <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="CU0-RI-bDh">
                                             <rect key="frame" x="201" y="8" width="187" height="29"/>
@@ -413,6 +429,7 @@
                     <size key="freeformSize" width="600" height="600"/>
                     <connections>
                         <outlet property="bbiMoreFunctionality" destination="z6g-3Q-zho" id="iNF-wQ-3HC"/>
+                        <outlet property="brightenToggle" destination="gCr-QR-WvU" id="rvg-Zv-krs"/>
                         <outlet property="focusToggle" destination="W8A-zI-q3t" id="ab2-7g-zyq"/>
                         <outlet property="mapToolbar" destination="Vle-ou-viq" id="vQT-Qs-Mqy"/>
                         <outlet property="mapTypeSegmentedControl" destination="CU0-RI-bDh" id="Nt0-Qu-Elg"/>
