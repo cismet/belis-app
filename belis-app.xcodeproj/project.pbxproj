@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C4CF4FA976B7C8D589D81E7 /* Pods_belis_appTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 108BB485D968A36C1A37EFE3 /* Pods_belis_appTests.framework */; };
 		2D0A979C1ADBC4C8005312BA /* Strasse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0A979B1ADBC4C8005312BA /* Strasse.swift */; };
 		2D0B7F651AB3451700E33A6C /* SingleTitledInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0B7F631AB3451700E33A6C /* SingleTitledInfoCell.swift */; };
 		2D0B7F661AB3451700E33A6C /* SingleTitledInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D0B7F641AB3451700E33A6C /* SingleTitledInfoCell.xib */; };
@@ -29,7 +30,6 @@
 		2D53983A1B945C4C001C865F /* Icon-60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5398391B945C4C001C865F /* Icon-60@3x.png */; };
 		2D53983C1B945C58001C865F /* Icon-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D53983B1B945C58001C865F /* Icon-40.png */; };
 		2D53983E1B945C63001C865F /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D53983D1B945C63001C865F /* Icon-Small.png */; };
-		2D5692101AE119B700545D62 /* ObjectMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D56920F1AE119B700545D62 /* ObjectMapper.framework */; };
 		2D5FB2D21A67C7320041020C /* belis_app.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D01A67C7320041020C /* belis_app.xcdatamodeld */; };
 		2D5FB2D91A67C7320041020C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D81A67C7320041020C /* Images.xcassets */; };
 		2D5FB2E81A67C7320041020C /* belis_appTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2E71A67C7320041020C /* belis_appTests.swift */; };
@@ -92,6 +92,7 @@
 		2DF2C7DD1AB6E2FE00F3A2FC /* SimpleInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF2C7DC1AB6E2FE00F3A2FC /* SimpleInfoCell.swift */; };
 		2DF5EBCC1AFB6F9100062669 /* mast.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DF5EBCB1AFB6F9100062669 /* mast.png */; };
 		2DF6A9BC1A82541900E20FBF /* MappingStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */; };
+		FF431EFC15C82F46A0B83967 /* Pods_belis_app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EED8D3848BFD41A9686D772 /* Pods_belis_app.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -105,6 +106,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		108BB485D968A36C1A37EFE3 /* Pods_belis_appTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_belis_appTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1655E151C5017305DDA8CE94 /* Pods-belis-app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-belis-app.release.xcconfig"; path = "Pods/Target Support Files/Pods-belis-app/Pods-belis-app.release.xcconfig"; sourceTree = "<group>"; };
 		2D0A979B1ADBC4C8005312BA /* Strasse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Strasse.swift; sourceTree = "<group>"; };
 		2D0B7F631AB3451700E33A6C /* SingleTitledInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SingleTitledInfoCell.swift; path = "table-cell-guis/SingleTitledInfoCell.swift"; sourceTree = "<group>"; };
 		2D0B7F641AB3451700E33A6C /* SingleTitledInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SingleTitledInfoCell.xib; path = "table-cell-guis/SingleTitledInfoCell.xib"; sourceTree = "<group>"; };
@@ -128,7 +131,6 @@
 		2D5398391B945C4C001C865F /* Icon-60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-60@3x.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-60@3x.png"; sourceTree = "<group>"; };
 		2D53983B1B945C58001C865F /* Icon-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-40.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-40.png"; sourceTree = "<group>"; };
 		2D53983D1B945C63001C865F /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-Small.png"; sourceTree = "<group>"; };
-		2D56920F1AE119B700545D62 /* ObjectMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ObjectMapper.framework; path = Carthage/Build/iOS/ObjectMapper.framework; sourceTree = "<group>"; };
 		2D5FB2C91A67C7320041020C /* belis-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "belis-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D5FB2CD1A67C7320041020C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2D5FB2D11A67C7320041020C /* belis_app.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = belis_app.xcdatamodel; sourceTree = "<group>"; };
@@ -205,6 +207,10 @@
 		2DF2C7DC1AB6E2FE00F3A2FC /* SimpleInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleInfoCell.swift; sourceTree = "<group>"; };
 		2DF5EBCB1AFB6F9100062669 /* mast.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mast.png; sourceTree = "<group>"; };
 		2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MappingStuff.swift; sourceTree = "<group>"; };
+		8EED8D3848BFD41A9686D772 /* Pods_belis_app.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_belis_app.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		93AF52810D28D566103CEBEC /* Pods-belis-appTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-belis-appTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-belis-appTests/Pods-belis-appTests.release.xcconfig"; sourceTree = "<group>"; };
+		D72B05BBF2B40E7BE9695D91 /* Pods-belis-app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-belis-app.debug.xcconfig"; path = "Pods/Target Support Files/Pods-belis-app/Pods-belis-app.debug.xcconfig"; sourceTree = "<group>"; };
+		F65AFE6FB3F1CBB7755A7F8A /* Pods-belis-appTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-belis-appTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-belis-appTests/Pods-belis-appTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,7 +221,7 @@
 				2D9D3B1C1A9F77B50049F46F /* UIKit.framework in Frameworks */,
 				2D9D3B1A1A9F777D0049F46F /* QuickLook.framework in Frameworks */,
 				2D5FB2F21A67CA570041020C /* MapKit.framework in Frameworks */,
-				2D5692101AE119B700545D62 /* ObjectMapper.framework in Frameworks */,
+				FF431EFC15C82F46A0B83967 /* Pods_belis_app.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -223,6 +229,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C4CF4FA976B7C8D589D81E7 /* Pods_belis_appTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -252,7 +259,6 @@
 				2D53983D1B945C63001C865F /* Icon-Small.png */,
 				2D53983B1B945C58001C865F /* Icon-40.png */,
 				2D5398391B945C4C001C865F /* Icon-60@3x.png */,
-				2D56920F1AE119B700545D62 /* ObjectMapper.framework */,
 				2D9D3B1B1A9F77B50049F46F /* UIKit.framework */,
 				2D9D3B191A9F777D0049F46F /* QuickLook.framework */,
 				2D5FB2F11A67CA570041020C /* MapKit.framework */,
@@ -260,6 +266,8 @@
 				2D5FB2E41A67C7320041020C /* belis-appTests */,
 				2D5FB2CA1A67C7320041020C /* Products */,
 				2D939DD31A67D5D200FB2AFB /* belis-app.playground */,
+				A8C0E0CEE0710E33AD2C46C0 /* Pods */,
+				BB67F872BED992D88CCD6BAD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -431,6 +439,26 @@
 			name = viewController;
 			sourceTree = "<group>";
 		};
+		A8C0E0CEE0710E33AD2C46C0 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D72B05BBF2B40E7BE9695D91 /* Pods-belis-app.debug.xcconfig */,
+				1655E151C5017305DDA8CE94 /* Pods-belis-app.release.xcconfig */,
+				F65AFE6FB3F1CBB7755A7F8A /* Pods-belis-appTests.debug.xcconfig */,
+				93AF52810D28D566103CEBEC /* Pods-belis-appTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		BB67F872BED992D88CCD6BAD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8EED8D3848BFD41A9686D772 /* Pods_belis_app.framework */,
+				108BB485D968A36C1A37EFE3 /* Pods_belis_appTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -438,10 +466,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D5FB2EB1A67C7320041020C /* Build configuration list for PBXNativeTarget "belis-app" */;
 			buildPhases = (
+				3420DE70143CE9460DE3C3EC /* Check Pods Manifest.lock */,
 				2D5FB2C51A67C7320041020C /* Sources */,
 				2D5FB2C61A67C7320041020C /* Frameworks */,
 				2D5FB2C71A67C7320041020C /* Resources */,
-				2D5692111AE119C800545D62 /* ShellScript */,
+				B0C2F260B18D504B6D609C90 /* Embed Pods Frameworks */,
+				803E5400F482E84100CD4B0B /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -456,9 +486,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D5FB2EE1A67C7320041020C /* Build configuration list for PBXNativeTarget "belis-appTests" */;
 			buildPhases = (
+				B79F0C687922106AC9899B5B /* Check Pods Manifest.lock */,
 				2D5FB2DD1A67C7320041020C /* Sources */,
 				2D5FB2DE1A67C7320041020C /* Frameworks */,
 				2D5FB2DF1A67C7320041020C /* Resources */,
+				6BE982757CBC312EDC4A8919 /* Embed Pods Frameworks */,
+				59CD90DC2B7AA7727C93B3D0 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -559,19 +592,95 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2D5692111AE119C800545D62 /* ShellScript */ = {
+		3420DE70143CE9460DE3C3EC /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/ObjectMapper.framework",
 			);
+			name = "Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		59CD90DC2B7AA7727C93B3D0 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-belis-appTests/Pods-belis-appTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6BE982757CBC312EDC4A8919 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-belis-appTests/Pods-belis-appTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		803E5400F482E84100CD4B0B /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-belis-app/Pods-belis-app-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B0C2F260B18D504B6D609C90 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-belis-app/Pods-belis-app-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B79F0C687922106AC9899B5B /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -740,6 +849,7 @@
 		};
 		2D5FB2EC1A67C7320041020C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D72B05BBF2B40E7BE9695D91 /* Pods-belis-app.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -763,6 +873,7 @@
 		};
 		2D5FB2ED1A67C7320041020C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1655E151C5017305DDA8CE94 /* Pods-belis-app.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -786,6 +897,7 @@
 		};
 		2D5FB2EF1A67C7320041020C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F65AFE6FB3F1CBB7755A7F8A /* Pods-belis-appTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -802,6 +914,7 @@
 		};
 		2D5FB2F01A67C7320041020C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 93AF52810D28D566103CEBEC /* Pods-belis-appTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = "belis-appTests/Info.plist";
