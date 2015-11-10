@@ -324,7 +324,11 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="LYr-cg-vAH"/>
-                                    <barButtonItem title="Kein Arbeitsauftrag ausgewählt" id="gaw-Jb-8bG"/>
+                                    <barButtonItem title="Kein Arbeitsauftrag ausgewählt" id="gaw-Jb-8bG">
+                                        <connections>
+                                            <action selector="itemArbeitsauftragTapped:" destination="Kou-sk-bUr" id="3Y0-qv-HzQ"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="BtE-3Q-gu8"/>
                                     <barButtonItem systemItem="bookmarks" id="CYg-ry-sRN">
                                         <connections>
@@ -742,24 +746,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jYu-3j-hMM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1374" y="-122"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="8Vg-vg-XPs">
-            <objects>
-                <viewController id="enO-7Y-b4m" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="XMT-iq-72t"/>
-                        <viewControllerLayoutGuide type="bottom" id="ydj-bb-9oL"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="XFg-oU-KpF">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="c5p-2K-4ln" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1392" y="559"/>
         </scene>
     </scenes>
     <resources>
