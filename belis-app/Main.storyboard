@@ -431,6 +431,7 @@
                         <outlet property="bbiMoreFunctionality" destination="z6g-3Q-zho" id="iNF-wQ-3HC"/>
                         <outlet property="brightenToggle" destination="gCr-QR-WvU" id="rvg-Zv-krs"/>
                         <outlet property="focusToggle" destination="W8A-zI-q3t" id="ab2-7g-zyq"/>
+                        <outlet property="itemArbeitsauftrag" destination="gaw-Jb-8bG" id="SGz-ge-cVU"/>
                         <outlet property="mapToolbar" destination="Vle-ou-viq" id="vQT-Qs-Mqy"/>
                         <outlet property="mapTypeSegmentedControl" destination="CU0-RI-bDh" id="Nt0-Qu-Elg"/>
                         <outlet property="mapView" destination="fWn-J2-ozd" id="9lq-5l-nb9"/>
@@ -710,7 +711,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V7a-zh-PHi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="702" y="-272.5"/>
+            <point key="canvasLocation" x="54" y="-152.5"/>
         </scene>
         <!--Additional Functionality Popover View Controller-->
         <scene sceneID="RgF-0m-zvf">
@@ -741,6 +742,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jYu-3j-hMM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1374" y="-122"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="8Vg-vg-XPs">
+            <objects>
+                <viewController id="enO-7Y-b4m" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="XMT-iq-72t"/>
+                        <viewControllerLayoutGuide type="bottom" id="ydj-bb-9oL"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="XFg-oU-KpF">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="c5p-2K-4ln" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1392" y="559"/>
         </scene>
     </scenes>
     <resources>

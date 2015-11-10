@@ -36,6 +36,24 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataPr
         wgs84WKT <- map["ausdehnung_wgs84"]
     }
     
+    
+    
+    func getVeranlassungsnummern() -> [String] {
+        var nummern: [String]=[]
+        if let prots=protokolle {
+            for prot in prots {
+                if let vnr=prot.veranlassungsnummer{
+                    if !nummern.contains(vnr){
+                        nummern.append(vnr)
+                    }
+                }
+            }
+        }
+        return nummern
+    }
+    
+    
+    
     // MARK: - CellInformationProviderProtocol
     
     func getMainTitle() -> String{
@@ -109,13 +127,15 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataPr
         let select=MGSwipeButton(title: "Auswählen", backgroundColor: selC ,callback: {
             (sender: MGSwipeTableCell!) -> Bool in
             if let mainVC=CidsConnector.sharedInstance().mainVC {
-                //mainVC.zoomToFitMapAnnotations([anno])
+                mainVC.selectArbeitsauftrag(self)
             }
             
             return true
         })
         return [select]
     }
+    
+    
     
     
 }

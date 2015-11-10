@@ -21,6 +21,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var focusToggle: UISwitch!
     @IBOutlet weak var textfieldGeoSearch: UITextField!
     @IBOutlet weak var brightenToggle: UISwitch!
+    @IBOutlet weak var itemArbeitsauftrag: UIBarButtonItem!
     
     @IBOutlet weak var bbiMoreFunctionality: UIBarButtonItem!
     
@@ -958,6 +959,52 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
             self.ensureFocusRectangleIsDisplayedWhenAndWhereItShould()
         })
+        
+    }
+    
+    func selectArbeitsauftrag(aa: Arbeitsauftrag) {
+        CidsConnector.sharedInstance().selectedArbeitsauftrag=aa
+        CidsConnector.sharedInstance().allArbeitsauftraegeBeforeCurrentSelection=CidsConnector.sharedInstance().searchResults
+        removeAllEntityObjects()
+
+        itemArbeitsauftrag.title=aa.nummer!
+        
+        actInd.center = mapView.center;
+        actInd.hidesWhenStopped = true;
+        actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
+        self.view.addSubview(actInd);
+        actInd.startAnimating();
+        
+        if let protokolle=aa.protokolle {
+            for prot in protokolle {
+                if let _=CidsConnector.sharedInstance().searchResults[Entity.PROTOKOLLE] {
+                    CidsConnector.sharedInstance().searchResults[Entity.PROTOKOLLE]!.append(prot)
+                }
+                else {
+                    CidsConnector.sharedInstance().searchResults.updateValue([prot], forKey: Entity.PROTOKOLLE)
+                }
+            }
+        }
+        
+        dispatch_async(dispatch_get_main_queue()) {
+            self.tableView.reloadData();
+            var annos: [MKAnnotation]=[]
+            
+            for (_, objArray) in CidsConnector.sharedInstance().searchResults{
+                for obj in objArray {
+                    obj.addToMapView(self.mapView);
+                    if let anno=obj.mapObject as? MKAnnotation {
+                        annos.append(anno)
+                    }
+                }
+            }
+            
+            self.actInd.stopAnimating();
+            self.actInd.removeFromSuperview();
+            dispatch_async(dispatch_get_main_queue()) {
+                self.zoomToFitMapAnnotations(annos)
+            }
+        }
         
     }
     

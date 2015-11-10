@@ -115,6 +115,12 @@ public class CidsConnector {
     let queue = NSOperationQueue()
     var searchResults=[Entity: [GeoBaseEntity]]()
     
+    var allArbeitsauftraegeBeforeCurrentSelection=[Entity: [GeoBaseEntity]]()
+    
+    var selectedArbeitsauftrag: Arbeitsauftrag?
+    
+    var veranlassungsCache=[String:Veranlassung]()
+    
     let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
     
     var mainVC:MainViewController?
@@ -240,6 +246,14 @@ public class CidsConnector {
                                                 else {
                                                     self.searchResults.updateValue([auftrag], forKey: Entity.ARBEITSAUFTRAEGE)
                                                 }
+                                                
+                                                for veranlassungsnummer in auftrag.getVeranlassungsnummern() {
+                                                    getVeranlassungByNummer(veranlassungsnummer, handler: { (veranlassung) -> () in
+                                                        if let v=veranlassung {
+                                                            self.veranlassungsCache.updateValue(v, forKey: veranlassungsnummer)
+                                                        }
+                                                    })
+                                                }
                                             }
                                             
                                             if self.queue.operationCount==1 {
@@ -280,6 +294,47 @@ public class CidsConnector {
     
    
 
+    func getVeranlassungByNummer(vnr:String, handler: (veranlassung:Veranlassung?) -> ()) {
+        assert(loggedIn)
+
+        var qp=QueryParameters(list:[
+            SingleQueryParameter(key: "nummer", value: vnr)
+            ]);
+        
+        func mySearchCompletionHandler(data : NSData!, response : NSURLResponse!, error : NSError!) -> Void {
+            if (error == nil) {
+                // Success
+                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                print("URL Session Task Succeeded: HTTP \(statusCode)")
+                
+                if let cidsJsonCollection: [String : AnyObject] = getJson(data) {
+                    // Content is now a cids Collection of json Data
+                    
+                    if let jsonArray=cidsJsonCollection["$collection"] as? [AnyObject] {
+                        var veranlassung: Veranlassung?
+                        veranlassung = Mapper<Veranlassung>().map(jsonArray[0])
+                        handler(veranlassung: veranlassung)
+                    }
+                }
+                else {
+                    print("Problem in Request")
+                }
+                
+            }
+            else {
+                // Failure
+                print("URL Session Task Failed: %@", error.localizedDescription);
+            }
+            handler(veranlassung: nil)
+        }
+        
+        
+        let sop=SearchOperation(baseUrl: self.baseUrl, searchKey: "BELIS2.de.cismet.belis2.server.search.VeranlassungByNummerSearch", user: self.login, pass: self.password, parameters: qp, completionHandler: mySearchCompletionHandler)
+        
+        sop.enqueue()
+
+    }
+    
     
     func search(ewktMapContent: String,leuchtenEnabled: Bool, mastenEnabled: Bool,mauerlaschenEnabled: Bool, leitungenEnabled: Bool, schaltstellenEnabled: Bool, handler: () -> ()) {
         assert(loggedIn)

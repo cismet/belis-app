@@ -10,7 +10,7 @@ import Foundation
 import ObjectMapper
 
 
-class Arbeitsprotokoll : BaseEntity {
+class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDataProvider {
     var material: String?
     var monteur: String?
     var bemerkung: String?
@@ -28,7 +28,9 @@ class Arbeitsprotokoll : BaseEntity {
     var abzweigdose: Abzweigdose?
     var schaltstelle: Schaltstelle?
     var standaloneGeom: StandaloneGeom?
-
+    var detailObjekt:String?
+    private var attachedGeoBaseEntity: GeoBaseEntity?
+    
     required init?(_ map: Map) {
         super.init(map)
     }
@@ -43,15 +45,142 @@ class Arbeitsprotokoll : BaseEntity {
         status <- map["fk_status"]
         veranlassungsnummer <- map["veranlassungsnummer"]
         protokollnummer <- map["protokollnummer"]
-        standort <- map["fk_standort"]
+
         mauerlasche <- map["protokollnummer"]
+
+        standort <- map["fk_standort"]
         leuchte <- map["fk_leuchte"]
         leitung <- map["fk_leitung"]
         abzweigdose <- map["fk_abzweigdose"]
         schaltstelle <- map["fk_schaltstelle"]
         standaloneGeom <- map["fk_geometrie"]
+        
+        
+        //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
+        //es ist nur ein slot gefüllt
+        if let gbe=standort {
+            wgs84WKT=gbe.wgs84WKT
+            detailObjekt="Standort"
+            attachedGeoBaseEntity=gbe
+        }
+        else if let gbe=leuchte {
+            wgs84WKT=gbe.wgs84WKT
+            detailObjekt="Leuchte"
+            attachedGeoBaseEntity=gbe
+        }
+        else if let gbe=leitung {
+            wgs84WKT=gbe.wgs84WKT
+            detailObjekt="Leitung"
+            attachedGeoBaseEntity=gbe
+        }
+        else if let gbe=abzweigdose {
+            wgs84WKT=gbe.wgs84WKT
+            detailObjekt="Abzweigdose"
+            attachedGeoBaseEntity=gbe
+        }
+        else if let gbe=schaltstelle {
+            wgs84WKT=gbe.wgs84WKT
+            detailObjekt="Schaltstelle"
+            attachedGeoBaseEntity=gbe
+        }
+        else if let gbe=standaloneGeom {
+            wgs84WKT=gbe.wgs84WKT
+            detailObjekt="Freie Geometrie"
+            attachedGeoBaseEntity=gbe
+        }
+       
     }
 
+    override func getType() -> Entity {
+        return Entity.PROTOKOLLE
+    }
+    
+    // MARK: - CellInformationProviderProtocol
+    
+    func getMainTitle() -> String{
+        var nr="?"
+        if let n=protokollnummer {
+            nr="\(n)"
+        }
+        return "#\(nr) - \(attachedGeoBaseEntity?.getAnnotationTitle() ?? "")"
+    }
+    func getSubTitle() -> String{
+        if let vnr = veranlassungsnummer {
+            if let veranlassung=CidsConnector.sharedInstance().veranlassungsCache[vnr]{
+                if let vbez=veranlassung.bezeichnung {
+                    return "\(vbez)"
+                }
+                else {
+                    return "V\(vnr)"
+                }
+            }
+        }
+        return "ohne Veranlassung"
+    }
+    func getTertiaryInfo() -> String{
+        if let st=status?.bezeichnung{
+            return st
+        }
+        else {
+            return ""
+        }
+        
+    }
+    func getQuaternaryInfo() -> String{
+        return ""
+    }
+    
+    @objc func getTitle() -> String {
+        return "Protokoll"
+    }
+    
+    @objc func getDetailGlyphIconString() -> String {
+        return "icon-switch"
+    }
+
+    
+    @objc func getAllData() -> [String: [CellData]] {
+        var data: [String: [CellData]] = ["main":[]]
+        data["main"]?.append(SingleTitledInfoCellData(title: "Id",data: getMainTitle()))
+        data["DeveloperInfo"]=[]
+        data["DeveloperInfo"]?.append(SingleTitledInfoCellData(title: "Key", data: "\(getType().tableName())/\(id)"))
+        return data
+    }
+    @objc func getDataSectionKeys() -> [String] {
+        return ["main","DeveloperInfo"]
+    }
+    
+    
+    
+    //Kartendarstellung
+    override func getAnnotationImageName() -> String{
+        if let gbe=attachedGeoBaseEntity {
+            return gbe.getAnnotationImageName()
+        }
+        return "leuchte.png";
+    }
+    
+    override func getAnnotationTitle() -> String{
+        if let gbe=attachedGeoBaseEntity {
+            return gbe.getAnnotationTitle()
+        }
+        return getMainTitle();
+    }
+    
+    override func canShowCallout() -> Bool{
+        if let gbe=attachedGeoBaseEntity {
+            return gbe.canShowCallout()
+        }
+        return true
+    }
+    override func getAnnotationCalloutGlyphIconName() -> String {
+        if let gbe=attachedGeoBaseEntity {
+            return gbe.getAnnotationCalloutGlyphIconName()
+        }
+        return "icon-ceilinglight"
+    }
+
+    
 }
 
 class Status: BaseEntity {
