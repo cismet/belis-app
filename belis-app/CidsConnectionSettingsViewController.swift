@@ -99,16 +99,13 @@ class CidsConnectionSettingsViewController: UIViewController {
         
         
     }
-    
     @IBAction func passwordChanged(sender: AnyObject) {
         CidsConnector.sharedInstance().clientCertContainerPass=certPassTextField.text!
         checkAndColor()
     }
-    
     @IBAction func tlsEnabledChanged(sender: AnyObject) {
         serverUrlChanged(sender)
     }
-    
     @IBAction func serverUrlChanged(sender: AnyObject) {
         var defaultport="80"
         if chkTLS.on {
@@ -131,7 +128,6 @@ class CidsConnectionSettingsViewController: UIViewController {
         }
         CidsConnector.sharedInstance().tlsEnabled=chkTLS.on
     }
-    
     @IBAction func removeServerCertTabbed(sender: AnyObject) {
         
         var error:NSError?
@@ -152,7 +148,6 @@ class CidsConnectionSettingsViewController: UIViewController {
         }
         checkAndColor()
     }
-    
     @IBAction func removeClientCertTabbed(sender: AnyObject) {
         var error:NSError?
         let ok:Bool

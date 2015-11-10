@@ -48,6 +48,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var brightOverlay=MyBrightOverlay()
 
     
+    //MARK: Standard VC functions
     override func viewDidLoad() {
         super.viewDidLoad();
         CidsConnector.sharedInstance().mainVC=self
@@ -124,18 +125,23 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
     }
-    
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        self.view.endEditing(true)
-        return false
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        focusRectShape.removeFromSuperlayer()
+        coordinator.animateAlongsideTransition(nil, completion: { context in
+            if UIDevice.currentDevice().orientation.isLandscape.boolValue {
+                print("landscape")
+            } else {
+                print("portraight")
+            }
+            self.ensureFocusRectangleIsDisplayedWhenAndWhereItShould()
+        })
+        
     }
     
-    
-    //UITableViewDataSource
+    //MARK: UITableViewDataSource
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return CidsConnector.sharedInstance().searchResults[Entity.byIndex(section)]?.count ?? 0
     }
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell: TableViewCell = tableView.dequeueReusableCellWithIdentifier("firstCellPrototype")as! TableViewCell
         //        var cellInfoProvider: CellInformationProviderProtocol = NoCellInformation()
@@ -183,7 +189,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return Entity.allValues.count
     }
-    
     func swipeTableCell(cell: MGSwipeTableCell!, shouldHideSwipeOnTap point: CGPoint) -> Bool {
         return true
     }
@@ -194,8 +199,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-    //    var lastSelection:BaseEntity?
-    //UITableViewDelegate
+
+    //MARK: UITableViewDelegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
         print("didSelectRowAtIndexPath")
         
@@ -224,12 +229,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-    // CLLocationManagerDelegate
+    // MARK: CLLocationManagerDelegate
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
     }
     
-    //NKMapViewDelegates
+    // MARK: NKMapViewDelegates
     func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
         
         if overlay is MKPolyline {
@@ -389,217 +394,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         print("didDeselectAnnotationView >> \(view.annotation!.title)")
     }
-    func delay(delay:Double, closure:()->()) {
-        dispatch_after(
-            dispatch_time(
-                DISPATCH_TIME_NOW,
-                Int64(delay * Double(NSEC_PER_SEC))
-            ),
-            dispatch_get_main_queue(), closure)
-    }
-
     
-    // MARK: - Use mark to logically organize your code
-    func mapTapped(sender: UITapGestureRecognizer) {
-        let touchPt = sender.locationInView(mapView)
-
-        //let hittedUI = mapView.hitTest(touchPt, withEvent: nil)
-        //        println(hittedUI)
-        print("mapTabbed")
-        
-        
-        let buffer=CGFloat(22)
-        
-        var foundPolyline: GeoBaseEntityStyledMkPolylineAnnotation?
-        var foundPoint: GeoBaseEntityPointAnnotation?
-        var foundPolygon: GeoBaseEntityStyledMkPolygonAnnotation?
-        
-        
-        
-        
-        
-        for anno: AnyObject in mapView.annotations {
-            if let pointAnnotation = anno as? GeoBaseEntityPointAnnotation {
-                let cgPoint = mapView.convertCoordinate(pointAnnotation.coordinate, toPointToView: mapView)
-                let path  = CGPathCreateMutable()
-                CGPathMoveToPoint(path, nil, cgPoint.x, cgPoint.y)
-                CGPathAddLineToPoint(path, nil, cgPoint.x, cgPoint.y)
-                
-                let fuzzyPath=CGPathCreateCopyByStrokingPath(path, nil, buffer, CGLineCap.Round, CGLineJoin.Round, 0.0)
-                if (CGPathContainsPoint(fuzzyPath, nil, touchPt, false)) {
-                    foundPoint = pointAnnotation
-                    print("foundPoint")
-                    selectOnMap(foundPoint?.getGeoBaseEntity())
-                    selectInTable(foundPoint?.getGeoBaseEntity())
-                    break
-                }
-            }
-        }
-        
-        if (foundPoint == nil){
-            
-            for overlay: AnyObject in mapView.overlays {
-                if let lineAnnotation  = overlay as? GeoBaseEntityStyledMkPolylineAnnotation{
-                    let path  = CGPathCreateMutable()
-                    for i in 0...lineAnnotation.pointCount-1 {
-                        let mapPoint = lineAnnotation.points()[i]
-                        
-                        let cgPoint = mapView.convertCoordinate(MKCoordinateForMapPoint(mapPoint), toPointToView: mapView)
-                        if i==0 {
-                            CGPathMoveToPoint(path, nil, cgPoint.x, cgPoint.y)
-                        }
-                        else {
-                            CGPathAddLineToPoint(path, nil, cgPoint.x, cgPoint.y)
-                        }
-                    }
-                    let fuzzyPath=CGPathCreateCopyByStrokingPath(path, nil, buffer, CGLineCap.Round, CGLineJoin.Round, 0.0)
-                    if (CGPathContainsPoint(fuzzyPath, nil, touchPt, false)) {
-                        foundPolyline = lineAnnotation
-                        break
-                    }
-                }
-                if let polygonAnnotation  = overlay as? GeoBaseEntityStyledMkPolygonAnnotation {
-                    let path  = CGPathCreateMutable()
-                    for i in 0...polygonAnnotation.pointCount-1 {
-                        let mapPoint = polygonAnnotation.points()[i]
-                        
-                        let cgPoint = mapView.convertCoordinate(MKCoordinateForMapPoint(mapPoint), toPointToView: mapView)
-                        if i==0 {
-                            CGPathMoveToPoint(path, nil, cgPoint.x, cgPoint.y)
-                        }
-                        else {
-                            CGPathAddLineToPoint(path, nil, cgPoint.x, cgPoint.y)
-                        }
-                    }
-                    if (CGPathContainsPoint(path, nil, touchPt, false)) {
-                        foundPolygon=polygonAnnotation
-                        break
-                    }
-                }
-            }
-            
-            if let hitPolyline = foundPolyline {
-                selectOnMap(hitPolyline.getGeoBaseEntity())
-                selectInTable(hitPolyline.getGeoBaseEntity())
-            }
-            else if let hitPolygon=foundPolygon{
-                selectOnMap(hitPolygon.getGeoBaseEntity())
-                selectInTable(hitPolygon.getGeoBaseEntity())
-            }
-            else {
-                selectOnMap(nil)
-            }
-        }
-        
-    }
-    func selectOnMap(geoBaseEntityToSelect : GeoBaseEntity?){
-        if  highlightedLine != nil {
-            mapView.removeOverlay(highlightedLine!);
-        }
-        if (selectedAnnotation != nil){
-            mapView.deselectAnnotation(selectedAnnotation, animated: false)
-        }
-        
-        if let geoBaseEntity = geoBaseEntityToSelect{
-            let mapObj=geoBaseEntity.mapObject
-            
-            mapView.selectAnnotation(mapObj as! MKAnnotation, animated: true);
-            selectedAnnotation=mapObj as? MKAnnotation
-            
-            if mapObj is GeoBaseEntityPointAnnotation {
-                
-                
-            }
-            else if mapObj is GeoBaseEntityStyledMkPolylineAnnotation {
-                let line = mapObj as! GeoBaseEntityStyledMkPolylineAnnotation;
-                highlightedLine = HighlightedMkPolyline(points: line.points(), count: line.pointCount);
-                mapView.removeOverlay(line);
-                mapView.addOverlay(highlightedLine!);
-                mapView.addOverlay(line); //bring the highlightedLine below the line
-                
-            } else if mapObj is GeoBaseEntityStyledMkPolygonAnnotation {
-                //let polygon=mapObj as! GeoBaseEntityStyledMkPolygonAnnotation
-                //let annos=[polygon]
-                //zoomToFitMapAnnotations(annos)
-            }
-        } else {
-            selectedAnnotation=nil
-        }
-    }
-    func selectInTable(geoBaseEntityToSelect : GeoBaseEntity?, scrollToShow: Bool=true){
-        if let geoBaseEntity = geoBaseEntityToSelect{
-            let entity=geoBaseEntity.getType()
-
-            //need old fashioned loop for index
-            for i in 0...CidsConnector.sharedInstance().searchResults[entity]!.count-1 {
-                var results : [GeoBaseEntity] = CidsConnector.sharedInstance().searchResults[entity]!
-                if results[i].id == geoBaseEntity.id {
-                    if scrollToShow {
-                    tableView.selectRowAtIndexPath(NSIndexPath(forRow: i, inSection: entity.index()), animated: true, scrollPosition: UITableViewScrollPosition.Top)
-                    }
-                    else {
-                        tableView.selectRowAtIndexPath(NSIndexPath(forRow: i, inSection: entity.index()), animated: true, scrollPosition: UITableViewScrollPosition.None)
-                    }
-                    break;
-                }
-            }
-        }
-    }
-    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        //var detailVC=LeuchtenDetailsViewController()
-        //        var detailVC=storyboard!.instantiateViewControllerWithIdentifier("LeuchtenDetails") as UIViewController
-        var geoBaseEntity: GeoBaseEntity?
-        if let pointAnnotation = view.annotation as? GeoBaseEntityPointAnnotation {
-            geoBaseEntity=pointAnnotation.geoBaseEntity
-        }
-        else if let lineAnnotation = view.annotation as? GeoBaseEntityStyledMkPolylineAnnotation {
-            geoBaseEntity=lineAnnotation.geoBaseEntity
-        }else if let polygonAnnotation = view.annotation as? GeoBaseEntityStyledMkPolygonAnnotation {
-            geoBaseEntity=polygonAnnotation.geoBaseEntity
-        }
-        
-        if let gbe = geoBaseEntity  {
-            
-            let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
-            
-            if let cellDataProvider=gbe as? CellDataProvider {
-                detailVC.sections=cellDataProvider.getDataSectionKeys()
-                detailVC.setCellData(cellDataProvider.getAllData())
-                detailVC.objectToShow=gbe
-                detailVC.title=cellDataProvider.getTitle()
-                let icon=UIBarButtonItem()
-                icon.image=getGlyphedImage(cellDataProvider.getDetailGlyphIconString())
-                detailVC.navigationItem.leftBarButtonItem = icon
-            }
-            if let actionProvider=gbe as? ActionProvider {
-                detailVC.actions=actionProvider.getAllActions()
-                let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
-                detailVC.navigationItem.rightBarButtonItem = action
-            }
-            
-            let detailNC=UINavigationController(rootViewController: detailVC)
-            selectedAnnotation=nil
-            
-            mapView.deselectAnnotation(view.annotation, animated: false)
-            let popC=UIPopoverController(contentViewController: detailNC)
-            popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
-        }
-    }
-    func removeAllEntityObjects(){
-        for (_, entityArray) in CidsConnector.sharedInstance().searchResults{
-            for obj in entityArray {
-                dispatch_async(dispatch_get_main_queue()) {
-                    obj.removeFromMapView(self.mapView);
-                }
-            }
-        }
-        CidsConnector.sharedInstance().searchResults=[Entity: [GeoBaseEntity]]()
-        dispatch_async(dispatch_get_main_queue()) {
-            self.tableView.reloadData();
-        }
-    }
-    
-    //Actions
+    //MARK: - IBActions
     @IBAction func searchButtonTabbed(sender: AnyObject) {
         removeAllEntityObjects()
         
@@ -882,7 +678,216 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             return nil
         }
     }
-
+    
+    // MARK: - public functions
+    func mapTapped(sender: UITapGestureRecognizer) {
+        let touchPt = sender.locationInView(mapView)
+        
+        //let hittedUI = mapView.hitTest(touchPt, withEvent: nil)
+        //        println(hittedUI)
+        print("mapTabbed")
+        
+        
+        let buffer=CGFloat(22)
+        
+        var foundPolyline: GeoBaseEntityStyledMkPolylineAnnotation?
+        var foundPoint: GeoBaseEntityPointAnnotation?
+        var foundPolygon: GeoBaseEntityStyledMkPolygonAnnotation?
+        
+        
+        
+        
+        
+        for anno: AnyObject in mapView.annotations {
+            if let pointAnnotation = anno as? GeoBaseEntityPointAnnotation {
+                let cgPoint = mapView.convertCoordinate(pointAnnotation.coordinate, toPointToView: mapView)
+                let path  = CGPathCreateMutable()
+                CGPathMoveToPoint(path, nil, cgPoint.x, cgPoint.y)
+                CGPathAddLineToPoint(path, nil, cgPoint.x, cgPoint.y)
+                
+                let fuzzyPath=CGPathCreateCopyByStrokingPath(path, nil, buffer, CGLineCap.Round, CGLineJoin.Round, 0.0)
+                if (CGPathContainsPoint(fuzzyPath, nil, touchPt, false)) {
+                    foundPoint = pointAnnotation
+                    print("foundPoint")
+                    selectOnMap(foundPoint?.getGeoBaseEntity())
+                    selectInTable(foundPoint?.getGeoBaseEntity())
+                    break
+                }
+            }
+        }
+        
+        if (foundPoint == nil){
+            
+            for overlay: AnyObject in mapView.overlays {
+                if let lineAnnotation  = overlay as? GeoBaseEntityStyledMkPolylineAnnotation{
+                    let path  = CGPathCreateMutable()
+                    for i in 0...lineAnnotation.pointCount-1 {
+                        let mapPoint = lineAnnotation.points()[i]
+                        
+                        let cgPoint = mapView.convertCoordinate(MKCoordinateForMapPoint(mapPoint), toPointToView: mapView)
+                        if i==0 {
+                            CGPathMoveToPoint(path, nil, cgPoint.x, cgPoint.y)
+                        }
+                        else {
+                            CGPathAddLineToPoint(path, nil, cgPoint.x, cgPoint.y)
+                        }
+                    }
+                    let fuzzyPath=CGPathCreateCopyByStrokingPath(path, nil, buffer, CGLineCap.Round, CGLineJoin.Round, 0.0)
+                    if (CGPathContainsPoint(fuzzyPath, nil, touchPt, false)) {
+                        foundPolyline = lineAnnotation
+                        break
+                    }
+                }
+                if let polygonAnnotation  = overlay as? GeoBaseEntityStyledMkPolygonAnnotation {
+                    let path  = CGPathCreateMutable()
+                    for i in 0...polygonAnnotation.pointCount-1 {
+                        let mapPoint = polygonAnnotation.points()[i]
+                        
+                        let cgPoint = mapView.convertCoordinate(MKCoordinateForMapPoint(mapPoint), toPointToView: mapView)
+                        if i==0 {
+                            CGPathMoveToPoint(path, nil, cgPoint.x, cgPoint.y)
+                        }
+                        else {
+                            CGPathAddLineToPoint(path, nil, cgPoint.x, cgPoint.y)
+                        }
+                    }
+                    if (CGPathContainsPoint(path, nil, touchPt, false)) {
+                        foundPolygon=polygonAnnotation
+                        break
+                    }
+                }
+            }
+            
+            if let hitPolyline = foundPolyline {
+                selectOnMap(hitPolyline.getGeoBaseEntity())
+                selectInTable(hitPolyline.getGeoBaseEntity())
+            }
+            else if let hitPolygon=foundPolygon{
+                selectOnMap(hitPolygon.getGeoBaseEntity())
+                selectInTable(hitPolygon.getGeoBaseEntity())
+            }
+            else {
+                selectOnMap(nil)
+            }
+        }
+        
+    }
+    func selectOnMap(geoBaseEntityToSelect : GeoBaseEntity?){
+        if  highlightedLine != nil {
+            mapView.removeOverlay(highlightedLine!);
+        }
+        if (selectedAnnotation != nil){
+            mapView.deselectAnnotation(selectedAnnotation, animated: false)
+        }
+        
+        if let geoBaseEntity = geoBaseEntityToSelect{
+            let mapObj=geoBaseEntity.mapObject
+            
+            mapView.selectAnnotation(mapObj as! MKAnnotation, animated: true);
+            selectedAnnotation=mapObj as? MKAnnotation
+            
+            if mapObj is GeoBaseEntityPointAnnotation {
+                
+                
+            }
+            else if mapObj is GeoBaseEntityStyledMkPolylineAnnotation {
+                let line = mapObj as! GeoBaseEntityStyledMkPolylineAnnotation;
+                highlightedLine = HighlightedMkPolyline(points: line.points(), count: line.pointCount);
+                mapView.removeOverlay(line);
+                mapView.addOverlay(highlightedLine!);
+                mapView.addOverlay(line); //bring the highlightedLine below the line
+                
+            } else if mapObj is GeoBaseEntityStyledMkPolygonAnnotation {
+                //let polygon=mapObj as! GeoBaseEntityStyledMkPolygonAnnotation
+                //let annos=[polygon]
+                //zoomToFitMapAnnotations(annos)
+            }
+        } else {
+            selectedAnnotation=nil
+        }
+    }
+    func selectInTable(geoBaseEntityToSelect : GeoBaseEntity?, scrollToShow: Bool=true){
+        if let geoBaseEntity = geoBaseEntityToSelect{
+            let entity=geoBaseEntity.getType()
+            
+            //need old fashioned loop for index
+            for i in 0...CidsConnector.sharedInstance().searchResults[entity]!.count-1 {
+                var results : [GeoBaseEntity] = CidsConnector.sharedInstance().searchResults[entity]!
+                if results[i].id == geoBaseEntity.id {
+                    if scrollToShow {
+                        tableView.selectRowAtIndexPath(NSIndexPath(forRow: i, inSection: entity.index()), animated: true, scrollPosition: UITableViewScrollPosition.Top)
+                    }
+                    else {
+                        tableView.selectRowAtIndexPath(NSIndexPath(forRow: i, inSection: entity.index()), animated: true, scrollPosition: UITableViewScrollPosition.None)
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        //var detailVC=LeuchtenDetailsViewController()
+        //        var detailVC=storyboard!.instantiateViewControllerWithIdentifier("LeuchtenDetails") as UIViewController
+        var geoBaseEntity: GeoBaseEntity?
+        if let pointAnnotation = view.annotation as? GeoBaseEntityPointAnnotation {
+            geoBaseEntity=pointAnnotation.geoBaseEntity
+        }
+        else if let lineAnnotation = view.annotation as? GeoBaseEntityStyledMkPolylineAnnotation {
+            geoBaseEntity=lineAnnotation.geoBaseEntity
+        }else if let polygonAnnotation = view.annotation as? GeoBaseEntityStyledMkPolygonAnnotation {
+            geoBaseEntity=polygonAnnotation.geoBaseEntity
+        }
+        
+        if let gbe = geoBaseEntity  {
+            
+            let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            
+            if let cellDataProvider=gbe as? CellDataProvider {
+                detailVC.sections=cellDataProvider.getDataSectionKeys()
+                detailVC.setCellData(cellDataProvider.getAllData())
+                detailVC.objectToShow=gbe
+                detailVC.title=cellDataProvider.getTitle()
+                let icon=UIBarButtonItem()
+                icon.image=getGlyphedImage(cellDataProvider.getDetailGlyphIconString())
+                detailVC.navigationItem.leftBarButtonItem = icon
+            }
+            if let actionProvider=gbe as? ActionProvider {
+                detailVC.actions=actionProvider.getAllActions()
+                let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
+                detailVC.navigationItem.rightBarButtonItem = action
+            }
+            
+            let detailNC=UINavigationController(rootViewController: detailVC)
+            selectedAnnotation=nil
+            
+            mapView.deselectAnnotation(view.annotation, animated: false)
+            let popC=UIPopoverController(contentViewController: detailNC)
+            popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
+        }
+    }
+    func removeAllEntityObjects(){
+        for (_, entityArray) in CidsConnector.sharedInstance().searchResults{
+            for obj in entityArray {
+                dispatch_async(dispatch_get_main_queue()) {
+                    obj.removeFromMapView(self.mapView);
+                }
+            }
+        }
+        CidsConnector.sharedInstance().searchResults=[Entity: [GeoBaseEntity]]()
+        dispatch_async(dispatch_get_main_queue()) {
+            self.tableView.reloadData();
+        }
+    }
+    func delay(delay:Double, closure:()->()) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(delay * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), closure)
+    }
+    
+    // MARK: - private funcs
     private func geoSearch(){
         if matchingSearchItems.count>0 {
             self.mapView.removeAnnotations(self.matchingSearchItemsAnnotations)
@@ -965,17 +970,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
     }
+
     
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        focusRectShape.removeFromSuperlayer()
-        coordinator.animateAlongsideTransition(nil, completion: { context in
-            if UIDevice.currentDevice().orientation.isLandscape.boolValue {
-                print("landscape")
-            } else {
-                print("portraight")
-            }
-            self.ensureFocusRectangleIsDisplayedWhenAndWhereItShould()
-        })
-        
-    }
+//    func textFieldShouldReturn(textField: UITextField) -> Bool {
+//        self.view.endEditing(true)
+//        return false
+//    }
+    
+    
 }
