@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Veranlassung : BaseEntity {
+class Veranlassung : BaseEntity, CellDataProvider  {
 
     var dokumente: [DMSUrl] = []
     var standorte: [Standort] = []
@@ -20,7 +20,7 @@ class Veranlassung : BaseEntity {
     var geometrien: [StandaloneGeom] = []
     var nummer: String?
     var mauerlaschen: [Mauerlasche] = []
-    var art: [Veranlassungsart] = []
+    var art: Veranlassungsart?
     var username: String?
     var abzweigdosen: [Abzweigdose] = []
     var leuchten: [Leuchte] = []
@@ -50,9 +50,37 @@ class Veranlassung : BaseEntity {
         abzweigdosen <- map["ar_abzweigdosen"];
         leuchten <- map["ar_leuchten"];
         bezeichnung <- map["bezeichnung"];
-        datum <- map["datum"];
+        datum <- (map["datum"], DateTransformFromString(format: "yyyy-MM-dd"))
         schaltstellen <- map["ar_schaltstellen"];
         leitungen <- map["ar_leitungen"];
+    }
+     // MARK: BaseEntity - must be overridden
+    override func getType() -> Entity {
+        return Entity.VERANLASSUNGEN
+    }
+    
+    
+    // MARK: CellDataProvider
+    @objc func getTitle() -> String {
+        return "Veranlassung"
+    }
+    @objc func getDetailGlyphIconString() -> String {
+        return "icon-switch"
+    }
+    @objc func getAllData() -> [String: [CellData]] {
+        var data: [String: [CellData]] = ["main":[]]
+        data["main"]?.append(SingleTitledInfoCellData(title: "Nummer", data: nummer ?? "?"))
+        data["main"]?.append(SingleTitledInfoCellData(title: "Bezeichnung", data: bezeichnung ?? "-"))
+        data["main"]?.append(SingleTitledInfoCellData(title: "Grund (Art)", data: art?.bezeichnung ?? "-"))
+        data["main"]?.append(MemoTitledInfoCellData(title: "Beschreibung", data: beschreibung ?? ""))
+        data["main"]?.append(DoubleTitledInfoCellData(titleLeft: "angelegt von", dataLeft: username ?? "-", titleRight: "angelegt am", dataRight: datum?.toDateString() ?? "-"))
+        data["main"]?.append(MemoTitledInfoCellData(title: "Bemerkungen", data: bemerkungen ?? ""))
+        data["DeveloperInfo"]=[]
+        data["DeveloperInfo"]?.append(SingleTitledInfoCellData(title: "Key", data: "\(getType().tableName())/\(id)"))
+        return data
+    }
+    @objc func getDataSectionKeys() -> [String] {
+        return ["main","DeveloperInfo"]
     }
     
 }

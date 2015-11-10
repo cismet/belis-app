@@ -16,6 +16,7 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataPr
     var nummer: String?
     var protokolle: [Arbeitsprotokoll]?
     var zugewiesenAn: Team?
+ 
     
     required init?(_ map: Map) {
         super.init(map)
@@ -35,7 +36,6 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataPr
         //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
         wgs84WKT <- map["ausdehnung_wgs84"]
     }
-    
     
     
     func getVeranlassungsnummern() -> [String] {
@@ -99,6 +99,7 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataPr
         return "icon-line";
     }
     
+    // MARK: CellDataProvider
     
     @objc func getTitle() -> String {
         return "Arbeitsauftrag"
@@ -111,13 +112,23 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataPr
     
     @objc func getAllData() -> [String: [CellData]] {    
         var data: [String: [CellData]] = ["main":[]]
-        data["main"]?.append(SingleTitledInfoCellData(title: "Nummer",data: getMainTitle()))
+        data["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Nummer",dataLeft: getMainTitle(),titleRight: "zugewiesen an",dataRight: zugewiesenAn?.name ?? "-"))
+        data["main"]?.append(DoubleTitledInfoCellData(titleLeft: "angelegt von", dataLeft: angelegtVon ?? "-", titleRight: "angelegt am", dataRight: angelegtAm?.toDateString() ?? "-"))
+        
+        if let prots = protokolle {
+            data["Protokolle"]=[]
+            for p in prots {
+                data["Protokolle"]?.append(SingleTitledInfoCellData(title: "#\(p.protokollnummer!): \(p.attachedGeoBaseEntity?.getAnnotationTitle() ?? "-")",data: p.getSubTitle()))
+//                data["Protokolle"]?.append(SingleTitledInfoCellData(title: "#\(p.protokollnummer!)",data: zugewiesenAn?.name ?? "-"))
+            }
+        }
+        
         data["DeveloperInfo"]=[]
         data["DeveloperInfo"]?.append(SingleTitledInfoCellData(title: "Key", data: "\(getType().tableName())/\(id)"))
         return data
     }
     @objc func getDataSectionKeys() -> [String] {
-        return ["main","DeveloperInfo"]
+        return ["main","Protokolle","DeveloperInfo"]
     }
     
 

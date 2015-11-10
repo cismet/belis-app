@@ -22,12 +22,14 @@ struct WebHostingGlyps {
          "icon-map-marker":"\u{f220}",
         "icon-antenna":"\u{f3ec}",
         "icon-document":"\u{f0c2}",
-        "icon-chevron-right":"\u{f488}",
         "icon-camera":"\u{f19b}",
         "icon-horizontalexpand":"\u{f578}",
         "icon-switch":"\u{f28a}",
         "icon-certificatealt":"\u{f058}",
-        "icon-chevron-down":"\u{f48b}"
+        "icon-chevron-down":"\u{f48b}",
+        "icon-chevron-left":"\u{f489}",
+        "icon-chevron-right":"\u{f488}",
+        "icon-chevron-up":"\u{f48a}"
     ]
     
 }

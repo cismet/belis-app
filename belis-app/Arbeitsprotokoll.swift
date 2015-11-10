@@ -29,7 +29,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
     var schaltstelle: Schaltstelle?
     var standaloneGeom: StandaloneGeom?
     var detailObjekt:String?
-    private var attachedGeoBaseEntity: GeoBaseEntity?
+    var attachedGeoBaseEntity: GeoBaseEntity?
     
     required init?(_ map: Map) {
         super.init(map)
@@ -41,7 +41,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         monteur <- map["monteur"]
         bemerkung <- map["bemerkung"]
         defekt <- map["defekt"]
-        datum <- map["datum"]
+        datum <- (map["datum"], DateTransformFromString(format: "yyyy-MM-dd"))
         status <- map["fk_status"]
         veranlassungsnummer <- map["veranlassungsnummer"]
         protokollnummer <- map["protokollnummer"]
@@ -141,13 +141,30 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
     
     @objc func getAllData() -> [String: [CellData]] {
         var data: [String: [CellData]] = ["main":[]]
-        data["main"]?.append(SingleTitledInfoCellData(title: "Id",data: getMainTitle()))
+        var nr="?"
+        if let n=protokollnummer {
+            nr="\(n)"
+        }
+        data["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Nummer",dataLeft: nr,titleRight: "Fachobjekt",dataRight: attachedGeoBaseEntity?.getAnnotationTitle() ?? "-"))
+        if let vnr = veranlassungsnummer {
+            if let veranlassung=CidsConnector.sharedInstance().veranlassungsCache[vnr]{
+                let veranlassungDetails: [String: [CellData]] = veranlassung.getAllData()
+                let veranlassungSections = veranlassung.getDataSectionKeys()
+                data["main"]?.append(SingleTitledInfoCellDataWithDetails(title: "Veranlassung",data: veranlassungsnummer ?? "ohne Veranlassung", details: veranlassungDetails, sections: veranlassungSections))
+            }
+        }
+        
+        data["Details"]=[]
+        data["Details"]?.append(DoubleTitledInfoCellData(titleLeft: "Monteur", dataLeft: monteur ?? "-", titleRight: "Datum", dataRight: datum?.toDateString() ?? "-"))
+        data["Details"]?.append(SingleTitledInfoCellData(title: "Status",data: status?.bezeichnung ?? "-"))
+        data["Details"]?.append(MemoTitledInfoCellData(title: "Bemerkung",data: bemerkung ?? ""))
+        data["Details"]?.append(MemoTitledInfoCellData(title: "Material",data: material ?? ""))
         data["DeveloperInfo"]=[]
         data["DeveloperInfo"]?.append(SingleTitledInfoCellData(title: "Key", data: "\(getType().tableName())/\(id)"))
         return data
     }
     @objc func getDataSectionKeys() -> [String] {
-        return ["main","DeveloperInfo"]
+        return ["main","Details","DeveloperInfo"]
     }
     
     

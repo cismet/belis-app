@@ -46,7 +46,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     let focusRectShape = CAShapeLayer()
     static let IMAGE_PICKER=UIImagePickerController()
     var brightOverlay=MyBrightOverlay()
-
+    var shownDetails:DetailVC?
+    
     
     //MARK: Standard VC functions
     override func viewDidLoad() {
@@ -449,7 +450,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBAction func itemArbeitsauftragTapped(sender: AnyObject) {
         
         let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
-        
+        shownDetails=detailVC
         let gbe=CidsConnector.sharedInstance().selectedArbeitsauftrag
         
         if let cellDataProvider=gbe as? CellDataProvider {
@@ -457,8 +458,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             detailVC.setCellData(cellDataProvider.getAllData())
             detailVC.objectToShow=gbe
             detailVC.title=cellDataProvider.getTitle()
+
             let icon=UIBarButtonItem()
-            icon.image=getGlyphedImage(cellDataProvider.getDetailGlyphIconString())
+            icon.action="back:"
+            icon.image=getGlyphedImage("icon-chevron-left")
             detailVC.navigationItem.leftBarButtonItem = icon
         }
         let detailNC=UINavigationController(rootViewController: detailVC)
@@ -539,6 +542,19 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         geoSearch()
     }
 
+    // MARK: - Selector functions
+    func back(sender: UIBarButtonItem) {
+        if let details=shownDetails{
+            details.dismissViewControllerAnimated(true, completion:
+                { () -> Void in
+                    CidsConnector.sharedInstance().selectedArbeitsauftrag=nil
+                    self.selectArbeitsauftrag(nil)
+                    self.shownDetails=nil
+
+            })
+        }
+    }
+    
     func createFocusRect() -> MKMapRect {
         let mRect = self.mapView.visibleMapRect;
         let newSize = MKMapSize(width: mRect.size.width/3,height: mRect.size.height/3)
@@ -593,34 +609,47 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         self.mapView.setRegion(region, animated: true)
         
     }
-    func selectArbeitsauftrag(aa: Arbeitsauftrag) {
-        CidsConnector.sharedInstance().selectedArbeitsauftrag=aa
-        CidsConnector.sharedInstance().allArbeitsauftraegeBeforeCurrentSelection=CidsConnector.sharedInstance().searchResults
-        removeAllEntityObjects()
+    func selectArbeitsauftrag(arbeitsauftrag: Arbeitsauftrag?) {
         
-        itemArbeitsauftrag.title=aa.nummer!
-        
-        actInd.center = mapView.center;
+        CidsConnector.sharedInstance().selectedArbeitsauftrag=arbeitsauftrag
+        actInd.center = self.mapView.center;
         actInd.hidesWhenStopped = true;
         actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
         self.view.addSubview(actInd);
         actInd.startAnimating();
-        
-        if let protokolle=aa.protokolle {
-            for prot in protokolle {
-                if let _=CidsConnector.sharedInstance().searchResults[Entity.PROTOKOLLE] {
-                    CidsConnector.sharedInstance().searchResults[Entity.PROTOKOLLE]!.append(prot)
-                }
-                else {
-                    CidsConnector.sharedInstance().searchResults.updateValue([prot], forKey: Entity.PROTOKOLLE)
+        selectedAnnotation=nil
+        let overlays=self.mapView.overlays
+            self.mapView.removeOverlays(overlays)
+            for anno in self.mapView.selectedAnnotations {
+                self.mapView.deselectAnnotation(anno, animated: false)
+            }
+        var zoomToShowAll=true
+        if let aa=arbeitsauftrag {
+            CidsConnector.sharedInstance().allArbeitsauftraegeBeforeCurrentSelection=CidsConnector.sharedInstance().searchResults
+            removeAllEntityObjects()
+            
+            itemArbeitsauftrag.title=aa.nummer!
+            
+            
+            if let protokolle=aa.protokolle {
+                for prot in protokolle {
+                    if let _=CidsConnector.sharedInstance().searchResults[Entity.PROTOKOLLE] {
+                        CidsConnector.sharedInstance().searchResults[Entity.PROTOKOLLE]!.append(prot)
+                    }
+                    else {
+                        CidsConnector.sharedInstance().searchResults.updateValue([prot], forKey: Entity.PROTOKOLLE)
+                    }
                 }
             }
-        }
-        
-        dispatch_async(dispatch_get_main_queue()) {
-            self.tableView.reloadData();
-            var annos: [MKAnnotation]=[]
+        } else {
+            itemArbeitsauftrag.title="Kein Arbeitsauftrag ausgewählt"
+            self.removeAllEntityObjects()
+            CidsConnector.sharedInstance().searchResults=CidsConnector.sharedInstance().allArbeitsauftraegeBeforeCurrentSelection
+            zoomToShowAll=false
             
+        }
+        dispatch_async(dispatch_get_main_queue()) {
+            var annos: [MKAnnotation]=[]
             for (_, objArray) in CidsConnector.sharedInstance().searchResults{
                 for obj in objArray {
                     obj.addToMapView(self.mapView);
@@ -629,12 +658,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     }
                 }
             }
-            
+            if zoomToShowAll {
+                self.zoomToFitMapAnnotations(annos)
+                
+            }
             self.actInd.stopAnimating();
             self.actInd.removeFromSuperview();
-            dispatch_async(dispatch_get_main_queue()) {
-                self.zoomToFitMapAnnotations(annos)
-            }
         }
         
     }
