@@ -161,8 +161,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if let left=cell.baseEntity as? LeftSwipeActionProvider {
             cell.leftButtons=left.getLeftSwipeActions()
         }
+        else {
+            cell.leftButtons=[]
+        }
         if let right=cell.baseEntity as? RightSwipeActionProvider {
             cell.rightButtons=right.getRightSwipeActions()
+        }
+        else {
+            cell.rightButtons=[]
         }
         
         
@@ -204,7 +210,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     //MARK: UITableViewDelegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
         print("didSelectRowAtIndexPath")
-        
         if let obj=CidsConnector.sharedInstance().searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row] {
             selectOnMap(obj)
             //          lastSelection=obj
@@ -291,13 +296,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             anView!.image = UIImage(named: gbePA.imageName);
             
             
-            if let label=getGlyphedLabel(gbePA.glyphName) {
+            if let label=GlyphTools.sharedInstance().getGlyphedLabel(gbePA.glyphName) {
                 label.textColor=UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)
                 anView!.leftCalloutAccessoryView=label
             }
             
             
-            if let btn=getGlyphedButton("icon-chevron-right"){
+            if let btn=GlyphTools.sharedInstance().getGlyphedButton("icon-chevron-right"){
                 btn.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0), forState: UIControlState.Normal)
                 anView!.rightCalloutAccessoryView=btn
             }
@@ -315,11 +320,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 anView!.annotation = gbeSMKPA
             }
             
-            if let label=getGlyphedLabel(gbeSMKPA.glyphName) {
+            if let label=GlyphTools.sharedInstance().getGlyphedLabel(gbeSMKPA.glyphName) {
                 label.textColor=UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)
                 anView!.leftCalloutAccessoryView=label
             }
-            if let btn=getGlyphedButton("icon-chevron-right"){
+            if let btn=GlyphTools.sharedInstance().getGlyphedButton("icon-chevron-right"){
                 btn.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0), forState: UIControlState.Normal)
                 anView!.rightCalloutAccessoryView=btn
             }
@@ -343,11 +348,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 anView!.annotation = gbeSPGA
             }
             
-            if let label=getGlyphedLabel(gbeSPGA.glyphName) {
+            if let label=GlyphTools.sharedInstance().getGlyphedLabel(gbeSPGA.glyphName) {
                 label.textColor=UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)
                 anView!.leftCalloutAccessoryView=label
             }
-            if let btn=getGlyphedButton("icon-chevron-right"){
+            if let btn=GlyphTools.sharedInstance().getGlyphedButton("icon-chevron-right"){
                 btn.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0), forState: UIControlState.Normal)
                 anView!.rightCalloutAccessoryView=btn
             }
@@ -449,28 +454,31 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     @IBAction func itemArbeitsauftragTapped(sender: AnyObject) {
         
-        let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
-        shownDetails=detailVC
-        let gbe=CidsConnector.sharedInstance().selectedArbeitsauftrag
-        
-        if let cellDataProvider=gbe as? CellDataProvider {
+        if let gbe=CidsConnector.sharedInstance().selectedArbeitsauftrag {
+            let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
+            shownDetails=detailVC
+             let cellDataProvider=gbe as CellDataProvider
             detailVC.sections=cellDataProvider.getDataSectionKeys()
             detailVC.setCellData(cellDataProvider.getAllData())
             detailVC.objectToShow=gbe
             detailVC.title=cellDataProvider.getTitle()
-
+            
             let icon=UIBarButtonItem()
             icon.action="back:"
             icon.image=getGlyphedImage("icon-chevron-left")
             detailVC.navigationItem.leftBarButtonItem = icon
-        }
-        let detailNC=UINavigationController(rootViewController: detailVC)
-        selectedAnnotation=nil
-        
-      //  mapView.deselectAnnotation(view.annotation, animated: false)
-        let popC=UIPopoverController(contentViewController: detailNC)
-        
+            
+            let detailNC=UINavigationController(rootViewController: detailVC)
+            selectedAnnotation=nil
+            
+            //  mapView.deselectAnnotation(view.annotation, animated: false)
+            let popC=UIPopoverController(contentViewController: detailNC)
             popC.presentPopoverFromBarButtonItem(itemArbeitsauftrag, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
+        }
+        else if let indexPath=tableView.indexPathForSelectedRow , aa = CidsConnector.sharedInstance().searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row] as? Arbeitsauftrag {
+                selectArbeitsauftrag(aa)
+        }
+        
         
         
     }
@@ -489,13 +497,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
     }
     @IBAction func lookUpButtonTabbed(sender: AnyObject) {
+        selectArbeitsauftrag(nil,showActivityIndicator: false)
         removeAllEntityObjects()
         actInd.center = mapView.center;
         actInd.hidesWhenStopped = true;
         actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
         self.view.addSubview(actInd);
         actInd.startAnimating();
-        
         CidsConnector.sharedInstance().searchArbeitsauftraegeForTeam("") { () -> () in
             dispatch_async(dispatch_get_main_queue()) {
                 self.tableView.reloadData();
@@ -570,7 +578,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         for annotation in annos {
             if let poly=annotation as? MKMultiPoint {
                 let points=poly.points()
-                print(poly.pointCount)
                 for i in  0 ... poly.pointCount-1 { //last point is jwd (dono why)
                     let coord = MKCoordinateForMapPoint(points[i])
                     //print("CO: \(coord.longitude),\(coord.latitude)")
@@ -596,10 +603,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         let center = CLLocationCoordinate2D(latitude: topLeftCoordinate.latitude - (topLeftCoordinate.latitude - bottomRightCoordinate.latitude) * 0.5, longitude: topLeftCoordinate.longitude - (topLeftCoordinate.longitude - bottomRightCoordinate.longitude) * 0.5)
         
-        print("\ncenter:\(center.latitude) \(center.longitude)")
         // Add a little extra space on the sides
-        let span = MKCoordinateSpanMake(fabs(topLeftCoordinate.latitude - bottomRightCoordinate.latitude) * 1.01, fabs(bottomRightCoordinate.longitude - topLeftCoordinate.longitude) * 1.01)
-        print("\nspan:\(span.latitudeDelta) \(span.longitudeDelta)")
+        let span = MKCoordinateSpanMake(fabs(topLeftCoordinate.latitude - bottomRightCoordinate.latitude) * 1.3, fabs(bottomRightCoordinate.longitude - topLeftCoordinate.longitude) * 1.3)
         
         var region = MKCoordinateRegion(center: center, span: span)
         
@@ -609,15 +614,20 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         self.mapView.setRegion(region, animated: true)
         
     }
-    func selectArbeitsauftrag(arbeitsauftrag: Arbeitsauftrag?) {
-        
-        CidsConnector.sharedInstance().selectedArbeitsauftrag=arbeitsauftrag
-        actInd.center = self.mapView.center;
-        actInd.hidesWhenStopped = true;
-        actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
-        self.view.addSubview(actInd);
-        actInd.startAnimating();
+    func selectArbeitsauftrag(arbeitsauftrag: Arbeitsauftrag?, showActivityIndicator: Bool = true) {
+        let sel=selectedAnnotation
         selectedAnnotation=nil
+        if let s=sel {
+         mapView.deselectAnnotation(s, animated: false)
+        }
+        CidsConnector.sharedInstance().selectedArbeitsauftrag=arbeitsauftrag
+        if showActivityIndicator {
+            actInd.center = self.mapView.center;
+            actInd.hidesWhenStopped = true;
+            actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
+            self.view.addSubview(actInd);
+            actInd.startAnimating();
+        }
         let overlays=self.mapView.overlays
             self.mapView.removeOverlays(overlays)
             for anno in self.mapView.selectedAnnotations {
@@ -662,51 +672,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 self.zoomToFitMapAnnotations(annos)
                 
             }
-            self.actInd.stopAnimating();
-            self.actInd.removeFromSuperview();
+            if showActivityIndicator {
+                self.actInd.stopAnimating();
+                self.actInd.removeFromSuperview();
+            }
         }
         
     }
 
-    func getGlyphedLabel(glyphName: String) -> UILabel? {
-        if let glyph=WebHostingGlyps.glyphs[glyphName] {
-            let label=UILabel(frame: CGRectMake(0, 0, 25,25))
-            label.font = UIFont(name: "WebHostingHub-Glyphs", size: 20)
-            label.textAlignment=NSTextAlignment.Center
-            label.text=glyph
-            label.sizeToFit()
-            return label
-        }
-        else  {
-            return nil
-        }
-    }
-    func getGlyphedImage(glyphName: String) -> UIImage? {
-        if let glyph=WebHostingGlyps.glyphs[glyphName] {
-            
-            let color=UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)
-            let alpha=UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
-            let font=UIFont(name: "WebHostingHub-Glyphs", size: 14)!
-            let image=UIImage(text: glyph, font: font, color: color, backgroundColor: alpha, size: CGSize(width: 20,height:20), offset: CGPoint(x: 0, y: 2))
-            return image
-        }
-        else  {
-            return nil
-        }
-    }
-    func getGlyphedButton(glyphName: String) -> UIButton? {
-        if let glyph=WebHostingGlyps.glyphs[glyphName] {
-            let btn=UIButton(frame: CGRectMake(0, 0, 25,25))
-            btn.titleLabel!.font = UIFont(name: "WebHostingHub-Glyphs", size: 20)
-            btn.titleLabel!.textAlignment=NSTextAlignment.Center
-            btn.setTitle(glyph, forState: UIControlState.Normal)
-            btn.sizeToFit()
-            return btn
-        }
-        else  {
-            return nil
-        }
-    }
+    
     
     // MARK: - public functions
     func mapTapped(sender: UITapGestureRecognizer) {
@@ -999,7 +973,17 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
     }
-
+    func getGlyphedImage(glyphName: String, fontsize: CGFloat = 14, size: CGSize = CGSize(width: 20,height:20), offset: CGPoint = CGPoint(x: 0, y: 2), color: UIColor = UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0),backgroundcolor:UIColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0) ) -> UIImage? {
+        if let glyph=WebHostingGlyps.glyphs[glyphName] {
+            
+            let font=UIFont(name: "WebHostingHub-Glyphs", size: fontsize)!
+            let image=UIImage(text: glyph, font: font, color: color, backgroundColor: backgroundcolor, size: size, offset: offset)
+            return image
+        }
+        else  {
+            return nil
+        }
+    }
     
 //    func textFieldShouldReturn(textField: UITextField) -> Bool {
 //        self.view.endEditing(true)

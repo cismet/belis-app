@@ -8,9 +8,10 @@
 
 import Foundation
 import ObjectMapper
+import MGSwipeTableCell
 
 
-class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDataProvider {
+class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDataProvider, RightSwipeActionProvider {
     var material: String?
     var monteur: String?
     var bemerkung: String?
@@ -196,7 +197,61 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         }
         return "icon-ceilinglight"
     }
+    
+    func getRightSwipeActions() -> [MGSwipeButton] {
+        let status=MGSwipeButton(title: "Status", backgroundColor: UIColor(red: 255.0/255.0, green: 107.0/255.0, blue: 107.0/255.0, alpha: 1.0) ,callback: {
+            (sender: MGSwipeTableCell!) -> Bool in
+            if let mainVC=CidsConnector.sharedInstance().mainVC {
+//                if let protDetailView = mainVC.storyboard?.instantiateViewControllerWithIdentifier("protDetails") as? ProtokollDetailViewController {
+//                        mainVC.presentViewController(protDetailView, animated: true, completion: { () -> Void in
+//                            
+//                        })
+//                    
+//                }
+            }
+            
+            return true
+        })
+        let actions=MGSwipeButton(title: "Aktionen", backgroundColor: UIColor(red: 78.0/255.0, green: 205.0/255.0, blue: 196.0/255.0, alpha: 1.0) ,callback: {
+            (sender: MGSwipeTableCell!) -> Bool in
+            if let mainVC=CidsConnector.sharedInstance().mainVC {
+                let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+                alertController.addAction(UIAlertAction(title: "Leuchtenerneuerung", style: .Default, handler: { alertAction in
+                    // Handle Take Photo here
+                }))
+                alertController.addAction(UIAlertAction(title: "Leuchtmittelwechsel (mit EP)", style: .Default, handler: { alertAction in
+                    // Handle Choose Existing Photo
+                }))
+                alertController.addAction(UIAlertAction(title: "Leuchtmittelwechsel", style: .Default, handler: { alertAction in
+                    // Handle Choose Existing Photo
+                }))
+                alertController.addAction(UIAlertAction(title: "Rundsteuerempfängerwechsel", style: .Default, handler: { alertAction in
+                    // Handle Choose Existing Photo
+                }))
+                alertController.addAction(UIAlertAction(title: "Sonderturnus", style: .Default, handler: { alertAction in
+                    // Handle Choose Existing Photo
+                }))
+                alertController.addAction(UIAlertAction(title: "Vorschaltgerätwechsel", style: .Default, handler: { alertAction in
+                    // Handle Choose Existing Photo
+                }))
+                alertController.addAction(UIAlertAction(title: "Sonstiges", style: .Default, handler: { alertAction in
+                    // Handle Choose Existing Photo
+                }))
 
+                alertController.modalPresentationStyle = .Popover
+                
+                let popover = alertController.popoverPresentationController!
+                popover.permittedArrowDirections = .Up
+                popover.sourceView = sender
+                popover.sourceRect = sender.bounds
+                
+                mainVC.presentViewController(alertController, animated: true, completion: nil)
+            }
+            
+            return true
+        })
+        return [status,actions]
+    }
     
 }
 

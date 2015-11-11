@@ -26,7 +26,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         tableView.registerNib(UINib(nibName: "DoubleTitledInfoCell", bundle: nil), forCellReuseIdentifier: "doubleTitled")
         tableView.registerNib(UINib(nibName: "MemoTitledInfoCell", bundle: nil), forCellReuseIdentifier: "memoTitled")
         tableView.registerClass(SimpleInfoCell.self, forCellReuseIdentifier: "simple")
-            tableView.registerClass(SimpleUrlPreviewInfoCell.self, forCellReuseIdentifier: "simpleUrl")
+        tableView.registerClass(SimpleUrlPreviewInfoCell.self, forCellReuseIdentifier: "simpleUrl")
         tableView.rowHeight=UITableViewAutomaticDimension
     }
  
@@ -83,14 +83,12 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         // Pass the selected object to the new view controller.
     }
     */
-    //UITableViewDataSource
-  
     
+    // MARK: UITableViewDataSource
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionKey: String = sections[section]
         return data[sectionKey]?.count ?? 0
     }
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let row=indexPath.row
         let section = indexPath.section
@@ -106,7 +104,6 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         }
         return cell
     }
-    
     func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if  sections.count>section{
             let sectionKey: String = sections[section]
@@ -121,7 +118,6 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
             return 0
         }
     }
-    
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
         let row=indexPath.row
@@ -135,13 +131,12 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         }
         return 44
     }
-    
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return sections.count
     }
     
     
-    //UITableViewDelegate
+    // MARK: UITableViewDelegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
         let row=indexPath.row
         let section = indexPath.section
@@ -156,7 +151,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         return sections[section]
     }
 
-    //UIImagePickerControllerDelegate
+    // MARK: UIImagePickerControllerDelegate
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         print("DetailVC FINISH")
         if let x = (callBacker as? UIImagePickerControllerDelegate) {
@@ -165,8 +160,6 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         //picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
         
     }
-
-    
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         print("DetailVC CANCEL")
         if let x = (callBacker as? UIImagePickerControllerDelegate) {

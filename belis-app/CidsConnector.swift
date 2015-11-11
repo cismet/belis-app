@@ -12,7 +12,6 @@ import Security
 
 public class CidsConnector {
     
-    static var instance: CidsConnector!
     
     #if arch(i386) || arch(x86_64)
     let simulator=true
@@ -102,8 +101,10 @@ public class CidsConnector {
         }
     }
     
-    
-    // SHARED INSTANCE
+
+    // MARK: SHARED INSTANCE
+    static var instance: CidsConnector!
+
     class func sharedInstance() -> CidsConnector {
         self.instance = (self.instance ?? CidsConnector())
         return self.instance

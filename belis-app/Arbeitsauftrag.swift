@@ -118,10 +118,14 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataPr
         if let prots = protokolle {
             data["Protokolle"]=[]
             for p in prots {
-                data["Protokolle"]?.append(SingleTitledInfoCellData(title: "#\(p.protokollnummer!): \(p.attachedGeoBaseEntity?.getAnnotationTitle() ?? "-")",data: p.getSubTitle()))
+                let protDetails=p.getAllData()
+                let protSections=p.getDataSectionKeys()
+                
+                data["Protokolle"]?.append(SingleTitledInfoCellDataWithDetails(title: "#\(p.protokollnummer!): \(p.attachedGeoBaseEntity?.getAnnotationTitle() ?? "-")",data: p.getSubTitle(), details: protDetails, sections: protSections))
 //                data["Protokolle"]?.append(SingleTitledInfoCellData(title: "#\(p.protokollnummer!)",data: zugewiesenAn?.name ?? "-"))
             }
         }
+       
         
         data["DeveloperInfo"]=[]
         data["DeveloperInfo"]?.append(SingleTitledInfoCellData(title: "Key", data: "\(getType().tableName())/\(id)"))

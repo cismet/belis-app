@@ -717,6 +717,36 @@
             </objects>
             <point key="canvasLocation" x="54" y="-152.5"/>
         </scene>
+        <!--Protokoll Detail View Controller-->
+        <scene sceneID="vtU-0A-ZA8">
+            <objects>
+                <tableViewController storyboardIdentifier="protDetails" modalPresentationStyle="formSheet" id="C4c-SF-r80" customClass="ProtokollDetailViewController" customModule="belis_app" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="096-HN-LJp">
+                        <rect key="frame" x="0.0" y="0.0" width="400" height="500"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="HDi-pz-518">
+                                <rect key="frame" x="0.0" y="28" width="400" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HDi-pz-518" id="uob-Yo-6fA">
+                                    <rect key="frame" x="0.0" y="0.0" width="400" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="C4c-SF-r80" id="q0G-jQ-Ewl"/>
+                            <outlet property="delegate" destination="C4c-SF-r80" id="O6E-iE-U8m"/>
+                        </connections>
+                    </tableView>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="400" height="500"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pYr-8F-5Ea" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="789" y="-427"/>
+        </scene>
         <!--Additional Functionality Popover View Controller-->
         <scene sceneID="RgF-0m-zvf">
             <objects>

@@ -149,7 +149,7 @@ class GeoBaseEntity : BaseEntity, LeftSwipeActionProvider{
     }
 
     func getLeftSwipeActions() -> [MGSwipeButton] {
-        let zoomC=UIColor(red: 193.0/255.0, green: 237.0/255.0, blue: 46.0/255.0, alpha: 1.0)
+        let zoomC=UIColor(red: 199.0/255.0, green: 244.0/255.0, blue: 100.0/255.0, alpha: 1.0)
         
         let zoom=MGSwipeButton(title: "Zoom", backgroundColor: zoomC ,callback: {
             (sender: MGSwipeTableCell!) -> Bool in

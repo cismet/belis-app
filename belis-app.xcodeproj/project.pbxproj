@@ -80,6 +80,7 @@
 		2D9D3AD61A9E23DD0049F46F /* AF+ImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9D3AD51A9E23DD0049F46F /* AF+ImageView+Extension.swift */; };
 		2D9D3B1A1A9F777D0049F46F /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D9D3B191A9F777D0049F46F /* QuickLook.framework */; };
 		2D9D3B1C1A9F77B50049F46F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D9D3B1B1A9F77B50049F46F /* UIKit.framework */; };
+		2DA28D5A1BF3925200FB056B /* ProtokollDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DA28D591BF3925200FB056B /* ProtokollDetailViewController.swift */; };
 		2DB10EE91B299CA200B78852 /* FotoActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB10EE81B299CA200B78852 /* FotoActions.swift */; };
 		2DB6E8BC1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */; };
 		2DB6E8BD1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */; };
@@ -197,6 +198,7 @@
 		2D9D3AD51A9E23DD0049F46F /* AF+ImageView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AF+ImageView+Extension.swift"; sourceTree = "<group>"; };
 		2D9D3B191A9F777D0049F46F /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		2D9D3B1B1A9F77B50049F46F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		2DA28D591BF3925200FB056B /* ProtokollDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtokollDetailViewController.swift; sourceTree = "<group>"; };
 		2DB10EE81B299CA200B78852 /* FotoActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FotoActions.swift; sourceTree = "<group>"; };
 		2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "webhostinghub-glyphs.ttf"; sourceTree = "<group>"; };
 		2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebHostingGlyph.swift; sourceTree = "<group>"; };
@@ -435,6 +437,7 @@
 				2D5FB3061A67CC340041020C /* MainViewController.swift */,
 				2D5FB3041A67CC340041020C /* LoginViewController.swift */,
 				2DDF34FA1BDE1F5D00C3047D /* AdditionalFunctionalityPopoverViewController.swift */,
+				2DA28D591BF3925200FB056B /* ProtokollDetailViewController.swift */,
 			);
 			name = viewController;
 			sourceTree = "<group>";
@@ -721,6 +724,7 @@
 				2D5FB32E1A67CCA60041020C /* WKTPolygon.m in Sources */,
 				2D5FB3091A67CC340041020C /* AppDelegate.swift in Sources */,
 				2D5FB32B1A67CCA60041020C /* WKTParser.m in Sources */,
+				2DA28D5A1BF3925200FB056B /* ProtokollDetailViewController.swift in Sources */,
 				2D5FB3301A67CCA60041020C /* WKTString.m in Sources */,
 				2D5FB3451A67CCEB0041020C /* Standort.swift in Sources */,
 				2D5FB3271A67CCA60041020C /* WKTGeometry.m in Sources */,
