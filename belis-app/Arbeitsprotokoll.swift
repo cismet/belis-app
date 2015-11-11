@@ -291,7 +291,25 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
                     // Handle Choose Existing Photo
                 }))
                 alertController.addAction(UIAlertAction(title: "Sonstiges", style: .Default, handler: { alertAction in
-                    // Handle Choose Existing Photo
+                    if let protDetailView = mainVC.storyboard?.instantiateViewControllerWithIdentifier("protDetails") as? GenericFormViewController {
+                        let form = FormDescriptor()
+                        form.title = "Sonstiges"
+
+                        let section2 = FormSectionDescriptor()
+                        let row = FormRowDescriptor(tag: "bemerkung", rowType: .MultilineText, title: "")
+                        section2.headerTitle = "Informationen zu den durchgeführten Tätigkeiten"
+                        section2.addRow(row)
+                        form.sections = [section2]
+                        protDetailView.form=form
+
+                        
+                        
+                        let detailNC=UINavigationController(rootViewController: protDetailView)
+                        detailNC.modalInPopover=true
+                        let popC=UIPopoverController(contentViewController: detailNC)
+                        popC.setPopoverContentSize(CGSize(width: 400, height: 600), animated: false)
+                        popC.presentPopoverFromRect(sender.bounds, inView: sender, permittedArrowDirections: .Left, animated: true)
+                    }
                 }))
 
                 alertController.modalPresentationStyle = .Popover

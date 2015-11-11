@@ -464,7 +464,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             let icon=UIBarButtonItem()
             icon.action="back:"
-            icon.image=getGlyphedImage("icon-chevron-left")
+            //icon.image=getGlyphedImage("icon-chevron-left")
+            icon.image=getGlyphedImage("icon-chevron-left", fontsize: 11, size: CGSize(width: 14, height: 14))
             detailVC.navigationItem.leftBarButtonItem = icon
             
             let detailNC=UINavigationController(rootViewController: detailVC)
