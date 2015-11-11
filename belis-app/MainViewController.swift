@@ -453,7 +453,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
     }
     @IBAction func itemArbeitsauftragTapped(sender: AnyObject) {
-        
         if let gbe=CidsConnector.sharedInstance().selectedArbeitsauftrag {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
             shownDetails=detailVC
@@ -471,7 +470,6 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let detailNC=UINavigationController(rootViewController: detailVC)
             selectedAnnotation=nil
             
-            //  mapView.deselectAnnotation(view.annotation, animated: false)
             let popC=UIPopoverController(contentViewController: detailNC)
             popC.presentPopoverFromBarButtonItem(itemArbeitsauftrag, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
         }

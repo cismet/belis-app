@@ -1,13 +1,16 @@
 PODS:
   - MGSwipeTableCell (HEAD based on 1.5.1)
   - ObjectMapper (1.0.1)
+  - SwiftForms (1.0.2)
 
 DEPENDENCIES:
   - MGSwipeTableCell (HEAD)
   - ObjectMapper (~> 1.0)
+  - SwiftForms
 
 SPEC CHECKSUMS:
   MGSwipeTableCell: a51fa670c01f0aa048f12af040acebf315223137
   ObjectMapper: 98524bac0dca46c6b3d5ee02cd410fc700ec6ce2
+  SwiftForms: c439aca9cf462383a1292c028bd14915de42bf6b
 
 COCOAPODS: 0.39.0
