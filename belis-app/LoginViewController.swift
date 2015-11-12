@@ -12,11 +12,12 @@ import ObjectMapper
 
 
 class LoginViewController: UIViewController {
-    
+
+    // MARK: Outlets
     @IBOutlet weak var txtLogin: UITextField!
-    
     @IBOutlet weak var txtPass: UITextField!
     
+    // MARK: - Default functions
     override func viewDidLoad() {
         super.viewDidLoad()
         let storedLogin: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("login")
@@ -25,20 +26,16 @@ class LoginViewController: UIViewController {
         }
         // Do any additional setup after loading the view, typically from a nib.
     }
-    
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        
     }
     override func willAnimateRotationToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
     }
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-    
-    
+    // MARK: - IBActions
     @IBAction func loginButtonTabbed(sender: AnyObject) {
         NSUserDefaults.standardUserDefaults().setObject(txtLogin.text!, forKey: "login")
         let waiting = UIAlertController(title: "Anmeldung", message: "Sie werden am System angemeldet...", preferredStyle: UIAlertControllerStyle.Alert)
@@ -86,11 +83,4 @@ class LoginViewController: UIViewController {
         }
     
     }
-    
-    @IBAction func moreButtonTabbed(sender: AnyObject) {
-        
-        
-    }
-    
-    var queue=NSOperationQueue()
 }

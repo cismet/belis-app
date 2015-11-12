@@ -48,16 +48,17 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         veranlassungsnummer <- map["veranlassungsnummer"]
         protokollnummer <- map["protokollnummer"]
 
-        mauerlasche <- map["protokollnummer"]
-
         standort <- map["fk_standort"]
         leuchte <- map["fk_leuchte"]
+        mauerlasche <- map["fk_mauerlasche"]
         leitung <- map["fk_leitung"]
         abzweigdose <- map["fk_abzweigdose"]
         schaltstelle <- map["fk_schaltstelle"]
         standaloneGeom <- map["fk_geometrie"]
         
-        
+        if let vnr=veranlassungsnummer where vnr == "00005881" {
+            print ("HIT")
+        }
         //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
         //es ist nur ein slot gefüllt
         if let gbe=standort {
@@ -68,6 +69,11 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         else if let gbe=leuchte {
             wgs84WKT=gbe.wgs84WKT
             detailObjekt="Leuchte"
+            attachedGeoBaseEntity=gbe
+        }
+        else if let gbe=mauerlasche {
+            wgs84WKT=gbe.wgs84WKT
+            detailObjekt="Mauerlasche"
             attachedGeoBaseEntity=gbe
         }
         else if let gbe=leitung {
@@ -344,23 +350,7 @@ class Status: BaseEntity {
     }
 }
 
-class StandaloneGeom: GeoBaseEntity {
-    var dokumente: [DMSUrl] = []
-    var bezeichnung: String?
-    
-    required init?(_ map: Map) {
-        super.init(map)
-    }
-    
-    override func mapping(map: Map) {
-        id <- map["id"];
-        bezeichnung <- map["bezeichnung"];
-        dokumente <- map["ar_dokumente"];
-        wgs84WKT <- map["fk_geom.wgs84_wkt"]
-    }
 
-    
-}
 
 class GenericFormViewController: FormViewController {
     required init(coder aDecoder: NSCoder) {

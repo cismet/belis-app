@@ -249,4 +249,16 @@ protocol GeoBaseEntityProvider {
     func getGeoBaseEntity() -> GeoBaseEntity
 }
 
+protocol PolygonStyler {
+    func getStrokeColor()->UIColor
+    func getLineWidth()->CGFloat
+    func getFillColor()->UIColor
+}
+struct PolygonStylerConstants {
+    static let strokeColor=UIColor(red: 96.0/255.0, green: 224.0/255.0, blue: 173.0/255.0, alpha: 0.8)
+    static let fillColor=UIColor(red: 229.0/255.0, green: 252.0/255.0, blue: 194.0/255.0, alpha: 0.8)
+    static let lineWidth: CGFloat=5.0
+    
+    
+}
 

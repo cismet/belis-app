@@ -258,11 +258,19 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 
             }
         }
-        else if overlay is GeoBaseEntityStyledMkPolygonAnnotation {
-            let polygonRenderer = MKPolygonRenderer(overlay: overlay)
-            polygonRenderer.strokeColor =  UIColor(red: 196.0/255.0, green: 77.0/255.0, blue: 88.0/255.0, alpha: 0.8);
-            polygonRenderer.lineWidth = 10
-            polygonRenderer.fillColor=UIColor(red: 255.0/255.0, green: 107.0/255.0, blue: 107.0/255.0, alpha: 0.8);
+        else if let polygon = overlay as? GeoBaseEntityStyledMkPolygonAnnotation {
+            let polygonRenderer = MKPolygonRenderer(overlay: polygon)
+
+            if let styler = polygon.getGeoBaseEntity() as? PolygonStyler {
+                polygonRenderer.strokeColor =  styler.getStrokeColor()
+                polygonRenderer.lineWidth = styler.getLineWidth()
+                polygonRenderer.fillColor=styler.getFillColor()
+            }else {
+                polygonRenderer.strokeColor =  PolygonStylerConstants.strokeColor
+                polygonRenderer.lineWidth = PolygonStylerConstants.lineWidth
+                polygonRenderer.fillColor=PolygonStylerConstants.fillColor
+            }
+            
             return polygonRenderer
             
         }
@@ -437,6 +445,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             assert(!NSThread.isMainThread() )
             dispatch_async(dispatch_get_main_queue()) {
+                CidsConnector.sharedInstance().sortSearchResults()
                 self.tableView.reloadData();
                 
                 for (_, objArray) in CidsConnector.sharedInstance().searchResults{
@@ -505,6 +514,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         actInd.startAnimating();
         CidsConnector.sharedInstance().searchArbeitsauftraegeForTeam("") { () -> () in
             dispatch_async(dispatch_get_main_queue()) {
+                CidsConnector.sharedInstance().sortSearchResults()
                 self.tableView.reloadData();
                 var annos: [MKAnnotation]=[]
                 
@@ -785,8 +795,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if let geoBaseEntity = geoBaseEntityToSelect{
             let mapObj=geoBaseEntity.mapObject
             
-            mapView.selectAnnotation(mapObj as! MKAnnotation, animated: true);
-            selectedAnnotation=mapObj as? MKAnnotation
+            if let mO=mapObj as? MKAnnotation {
+                mapView.selectAnnotation(mO, animated: true);
+                selectedAnnotation=mapObj as? MKAnnotation
+            }
             
             if mapObj is GeoBaseEntityPointAnnotation {
                 

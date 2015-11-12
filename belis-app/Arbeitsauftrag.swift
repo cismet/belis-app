@@ -10,7 +10,7 @@ import Foundation
 import ObjectMapper
 import MGSwipeTableCell
 
-class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvider, RightSwipeActionProvider {
+class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvider, RightSwipeActionProvider, PolygonStyler {
     var angelegtVon:String?
     var angelegtAm: NSDate?
     var nummer: String?
@@ -151,7 +151,17 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataPr
     }
     
     
-    
+    //MARK:- PolygonStyler Impl
+    func getStrokeColor()->UIColor {
+        return UIColor(red: 196.0/255.0, green: 77.0/255.0, blue: 88.0/255.0, alpha: 0.8)
+    }
+    func getLineWidth()->CGFloat {
+        return 10
+    }
+    func getFillColor()->UIColor {
+        return UIColor(red: 255.0/255.0, green: 107.0/255.0, blue: 107.0/255.0, alpha: 0.8)
+    }
+
     
 }
 

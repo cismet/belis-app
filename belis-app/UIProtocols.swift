@@ -15,6 +15,8 @@ protocol CallOutInformationProviderProtocol {
     func canShowDetailInformation() -> Bool
 }
 
+
+
 protocol CellInformationProviderProtocol {
     func getMainTitle() -> String
     func getSubTitle() -> String

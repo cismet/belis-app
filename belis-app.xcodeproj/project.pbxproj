@@ -27,6 +27,7 @@
 		2D3DC3611A94F65E0035575A /* SwiftTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3DC3601A94F65E0035575A /* SwiftTools.swift */; };
 		2D407C201AC2ECD40083013A /* DetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D407C1E1AC2ECD40083013A /* DetailVC.swift */; };
 		2D407C211AC2ECD40083013A /* DetailVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D407C1F1AC2ECD40083013A /* DetailVC.xib */; };
+		2D46EEEE1BF49185004E3D9E /* StandaloneGeom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D46EEED1BF49185004E3D9E /* StandaloneGeom.swift */; };
 		2D53983A1B945C4C001C865F /* Icon-60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5398391B945C4C001C865F /* Icon-60@3x.png */; };
 		2D53983C1B945C58001C865F /* Icon-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D53983B1B945C58001C865F /* Icon-40.png */; };
 		2D53983E1B945C63001C865F /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D53983D1B945C63001C865F /* Icon-Small.png */; };
@@ -129,6 +130,7 @@
 		2D3DC3601A94F65E0035575A /* SwiftTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftTools.swift; sourceTree = "<group>"; };
 		2D407C1E1AC2ECD40083013A /* DetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailVC.swift; sourceTree = "<group>"; };
 		2D407C1F1AC2ECD40083013A /* DetailVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailVC.xib; sourceTree = "<group>"; };
+		2D46EEED1BF49185004E3D9E /* StandaloneGeom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandaloneGeom.swift; sourceTree = "<group>"; };
 		2D5398391B945C4C001C865F /* Icon-60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-60@3x.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-60@3x.png"; sourceTree = "<group>"; };
 		2D53983B1B945C58001C865F /* Icon-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-40.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-40.png"; sourceTree = "<group>"; };
 		2D53983D1B945C63001C865F /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-Small.png"; sourceTree = "<group>"; };
@@ -374,6 +376,7 @@
 				2D3DC3591A94E2C60035575A /* DMSUrl.swift */,
 				2D3DC35E1A94EBA50035575A /* Timestamp.swift */,
 				2D0A979B1ADBC4C8005312BA /* Strasse.swift */,
+				2D46EEED1BF49185004E3D9E /* StandaloneGeom.swift */,
 			);
 			name = data;
 			sourceTree = "<group>";
@@ -721,6 +724,7 @@
 				2D5FB33E1A67CCEB0041020C /* Arbeitsprotokoll.swift in Sources */,
 				2D9D3AD41A9E239A0049F46F /* AF+Image+Extension.swift in Sources */,
 				2D5FB33D1A67CCEB0041020C /* Arbeitsauftrag.swift in Sources */,
+				2D46EEEE1BF49185004E3D9E /* StandaloneGeom.swift in Sources */,
 				2D5FB32E1A67CCA60041020C /* WKTPolygon.m in Sources */,
 				2D5FB3091A67CC340041020C /* AppDelegate.swift in Sources */,
 				2D5FB32B1A67CCA60041020C /* WKTParser.m in Sources */,

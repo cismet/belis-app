@@ -184,7 +184,13 @@ public class CidsConnector {
         let loginOp=LoginOperation(baseUrl: baseUrl, domain: domain,user: login, pass: password,completionHandler: cH)
         loginOp.enqueue()
     }
-    
+    func sortSearchResults() {
+        for key in searchResults.keys {
+            searchResults[key]?.sortInPlace {
+                return $0.id < $1.id
+            }
+        }
+    }
     
     
     
@@ -514,8 +520,11 @@ enum Entity : String{
     case ARBEITSAUFTRAEGE="Arbeitsaufträge"
     case VERANLASSUNGEN="Veranlassungen"
     case PROTOKOLLE="Protokolle"
+    case ABZWEIGDOSEN="Abzweigdose"
+    case STANDALONEGEOMS="Geometrie"
+
     
-    static let allValues=[LEUCHTEN,MASTEN,MAUERLASCHEN,LEITUNGEN,SCHALTSTELLEN,ARBEITSAUFTRAEGE,VERANLASSUNGEN,PROTOKOLLE]
+    static let allValues=[LEUCHTEN,MASTEN,MAUERLASCHEN,LEITUNGEN,SCHALTSTELLEN,ARBEITSAUFTRAEGE,VERANLASSUNGEN,PROTOKOLLE,ABZWEIGDOSEN,STANDALONEGEOMS]
     
     static func byIndex(index: Int) -> Entity {
         return allValues[index]
@@ -539,11 +548,15 @@ enum Entity : String{
             return 6
         case .PROTOKOLLE:
             return 7
+        case .ABZWEIGDOSEN:
+            return 8
+        case .STANDALONEGEOMS:
+            return 9
         }
     }
-    
+
     static func byClassId(cid: Int) -> Entity? {
-        let dict=[27:LEUCHTEN, 26:MASTEN, 52:MAUERLASCHEN, 49:LEITUNGEN,51:SCHALTSTELLEN, 47:ARBEITSAUFTRAEGE,35:VERANLASSUNGEN,54:PROTOKOLLE]
+        let dict=[27:LEUCHTEN, 26:MASTEN, 52:MAUERLASCHEN, 49:LEITUNGEN,51:SCHALTSTELLEN, 47:ARBEITSAUFTRAEGE,35:VERANLASSUNGEN,54:PROTOKOLLE, 50:ABZWEIGDOSEN,56:STANDALONEGEOMS]
         return dict[cid]
     }
     func classId() -> Int{
@@ -564,7 +577,11 @@ enum Entity : String{
             return 35
         case .PROTOKOLLE:
             return 54
-
+        case .ABZWEIGDOSEN:
+            return 50
+        case .STANDALONEGEOMS:
+            return 56
+            
         }
         
     }
@@ -588,6 +605,10 @@ enum Entity : String{
             return "VERANLASSUNG"
         case .PROTOKOLLE:
             return "ARBEITSPROTOKOLL"
+        case .ABZWEIGDOSEN:
+            return "ABZWEIGDOSE"
+        case .STANDALONEGEOMS:
+            return "GEOMETRIE"
         }
     }
     
