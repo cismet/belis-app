@@ -583,9 +583,9 @@ enum Entity : String{
             return 56
             
         }
-        
     }
-    
+
+
     
     func tableName() -> String {
         switch self {

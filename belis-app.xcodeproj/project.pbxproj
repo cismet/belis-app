@@ -28,6 +28,9 @@
 		2D407C201AC2ECD40083013A /* DetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D407C1E1AC2ECD40083013A /* DetailVC.swift */; };
 		2D407C211AC2ECD40083013A /* DetailVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D407C1F1AC2ECD40083013A /* DetailVC.xib */; };
 		2D46EEEE1BF49185004E3D9E /* StandaloneGeom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D46EEED1BF49185004E3D9E /* StandaloneGeom.swift */; };
+		2D46EEF11BF4A75F004E3D9E /* MastActionForms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D46EEF01BF4A75F004E3D9E /* MastActionForms.swift */; };
+		2D46EEF31BF4A771004E3D9E /* LeuchteActionForms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D46EEF21BF4A771004E3D9E /* LeuchteActionForms.swift */; };
+		2D46EEF51BF4B453004E3D9E /* ProtokollStatusForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D46EEF41BF4B453004E3D9E /* ProtokollStatusForm.swift */; };
 		2D53983A1B945C4C001C865F /* Icon-60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5398391B945C4C001C865F /* Icon-60@3x.png */; };
 		2D53983C1B945C58001C865F /* Icon-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D53983B1B945C58001C865F /* Icon-40.png */; };
 		2D53983E1B945C63001C865F /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D53983D1B945C63001C865F /* Icon-Small.png */; };
@@ -81,7 +84,6 @@
 		2D9D3AD61A9E23DD0049F46F /* AF+ImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9D3AD51A9E23DD0049F46F /* AF+ImageView+Extension.swift */; };
 		2D9D3B1A1A9F777D0049F46F /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D9D3B191A9F777D0049F46F /* QuickLook.framework */; };
 		2D9D3B1C1A9F77B50049F46F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D9D3B1B1A9F77B50049F46F /* UIKit.framework */; };
-		2DA28D5A1BF3925200FB056B /* ProtokollDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DA28D591BF3925200FB056B /* ProtokollDetailViewController.swift */; };
 		2DB10EE91B299CA200B78852 /* FotoActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB10EE81B299CA200B78852 /* FotoActions.swift */; };
 		2DB6E8BC1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */; };
 		2DB6E8BD1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */; };
@@ -131,6 +133,9 @@
 		2D407C1E1AC2ECD40083013A /* DetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailVC.swift; sourceTree = "<group>"; };
 		2D407C1F1AC2ECD40083013A /* DetailVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailVC.xib; sourceTree = "<group>"; };
 		2D46EEED1BF49185004E3D9E /* StandaloneGeom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandaloneGeom.swift; sourceTree = "<group>"; };
+		2D46EEF01BF4A75F004E3D9E /* MastActionForms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MastActionForms.swift; sourceTree = "<group>"; };
+		2D46EEF21BF4A771004E3D9E /* LeuchteActionForms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeuchteActionForms.swift; sourceTree = "<group>"; };
+		2D46EEF41BF4B453004E3D9E /* ProtokollStatusForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtokollStatusForm.swift; sourceTree = "<group>"; };
 		2D5398391B945C4C001C865F /* Icon-60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-60@3x.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-60@3x.png"; sourceTree = "<group>"; };
 		2D53983B1B945C58001C865F /* Icon-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-40.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-40.png"; sourceTree = "<group>"; };
 		2D53983D1B945C63001C865F /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-Small.png"; sourceTree = "<group>"; };
@@ -200,7 +205,6 @@
 		2D9D3AD51A9E23DD0049F46F /* AF+ImageView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AF+ImageView+Extension.swift"; sourceTree = "<group>"; };
 		2D9D3B191A9F777D0049F46F /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		2D9D3B1B1A9F77B50049F46F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		2DA28D591BF3925200FB056B /* ProtokollDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtokollDetailViewController.swift; sourceTree = "<group>"; };
 		2DB10EE81B299CA200B78852 /* FotoActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FotoActions.swift; sourceTree = "<group>"; };
 		2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "webhostinghub-glyphs.ttf"; sourceTree = "<group>"; };
 		2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebHostingGlyph.swift; sourceTree = "<group>"; };
@@ -253,6 +257,16 @@
 				2DB8E80D1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift */,
 			);
 			name = components;
+			sourceTree = "<group>";
+		};
+		2D46EEEF1BF4A73B004E3D9E /* actionForms */ = {
+			isa = PBXGroup;
+			children = (
+				2D46EEF01BF4A75F004E3D9E /* MastActionForms.swift */,
+				2D46EEF21BF4A771004E3D9E /* LeuchteActionForms.swift */,
+				2D46EEF41BF4B453004E3D9E /* ProtokollStatusForm.swift */,
+			);
+			name = actionForms;
 			sourceTree = "<group>";
 		};
 		2D5FB2C01A67C7320041020C = {
@@ -433,6 +447,7 @@
 		2DB6E8C91A9DD5D500D4EA4E /* viewController */ = {
 			isa = PBXGroup;
 			children = (
+				2D46EEEF1BF4A73B004E3D9E /* actionForms */,
 				2D9D3AC41A9E18E90049F46F /* details */,
 				2D5FB3081A67CC340041020C /* TableViewCell.swift */,
 				2D5FB3071A67CC340041020C /* SelectionPopoverViewController.swift */,
@@ -440,7 +455,6 @@
 				2D5FB3061A67CC340041020C /* MainViewController.swift */,
 				2D5FB3041A67CC340041020C /* LoginViewController.swift */,
 				2DDF34FA1BDE1F5D00C3047D /* AdditionalFunctionalityPopoverViewController.swift */,
-				2DA28D591BF3925200FB056B /* ProtokollDetailViewController.swift */,
 			);
 			name = viewController;
 			sourceTree = "<group>";
@@ -728,13 +742,14 @@
 				2D5FB32E1A67CCA60041020C /* WKTPolygon.m in Sources */,
 				2D5FB3091A67CC340041020C /* AppDelegate.swift in Sources */,
 				2D5FB32B1A67CCA60041020C /* WKTParser.m in Sources */,
-				2DA28D5A1BF3925200FB056B /* ProtokollDetailViewController.swift in Sources */,
 				2D5FB3301A67CCA60041020C /* WKTString.m in Sources */,
 				2D5FB3451A67CCEB0041020C /* Standort.swift in Sources */,
+				2D46EEF51BF4B453004E3D9E /* ProtokollStatusForm.swift in Sources */,
 				2D5FB3271A67CCA60041020C /* WKTGeometry.m in Sources */,
 				2D5FB3441A67CCEB0041020C /* Schaltstelle.swift in Sources */,
 				2D1ED1851B8344BD0004AAFA /* CidsOperations.swift in Sources */,
 				2D5FB2D21A67C7320041020C /* belis_app.xcdatamodeld in Sources */,
+				2D46EEF31BF4A771004E3D9E /* LeuchteActionForms.swift in Sources */,
 				2D5FB32C1A67CCA60041020C /* WKTPoint.m in Sources */,
 				2D9952231AA5FFC600B5E02E /* DokumentPreviewVC.swift in Sources */,
 				2D5FB30E1A67CC340041020C /* MainViewController.swift in Sources */,
@@ -745,6 +760,7 @@
 				2D6867501B02397900B0C2EE /* BaseEntityAction.swift in Sources */,
 				2D5FB3281A67CCA60041020C /* WKTGeometryCollection.m in Sources */,
 				2D5FB32D1A67CCA60041020C /* WKTPointM.m in Sources */,
+				2D46EEF11BF4A75F004E3D9E /* MastActionForms.swift in Sources */,
 				2D939DDB1A6905D500FB2AFB /* CidsConnector.swift in Sources */,
 				2D1ED1871B8344C80004AAFA /* CidsSessionFactory.swift in Sources */,
 				2D939DEF1A690A6300FB2AFB /* CidsUtilityClasses.swift in Sources */,

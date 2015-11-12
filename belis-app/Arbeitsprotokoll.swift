@@ -209,65 +209,12 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         let status=MGSwipeButton(title: "Status", backgroundColor: UIColor(red: 255.0/255.0, green: 107.0/255.0, blue: 107.0/255.0, alpha: 1.0) ,callback: {
             (sender: MGSwipeTableCell!) -> Bool in
             if let mainVC=CidsConnector.sharedInstance().mainVC {
-                
-                if let protDetailView = mainVC.storyboard?.instantiateViewControllerWithIdentifier("protDetails") as? GenericFormViewController {
-                    let form = FormDescriptor()
-                    form.title = "Protokoll Details"
-                    let section0 = FormSectionDescriptor()
-                    section0.headerTitle = "Status"
-                    var row: FormRowDescriptor! = FormRowDescriptor(tag: "status", rowType: .SegmentedControl, title: "")
-                    row.configuration[FormRowDescriptor.Configuration.Options] = [0, 1, 2]
-                    row.configuration[FormRowDescriptor.Configuration.TitleFormatterClosure] = { value in
-                        switch( value ) {
-                        case 0:
-                            return "in Bearbeitung"
-                        case 1:
-                            return "erledigt"
-                        case 2:
-                            return "Fehlmeldung"
-                        default:
-                            return nil
-                        }
-                        } as TitleFormatterClosure
-                    
-                    row.configuration[FormRowDescriptor.Configuration.CellConfiguration] = ["segmentedControl.tintColor" : UIColor.blueColor()]
-                    section0.addRow(row)
-
-                    let section1 = FormSectionDescriptor()
-                    row = FormRowDescriptor(tag: "monteur", rowType: .Text, title: "Monteur")
-                    row.configuration[FormRowDescriptor.Configuration.CellConfiguration] = ["textField.placeholder" : "Monteurname", "textField.textAlignment" : NSTextAlignment.Right.rawValue]
-                    row.value=self.monteur
-                    section1.addRow(row)
-                    row = FormRowDescriptor(tag: "datum", rowType: .Date, title: "Datum")
-                    row.value=self.datum
-                    section1.addRow(row)
-                                        let section2 = FormSectionDescriptor()
-                    row = FormRowDescriptor(tag: "bemerkung", rowType: .MultilineText, title: "")
-                    section2.headerTitle = "Bemerkung"
-                    row.value=self.bemerkung
-                    section2.addRow(row)
-                    let section3 = FormSectionDescriptor()
-                    row = FormRowDescriptor(tag: "material", rowType: .MultilineText, title: "")
-                    section3.headerTitle = "Material"
-                    section3.addRow(row)
-                    row.value=self.material
-                    
-                    let section8 = FormSectionDescriptor()
-                    
-                    row = FormRowDescriptor(tag: "dismiss", rowType: .Button, title: "---")
-                    row.configuration[FormRowDescriptor.Configuration.DidSelectClosure] = {
-                        protDetailView.view.endEditing(true)
-                        } as DidSelectClosure
-                    section8.addRow(row)
-                    
-                    
-                    form.sections = [section1,section0,section2,section3,section8]
-                    protDetailView.form=form
-                    
+                if let protDetailView = mainVC.storyboard?.instantiateViewControllerWithIdentifier("formView") as? GenericFormViewController {
+                    protDetailView.form=ProtokollStatusForm(protokoll: self, vc: protDetailView)
                     let detailNC=UINavigationController(rootViewController: protDetailView)
                     detailNC.modalInPopover=true
                     let popC=UIPopoverController(contentViewController: detailNC)
-                    popC.setPopoverContentSize(CGSize(width: 400, height: 600), animated: false)
+                    popC.setPopoverContentSize(CGSize(width: 400, height: 500), animated: false)
                     popC.presentPopoverFromRect(sender.bounds, inView: sender, permittedArrowDirections: .Left, animated: true)
                 }
             }
@@ -297,7 +244,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
                     // Handle Choose Existing Photo
                 }))
                 alertController.addAction(UIAlertAction(title: "Sonstiges", style: .Default, handler: { alertAction in
-                    if let protDetailView = mainVC.storyboard?.instantiateViewControllerWithIdentifier("protDetails") as? GenericFormViewController {
+                    if let protDetailView = mainVC.storyboard?.instantiateViewControllerWithIdentifier("formView") as? GenericFormViewController {
                         let form = FormDescriptor()
                         form.title = "Sonstiges"
 
@@ -313,7 +260,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
                         let detailNC=UINavigationController(rootViewController: protDetailView)
                         detailNC.modalInPopover=true
                         let popC=UIPopoverController(contentViewController: detailNC)
-                        popC.setPopoverContentSize(CGSize(width: 400, height: 600), animated: false)
+                        popC.setPopoverContentSize(CGSize(width: 500, height: 200), animated: false)
                         popC.presentPopoverFromRect(sender.bounds, inView: sender, permittedArrowDirections: .Left, animated: true)
                     }
                 }))
@@ -332,6 +279,13 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         })
         return [status,actions]
     }
+    
+    
+    func getActions()-> [UIAlertAction]{
+        return []
+    }
+    
+    
     
 }
 
@@ -359,17 +313,32 @@ class GenericFormViewController: FormViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Submit", style: .Plain, target: self, action: "submit:")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Speichern", style: .Plain, target: self, action: "submit:")
+        if let mainVC=CidsConnector.sharedInstance().mainVC {
+            let image=mainVC.getGlyphedImage("icon-chevron-left", fontsize: 11, size: CGSize(width: 14, height: 14))
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: UIBarButtonItemStyle.Plain , target: self, action: "cancel:")
+        }
+        else  {
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "cancel:")
+        }
+
     }
 
     
     func submit(_: UIBarButtonItem!) {
         self.dismissViewControllerAnimated(true) { () -> Void in
             //MARK: TODO
-            print("call handler")
+            print("call submit handler")
         }
     }
-    
+
+    func cancel(_: UIBarButtonItem!) {
+        self.dismissViewControllerAnimated(true) { () -> Void in
+            //MARK: TODO
+            print("call cancel handler")
+        }
+    }
+
     
     
 }
