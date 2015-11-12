@@ -23,6 +23,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBOutlet weak var brightenToggle: UISwitch!
     @IBOutlet weak var itemArbeitsauftrag: UIBarButtonItem!
     @IBOutlet weak var bbiMoreFunctionality: UIBarButtonItem!
+    @IBOutlet weak var bbiZoomToAllObjects: UIBarButtonItem!
     
     var matchingSearchItems: [MKMapItem] = [MKMapItem]()
     var matchingSearchItemsAnnotations: [MKPointAnnotation ] = [MKPointAnnotation]()
@@ -103,6 +104,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             NSFontAttributeName : UIFont(name: "WebHostingHub-Glyphs", size: 16)!],
             forState: UIControlState.Normal)
         bbiMoreFunctionality.title=WebHostingGlyps.glyphs["icon-chevron-down"]
+        bbiZoomToAllObjects.setTitleTextAttributes([
+            NSFontAttributeName : UIFont(name: "WebHostingHub-Glyphs", size: 20)!],
+            forState: UIControlState.Normal)
+        bbiZoomToAllObjects.title=WebHostingGlyps.glyphs["icon-world"]
         print(UIDevice.currentDevice().identifierForVendor!.UUIDString)
         
         
@@ -558,7 +563,19 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBAction func geoSearchInputDidEnd(sender: AnyObject) {
         geoSearch()
     }
-
+    @IBAction func zoomToAllObjectsTapped(sender: AnyObject) {
+        var annos: [MKAnnotation]=[]
+        for (_, objArray) in CidsConnector.sharedInstance().searchResults{
+            for obj in objArray {
+                if let anno=obj.mapObject as? MKAnnotation {
+                    annos.append(anno)
+                }
+            }
+        }
+        dispatch_async(dispatch_get_main_queue()) {
+            self.zoomToFitMapAnnotations(annos)
+        }
+    }
     // MARK: - Selector functions
     func back(sender: UIBarButtonItem) {
         if let details=shownDetails{

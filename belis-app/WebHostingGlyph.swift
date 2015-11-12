@@ -32,7 +32,8 @@ struct WebHostingGlyps {
         "icon-chevron-down":"\u{f48b}",
         "icon-chevron-left":"\u{f489}",
         "icon-chevron-right":"\u{f488}",
-        "icon-chevron-up":"\u{f48a}"
+        "icon-chevron-up":"\u{f48a}",
+        "icon-world":"\u{f4f3}"
     ]
     
 }

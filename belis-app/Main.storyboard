@@ -322,6 +322,12 @@
                                             </segue>
                                         </connections>
                                     </barButtonItem>
+                                    <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="lmI-kR-5BK"/>
+                                    <barButtonItem title="Item" id="NfJ-Fp-mvA" userLabel="Zoom">
+                                        <connections>
+                                            <action selector="zoomToAllObjectsTapped:" destination="Kou-sk-bUr" id="0z0-db-FXh"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="LYr-cg-vAH"/>
                                     <barButtonItem title="Kein Arbeitsauftrag ausgewählt" id="gaw-Jb-8bG">
                                         <connections>
@@ -342,7 +348,7 @@
                                     </barButtonItem>
                                     <barButtonItem style="plain" id="hZb-wC-ZDc">
                                         <textField key="customView" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" usesAttributedText="YES" borderStyle="roundedRect" placeholder="Straße" minimumFontSize="17" clearButtonMode="unlessEditing" id="FwD-0Q-xQY">
-                                            <rect key="frame" x="411" y="7" width="151" height="30"/>
+                                            <rect key="frame" x="412" y="7" width="151" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <attributedString key="attributedText"/>
                                             <textInputTraits key="textInputTraits"/>
@@ -432,6 +438,7 @@
                     <size key="freeformSize" width="600" height="600"/>
                     <connections>
                         <outlet property="bbiMoreFunctionality" destination="z6g-3Q-zho" id="iNF-wQ-3HC"/>
+                        <outlet property="bbiZoomToAllObjects" destination="NfJ-Fp-mvA" id="t1O-4c-JZV"/>
                         <outlet property="brightenToggle" destination="gCr-QR-WvU" id="rvg-Zv-krs"/>
                         <outlet property="focusToggle" destination="W8A-zI-q3t" id="ab2-7g-zyq"/>
                         <outlet property="itemArbeitsauftrag" destination="gaw-Jb-8bG" id="SGz-ge-cVU"/>
