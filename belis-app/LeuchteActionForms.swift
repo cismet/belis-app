@@ -9,47 +9,6 @@
 import Foundation
 import SwiftForms
 
-//                let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
-//                alertController.addAction(UIAlertAction(title: "Leuchtenerneuerung", style: .Default, handler: { alertAction in
-//                    // Handle Take Photo here
-//                }))
-//                alertController.addAction(UIAlertAction(title: "Leuchtmittelwechsel (mit EP)", style: .Default, handler: { alertAction in
-//                    // Handle Choose Existing Photo
-//                }))
-//                alertController.addAction(UIAlertAction(title: "Leuchtmittelwechsel", style: .Default, handler: { alertAction in
-//                    // Handle Choose Existing Photo
-//                }))
-//                alertController.addAction(UIAlertAction(title: "Rundsteuerempfängerwechsel", style: .Default, handler: { alertAction in
-//                    // Handle Choose Existing Photo
-//                }))
-//                alertController.addAction(UIAlertAction(title: "Sonderturnus", style: .Default, handler: { alertAction in
-//                    // Handle Choose Existing Photo
-//                }))
-//                alertController.addAction(UIAlertAction(title: "Vorschaltgerätwechsel", style: .Default, handler: { alertAction in
-//                    // Handle Choose Existing Photo
-//                }))
-//                alertController.addAction(UIAlertAction(title: "Sonstiges", style: .Default, handler: { alertAction in
-//                    if let formVC = mainVC.storyboard?.instantiateViewControllerWithIdentifier("formView") as? GenericFormViewController {
-//                        let form = FormDescriptor()
-//                        form.title = "Sonstiges"
-//
-//                        let section2 = FormSectionDescriptor()
-//                        let row = FormRowDescriptor(tag: "bemerkung", rowType: .MultilineText, title: "")
-//                        section2.headerTitle = "Informationen zu den durchgeführten Tätigkeiten"
-//                        section2.addRow(row)
-//                        form.sections = [section2]
-//                        formVC.form=form
-//
-//                        let detailNC=UINavigationController(rootViewController: formVC)
-//                        detailNC.modalInPopover=true
-//                        let popC=UIPopoverController(contentViewController: detailNC)
-//                        popC.setPopoverContentSize(CGSize(width: 500, height: 200), animated: false)
-//                        popC.presentPopoverFromRect(sender.bounds, inView: sender, permittedArrowDirections: .Left, animated: true)
-//                    }
-//                }))
-
-
-
 
 class LeuchtenerneuerungAction : ObjectAction {
     override init(){
