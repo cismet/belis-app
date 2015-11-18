@@ -41,7 +41,7 @@ class SonstigesAction : ObjectAction {
     }
     
 }
-class PruefungAction : ObjectAction {
+class MauerlaschenPruefungAction : ObjectAction {
     override init(){
         super.init()
         title="Prüfung"

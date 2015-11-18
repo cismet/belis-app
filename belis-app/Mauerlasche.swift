@@ -175,7 +175,7 @@ class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProv
     
     // MARK: - ObjectActionProvider
     @objc func getAllObjectActions() -> [ObjectAction]{
-        return [PruefungAction(),SonstigesAction()]
+        return [MauerlaschenPruefungAction(),SonstigesAction()]
     }
 }
 
