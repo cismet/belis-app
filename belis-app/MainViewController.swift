@@ -11,6 +11,7 @@ import UIKit;
 import MapKit;
 import ObjectMapper;
 import MGSwipeTableCell
+import JGProgressHUD
 
 class MainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,CLLocationManagerDelegate, MKMapViewDelegate, UITextFieldDelegate, MGSwipeTableCellDelegate {
     
@@ -39,7 +40,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var pass="";
     var timer = NSTimer();
     
-    var actInd : UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(0,0, 150, 150)) as UIActivityIndicatorView
+    let progressHUD = JGProgressHUD(style: JGProgressHUDStyle.Dark)
+    
     
     var gotoUserLocationButton:MKUserTrackingBarButtonItem!;
     var locationManager: CLLocationManager!
@@ -420,12 +422,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         self.tableView.reloadData();
         
-        actInd.center = mapView.center;
-        actInd.hidesWhenStopped = true;
-        actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
-        self.view.addSubview(actInd);
-        actInd.startAnimating();
-        
+        progressHUD.showInView(self.view,animated: true)
         
         var mRect : MKMapRect
         if focusToggle.on {
@@ -460,8 +457,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                         
                     }
                 }
-                self.actInd.stopAnimating();
-                self.actInd.removeFromSuperview();
+                self.progressHUD.dismissAnimated(true)
             }
         }
         
@@ -512,11 +508,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBAction func lookUpButtonTabbed(sender: AnyObject) {
         selectArbeitsauftrag(nil,showActivityIndicator: false)
         removeAllEntityObjects()
-        actInd.center = mapView.center;
-        actInd.hidesWhenStopped = true;
-        actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
-        self.view.addSubview(actInd);
-        actInd.startAnimating();
+        progressHUD.showInView(self.view,animated: true)
         CidsConnector.sharedInstance().searchArbeitsauftraegeForTeam("") { () -> () in
             dispatch_async(dispatch_get_main_queue()) {
                 CidsConnector.sharedInstance().sortSearchResults()
@@ -531,9 +523,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                         }
                     }
                 }
-                
-                self.actInd.stopAnimating();
-                self.actInd.removeFromSuperview();
+                self.progressHUD.dismissAnimated(true)
                 dispatch_async(dispatch_get_main_queue()) {
                     self.zoomToFitMapAnnotations(annos)
                 }
@@ -648,11 +638,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         CidsConnector.sharedInstance().selectedArbeitsauftrag=arbeitsauftrag
         if showActivityIndicator {
-            actInd.center = self.mapView.center;
-            actInd.hidesWhenStopped = true;
-            actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
-            self.view.addSubview(actInd);
-            actInd.startAnimating();
+            progressHUD.showInView(self.view, animated: true)
         }
         let overlays=self.mapView.overlays
             self.mapView.removeOverlays(overlays)
@@ -699,8 +685,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 
             }
             if showActivityIndicator {
-                self.actInd.stopAnimating();
-                self.actInd.removeFromSuperview();
+                self.progressHUD.dismissAnimated(true)
             }
         }
         

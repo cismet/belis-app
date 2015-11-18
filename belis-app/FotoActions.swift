@@ -9,6 +9,7 @@
 import Foundation
 import AssetsLibrary
 import ImageIO
+import JGProgressHUD
 
 class ChooseFotoAction : BaseEntityAction {
     init(yourself: BaseEntity) {
@@ -77,12 +78,8 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         // var mediaType:String = info[UIImagePickerControllerEditedImage] as! String
         
-        var actInd : UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(0,0, 150, 150)) as UIActivityIndicatorView
-        actInd.center =  picker.view.center
-        actInd.hidesWhenStopped = true;
-        actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
-        picker.view.addSubview(actInd)
-        
+        let progressHUD = JGProgressHUD(style: JGProgressHUDStyle.Dark)
+        progressHUD.showInView(picker.view,animated: true)
         var tField: UITextField!
         
         func configurationTextField(textField: UITextField!)
@@ -105,7 +102,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             var imageToSave:UIImage
             
             imageToSave = info[UIImagePickerControllerOriginalImage]as! UIImage
-            actInd.startAnimating();
+            progressHUD.showInView(picker.view,animated: true)
             let metadata = info[UIImagePickerControllerMediaMetadata] as? NSDictionary
             
             
@@ -161,8 +158,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
                     CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {(success:Bool) -> () in
                         assert(!NSThread.isMainThread() )
                         dispatch_async(dispatch_get_main_queue()) {
-                            actInd.stopAnimating()
-                            actInd.removeFromSuperview()
+                            progressHUD.dismissAnimated(true)
                             picker.dismissViewControllerAnimated(true, completion: nil)
                             if success {
                                 print("Everything is going to be 200-OK")
@@ -183,6 +179,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             
             
         }))
+        progressHUD.dismiss()
         picker.presentViewController(alert, animated: true, completion: {
             print("completion block")
         })

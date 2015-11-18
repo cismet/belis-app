@@ -8,11 +8,12 @@ target 'belis-app' do
 pod 'ObjectMapper', '~> 1.0'
 pod 'MGSwipeTableCell', :head
 pod 'SwiftForms'
+pod 'JGProgressHUD'
 end
 
 target 'belis-appTests' do
 pod 'ObjectMapper', '~> 1.0'
 pod 'MGSwipeTableCell', :head
 pod 'SwiftForms'
+pod 'JGProgressHUD'
 end
-
