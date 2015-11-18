@@ -29,11 +29,12 @@ class Veranlassung : BaseEntity, CellDataProvider  {
     var schaltstellen: [Schaltstelle] = []
     var leitungen: [Leitung] = []
 
-
+    // MARK: - required init because of ObjectMapper
     required init?(_ map: Map) {
         super.init(map)
     }
     
+    // MARK: - essential overrides BaseEntity
     override func mapping(map: Map) {
         id <- map["id"];
         dokumente <- map["ar_dokumente"];
@@ -54,13 +55,11 @@ class Veranlassung : BaseEntity, CellDataProvider  {
         schaltstellen <- map["ar_schaltstellen"];
         leitungen <- map["ar_leitungen"];
     }
-     // MARK: BaseEntity - must be overridden
     override func getType() -> Entity {
         return Entity.VERANLASSUNGEN
     }
     
-    
-    // MARK: CellDataProvider
+    // MARK: - CellDataProvider Impl
     @objc func getTitle() -> String {
         return "Veranlassung"
     }

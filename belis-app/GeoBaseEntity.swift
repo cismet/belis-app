@@ -13,11 +13,6 @@ import MGSwipeTableCell
 class GeoBaseEntity : BaseEntity, LeftSwipeActionProvider{
     var mapObject : NSObject?;
     private var geom :WKTGeometry?
-
-    
-    override init(){
-        super.init()
-    }
     
     var wgs84WKT : String?
         {
@@ -49,38 +44,18 @@ class GeoBaseEntity : BaseEntity, LeftSwipeActionProvider{
         
     }
     
-    func addToMapView(mapView:MKMapView) {
-        if let mo=mapObject {
-            if let moPoint=mo as? GeoBaseEntityPointAnnotation {
-                mapView.addAnnotation(moPoint)
-            }
-            else if let moLine=mo as? GeoBaseEntityStyledMkPolylineAnnotation {
-                mapView.addOverlay(moLine)
-                mapView.addAnnotation(moLine)
-            }
-            else if let moPolygon=mo as? GeoBaseEntityStyledMkPolygonAnnotation {
-                mapView.addOverlay(moPolygon)
-                mapView.addAnnotation(moPolygon)
+    
+    // MARK: - Constructor
+    override init(){
+        super.init()
+    }
 
-            }
-        }
+    // MARK: - required init because of ObjectMapper
+    required init?(_ map: Map) {
+        super.init(map)
     }
     
-    
-    func removeFromMapView(mapView:MKMapView) {
-        if let mo=mapObject {
-            if let moPoint=mo as? GeoBaseEntityPointAnnotation {
-                mapView.removeAnnotation(moPoint)
-            }
-            else if let moLine=mo as? GeoBaseEntityStyledMkPolylineAnnotation {
-                mapView.removeOverlay(moLine)
-            }
-            else if let moPoly=mo as? GeoBaseEntityStyledMkPolygonAnnotation {
-                mapView.removeOverlay(moPoly)
-            }
-        }
-    }
-    
+    // MARK: - essential overrides GeoBaseEntity
     func getAnnotationTitle() -> String{
         return "";
     }
@@ -94,7 +69,49 @@ class GeoBaseEntity : BaseEntity, LeftSwipeActionProvider{
         return "";
     }
     
-    
+    // MARK: - LeftSwipeActionProvider Impl
+    func getLeftSwipeActions() -> [MGSwipeButton] {
+        let zoomC=UIColor(red: 199.0/255.0, green: 244.0/255.0, blue: 100.0/255.0, alpha: 1.0)
+        
+        let zoom=MGSwipeButton(title: "Zoom", backgroundColor: zoomC ,callback: {
+            (sender: MGSwipeTableCell!) -> Bool in
+            if let anno=self.mapObject as? MKAnnotation, mainVC=CidsConnector.sharedInstance().mainVC {
+                 mainVC.zoomToFitMapAnnotations([anno])
+            }
+            return true
+        })
+        return [zoom]
+    }
+    // MARK: - object functions
+    func addToMapView(mapView:MKMapView) {
+        if let mo=mapObject {
+            if let moPoint=mo as? GeoBaseEntityPointAnnotation {
+                mapView.addAnnotation(moPoint)
+            }
+            else if let moLine=mo as? GeoBaseEntityStyledMkPolylineAnnotation {
+                mapView.addOverlay(moLine)
+                mapView.addAnnotation(moLine)
+            }
+            else if let moPolygon=mo as? GeoBaseEntityStyledMkPolygonAnnotation {
+                mapView.addOverlay(moPolygon)
+                mapView.addAnnotation(moPolygon)
+                
+            }
+        }
+    }
+    func removeFromMapView(mapView:MKMapView) {
+        if let mo=mapObject {
+            if let moPoint=mo as? GeoBaseEntityPointAnnotation {
+                mapView.removeAnnotation(moPoint)
+            }
+            else if let moLine=mo as? GeoBaseEntityStyledMkPolylineAnnotation {
+                mapView.removeOverlay(moLine)
+            }
+            else if let moPoly=mo as? GeoBaseEntityStyledMkPolygonAnnotation {
+                mapView.removeOverlay(moPoly)
+            }
+        }
+    }
     func liesIn(coordinateRegion: MKCoordinateRegion ) -> Bool{
         let region = coordinateRegion;
         
@@ -138,27 +155,6 @@ class GeoBaseEntity : BaseEntity, LeftSwipeActionProvider{
             return true;
         }
         
-    }
-    
-    
-    required init?(_ map: Map) {
-        super.init(map)
-    }
-    override func mapping(map: Map) {
-        
-    }
-
-    func getLeftSwipeActions() -> [MGSwipeButton] {
-        let zoomC=UIColor(red: 199.0/255.0, green: 244.0/255.0, blue: 100.0/255.0, alpha: 1.0)
-        
-        let zoom=MGSwipeButton(title: "Zoom", backgroundColor: zoomC ,callback: {
-            (sender: MGSwipeTableCell!) -> Bool in
-            if let anno=self.mapObject as? MKAnnotation, mainVC=CidsConnector.sharedInstance().mainVC {
-                 mainVC.zoomToFitMapAnnotations([anno])
-            }
-            return true
-        })
-        return [zoom]
     }
     
 }

@@ -13,39 +13,37 @@ class StandaloneGeom: GeoBaseEntity, ObjectActionProvider {
     var dokumente: [DMSUrl] = []
     var bezeichnung: String?
     
+    // MARK: - required init because of ObjectMapper
     required init?(_ map: Map) {
         super.init(map)
     }
     
+    // MARK: - essential overrides BaseEntity
     override func mapping(map: Map) {
         id <- map["id"];
         bezeichnung <- map["bezeichnung"];
         dokumente <- map["ar_dokumente"];
         wgs84WKT <- map["fk_geom.wgs84_wkt"]
     }
-    
-    // - MARK: essential overrides
     override func getType() -> Entity {
         return Entity.ABZWEIGDOSEN
     }
     
+    // MARK: - essential overrides GeoBaseEntity
     override func getAnnotationImageName() -> String{
         return "mauerlasche.png";
     }
     override func getAnnotationTitle() -> String{
         return getMainTitle();
     }
-    
     override func canShowCallout() -> Bool{
         return true;
     }
-    
     override func getAnnotationCalloutGlyphIconName() -> String {
         return "icon-nut";
     }
     
-    // - MARK: CellInformationProviderProtocol Impl
-    
+    // MARK: - CellInformationProviderProtocol Impl
     func getMainTitle() -> String{
         return "FG \(bezeichnung ?? "")"
     }
@@ -59,12 +57,10 @@ class StandaloneGeom: GeoBaseEntity, ObjectActionProvider {
         return ""
     }
     
-    
-    // - MARK: CellDataProvider Impl
+    // MARK: - CellDataProvider Impl
     @objc func getTitle() -> String {
         return getMainTitle()
     }
-    
     @objc func getDetailGlyphIconString() -> String {
         return "icon-nut"
     }
@@ -88,7 +84,7 @@ class StandaloneGeom: GeoBaseEntity, ObjectActionProvider {
         return ["main","Dokumente","DeveloperInfo"]
     }
     
-    // MARK: - ObjectActionProvider
+    // MARK: - ObjectActionProvider Impl
     @objc func getAllObjectActions() -> [ObjectAction]{
         return [SonstigesAction()]
     }

@@ -9,19 +9,26 @@
 import Foundation
 import ObjectMapper
 
-
+// MARK:
 class DMSUrl : BaseEntity{
     var typ: String?
     var url: Url?
     var description: String?
     var name: String?
     
+    // MARK: - required init because of ObjectMapper
+    required init?(_ map: Map) {
+        super.init(map)
+    }
+
+    // MARK: - convenience constructor
     convenience init(name: String, fileName: String) {
         self.init()
         description=name
         url=Url(webdavObjectName: fileName)
     }
     
+    // MARK: - essential overrides BaseEntity
     override func mapping(map: Map) {
         id <- map["id"];
         url <- map["url_id"]
@@ -29,6 +36,7 @@ class DMSUrl : BaseEntity{
         name <- map["name"]
     }
     
+    // MARK: - object functions
     func getUrl() -> String{
         return 
             (url?.urlBase?.protPrefix ?? "")
@@ -41,12 +49,11 @@ class DMSUrl : BaseEntity{
             +
             (url?.objectName ?? "")
     }
-    
     func getTitle() -> String {
         return name ?? description ?? "Dokument \(id)"
     }
 }
-
+// MARK:
 class Url : BaseEntity{
     init(webdavObjectName: String){
         super.init()
@@ -61,13 +68,14 @@ class Url : BaseEntity{
     
     var urlBase: UrlBase?
     var objectName: String?
+    // MARK: - essential overrides BaseEntity
     override func mapping(map: Map) {
         id <- map["id"];
         urlBase <- map["url_base_id"]
         objectName <- map["object_name"]
     }
 }
-
+// MARK:
 class UrlBase : BaseEntity{
     var protPrefix: String?
     var server: String?
@@ -87,6 +95,7 @@ class UrlBase : BaseEntity{
     }
 
     
+    // MARK: - essential overrides BaseEntity
     override func mapping(map: Map) {
         id <- map["id"];
         protPrefix <- map["prot_prefix"]

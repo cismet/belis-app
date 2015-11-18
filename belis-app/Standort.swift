@@ -44,14 +44,15 @@ class Standort: GeoBaseEntity ,  CellInformationProviderProtocol, CellDataProvid
     var anlagengruppe: MastAnlagengruppe?
     var anbauten: String?
     
+    // MARK: - required init because of ObjectMapper
     required init?(_ map: Map) {
         super.init(map)
     }
     
+    // MARK: - essential overrides BaseEntity
     override func getType() -> Entity {
         return Entity.MASTEN
     }
-
     override func mapping(map: Map) {
         super.id <- map["id"];
         plz  <- map["plz"]
@@ -91,8 +92,22 @@ class Standort: GeoBaseEntity ,  CellInformationProviderProtocol, CellDataProvid
         wgs84WKT <- map["fk_geom.wgs84_wkt"]
         
     }
-    // CellInformationProviderProtocol
     
+    // MARK: - essential overrides GeoBaseEntity
+    override func getAnnotationImageName() -> String{
+        return "mast.png";
+    }
+    override func getAnnotationTitle() -> String{
+        return getMainTitle();
+    }
+    override func canShowCallout() -> Bool{
+        return true
+    }
+    override func getAnnotationCalloutGlyphIconName() -> String {
+        return "icon-horizontalexpand"
+    }
+
+    // MARK: - CellInformationProviderProtocol Impl
     func getMainTitle() -> String{
         var standortPart:String
         if let snrInt = lfdNummer {
@@ -123,53 +138,27 @@ class Standort: GeoBaseEntity ,  CellInformationProviderProtocol, CellDataProvid
     }
     
     
-    //CallOutInformationProviderProtocol
-    
+    // MARK: - CallOutInformationProviderProtocol Impl
     func getCallOutTitle() -> String {
         return getAnnotationTitle()
     }
     func getGlyphIconName() -> String {
         return "icon-horizontalexpand"
     }
-    
     func getDetailViewID() -> String{
         return "StandortDetails"
     }
-    
     func canShowDetailInformation() -> Bool{
         return true
     }
     
-    
-    //Override GeoBaseEntity
-    override func getAnnotationImageName() -> String{
-        return "mast.png";
-    }
-    
-    override func getAnnotationTitle() -> String{
-        return getMainTitle();
-    }
-    
-    override func canShowCallout() -> Bool{
-        return true
-    }
-    override func getAnnotationCalloutGlyphIconName() -> String {
-        return "icon-horizontalexpand"
-    }
-
-    
-    
-    //CellDataProvider
-    
-    
+    // MARK: - CellDataProvider Impl
     @objc func getTitle() -> String {
         return "Mast"
     }
-    
     @objc func getDetailGlyphIconString() -> String {
         return "icon-horizontalexpand"
     }
-
     @objc func getAllData() -> [String: [CellData]] {
         var mastDetails: [String: [CellData]] = ["main":[]]
         
@@ -329,7 +318,8 @@ class Standort: GeoBaseEntity ,  CellInformationProviderProtocol, CellDataProvid
     @objc func getDataSectionKeys() -> [String] {
         return ["main","Dokumente","DeveloperInfo"]
     }
-    // Actions
+
+    // MARK: - ActionProvider Impl
     @objc func getAllActions() -> [BaseEntityAction] {
         
         
@@ -341,11 +331,12 @@ class Standort: GeoBaseEntity ,  CellInformationProviderProtocol, CellDataProvid
         return actions
     }
     
+    // MARK: - DocumentContainer Impl
     func addDocument(document: DMSUrl) {
         dokumente.append(document)
     }
     
-    // MARK: - ObjectActionProvider
+    // MARK: - ObjectActionProvider Impl
     @objc func getAllObjectActions() -> [ObjectAction]{
         return [SonstigesAction()]
     }

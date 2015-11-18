@@ -8,22 +8,22 @@
 
 import Foundation
 import MGSwipeTableCell
+
+// MARK: - CallOutInformationProviderProtocol
 protocol CallOutInformationProviderProtocol {
     func getCalloutTitle() -> String
     func getGlyphIconName() -> String
     func getDetailViewID() -> String
     func canShowDetailInformation() -> Bool
 }
-
-
-
+// MARK: - CellInformationProviderProtocol
 protocol CellInformationProviderProtocol {
     func getMainTitle() -> String
     func getSubTitle() -> String
     func getTertiaryInfo() -> String
     func getQuaternaryInfo() -> String
 }
-
+// MARK: - NoCellInformation
 class NoCellInformation : CellInformationProviderProtocol {
     // CellInformationProviderProtocol
     
@@ -40,11 +40,11 @@ class NoCellInformation : CellInformationProviderProtocol {
         return "should not happen"
     }
 }
-
+// MARK: - CellData
 @objc protocol CellData {
     func getCellReuseIdentifier() -> String
 }
-
+// MARK: - CellDataProvider
 @objc protocol CellDataProvider {
     func getAllData() -> [String: [CellData]]
     func getDataSectionKeys() -> [String]
@@ -52,28 +52,29 @@ class NoCellInformation : CellInformationProviderProtocol {
     func getDetailGlyphIconString() -> String
 }
 
-
+// MARK: - CellDataUI
 @objc protocol CellDataUI {
     func fillFromCellData(cellData :CellData)
     func getPreferredCellHeight() -> CGFloat
 }
-
+// MARK: - SimpleCellActionProvider
 @objc protocol SimpleCellActionProvider {
     func action(_: UIViewController)
 }
-
+// MARK: - ActionProvider
 @objc protocol ActionProvider {
     func getAllActions() -> [BaseEntityAction]
 }
-
+// MARK: -  ObjectActionProvider
 @objc protocol ObjectActionProvider {
     func getAllObjectActions() -> [ObjectAction]
 }
 
-
+// MARK: - LeftSwipeActionProvider
 protocol LeftSwipeActionProvider {
     func getLeftSwipeActions()->[MGSwipeButton]
 }
+// MARK: - RightSwipeActionProvider
 protocol RightSwipeActionProvider {
     func getRightSwipeActions()->[MGSwipeButton]
 }

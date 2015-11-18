@@ -17,14 +17,12 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataPr
     var protokolle: [Arbeitsprotokoll]?
     var zugewiesenAn: Team?
  
-    
+    // MARK: - required init because of ObjectMapper
     required init?(_ map: Map) {
         super.init(map)
     }
-    override func getType() -> Entity {
-        return Entity.ARBEITSAUFTRAEGE
-    }
-    
+
+    // MARK: - essential overrides BaseEntity
     override func mapping(map: Map) {
         id <- map["id"];
         angelegtVon <- map["angelegt_von"]
@@ -36,26 +34,22 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataPr
         //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
         wgs84WKT <- map["ausdehnung_wgs84"]
     }
-    
-    
-    func getVeranlassungsnummern() -> [String] {
-        var nummern: [String]=[]
-        if let prots=protokolle {
-            for prot in prots {
-                if let vnr=prot.veranlassungsnummer{
-                    if !nummern.contains(vnr){
-                        nummern.append(vnr)
-                    }
-                }
-            }
-        }
-        return nummern
+    override func getType() -> Entity {
+        return Entity.ARBEITSAUFTRAEGE
     }
     
-    
-    
-    // MARK: - CellInformationProviderProtocol
-    
+    // MARK: - essential overrides GeoBaseEntity
+    override func getAnnotationTitle() -> String{
+        return "\(getMainTitle()) - \(getSubTitle())"
+    }
+    override func canShowCallout() -> Bool{
+        return true;
+    }
+    override func getAnnotationCalloutGlyphIconName() -> String {
+        return "icon-line";
+    }
+
+    // MARK: - CellInformationProviderProtocol Impl
     func getMainTitle() -> String{
         if let nr = nummer {
             return "A\(nr)"
@@ -85,32 +79,14 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataPr
         return "?"
     }
     
-    
-    
-    override func getAnnotationTitle() -> String{
-        return "\(getMainTitle()) - \(getSubTitle())"
-    }
-    
-    override func canShowCallout() -> Bool{
-        return true;
-    }
-    
-    override func getAnnotationCalloutGlyphIconName() -> String {
-        return "icon-line";
-    }
-    
-    // MARK: CellDataProvider
-    
+    // MARK: CellDataProvider Impl
     @objc func getTitle() -> String {
         return "Arbeitsauftrag"
     }
-    
     @objc func getDetailGlyphIconString() -> String {
         return "icon-switch"
     }
-
-    
-    @objc func getAllData() -> [String: [CellData]] {    
+    @objc func getAllData() -> [String: [CellData]] {
         var data: [String: [CellData]] = ["main":[]]
         data["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Nummer",dataLeft: getMainTitle(),titleRight: "zugewiesen an",dataRight: zugewiesenAn?.name ?? "-"))
         data["main"]?.append(DoubleTitledInfoCellData(titleLeft: "angelegt von", dataLeft: angelegtVon ?? "-", titleRight: "angelegt am", dataRight: angelegtAm?.toDateString() ?? "-"))
@@ -135,7 +111,7 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataPr
         return ["main","Protokolle","DeveloperInfo"]
     }
     
-
+    // MARK: RightSwipeActionProvider Impl
     func getRightSwipeActions() -> [MGSwipeButton] {
         let selC=UIColor(red: 91.0/255.0, green: 152.0/255.0, blue: 246.0/255.0, alpha: 1.0)
         
@@ -150,7 +126,6 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataPr
         return [select]
     }
     
-    
     //MARK:- PolygonStyler Impl
     func getStrokeColor()->UIColor {
         return UIColor(red: 196.0/255.0, green: 77.0/255.0, blue: 88.0/255.0, alpha: 0.8)
@@ -162,11 +137,25 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataPr
         return UIColor(red: 255.0/255.0, green: 107.0/255.0, blue: 107.0/255.0, alpha: 0.8)
     }
 
-    // MARK: - ObjectActionProvider
+    // MARK: - ObjectActionProvider Impl
     @objc func getAllObjectActions() -> [ObjectAction]{
         return [SonstigesAction()]
     }
-    
+ 
+    // MARK: - ObjectFunctions
+    func getVeranlassungsnummern() -> [String] {
+        var nummern: [String]=[]
+        if let prots=protokolle {
+            for prot in prots {
+                if let vnr=prot.veranlassungsnummer{
+                    if !nummern.contains(vnr){
+                        nummern.append(vnr)
+                    }
+                }
+            }
+        }
+        return nummern
+    }
 }
 
 class Team : BaseEntity {

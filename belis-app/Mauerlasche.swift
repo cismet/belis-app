@@ -72,7 +72,7 @@ class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProv
     }
     
     
-    // - MARK: CellDataProvider Impl
+    // MARK: - CellDataProvider Impl
     @objc func getTitle() -> String {
         return "Mauerlasche"
     }

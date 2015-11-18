@@ -11,9 +11,13 @@ import ObjectMapper
 
 class Abzweigdose : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvider, ObjectActionProvider {
     var dokumente: [DMSUrl]=[]
+    
+    // MARK: - required init because of ObjectMapper
     required init?(_ map: Map) {
         super.init(map)
     }
+    
+    // MARK: - essential overrides BaseEntity
     override func mapping(map: Map) {
         id <- map["id"];
         dokumente <- map["dokumente"];
@@ -23,29 +27,25 @@ class Abzweigdose : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvi
         
         
     }
-    
-    // - MARK: essential overrides
     override func getType() -> Entity {
         return Entity.ABZWEIGDOSEN
     }
     
+    // MARK: - essential overrides GeoBaseEntity
     override func getAnnotationImageName() -> String{
         return "mauerlasche.png";
     }
     override func getAnnotationTitle() -> String{
         return getMainTitle();
     }
-    
     override func canShowCallout() -> Bool{
         return true;
     }
-    
     override func getAnnotationCalloutGlyphIconName() -> String {
         return "icon-nut";
     }
     
-    // - MARK: CellInformationProviderProtocol Impl
-
+    // MARK: - CellInformationProviderProtocol Impl
     func getMainTitle() -> String{
         return "AZD \(id)"
     }
@@ -58,13 +58,11 @@ class Abzweigdose : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvi
     func getQuaternaryInfo() -> String{
         return ""
     }
-   
     
-    // - MARK: CellDataProvider Impl
+    // MARK: - CellDataProvider Impl
     @objc func getTitle() -> String {
         return "Mauerlasche"
     }
-    
     @objc func getDetailGlyphIconString() -> String {
         return "icon-nut"
     }
@@ -88,7 +86,7 @@ class Abzweigdose : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvi
         return ["main","Dokumente","DeveloperInfo"]
     }
     
-    // MARK: - ObjectActionProvider
+    // MARK: - ObjectActionProvider Impl
     @objc func getAllObjectActions() -> [ObjectAction]{
         return [SonstigesAction()]
     }
