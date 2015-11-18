@@ -10,7 +10,7 @@ import Foundation
 import ObjectMapper
 
 
-class Standort: GeoBaseEntity ,  CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer{
+class Standort: GeoBaseEntity ,  CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer, ObjectActionProvider{
     var plz : String?
     var strasse : Strasse?
     var bezirk : Stadtbezirk?
@@ -345,6 +345,10 @@ class Standort: GeoBaseEntity ,  CellInformationProviderProtocol, CellDataProvid
         dokumente.append(document)
     }
     
+    // MARK: - ObjectActionProvider
+    @objc func getAllObjectActions() -> [ObjectAction]{
+        return [SonstigesAction()]
+    }
 }
 
 class Stadtbezirk : BaseEntity{

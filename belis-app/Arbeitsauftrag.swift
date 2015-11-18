@@ -162,6 +162,10 @@ class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataPr
         return UIColor(red: 255.0/255.0, green: 107.0/255.0, blue: 107.0/255.0, alpha: 0.8)
     }
 
+    // MARK: - ObjectActionProvider
+    @objc func getAllObjectActions() -> [ObjectAction]{
+        return [SonstigesAction()]
+    }
     
 }
 

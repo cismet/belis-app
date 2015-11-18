@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Abzweigdose : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvider {
+class Abzweigdose : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvider, ObjectActionProvider {
     var dokumente: [DMSUrl]=[]
     required init?(_ map: Map) {
         super.init(map)
@@ -86,5 +86,10 @@ class Abzweigdose : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvi
     }
     @objc func getDataSectionKeys() -> [String] {
         return ["main","Dokumente","DeveloperInfo"]
+    }
+    
+    // MARK: - ObjectActionProvider
+    @objc func getAllObjectActions() -> [ObjectAction]{
+        return [SonstigesAction()]
     }
 }

@@ -224,55 +224,23 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         let actions=MGSwipeButton(title: "Aktionen", backgroundColor: UIColor(red: 78.0/255.0, green: 205.0/255.0, blue: 196.0/255.0, alpha: 1.0) ,callback: {
             (sender: MGSwipeTableCell!) -> Bool in
             if let mainVC=CidsConnector.sharedInstance().mainVC {
-                let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
-                alertController.addAction(UIAlertAction(title: "Leuchtenerneuerung", style: .Default, handler: { alertAction in
-                    // Handle Take Photo here
-                }))
-                alertController.addAction(UIAlertAction(title: "Leuchtmittelwechsel (mit EP)", style: .Default, handler: { alertAction in
-                    // Handle Choose Existing Photo
-                }))
-                alertController.addAction(UIAlertAction(title: "Leuchtmittelwechsel", style: .Default, handler: { alertAction in
-                    // Handle Choose Existing Photo
-                }))
-                alertController.addAction(UIAlertAction(title: "Rundsteuerempfängerwechsel", style: .Default, handler: { alertAction in
-                    // Handle Choose Existing Photo
-                }))
-                alertController.addAction(UIAlertAction(title: "Sonderturnus", style: .Default, handler: { alertAction in
-                    // Handle Choose Existing Photo
-                }))
-                alertController.addAction(UIAlertAction(title: "Vorschaltgerätwechsel", style: .Default, handler: { alertAction in
-                    // Handle Choose Existing Photo
-                }))
-                alertController.addAction(UIAlertAction(title: "Sonstiges", style: .Default, handler: { alertAction in
-                    if let protDetailView = mainVC.storyboard?.instantiateViewControllerWithIdentifier("formView") as? GenericFormViewController {
-                        let form = FormDescriptor()
-                        form.title = "Sonstiges"
-
-                        let section2 = FormSectionDescriptor()
-                        let row = FormRowDescriptor(tag: "bemerkung", rowType: .MultilineText, title: "")
-                        section2.headerTitle = "Informationen zu den durchgeführten Tätigkeiten"
-                        section2.addRow(row)
-                        form.sections = [section2]
-                        protDetailView.form=form
-
-                        
-                        
-                        let detailNC=UINavigationController(rootViewController: protDetailView)
-                        detailNC.modalInPopover=true
-                        let popC=UIPopoverController(contentViewController: detailNC)
-                        popC.setPopoverContentSize(CGSize(width: 500, height: 200), animated: false)
-                        popC.presentPopoverFromRect(sender.bounds, inView: sender, permittedArrowDirections: .Left, animated: true)
+                if let oActionProvider=self.attachedGeoBaseEntity as? ObjectActionProvider {
+                    if oActionProvider.getAllObjectActions().count>0 {
+                        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+                        for oAction in oActionProvider.getAllObjectActions() {
+                            oAction.sender=sender
+                            oAction.mainVC=mainVC
+                            alertController.addAction(UIAlertAction(title: oAction.title, style: oAction.style, handler: oAction.handler))
+                            
+                        }
+                        alertController.modalPresentationStyle = .Popover
+                        let popover = alertController.popoverPresentationController!
+                        popover.permittedArrowDirections = .Left
+                        popover.sourceView = sender
+                        popover.sourceRect = sender.bounds
+                        mainVC.presentViewController(alertController, animated: true, completion: nil)
                     }
-                }))
-
-                alertController.modalPresentationStyle = .Popover
-                
-                let popover = alertController.popoverPresentationController!
-                popover.permittedArrowDirections = .Left
-                popover.sourceView = sender
-                popover.sourceRect = sender.bounds
-                
-                mainVC.presentViewController(alertController, animated: true, completion: nil)
+                }
             }
             
             return true
@@ -307,16 +275,19 @@ class Status: BaseEntity {
 
 
 class GenericFormViewController: FormViewController {
+    var saveHandler : (()->())?
+    var cancelHandler : (()->())?
+    
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Speichern", style: .Plain, target: self, action: "submit:")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Speichern", style: .Plain, target: self, action: "save")
         if let mainVC=CidsConnector.sharedInstance().mainVC {
             let image=mainVC.getGlyphedImage("icon-chevron-left", fontsize: 11, size: CGSize(width: 14, height: 14))
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: UIBarButtonItemStyle.Plain , target: self, action: "cancel:")
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: UIBarButtonItemStyle.Plain , target: self, action: "cancel")
         }
         else  {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "cancel:")
@@ -325,17 +296,25 @@ class GenericFormViewController: FormViewController {
     }
 
     
-    func submit(_: UIBarButtonItem!) {
+    func save() {
         self.dismissViewControllerAnimated(true) { () -> Void in
-            //MARK: TODO
-            print("call submit handler")
+            if let sh=self.saveHandler {
+                sh()
+            }
+            else {
+                //should not  happen >> log it
+            }
         }
     }
 
-    func cancel(_: UIBarButtonItem!) {
+    func cancel() {
         self.dismissViewControllerAnimated(true) { () -> Void in
-            //MARK: TODO
-            print("call cancel handler")
+            if let ch=self.cancelHandler {
+                ch()
+            }
+            else {
+                //should not  happen >> log it
+            }
         }
     }
 

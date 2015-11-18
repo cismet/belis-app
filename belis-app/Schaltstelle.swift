@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider,ActionProvider, DocumentContainer{
+class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider,ActionProvider, DocumentContainer, ObjectActionProvider{
     
     var erstellungsjahr: NSDate?
     var laufendeNummer: Int?
@@ -243,6 +243,11 @@ class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInf
 
     func addDocument(document: DMSUrl) {
         dokumente.append(document)
+    }
+    
+    // MARK: - ObjectActionProvider
+    @objc func getAllObjectActions() -> [ObjectAction]{
+        return [SonstigesAction()]
     }
 }
 

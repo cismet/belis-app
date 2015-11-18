@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
+class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer, ObjectActionProvider {
     var erstellungsjahr: Int?
     var laufendeNummer: Int?
     var material: Mauerlaschenmaterial?
@@ -173,7 +173,10 @@ class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProv
         return ""
     }
     
-    
+    // MARK: - ObjectActionProvider
+    @objc func getAllObjectActions() -> [ObjectAction]{
+        return [SonstigesAction()]
+    }
 }
 
 class Mauerlaschenmaterial : BaseEntity{

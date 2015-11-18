@@ -75,6 +75,7 @@
 		2D65AABC1AB09B8E00621A0A /* cismetSignet2k.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D65AABB1AB09B8E00621A0A /* cismetSignet2k.png */; };
 		2D6867501B02397900B0C2EE /* BaseEntityAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D68674F1B02397900B0C2EE /* BaseEntityAction.swift */; };
 		2D81C2A51AA84B710051876C /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D81C2A41AA84B710051876C /* Secrets.swift */; };
+		2D82A5CB1BFC7FF8000B29A7 /* ObjectActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D82A5CA1BFC7FF8000B29A7 /* ObjectActions.swift */; };
 		2D939DDB1A6905D500FB2AFB /* CidsConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */; };
 		2D939DEF1A690A6300FB2AFB /* CidsUtilityClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D939DEE1A690A6300FB2AFB /* CidsUtilityClasses.swift */; };
 		2D9952231AA5FFC600B5E02E /* DokumentPreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9952211AA5FFC600B5E02E /* DokumentPreviewVC.swift */; };
@@ -195,6 +196,7 @@
 		2D65AABB1AB09B8E00621A0A /* cismetSignet2k.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cismetSignet2k.png; sourceTree = "<group>"; };
 		2D68674F1B02397900B0C2EE /* BaseEntityAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseEntityAction.swift; sourceTree = "<group>"; };
 		2D81C2A41AA84B710051876C /* Secrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		2D82A5CA1BFC7FF8000B29A7 /* ObjectActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectActions.swift; sourceTree = "<group>"; };
 		2D939DD31A67D5D200FB2AFB /* belis-app.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "belis-app.playground"; sourceTree = "<group>"; };
 		2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsConnector.swift; sourceTree = "<group>"; };
 		2D939DEE1A690A6300FB2AFB /* CidsUtilityClasses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsUtilityClasses.swift; sourceTree = "<group>"; };
@@ -265,6 +267,7 @@
 				2D46EEF01BF4A75F004E3D9E /* MastActionForms.swift */,
 				2D46EEF21BF4A771004E3D9E /* LeuchteActionForms.swift */,
 				2D46EEF41BF4B453004E3D9E /* ProtokollStatusForm.swift */,
+				2D82A5CA1BFC7FF8000B29A7 /* ObjectActions.swift */,
 			);
 			name = actionForms;
 			sourceTree = "<group>";
@@ -751,6 +754,7 @@
 				2D5FB2D21A67C7320041020C /* belis_app.xcdatamodeld in Sources */,
 				2D46EEF31BF4A771004E3D9E /* LeuchteActionForms.swift in Sources */,
 				2D5FB32C1A67CCA60041020C /* WKTPoint.m in Sources */,
+				2D82A5CB1BFC7FF8000B29A7 /* ObjectActions.swift in Sources */,
 				2D9952231AA5FFC600B5E02E /* DokumentPreviewVC.swift in Sources */,
 				2D5FB30E1A67CC340041020C /* MainViewController.swift in Sources */,
 				2D5FB3431A67CCEB0041020C /* Mauerlasche.swift in Sources */,

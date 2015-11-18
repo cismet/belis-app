@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class StandaloneGeom: GeoBaseEntity {
+class StandaloneGeom: GeoBaseEntity, ObjectActionProvider {
     var dokumente: [DMSUrl] = []
     var bezeichnung: String?
     
@@ -86,6 +86,11 @@ class StandaloneGeom: GeoBaseEntity {
     }
     @objc func getDataSectionKeys() -> [String] {
         return ["main","Dokumente","DeveloperInfo"]
+    }
+    
+    // MARK: - ObjectActionProvider
+    @objc func getAllObjectActions() -> [ObjectAction]{
+        return [SonstigesAction()]
     }
 
 }

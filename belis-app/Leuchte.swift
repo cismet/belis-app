@@ -8,7 +8,7 @@
 
 import Foundation
 import ObjectMapper
-class Leuchte : GeoBaseEntity,  CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
+class Leuchte : GeoBaseEntity,  CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer, ObjectActionProvider {
     var strasse: Strasse?
     var energielieferant: Energielieferant?
     var rundsteuerempfaenger: Rundsteuerempfaenger?
@@ -383,7 +383,12 @@ class Leuchte : GeoBaseEntity,  CellInformationProviderProtocol, CellDataProvide
         return ""
     }
     
-    
+    // MARK: - ObjectActionProvider
+    @objc func getAllObjectActions() -> [ObjectAction]{
+        return [LeuchtenerneuerungAction(),LeuchtmittelwechselEPAction(),LeuchtmittelwechselAction(),RundsteuerempfaengerwechselAction(), SonderturnusAction(), VorschaltgeraetwechselAction(), SonstigesAction()]
+    }
+ 
+
 }
 
 

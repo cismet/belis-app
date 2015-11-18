@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Leitung : GeoBaseEntity ,CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
+class Leitung : GeoBaseEntity ,CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer, ObjectActionProvider {
     var material: Leitungsmaterial?
     var leitungstyp: Leitungstyp?
     var querschnitt: Querschnitt?
@@ -137,6 +137,10 @@ class Leitung : GeoBaseEntity ,CellInformationProviderProtocol, CellDataProvider
         return ""
     }
 
+    // MARK: - ObjectActionProvider
+    @objc func getAllObjectActions() -> [ObjectAction]{
+        return [SonstigesAction()]
+    }
 }
 
 class Leitungsmaterial : BaseEntity{

@@ -66,6 +66,10 @@ class NoCellInformation : CellInformationProviderProtocol {
     func getAllActions() -> [BaseEntityAction]
 }
 
+@objc protocol ObjectActionProvider {
+    func getAllObjectActions() -> [ObjectAction]
+}
+
 
 protocol LeftSwipeActionProvider {
     func getLeftSwipeActions()->[MGSwipeButton]
