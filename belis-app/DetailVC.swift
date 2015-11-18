@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate{
+class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UIImagePickerControllerDelegate, UINavigationControllerDelegate, Refreshable{
 
     @IBOutlet weak var tableView: UITableView!
     var data: [String: [CellData]] = ["main":[]]
@@ -37,15 +37,6 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
     
     func setCellData(data:[String: [CellData]]){
         self.data=data
-    }
-    
-    func refresh() {
-        if let provider=objectToShow as? CellDataProvider{
-            sections=provider.getDataSectionKeys()
-            setCellData(provider.getAllData())
-            dispatch_async(dispatch_get_main_queue(),{
-                self.tableView.reloadData()
-            });        }
     }
     
     func moreAction() {
@@ -167,6 +158,16 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         }
         //picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
         
+    }
+
+    // MARK: - Refreshable Impl
+    func refresh() {
+        if let provider=objectToShow as? CellDataProvider{
+            sections=provider.getDataSectionKeys()
+            setCellData(provider.getAllData())
+            dispatch_async(dispatch_get_main_queue(),{
+                self.tableView.reloadData()
+            });        }
     }
 
 }

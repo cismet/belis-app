@@ -18,7 +18,7 @@ class ChooseFotoAction : BaseEntityAction {
             picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
             picker.mediaTypes = UIImagePickerController.availableMediaTypesForSourceType(.PhotoLibrary)!
             picker.delegate = detailVC as! DetailVC
-            (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: yourself,detailVC: (detailVC as! DetailVC))
+            (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: yourself,refreshable: (detailVC as! DetailVC))
             picker.allowsEditing = true
             picker.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
             detailVC.presentViewController(picker, animated: true, completion: nil)
@@ -35,7 +35,7 @@ class TakeFotoAction : BaseEntityAction {
                 let picker = MainViewController.IMAGE_PICKER
                 picker.sourceType = UIImagePickerControllerSourceType.Camera
                 picker.delegate = detailVC as! DetailVC
-                (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: yourself,detailVC: (detailVC as! DetailVC))
+                (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: yourself,refreshable: (detailVC as! DetailVC))
                 
                 picker.allowsEditing = true
                 //picker.showsCameraControls=true
@@ -59,10 +59,10 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
     var library = ALAssetsLibrary()
     
     var selfEntity: BaseEntity
-    var detailVC: DetailVC
-    init (yourself: BaseEntity, detailVC: DetailVC){
+    var refreshable: Refreshable
+    init (yourself: BaseEntity, refreshable: Refreshable){
         selfEntity=yourself
-        self.detailVC=detailVC
+        self.refreshable=refreshable
         if let _ = selfEntity as? DocumentContainer {
             
         }
@@ -167,7 +167,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
                             if success {
                                 print("Everything is going to be 200-OK")
                                 (self.selfEntity as! DocumentContainer).addDocument(DMSUrl(name:pictureName, fileName:fileName))
-                                self.detailVC.refresh()
+                                self.refreshable.refresh()
                             }
                             else {
                                 

@@ -79,3 +79,8 @@ protocol RightSwipeActionProvider {
     func getRightSwipeActions()->[MGSwipeButton]
 }
 
+// MARK: - Refreshable
+protocol Refreshable {
+    func refresh()
+}
+
