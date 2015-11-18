@@ -338,7 +338,7 @@ class Standort: GeoBaseEntity ,  CellInformationProviderProtocol, CellDataProvid
     
     // MARK: - ObjectActionProvider Impl
     @objc func getAllObjectActions() -> [ObjectAction]{
-        return [SonstigesAction()]
+        return [AnstricharbeitenAction(),ElektrischePruefungAction(),MasterneuerungAction(), MastRevisionAction(),StandsicherheitspruefungAction(), SonstigesAction()]
     }
 }
 

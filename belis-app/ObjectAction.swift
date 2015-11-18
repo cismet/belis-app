@@ -9,7 +9,7 @@
 import Foundation
 import SwiftForms
 
- class ObjectAction: NSObject {
+public class ObjectAction: NSObject {
     var title:String = ""
     var style: UIAlertActionStyle = UIAlertActionStyle.Default
     var mainVC: UIViewController?
@@ -52,40 +52,5 @@ import SwiftForms
     func getPreferredSize()->CGSize {
         return CGSize(width: 400, height: 500)
     }
-    
-    
    
-}
-
-
-class SonstigesAction : ObjectAction {
-    override init(){
-        super.init()
-        title="Sonstiges"
-    }
-    override func getFormDescriptor()->FormDescriptor {
-        let form = FormDescriptor()
-        form.title = "Sonstiges"
-        let section2 = FormSectionDescriptor()
-        let row = FormRowDescriptor(tag: "bemerkung", rowType: .MultilineText, title: "")
-        section2.headerTitle = "Informationen zu den durchgeführten Tätigkeiten"
-        section2.addRow(row)
-        form.sections = [section2]
-        return form
-
-    }
-    
-    override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 200)
-    }
-    
-    override func save(){
-        print("HELL SAVE")
-        
-    }
-    
-    override func cancel(){
-        print("HELL CANCEL")
-    }
-    
 }

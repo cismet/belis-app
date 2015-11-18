@@ -1,50 +1,19 @@
 //
-//  MastActionForms.swift
+//  OtherActionForms.swift
 //  belis-app
 //
-//  Created by Thorsten Hell on 12.11.15.
+//  Created by Thorsten Hell on 18.11.15.
 //  Copyright © 2015 cismet. All rights reserved.
 //
 
 import Foundation
 import SwiftForms
 
-class AnstricharbeitenAction : ObjectAction {
-    override init(){
-        super.init()
-        title="Anstricharbeiten"
-    }
-    override func getFormDescriptor()->FormDescriptor {
-        let form = FormDescriptor()
-        form.title = "Sonstiges"
-        let section2 = FormSectionDescriptor()
-        let row = FormRowDescriptor(tag: "bemerkung", rowType: .MultilineText, title: "")
-        section2.headerTitle = "Informationen zu den durchgeführten Tätigkeiten"
-        section2.addRow(row)
-        form.sections = [section2]
-        return form
-        
-    }
-    
-    override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 200)
-    }
-    
-    override func save(){
-        print("HELL SAVE")
-        
-    }
-    
-    override func cancel(){
-        print("HELL CANCEL")
-    }
-    
-}
 
-class ElektrischePruefungAction : ObjectAction {
+class SonstigesAction : ObjectAction {
     override init(){
         super.init()
-        title="ElektrischePrüfung"
+        title="Sonstiges"
     }
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
@@ -72,10 +41,10 @@ class ElektrischePruefungAction : ObjectAction {
     }
     
 }
-class MasterneuerungAction : ObjectAction {
+class PruefungAction : ObjectAction {
     override init(){
         super.init()
-        title="Masterneuerung"
+        title="Prüfung"
     }
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
@@ -103,41 +72,10 @@ class MasterneuerungAction : ObjectAction {
     }
     
 }
-class MastRevisionAction : ObjectAction {
+class SchaltstellenRevisionAction : ObjectAction {
     override init(){
         super.init()
         title="Revision"
-    }
-    override func getFormDescriptor()->FormDescriptor {
-        let form = FormDescriptor()
-        form.title = "Sonstiges"
-        let section2 = FormSectionDescriptor()
-        let row = FormRowDescriptor(tag: "bemerkung", rowType: .MultilineText, title: "")
-        section2.headerTitle = "Informationen zu den durchgeführten Tätigkeiten"
-        section2.addRow(row)
-        form.sections = [section2]
-        return form
-        
-    }
-    
-    override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 200)
-    }
-    
-    override func save(){
-        print("HELL SAVE")
-        
-    }
-    
-    override func cancel(){
-        print("HELL CANCEL")
-    }
-    
-}
-class StandsicherheitspruefungAction : ObjectAction {
-    override init(){
-        super.init()
-        title="Standsicherheitsprüfung"
     }
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()

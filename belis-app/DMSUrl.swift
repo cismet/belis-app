@@ -15,11 +15,6 @@ class DMSUrl : BaseEntity{
     var url: Url?
     var description: String?
     var name: String?
-    
-    // MARK: - required init because of ObjectMapper
-    required init?(_ map: Map) {
-        super.init(map)
-    }
 
     // MARK: - convenience constructor
     convenience init(name: String, fileName: String) {

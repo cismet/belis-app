@@ -239,7 +239,7 @@ class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInf
     
     // MARK: - ObjectActionProvider Impl
     @objc func getAllObjectActions() -> [ObjectAction]{
-        return [SonstigesAction()]
+        return [SchaltstellenRevisionAction(),SonstigesAction()]
     }
 }
 
