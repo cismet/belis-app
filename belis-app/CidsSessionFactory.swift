@@ -48,29 +48,22 @@ class CidsSessionFactory : NSObject, NSURLSessionDelegate{
         
         let authMethod=challenge.protectionSpace.authenticationMethod
         
-        //SecTrustEvaluate(challenge.protectionSpace.serverTrust!, nil);
-        
         if authMethod==NSURLAuthenticationMethodServerTrust {
-            print("check server cert")
             let serverTrust=challenge.protectionSpace.serverTrust
-            let serverCert=SecTrustGetCertificateAtIndex(serverTrust!, 0)! //.takeUnretainedValue()
-            let remoteCertificateData = NSData(data:SecCertificateCopyData(serverCert)) //.takeRetainedValue())
+            let serverCert=SecTrustGetCertificateAtIndex(serverTrust!, 0)!
+            let remoteCertificateData = NSData(data:SecCertificateCopyData(serverCert))
 
             
             
             if  remoteCertificateData.isEqualToData(localServerCertData!) {
-                print("YAY")
                 
-              //  completionHandler(NSURLSessionAuthChallengeDisposition.UseCredential, NSURLCredential(forTrust: challenge.protectionSpace.serverTrust!))                
                 completionHandler(.UseCredential, NSURLCredential(trust: challenge.protectionSpace.serverTrust!))
             }
             else {
-                print("NAY")
+                print("Problem with Server CERT Check")
             }
         } else if authMethod==NSURLAuthenticationMethodClientCertificate {
-            print("provide client cert")
             if let clientCert=identityAndTrustForCSC {
-                
                 let urlCredential:NSURLCredential = NSURLCredential(
                     identity: clientCert.identityRef,
                     certificates: identityAndTrustForCSC!.certArray as [AnyObject],
@@ -88,11 +81,7 @@ class CidsSessionFactory : NSObject, NSURLSessionDelegate{
         
         var identityAndTrust:IdentityAndTrust!
         var securityError:OSStatus = errSecSuccess
-        
-        //var items:Unmanaged<CFArray>?
         let items: UnsafeMutablePointer<CFArray?> = UnsafeMutablePointer<CFArray?>.alloc(1)
-        
-//        let certOptions:CFDictionary = [ kSecImportExportPassphrase.takeRetainedValue() as String: certPassword ];
         let certOptions:CFDictionary = [ kSecImportExportPassphrase as String: certPassword ];
         
         // import certificate to read its entries
