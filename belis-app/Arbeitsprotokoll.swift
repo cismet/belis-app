@@ -83,10 +83,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         abzweigdose <- map["fk_abzweigdose"]
         schaltstelle <- map["fk_schaltstelle"]
         standaloneGeom <- map["fk_geometrie"]
-        
-        if let vnr=veranlassungsnummer where vnr == "00005881" {
-            print ("HIT")
-        }
+       
         //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
         //es ist nur ein slot gefüllt
         if let gbe=standort {
@@ -218,6 +215,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         })
         let actions=MGSwipeButton(title: "Aktionen", backgroundColor: UIColor(red: 78.0/255.0, green: 205.0/255.0, blue: 196.0/255.0, alpha: 1.0) ,callback: {
             (sender: MGSwipeTableCell!) -> Bool in
+            
             if let mainVC=CidsConnector.sharedInstance().mainVC {
                 if let oActionProvider=self.attachedGeoBaseEntity as? ObjectActionProvider {
                     if oActionProvider.getAllObjectActions().count>0 {
@@ -237,8 +235,8 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
                     }
                 }
             }
-            
             return true
+        
         })
         return [status,actions]
     }

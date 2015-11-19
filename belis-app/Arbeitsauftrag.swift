@@ -164,4 +164,8 @@ class Team : BaseEntity {
         super.id <- map["id"]
         name <- map["name"]
     }
+    class func ascending(lhs: Team, rhs: Team) -> Bool {
+        return lhs.name < rhs.name
+    }
+
 }

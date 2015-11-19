@@ -10,11 +10,15 @@ import Foundation
 import SwiftForms
 
 public class ObjectAction: NSObject {
+    let PROTOKOLL_ID="PROTOKOLL_ID"
+    var arbeitsprotokoll_id = -1
+    
     var title:String = ""
     var style: UIAlertActionStyle = UIAlertActionStyle.Default
     var mainVC: UIViewController?
     var sender: UIView?
     var formVC: GenericFormViewController!
+    
     override init() {
         super.init()
         formVC = CidsConnector.sharedInstance().mainVC!.storyboard!.instantiateViewControllerWithIdentifier("formView") as! GenericFormViewController

@@ -157,6 +157,59 @@ class GetEntityOperation: CidsRequestOperation {
     }
 }
 
+class GetAllEntitiesOperation: CidsRequestOperation {
+    var entityName=""
+    var completionHandler: ((operation:GetAllEntitiesOperation, data : NSData!, response : NSURLResponse!, error : NSError!, queue: NSOperationQueue) -> ())?
+    
+    init(baseUrl: String, domain: String,entityName:String, user: String, pass:String, queue: NSOperationQueue, completionHandler: (operation:GetAllEntitiesOperation, data : NSData!, response : NSURLResponse!, error : NSError!, queue: NSOperationQueue) -> ()) {
+        super.init(user:user,pass:pass)
+        self.qu=queue
+        self.completionHandler=completionHandler
+        url="\(baseUrl)/\(domain).\(entityName)?limit=30"
+    }
+    
+    override func main() {
+        if self.cancelled {
+            return
+        }
+        else  {
+            let nsurl = NSURL(string: url)
+            
+            let request = NSMutableURLRequest(URL: nsurl!)
+            request.HTTPMethod = "GET"
+            
+            request.addValue(authHeader, forHTTPHeaderField: "Authorization") //correct passwd
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            let session=sessionFactory.getNewCidsSession()
+            /* Start a new Task */
+            task = session.dataTaskWithRequest(request, completionHandler: { (data : NSData?, response : NSURLResponse?, error : NSError?) -> Void in
+                if let handler=self.completionHandler {
+                    handler(operation: self, data: data, response: response, error: error, queue: self.qu)
+                }
+                else {
+                    if (error == nil) {
+                        // Success
+                        let statusCode = (response as! NSHTTPURLResponse).statusCode
+                        print("URL Session Task Succeeded: HTTP \(statusCode)")
+                    }
+                    else {
+                        // Failure
+                        print("URL Session Task Failed: %@", error!.localizedDescription);
+                    }
+                }
+                
+                
+                self.executing=false
+                self.finished = true
+                self.task=nil
+            })
+            if let t=self.task {
+                t.resume()
+            }
+        }
+    }
+}
+
 class LoginOperation: CidsRequestOperation {
     var completionHandler: ((loggedIn: Bool, error: NSError?) -> ())?
     init(baseUrl: String, domain: String, user: String, pass:String, completionHandler: (loggedIn: Bool, error: NSError?) -> ()){

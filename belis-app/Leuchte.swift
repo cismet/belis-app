@@ -415,6 +415,9 @@ class Rundsteuerempfaenger : BaseEntity{
         programm <- map["programm"]
         foto <- map["foto"]
     }
+    class func ascending(lhs: Rundsteuerempfaenger, rhs: Rundsteuerempfaenger) -> Bool {
+        return "\(lhs.herrsteller_rs)-\(lhs.rs_typ)" < "\(rhs.herrsteller_rs)-\(rhs.rs_typ)"
+    }
 }
 
 class LeuchtenTyp : BaseEntity{
@@ -449,6 +452,10 @@ class LeuchtenTyp : BaseEntity{
         foto <- map["foto"]
         dokumente <- map["dokumente"]
         typenbezeichnung <- map["typenbezeichnung"]
+    }
+    
+    class func ascending(lhs: LeuchtenTyp, rhs: LeuchtenTyp) -> Bool {
+        return lhs.leuchtenTyp < rhs.leuchtenTyp
     }
 }
 
@@ -491,6 +498,9 @@ class Leuchtmittel : BaseEntity{
         super.id <- map["id"]
         hersteller <- map["hersteller"]
         lichtfarbe <- map["lichtfarbe"]
+    }
+    class func ascending(lhs: Leuchtmittel, rhs: Leuchtmittel) -> Bool {
+        return "\(lhs.hersteller)-\(lhs.lichtfarbe)" < "\(rhs.hersteller)-\(rhs.lichtfarbe)"
     }
 }
 

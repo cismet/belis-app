@@ -27,15 +27,13 @@ class LeuchtenerneuerungAction : ObjectAction {
         //section0.headerTitle = "Informationen zu den durchgeführten Tätigkeiten"
         section0.addRow(row)
         row = FormRowDescriptor(tag: PT.LEUCHTENTYP.rawValue, rowType: .Picker, title: "Leuchtentyp")
-        var leuchteTypenArrayById: [String:String]=["1":"L 1.1 AEG Umbau auf HSE","2":"L 1.4E Trilux Hängeleuchte 8771/70 HST EVG", "4":"L 1.5 Seilleuchte THorn 100W","56":"L 1.6 Seilleuchte Phillips 250W"]
-        var keys : [String] = []
-        for key in leuchteTypenArrayById.keys {
-            keys.append(key)
-        }
         
-        row.configuration[FormRowDescriptor.Configuration.Options] = keys
+        
+        
+        row.configuration[FormRowDescriptor.Configuration.Options] = CidsConnector.sharedInstance().sortedLeuchtenTypListKeys
         row.configuration[FormRowDescriptor.Configuration.TitleFormatterClosure] = { value in
-            return  leuchteTypenArrayById[value as! String]
+            let typ=CidsConnector.sharedInstance().leuchtentypList[value as! String]
+            return "\(typ!.leuchtenTyp!) - \(typ!.fabrikat!)"
             } as TitleFormatterClosure
         
         section0.addRow(row)
@@ -84,15 +82,10 @@ class LeuchtmittelwechselEPAction : ObjectAction {
         row = FormRowDescriptor(tag: PT.WECHSELDATUM.rawValue, rowType: .Date, title: "Wechseldatum")
         section0.addRow(row)
         row = FormRowDescriptor(tag: PT.LEUCHTMITTEL.rawValue, rowType: .Picker, title: "eingesetztes Leuchtmittel")
-        var leuchteTypenArrayById: [String:String]=["1":"L 1.1 AEG Umbau auf HSE","2":"L 1.4E Trilux Hängeleuchte 8771/70 HST EVG", "4":"L 1.5 Seilleuchte THorn 100W","56":"L 1.6 Seilleuchte Phillips 250W"]
-        var keys : [String] = []
-        for key in leuchteTypenArrayById.keys {
-            keys.append(key)
-        }
-        
-        row.configuration[FormRowDescriptor.Configuration.Options] = keys
+        row.configuration[FormRowDescriptor.Configuration.Options] = CidsConnector.sharedInstance().sortedLeuchtmittelListKeys
         row.configuration[FormRowDescriptor.Configuration.TitleFormatterClosure] = { value in
-            return  leuchteTypenArrayById[value as! String]
+            let lm=CidsConnector.sharedInstance().leuchtmittelList[value as! String]
+            return  "\(lm?.hersteller ?? "ohne Hersteller") - \(lm?.lichtfarbe ?? "")"
             } as TitleFormatterClosure
         
         section0.addRow(row)
@@ -136,15 +129,12 @@ class LeuchtmittelwechselAction : ObjectAction {
         var row = FormRowDescriptor(tag: PT.WECHSELDATUM.rawValue, rowType: .Date, title: "Wechseldatum")
         section0.addRow(row)
         row = FormRowDescriptor(tag: PT.LEUCHTMITTEL.rawValue, rowType: .Picker, title: "eingesetztes Leuchtmittel")
-        var leuchteTypenArrayById: [String:String]=["1":"L 1.1 AEG Umbau auf HSE","2":"L 1.4E Trilux Hängeleuchte 8771/70 HST EVG", "4":"L 1.5 Seilleuchte THorn 100W","56":"L 1.6 Seilleuchte Phillips 250W"]
-        var keys : [String] = []
-        for key in leuchteTypenArrayById.keys {
-            keys.append(key)
-        }
-        row.configuration[FormRowDescriptor.Configuration.Options] = keys
+        row.configuration[FormRowDescriptor.Configuration.Options] = CidsConnector.sharedInstance().sortedLeuchtmittelListKeys
         row.configuration[FormRowDescriptor.Configuration.TitleFormatterClosure] = { value in
-            return  leuchteTypenArrayById[value as! String]
+            let lm=CidsConnector.sharedInstance().leuchtmittelList[value as! String]
+            return  "\(lm?.hersteller ?? "ohne Hersteller") - \(lm?.lichtfarbe ?? "")"
             } as TitleFormatterClosure
+
         section0.addRow(row)
         row = FormRowDescriptor(tag: PT.LEBENSDAUER.rawValue, rowType: .Name, title: "Lebensdauer des Leuchtmittels")
         row.configuration[FormRowDescriptor.Configuration.CellConfiguration] = ["textField.placeholder" : "in Monaten", "textField.textAlignment" : NSTextAlignment.Right.rawValue]
@@ -182,14 +172,10 @@ class RundsteuerempfaengerwechselAction : ObjectAction {
         var row = FormRowDescriptor(tag: PT.EINBAUDATUM.rawValue, rowType: .Date, title: "Einbaudatum")
         section0.addRow(row)
         row = FormRowDescriptor(tag: PT.RUNDSTEUEREMPFAENGER.rawValue, rowType: .Picker, title: "Rundsteuerempfänger")
-        var leuchteTypenArrayById: [String:String]=["1":"L 1.1 AEG Umbau auf HSE","2":"L 1.4E Trilux Hängeleuchte 8771/70 HST EVG", "4":"L 1.5 Seilleuchte THorn 100W","56":"L 1.6 Seilleuchte Phillips 250W"]
-        var keys : [String] = []
-        for key in leuchteTypenArrayById.keys {
-            keys.append(key)
-        }
-        row.configuration[FormRowDescriptor.Configuration.Options] = keys
+        row.configuration[FormRowDescriptor.Configuration.Options] = CidsConnector.sharedInstance().sortedRundsteuerempfaengerListKeys
         row.configuration[FormRowDescriptor.Configuration.TitleFormatterClosure] = { value in
-            return  leuchteTypenArrayById[value as! String]
+            let rse=CidsConnector.sharedInstance().rundsteuerempfaengerList[value as! String]
+            return"\(rse?.herrsteller_rs ?? "ohne Hersteller") - \(rse?.rs_typ ?? "")"
             } as TitleFormatterClosure
         section0.addRow(row)
         form.sections = [section0]
@@ -261,16 +247,8 @@ class VorschaltgeraetwechselAction : ObjectAction {
         let section0 = FormSectionDescriptor()
         var row = FormRowDescriptor(tag: PT.WECHSELDATUM.rawValue, rowType: .Date, title: "Einbaudatum")
         section0.addRow(row)
-        row = FormRowDescriptor(tag: PT.VORSCHALTGERAET.rawValue, rowType: .Picker, title: "Vorschaltgerät")
-        var leuchteTypenArrayById: [String:String]=["1":"L 1.1 AEG Umbau auf HSE","2":"L 1.4E Trilux Hängeleuchte 8771/70 HST EVG", "4":"L 1.5 Seilleuchte THorn 100W","56":"L 1.6 Seilleuchte Phillips 250W"]
-        var keys : [String] = []
-        for key in leuchteTypenArrayById.keys {
-            keys.append(key)
-        }
-        row.configuration[FormRowDescriptor.Configuration.Options] = keys
-        row.configuration[FormRowDescriptor.Configuration.TitleFormatterClosure] = { value in
-            return  leuchteTypenArrayById[value as! String]
-            } as TitleFormatterClosure
+        row = FormRowDescriptor(tag: PT.VORSCHALTGERAET.rawValue, rowType: .Name, title: "Vorschaltgerät")
+        row.configuration[FormRowDescriptor.Configuration.CellConfiguration] = ["textField.textAlignment" : NSTextAlignment.Right.rawValue]
         section0.addRow(row)
         form.sections = [section0]
         return form

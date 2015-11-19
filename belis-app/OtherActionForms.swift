@@ -15,11 +15,14 @@ class SonstigesAction : ObjectAction {
         super.init()
         title="Sonstiges"
     }
+    enum PT:String {
+        case BEMERKUNG
+    }
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
         form.title = "Sonstiges"
         let section2 = FormSectionDescriptor()
-        let row = FormRowDescriptor(tag: "bemerkung", rowType: .MultilineText, title: "")
+        let row = FormRowDescriptor(tag: PT.BEMERKUNG.rawValue, rowType: .MultilineText, title: "")
         section2.headerTitle = "Informationen zu den durchgeführten Tätigkeiten"
         section2.addRow(row)
         form.sections = [section2]
@@ -32,8 +35,8 @@ class SonstigesAction : ObjectAction {
     }
     
     override func save(){
-        print("HELL SAVE")
-        
+        print("save")
+    
     }
     
     override func cancel(){

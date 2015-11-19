@@ -26,7 +26,7 @@ public class CidsConnector {
         self.instance = (self.instance ?? CidsConnector())
         return self.instance
     }
-
+    
     
     
     // MARK: - Values with custom getters and setters
@@ -111,12 +111,15 @@ public class CidsConnector {
             NSUserDefaults.standardUserDefaults().setObject(clientCertContainerPass, forKey: "clientCertContainerPass")
         }
     }
-
+    
     // MARK: - other variables
     private var login : String!
     private var password : String!
     private let domain = "BELIS2"
-    let queue = NSOperationQueue()
+    
+    let blockingQueue = NSOperationQueue()
+    let backgroundQeue = NSOperationQueue()
+    
     var searchResults=[Entity: [GeoBaseEntity]]()
     var allArbeitsauftraegeBeforeCurrentSelection=[Entity: [GeoBaseEntity]]()
     var selectedArbeitsauftrag: Arbeitsauftrag?
@@ -125,6 +128,21 @@ public class CidsConnector {
     var mainVC:MainViewController?
     var start=CidsConnector.currentTimeMillis();
     var loggedIn=false
+    var selectedTeam: Team?
+    
+    // MARK: - Lists
+    var sortedTeamListKeys: [String]=[]
+    var teamList: [String:Team]=[:]
+    
+    var sortedLeuchtenTypListKeys: [String]=[]
+    var leuchtentypList: [String:LeuchtenTyp]=[:]
+    
+    var sortedLeuchtmittelListKeys: [String]=[]
+    var leuchtmittelList: [String:Leuchtmittel]=[:]
+    
+    var sortedRundsteuerempfaengerListKeys: [String]=[]
+    var rundsteuerempfaengerList: [String:Rundsteuerempfaenger]=[:]
+    
     
     
     // MARK: - constructor
@@ -176,9 +194,174 @@ public class CidsConnector {
             }
             
             handler(loggedIn)
+            getLists()
         }
         let loginOp=LoginOperation(baseUrl: baseUrl, domain: domain,user: login, pass: password,completionHandler: cH)
         loginOp.enqueue()
+    }
+    func getLists() {
+        func teamsCompletionHandler(operation: GetAllEntitiesOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue){
+            if (error == nil) {
+                // Success
+                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                if let checkeddata: [String : AnyObject] = getJson(data) {
+                    let json =  checkeddata["$collection"] as! [[String : AnyObject]];
+                    if let teams = Mapper<Team>().mapArray(json) {
+                        
+                        print("\(teams.count) Teams vorhanden")
+                        let sortedTeams=teams.sort(Team.ascending)
+                        self.sortedTeamListKeys=[]
+                        for t in sortedTeams {
+                            self.teamList.updateValue(t, forKey: "\(t.id)")
+                            self.sortedTeamListKeys.append("\(t.id)")
+                        }
+                        print("\(teams.count) Teams abgelegt")
+                        //                        if self.queue.operationCount==1 {
+                        //                            let duration = (CidsConnector.currentTimeMillis() - self.start)
+                        //                            handler();
+                        //                            print("loaded \(duration)");
+                        //
+                        //                        }
+                    }
+                }
+                else {
+                    print("no json data for \(operation.url)")
+                    //self.searchResults[0].append(Leuchte())
+                    
+                }
+            }else {
+                // Failure
+                print("URL Session Task Failed: %@", error.localizedDescription);
+            }
+            
+        }
+        let teamsOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "team", user: login, pass: password, queue: backgroundQeue, completionHandler: teamsCompletionHandler)
+        
+        func leuchtentypenCompletionHandler(operation: GetAllEntitiesOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue){
+            if (error == nil) {
+                // Success
+                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                if let checkeddata: [String : AnyObject] = getJson(data) {
+                    let json =  checkeddata["$collection"] as! [[String : AnyObject]];
+                    if let lts = Mapper<LeuchtenTyp>().mapArray(json) {
+                        
+                        print("\(lts.count) Leuchtentypen vorhanden")
+                        let sortedLts=lts.sort(LeuchtenTyp.ascending)
+                        self.sortedLeuchtenTypListKeys=[]
+                        for lt in sortedLts {
+                            self.leuchtentypList.updateValue(lt, forKey: "\(lt.id)")
+                            self.sortedLeuchtenTypListKeys.append("\(lt.id)")
+                        }
+                        print("\(lts.count) Leuchtentypen abgelegt")
+
+                        //                        if self.queue.operationCount==1 {
+                        //                            let duration = (CidsConnector.currentTimeMillis() - self.start)
+                        //                            handler();
+                        //                            print("loaded \(duration)");
+                        //
+                        //                        }
+                    }
+                }
+                else {
+                    print("no json data for \(operation.url)")
+                    //self.searchResults[0].append(Leuchte())
+                    
+                }
+            }else {
+                // Failure
+                print("URL Session Task Failed: %@", error.localizedDescription);
+            }
+            
+        }
+        let leuchtentypenOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "tkey_leuchtentyp", user: login, pass: password, queue: backgroundQeue, completionHandler: leuchtentypenCompletionHandler)
+        
+        func leuchtmittelCompletionHandler(operation: GetAllEntitiesOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue){
+            if (error == nil) {
+                // Success
+                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                if let checkeddata: [String : AnyObject] = getJson(data) {
+                    let json =  checkeddata["$collection"] as! [[String : AnyObject]];
+                    if let lms = Mapper<Leuchtmittel>().mapArray(json) {
+                        
+                        print("\(lms.count) Leuchtmittel vorhanden")
+                        let sortedLms=lms.sort(Leuchtmittel.ascending)
+                        self.sortedLeuchtmittelListKeys=[]
+                        for lm in sortedLms {
+                            self.leuchtmittelList.updateValue(lm, forKey: "\(lm.id)")
+                            self.sortedLeuchtmittelListKeys.append("\(lm.id)")
+                        }
+                        print("\(lms.count) Leuchtmittel abgelegt")
+
+                        //                        if self.queue.operationCount==1 {
+                        //                            let duration = (CidsConnector.currentTimeMillis() - self.start)
+                        //                            handler();
+                        //                            print("loaded \(duration)");
+                        //
+                        //                        }
+                    }
+                }
+                else {
+                    print("no json data for \(operation.url)")
+                    //self.searchResults[0].append(Leuchte())
+                    
+                }
+            }else {
+                // Failure
+                print("URL Session Task Failed: %@", error.localizedDescription);
+            }
+            
+        }
+        
+        let leuchtmittelOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "leuchtmittel", user: login, pass: password, queue: backgroundQeue, completionHandler: leuchtmittelCompletionHandler)
+        
+        func rundsteuerempfaengerCompletionHandler(operation: GetAllEntitiesOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue){
+            if (error == nil) {
+                // Success
+                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                if let checkeddata: [String : AnyObject] = getJson(data) {
+                    let json =  checkeddata["$collection"] as! [[String : AnyObject]];
+                    if let rses = Mapper<Rundsteuerempfaenger>().mapArray(json) {
+                        
+                        print("\(rses.count) Rundsteuerempfänger vorhanden")
+                        let sortedRses=rses.sort(Rundsteuerempfaenger.ascending)
+                        self.sortedRundsteuerempfaengerListKeys=[]
+                        for rse in sortedRses {
+                            self.rundsteuerempfaengerList.updateValue(rse, forKey: "\(rse.id)")
+                            self.sortedRundsteuerempfaengerListKeys.append( "\(rse.id)")
+                        }
+                        print("\(rses.count) Rundsteuerempfänger abgelegt")
+
+                        //                        if self.queue.operationCount==1 {
+                        //                            let duration = (CidsConnector.currentTimeMillis() - self.start)
+                        //                            handler();
+                        //                            print("loaded \(duration)");
+                        //
+                        //                        }
+                    }
+                }
+                else {
+                    print("no json data for \(operation.url)")
+                    //self.searchResults[0].append(Leuchte())
+                    
+                }
+            }else {
+                // Failure
+                print("URL Session Task Failed: %@", error.localizedDescription);
+            }
+            
+        }
+        let rundsteuerempfaengerOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "rundsteuerempfaenger", user: login, pass: password, queue: backgroundQeue, completionHandler: rundsteuerempfaengerCompletionHandler)
+        
+        
+        teamsOperation.enqueue()
+        leuchtentypenOperation.enqueue()
+        leuchtmittelOperation.enqueue()
+        rundsteuerempfaengerOperation.enqueue()
+        
     }
     func sortSearchResults() {
         for key in searchResults.keys {
@@ -200,8 +383,8 @@ public class CidsConnector {
         var qp=QueryParameters(list:[
             SingleQueryParameter(key: "arbeitsauftragEnabled", value: true),
             SingleQueryParameter(key: "activeObjectsOnly", value: true),
-             SingleQueryParameter(key: "zugewiesenAn", value: 18) //39
-        ]);
+            SingleQueryParameter(key: "zugewiesenAn", value: 18) //39
+            ]);
         func mySearchCompletionHandler(data : NSData!, response : NSURLResponse!, error : NSError!) -> Void {
             if (error == nil) {
                 print("Arbeitsaufträge Search kein Fehler")
@@ -214,10 +397,10 @@ public class CidsConnector {
                         
                         
                         print(nodes.count);
-                        self.queue.cancelAllOperations()
+                        self.blockingQueue.cancelAllOperations()
                         self.searchResults=[Entity: [GeoBaseEntity]]()
                         self.start=CidsConnector.currentTimeMillis();
-                        self.queue.maxConcurrentOperationCount = 10
+                        self.blockingQueue.maxConcurrentOperationCount = 10
                         if nodes.count==0 {
                             handler()
                         }
@@ -254,7 +437,7 @@ public class CidsConnector {
                                                 }
                                             }
                                             
-                                            if self.queue.operationCount==1 {
+                                            if self.blockingQueue.operationCount==1 {
                                                 let duration = (CidsConnector.currentTimeMillis() - self.start)
                                                 handler();
                                                 print("loaded \(duration)");
@@ -271,7 +454,7 @@ public class CidsConnector {
                                         print("URL Session Task Failed: %@", error.localizedDescription);
                                     }
                                 }
-                                let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: queue, completionHandler: getAACompletionHandler)
+                                let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: getAACompletionHandler)
                                 
                                 op.enqueue()
                             }
@@ -291,7 +474,7 @@ public class CidsConnector {
     }
     func getVeranlassungByNummer(vnr:String, handler: (veranlassung:Veranlassung?) -> ()) {
         assert(loggedIn)
-
+        
         var qp=QueryParameters(list:[
             SingleQueryParameter(key: "nummer", value: vnr)
             ]);
@@ -327,7 +510,7 @@ public class CidsConnector {
         let sop=SearchOperation(baseUrl: self.baseUrl, searchKey: "BELIS2.de.cismet.belis2.server.search.VeranlassungByNummerSearch", user: self.login, pass: self.password, parameters: qp, completionHandler: mySearchCompletionHandler)
         
         sop.enqueue()
-
+        
     }
     func search(ewktMapContent: String,leuchtenEnabled: Bool, mastenEnabled: Bool,mauerlaschenEnabled: Bool, leitungenEnabled: Bool, schaltstellenEnabled: Bool, handler: () -> ()) {
         assert(loggedIn)
@@ -353,10 +536,10 @@ public class CidsConnector {
                         
                         
                         print(nodes.count);
-                        self.queue.cancelAllOperations()
+                        self.blockingQueue.cancelAllOperations()
                         self.searchResults=[Entity: [GeoBaseEntity]]()
                         self.start=CidsConnector.currentTimeMillis();
-                        self.queue.maxConcurrentOperationCount = 10
+                        self.blockingQueue.maxConcurrentOperationCount = 10
                         if nodes.count==0 {
                             handler()
                         }
@@ -387,8 +570,8 @@ public class CidsConnector {
                                                 gbEntity = Mapper<Leitung>().map(json)!
                                             case .SCHALTSTELLEN:
                                                 gbEntity = Mapper<Schaltstelle>().map(json)!
-                                                                                        default:
-                                                                                            print("could not find object from entity \(operation.entityName)")
+                                            default:
+                                                print("could not find object from entity \(operation.entityName)")
                                             }
                                             
                                             if let gbe=gbEntity {
@@ -402,7 +585,7 @@ public class CidsConnector {
                                             //println("+")
                                             //println("\(leuchte.id)==>\(leuchte.leuchtenNummer):\(leuchte.typ)@\(leuchte.standort?.strasse)->\(leuchte.wgs84WKT)");
                                             
-                                            if self.queue.operationCount==1 {
+                                            if self.blockingQueue.operationCount==1 {
                                                 let duration = (CidsConnector.currentTimeMillis() - self.start)
                                                 handler();
                                                 print("loaded \(duration)");
@@ -419,7 +602,7 @@ public class CidsConnector {
                                         print("URL Session Task Failed: %@", error.localizedDescription);
                                     }
                                 }
-                                let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: queue, completionHandler: completionHandler)
+                                let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: completionHandler)
                                 
                                 op.enqueue()
                             }
@@ -482,7 +665,7 @@ public class CidsConnector {
         
         up.enqueue()
     }
-
+    
     // MARK: - class functions
     class func currentTimeMillis() -> Int64{
         let nowDouble = NSDate().timeIntervalSince1970
