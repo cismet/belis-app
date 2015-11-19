@@ -12,13 +12,24 @@ import Security
 
 public class CidsConnector {
     
-    
+    // MARK: - fill simulator value
     #if arch(i386) || arch(x86_64)
     let simulator=true
     #else
     let simulator=false
     #endif
     
+    
+    // MARK: SHARED INSTANCE
+    static var instance: CidsConnector!
+    class func sharedInstance() -> CidsConnector {
+        self.instance = (self.instance ?? CidsConnector())
+        return self.instance
+    }
+
+    
+    
+    // MARK: - Values with custom getters and setters
     var tlsEnabled=false {
         didSet {
             NSUserDefaults.standardUserDefaults().setObject(tlsEnabled, forKey: "tlsEnabled")
@@ -100,32 +111,23 @@ public class CidsConnector {
             NSUserDefaults.standardUserDefaults().setObject(clientCertContainerPass, forKey: "clientCertContainerPass")
         }
     }
-    
 
-    // MARK: SHARED INSTANCE
-    static var instance: CidsConnector!
-
-    class func sharedInstance() -> CidsConnector {
-        self.instance = (self.instance ?? CidsConnector())
-        return self.instance
-    }
-    
+    // MARK: - other variables
     private var login : String!
     private var password : String!
     private let domain = "BELIS2"
     let queue = NSOperationQueue()
     var searchResults=[Entity: [GeoBaseEntity]]()
-    
     var allArbeitsauftraegeBeforeCurrentSelection=[Entity: [GeoBaseEntity]]()
-    
     var selectedArbeitsauftrag: Arbeitsauftrag?
-    
     var veranlassungsCache=[String:Veranlassung]()
-    
     let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
-    
     var mainVC:MainViewController?
+    var start=CidsConnector.currentTimeMillis();
+    var loggedIn=false
     
+    
+    // MARK: - constructor
     init(){
         
         let storedTLSEnabled: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("tlsEnabled")
@@ -159,13 +161,7 @@ public class CidsConnector {
         }
     }
     
-    
-    
-    
-    var start=CidsConnector.currentTimeMillis();
-    var loggedIn=false
-    
-    
+    // MARK: - functions
     func login(user :String, password :String, handler: (Bool) -> ()) {
         self.login=user+"@"+domain
         self.password=password
@@ -191,9 +187,6 @@ public class CidsConnector {
             }
         }
     }
-    
-    
-    
     func getJson(data: NSData) -> [String: AnyObject]?{
         do {
             return try NSJSONSerialization.JSONObjectWithData(data, options: []) as? [String: AnyObject]
@@ -202,8 +195,6 @@ public class CidsConnector {
             return nil
         }
     }
-    
-    
     func searchArbeitsauftraegeForTeam(team: String, handler: () -> ()) {
         assert(loggedIn)
         var qp=QueryParameters(list:[
@@ -298,9 +289,6 @@ public class CidsConnector {
         sop.enqueue()
         
     }
-    
-   
-
     func getVeranlassungByNummer(vnr:String, handler: (veranlassung:Veranlassung?) -> ()) {
         assert(loggedIn)
 
@@ -341,8 +329,6 @@ public class CidsConnector {
         sop.enqueue()
 
     }
-    
-    
     func search(ewktMapContent: String,leuchtenEnabled: Bool, mastenEnabled: Bool,mauerlaschenEnabled: Bool, leitungenEnabled: Bool, schaltstellenEnabled: Bool, handler: () -> ()) {
         assert(loggedIn)
         var qp=QueryParameters(list:[
@@ -457,11 +443,6 @@ public class CidsConnector {
         sop.enqueue()
         
     }
-    
-    
-    
-    
-    
     func executeSimpleServerAction(actionName actionName: String!, params: ActionParameterContainer, handler: (success:Bool) -> ()) {
         assert(loggedIn)
         
@@ -488,8 +469,6 @@ public class CidsConnector {
         let op=ServerActionOperation(baseUrl: baseUrl, user: login, pass: password, actionName: actionName,params:params, completionHandler: myActionCompletionHandler)
         op.enqueue()
     }
-    
-    
     func uploadImageToWebDAV(image: UIImage, fileName: String , completionHandler: (data : NSData!, response : NSURLResponse!, error : NSError!) -> Void) {
         assert(loggedIn)
         
@@ -503,14 +482,15 @@ public class CidsConnector {
         
         up.enqueue()
     }
-    
-    
+
+    // MARK: - class functions
     class func currentTimeMillis() -> Int64{
         let nowDouble = NSDate().timeIntervalSince1970
         return Int64(nowDouble*1000) + Int64(nowDouble/1000)
     }
 }
 
+// MARK: - Entity Enum
 enum Entity : String{
     case LEUCHTEN="Leuchten"
     case MASTEN="Masten"
@@ -522,39 +502,11 @@ enum Entity : String{
     case PROTOKOLLE="Protokolle"
     case ABZWEIGDOSEN="Abzweigdose"
     case STANDALONEGEOMS="Geometrie"
-
     
     static let allValues=[LEUCHTEN,MASTEN,MAUERLASCHEN,LEITUNGEN,SCHALTSTELLEN,ARBEITSAUFTRAEGE,VERANLASSUNGEN,PROTOKOLLE,ABZWEIGDOSEN,STANDALONEGEOMS]
-    
     static func byIndex(index: Int) -> Entity {
         return allValues[index]
     }
-    
-    func index() -> Int {
-        switch self {
-        case .LEUCHTEN:
-            return 0
-        case .MASTEN:
-            return 1
-        case .MAUERLASCHEN:
-            return 2
-        case .LEITUNGEN:
-            return 3
-        case .SCHALTSTELLEN:
-            return 4
-        case .ARBEITSAUFTRAEGE:
-            return 5
-        case .VERANLASSUNGEN:
-            return 6
-        case .PROTOKOLLE:
-            return 7
-        case .ABZWEIGDOSEN:
-            return 8
-        case .STANDALONEGEOMS:
-            return 9
-        }
-    }
-
     static func byClassId(cid: Int) -> Entity? {
         let dict=[27:LEUCHTEN, 26:MASTEN, 52:MAUERLASCHEN, 49:LEITUNGEN,51:SCHALTSTELLEN, 47:ARBEITSAUFTRAEGE,35:VERANLASSUNGEN,54:PROTOKOLLE, 50:ABZWEIGDOSEN,56:STANDALONEGEOMS]
         return dict[cid]
@@ -584,9 +536,30 @@ enum Entity : String{
             
         }
     }
-
-
-    
+    func index() -> Int {
+        switch self {
+        case .LEUCHTEN:
+            return 0
+        case .MASTEN:
+            return 1
+        case .MAUERLASCHEN:
+            return 2
+        case .LEITUNGEN:
+            return 3
+        case .SCHALTSTELLEN:
+            return 4
+        case .ARBEITSAUFTRAEGE:
+            return 5
+        case .VERANLASSUNGEN:
+            return 6
+        case .PROTOKOLLE:
+            return 7
+        case .ABZWEIGDOSEN:
+            return 8
+        case .STANDALONEGEOMS:
+            return 9
+        }
+    }
     func tableName() -> String {
         switch self {
         case .LEUCHTEN:
@@ -611,10 +584,7 @@ enum Entity : String{
             return "GEOMETRIE"
         }
     }
-    
     func isInSearchResults() -> Bool {
         return true
     }
-    
-    
 }
