@@ -75,4 +75,7 @@ class ActionParameterContainer : Mappable {
     func mapping(map: Map) {
         params <- map["parameters"];
     }
+    func append(key: String, value: AnyObject) {
+        params.updateValue(value, forKey: key)
+    }
 }

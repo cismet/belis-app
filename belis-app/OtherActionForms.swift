@@ -8,7 +8,6 @@
 
 import Foundation
 import SwiftForms
-import JGProgressHUD
 
 
 class SonstigesAction : ObjectAction {
@@ -38,55 +37,12 @@ class SonstigesAction : ObjectAction {
     override func save(){
         if arbeitsprotokoll_id != -1 {
             let content = formVC.form.formValues() as!  [String : AnyObject]
-            print(content[PT.BEMERKUNG.rawValue])
-            
-            dispatch_async(dispatch_get_main_queue()) {
-                CidsConnector.sharedInstance().mainVC?.progressHUD.showInView(CidsConnector.sharedInstance().mainVC!.view)
-            }
-            let apc=ActionParameterContainer(params: [   "PROTOKOLL_ID":"\(arbeitsprotokoll_id)",
-                PT.BEMERKUNG.rawValue:content[PT.BEMERKUNG.rawValue]!])
-            CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollFortfuehrungsantrag", params: apc, handler: { (success) -> () in
-                if !success {
-                    //display error message
-                    dispatch_async(dispatch_get_main_queue()) {
-                        CidsConnector.sharedInstance().mainVC?.progressHUD.dismissAnimated(false)
-                        let errorHUD=JGProgressHUD(style: JGProgressHUDStyle.Dark)
-                        errorHUD.indicatorView=JGProgressHUDErrorIndicatorView()
-                        errorHUD.showInView(CidsConnector.sharedInstance().mainVC!.view, animated: false)
-                        errorHUD.dismissAfterDelay(NSTimeInterval(2), animated: true)
-                    }
-                }
-                else {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        CidsConnector.sharedInstance().mainVC?.progressHUD.dismissAnimated(false)
-                        let successHUD=JGProgressHUD(style: JGProgressHUDStyle.Dark)
-                        successHUD.indicatorView=JGProgressHUDSuccessIndicatorView()
-                        successHUD.showInView(CidsConnector.sharedInstance().mainVC!.view, animated: false)
-                        successHUD.dismissAfterDelay(NSTimeInterval(1), animated: true)
-                    }
-
-                    //refresh
-                    CidsConnector.sharedInstance().refreshArbeitsauftrag(CidsConnector.sharedInstance().selectedArbeitsauftrag, handler: { (success) -> () in
-                        if success {
-                            dispatch_async(dispatch_get_main_queue()) {
-                                CidsConnector.sharedInstance().mainVC?.tableView.reloadData()
-                            }
-                        }
-                    })
-                    
-                }
-            })
+            showWaiting()
+            let apc=getParameterContainer()
+            apc.append(PT.BEMERKUNG.rawValue, value: content[PT.BEMERKUNG.rawValue]!)
+            CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollFortfuehrungsantrag", params: apc, handler: defaultAfterSaveHandler)
         }
-        else {
-            //Kein Protokoll, kein save
-        }
-        
     }
-    
-    override func cancel(){
-        print("HELL CANCEL")
-    }
-    
 }
 class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate, UINavigationControllerDelegate, Refreshable {
     enum ParamterType:String {
@@ -111,39 +67,39 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
         var row = FormRowDescriptor(tag: ParamterType.PRUEFDATUM.rawValue, rowType: .Date, title: "Prüfdatum")
         //section2.headerTitle = "Informationen zu den durchgeführten Tätigkeiten"
         section2.addRow(row)
-        row = FormRowDescriptor(tag: "", rowType: .Button, title: "Foto erstellen")
-        row.configuration[FormRowDescriptor.Configuration.DidSelectClosure] = {
-            super.formVC.view.endEditing(true)
-            
-            let picker = MainViewController.IMAGE_PICKER
-            picker.sourceType = UIImagePickerControllerSourceType.Camera
-            picker.delegate = self
-            self.callBacker=FotoPickerCallBacker(yourself: self.entity ,refreshable: self)
-            
-            picker.allowsEditing = true
-            //picker.showsCameraControls=true
-            picker.modalPresentationStyle = UIModalPresentationStyle.OverFullScreen
-            super.formVC.presentViewController(picker, animated: true, completion: { () -> Void in  })
-            
-            } as DidSelectClosure
-        section2.addRow(row)
-        row = FormRowDescriptor(tag: "", rowType: .Button, title: "Foto auswählen")
-        row.configuration[FormRowDescriptor.Configuration.DidSelectClosure] = {
-            super.formVC.view.endEditing(true)
-            
-            let picker = MainViewController.IMAGE_PICKER
-            picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
-            picker.mediaTypes = UIImagePickerController.availableMediaTypesForSourceType(.PhotoLibrary)!
-            picker.delegate = self
-            self.callBacker=FotoPickerCallBacker(yourself: self.entity ,refreshable: self)
-            
-            picker.allowsEditing = true
-            //picker.showsCameraControls=true
-            picker.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-            super.formVC.presentViewController(picker, animated: true, completion: { () -> Void in  })
-            
-            } as DidSelectClosure
-        section2.addRow(row)
+//        row = FormRowDescriptor(tag: "", rowType: .Button, title: "Foto erstellen")
+//        row.configuration[FormRowDescriptor.Configuration.DidSelectClosure] = {
+//            super.formVC.view.endEditing(true)
+//            
+//            let picker = MainViewController.IMAGE_PICKER
+//            picker.sourceType = UIImagePickerControllerSourceType.Camera
+//            picker.delegate = self
+//            self.callBacker=FotoPickerCallBacker(yourself: self.entity ,refreshable: self)
+//            
+//            picker.allowsEditing = true
+//            //picker.showsCameraControls=true
+//            picker.modalPresentationStyle = UIModalPresentationStyle.OverFullScreen
+//            super.formVC.presentViewController(picker, animated: true, completion: { () -> Void in  })
+//            
+//            } as DidSelectClosure
+//        section2.addRow(row)
+//        row = FormRowDescriptor(tag: "", rowType: .Button, title: "Foto auswählen")
+//        row.configuration[FormRowDescriptor.Configuration.DidSelectClosure] = {
+//            super.formVC.view.endEditing(true)
+//            
+//            let picker = MainViewController.IMAGE_PICKER
+//            picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+//            picker.mediaTypes = UIImagePickerController.availableMediaTypesForSourceType(.PhotoLibrary)!
+//            picker.delegate = self
+//            self.callBacker=FotoPickerCallBacker(yourself: self.entity ,refreshable: self)
+//            
+//            picker.allowsEditing = true
+//            //picker.showsCameraControls=true
+//            picker.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+//            super.formVC.presentViewController(picker, animated: true, completion: { () -> Void in  })
+//            
+//            } as DidSelectClosure
+//        section2.addRow(row)
         form.sections = [section2]
         return form
         
@@ -179,9 +135,6 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
         
     }
     
-    override func cancel(){
-        print("HELL CANCEL")
-    }
     
 }
 class SchaltstellenRevisionAction : ObjectAction {
