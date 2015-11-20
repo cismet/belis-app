@@ -167,7 +167,8 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
             setCellData(provider.getAllData())
             dispatch_async(dispatch_get_main_queue(),{
                 self.tableView.reloadData()
-            });        }
+            });
+        }
     }
 
 }

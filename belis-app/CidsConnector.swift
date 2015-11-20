@@ -121,8 +121,10 @@ public class CidsConnector {
     let backgroundQeue = NSOperationQueue()
     
     var searchResults=[Entity: [GeoBaseEntity]]()
+    
     var allArbeitsauftraegeBeforeCurrentSelection=[Entity: [GeoBaseEntity]]()
     var selectedArbeitsauftrag: Arbeitsauftrag?
+    
     var veranlassungsCache=[String:Veranlassung]()
     let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
     var mainVC:MainViewController?
@@ -255,7 +257,7 @@ public class CidsConnector {
                             self.sortedLeuchtenTypListKeys.append("\(lt.id)")
                         }
                         print("\(lts.count) Leuchtentypen abgelegt")
-
+                        
                         //                        if self.queue.operationCount==1 {
                         //                            let duration = (CidsConnector.currentTimeMillis() - self.start)
                         //                            handler();
@@ -294,7 +296,7 @@ public class CidsConnector {
                             self.sortedLeuchtmittelListKeys.append("\(lm.id)")
                         }
                         print("\(lms.count) Leuchtmittel abgelegt")
-
+                        
                         //                        if self.queue.operationCount==1 {
                         //                            let duration = (CidsConnector.currentTimeMillis() - self.start)
                         //                            handler();
@@ -334,7 +336,7 @@ public class CidsConnector {
                             self.sortedRundsteuerempfaengerListKeys.append( "\(rse.id)")
                         }
                         print("\(rses.count) Rundsteuerempfänger abgelegt")
-
+                        
                         //                        if self.queue.operationCount==1 {
                         //                            let duration = (CidsConnector.currentTimeMillis() - self.start)
                         //                            handler();
@@ -471,6 +473,56 @@ public class CidsConnector {
         
         sop.enqueue()
         
+    }
+    func refreshArbeitsauftrag(arbeitsauftrag: Arbeitsauftrag?, handler: (success: Bool)->() ){
+        if let _=arbeitsauftrag {
+            func completionHandler(operation:GetEntityOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue) -> (){
+                if (error == nil) {
+                    // Success
+                    let statusCode = (response as! NSHTTPURLResponse).statusCode
+                    print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                    if let json: [String : AnyObject] = getJson(data) {
+                        //let sel=self.mainVC!.tableView.indexPathForSelectedRow
+                        let entity = Mapper<Arbeitsauftrag>().map(json)
+                        if let aa=entity {
+                            CidsConnector.sharedInstance().selectedArbeitsauftrag=aa
+                            var tmp=CidsConnector.sharedInstance().allArbeitsauftraegeBeforeCurrentSelection
+                            if let x=tmp[Entity.ARBEITSAUFTRAEGE] {
+                                var i=0
+                                for oldAA in x {
+                                    if oldAA.id==aa.id {
+                                       CidsConnector.sharedInstance().allArbeitsauftraegeBeforeCurrentSelection[Entity.ARBEITSAUFTRAEGE]![i]=aa
+                                        break
+                                    }
+                                    i++
+                                }
+                            }
+                            
+                            self.mainVC!.fillArbeitsauftragIntoTable(aa)
+                            self.mainVC!.visualizeAllSearchResultsInMap(zoomToShowAll: false, showActivityIndicator: true)
+                            //  if let s=sel  {
+                            //  self.mainVC!.tableView.selectRowAtIndexPath(s, animated: false, scrollPosition: UITableViewScrollPosition.None)
+                            //  }
+
+                            handler(success: true)
+                            return
+                        }
+                        
+                    }else {
+                        print("no json data for \(operation.url)")
+                        //self.searchResults[0].append(Leuchte())
+                        
+                    }
+                }else {
+                    // Failure
+                    print("URL Session Task Failed: %@", error.localizedDescription);
+                }
+                
+                handler(success: false)
+            }
+            let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: Entity.ARBEITSAUFTRAEGE.tableName(), id: arbeitsauftrag!.id, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: completionHandler)
+            op.enqueue()
+        }
     }
     func getVeranlassungByNummer(vnr:String, handler: (veranlassung:Veranlassung?) -> ()) {
         assert(loggedIn)

@@ -64,7 +64,15 @@ class SonstigesAction : ObjectAction {
                         successHUD.showInView(CidsConnector.sharedInstance().mainVC!.view, animated: false)
                         successHUD.dismissAfterDelay(NSTimeInterval(1), animated: true)
                     }
-                    print("\\o/")
+
+                    //refresh
+                    CidsConnector.sharedInstance().refreshArbeitsauftrag(CidsConnector.sharedInstance().selectedArbeitsauftrag, handler: { (success) -> () in
+                        if success {
+                            dispatch_async(dispatch_get_main_queue()) {
+                                CidsConnector.sharedInstance().mainVC?.tableView.reloadData()
+                            }
+                        }
+                    })
                     
                 }
             })

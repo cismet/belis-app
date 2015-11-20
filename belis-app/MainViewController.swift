@@ -648,29 +648,42 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         var zoomToShowAll=true
         if let aa=arbeitsauftrag {
             CidsConnector.sharedInstance().allArbeitsauftraegeBeforeCurrentSelection=CidsConnector.sharedInstance().searchResults
-            removeAllEntityObjects()
-            
-            itemArbeitsauftrag.title=aa.nummer!
-            
-            
-            if let protokolle=aa.protokolle {
-                for prot in protokolle {
-                    if let _=CidsConnector.sharedInstance().searchResults[Entity.PROTOKOLLE] {
-                        CidsConnector.sharedInstance().searchResults[Entity.PROTOKOLLE]!.append(prot)
-                    }
-                    else {
-                        CidsConnector.sharedInstance().searchResults.updateValue([prot], forKey: Entity.PROTOKOLLE)
-                    }
-                }
-            }
+            fillArbeitsauftragIntoTable(aa)
         } else {
             itemArbeitsauftrag.title="Kein Arbeitsauftrag ausgewählt"
             self.removeAllEntityObjects()
             CidsConnector.sharedInstance().searchResults=CidsConnector.sharedInstance().allArbeitsauftraegeBeforeCurrentSelection
+            
             zoomToShowAll=false
             
         }
-        dispatch_async(dispatch_get_main_queue()) {
+        visualizeAllSearchResultsInMap(zoomToShowAll: zoomToShowAll, showActivityIndicator: showActivityIndicator)
+        
+        
+    }
+    func fillArbeitsauftragIntoTable(arbeitsauftrag: Arbeitsauftrag) {
+        removeAllEntityObjects()
+        
+        itemArbeitsauftrag.title=arbeitsauftrag.nummer!
+        
+        
+        if let protokolle=arbeitsauftrag.protokolle {
+            for prot in protokolle {
+                if let _=CidsConnector.sharedInstance().searchResults[Entity.PROTOKOLLE] {
+                    CidsConnector.sharedInstance().searchResults[Entity.PROTOKOLLE]!.append(prot)
+                }
+                else {
+                    CidsConnector.sharedInstance().searchResults.updateValue([prot], forKey: Entity.PROTOKOLLE)
+                }
+            }
+        }
+    }
+    
+    func visualizeAllSearchResultsInMap(zoomToShowAll zoomToShowAll: Bool,showActivityIndicator:Bool ) {
+        func doIt(){
+            self.selectedAnnotation=nil
+            self.mapView.deselectAnnotation(selectedAnnotation, animated: false)
+
             var annos: [MKAnnotation]=[]
             for (_, objArray) in CidsConnector.sharedInstance().searchResults{
                 for obj in objArray {
@@ -688,10 +701,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 self.progressHUD.dismissAnimated(true)
             }
         }
-        
+        if NSThread.isMainThread() {
+            doIt()
+        }
+        else {
+            dispatch_async(dispatch_get_main_queue()) {
+               doIt()
+            }
+        }
     }
-
-    
     
     // MARK: - public functions
     func mapTapped(sender: UITapGestureRecognizer) {
