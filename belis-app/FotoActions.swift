@@ -158,16 +158,20 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
                     CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {(success:Bool) -> () in
                         assert(!NSThread.isMainThread() )
                         dispatch_async(dispatch_get_main_queue()) {
-                            progressHUD.dismissAnimated(true)
+                            
                             picker.dismissViewControllerAnimated(true, completion: nil)
                             if success {
                                 print("Everything is going to be 200-OK")
                                 (self.selfEntity as! DocumentContainer).addDocument(DMSUrl(name:pictureName, fileName:fileName))
                                 self.refreshable.refresh()
+                                progressHUD.indicatorView=JGProgressHUDSuccessIndicatorView()
                             }
                             else {
-                                
+                                progressHUD.indicatorView=JGProgressHUDErrorIndicatorView()
                             }
+                            progressHUD.dismissAfterDelay(NSTimeInterval(1), animated: true)
+                            progressHUD.indicatorView=JGProgressHUDIndeterminateIndicatorView()
+                            progressHUD.dismissAnimated(true)
                         }
                     })
                 }

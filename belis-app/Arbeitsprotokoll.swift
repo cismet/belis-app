@@ -223,6 +223,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
                         for oAction in oActionProvider.getAllObjectActions() {
                             oAction.sender=sender
                             oAction.mainVC=mainVC
+                            oAction.arbeitsprotokoll_id=self.id
                             alertController.addAction(UIAlertAction(title: oAction.title, style: oAction.style, handler: oAction.handler))
                             
                         }

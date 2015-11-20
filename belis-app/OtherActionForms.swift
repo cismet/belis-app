@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftForms
+import JGProgressHUD
 
 
 class SonstigesAction : ObjectAction {
@@ -35,8 +36,43 @@ class SonstigesAction : ObjectAction {
     }
     
     override func save(){
-        print("save")
-    
+        if arbeitsprotokoll_id != -1 {
+            let content = formVC.form.formValues() as!  [String : AnyObject]
+            print(content[PT.BEMERKUNG.rawValue])
+            
+            dispatch_async(dispatch_get_main_queue()) {
+                CidsConnector.sharedInstance().mainVC?.progressHUD.showInView(CidsConnector.sharedInstance().mainVC!.view)
+            }
+            let apc=ActionParameterContainer(params: [   "PROTOKOLL_ID":"\(arbeitsprotokoll_id)",
+                PT.BEMERKUNG.rawValue:content[PT.BEMERKUNG.rawValue]!])
+            CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollFortfuehrungsantrag", params: apc, handler: { (success) -> () in
+                if !success {
+                    //display error message
+                    dispatch_async(dispatch_get_main_queue()) {
+                        CidsConnector.sharedInstance().mainVC?.progressHUD.dismissAnimated(false)
+                        let errorHUD=JGProgressHUD(style: JGProgressHUDStyle.Dark)
+                        errorHUD.indicatorView=JGProgressHUDErrorIndicatorView()
+                        errorHUD.showInView(CidsConnector.sharedInstance().mainVC!.view, animated: false)
+                        errorHUD.dismissAfterDelay(NSTimeInterval(2), animated: true)
+                    }
+                }
+                else {
+                    dispatch_async(dispatch_get_main_queue()) {
+                        CidsConnector.sharedInstance().mainVC?.progressHUD.dismissAnimated(false)
+                        let successHUD=JGProgressHUD(style: JGProgressHUDStyle.Dark)
+                        successHUD.indicatorView=JGProgressHUDSuccessIndicatorView()
+                        successHUD.showInView(CidsConnector.sharedInstance().mainVC!.view, animated: false)
+                        successHUD.dismissAfterDelay(NSTimeInterval(1), animated: true)
+                    }
+                    print("\\o/")
+                    
+                }
+            })
+        }
+        else {
+            //Kein Protokoll, kein save
+        }
+        
     }
     
     override func cancel(){
@@ -52,7 +88,7 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
     var entity: Mauerlasche!
     var actions: [BaseEntityAction]=[]
     var callBacker: AnyObject?
-
+    
     init(entity: Mauerlasche){
         super.init()
         title="Prüfung"
@@ -121,9 +157,9 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
         //picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
         
     }
-
-    func refresh() {
     
+    func refresh() {
+        
     }
     
     override func getPreferredSize()->CGSize {
