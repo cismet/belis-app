@@ -31,7 +31,11 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
     var schaltstelle: Schaltstelle?
     var standaloneGeom: StandaloneGeom?
     var detailObjekt:String?
+    
+    var aktionen: [ArbeitsprotokollAktion]=[]
+    
     var attachedGeoBaseEntity: GeoBaseEntity?
+    
     
     // MARK: - required init because of ObjectMapper
     required init?(_ map: Map) {
@@ -75,6 +79,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         status <- map["fk_status"]
         veranlassungsnummer <- map["veranlassungsnummer"]
         protokollnummer <- map["protokollnummer"]
+        aktionen <- map["n_aktionen"]
 
         standort <- map["fk_standort"]
         leuchte <- map["fk_leuchte"]
@@ -183,17 +188,55 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
             }
         }
         
-        data["Details"]=[]
-        data["Details"]?.append(DoubleTitledInfoCellData(titleLeft: "Monteur", dataLeft: monteur ?? "-", titleRight: "Datum", dataRight: datum?.toDateString() ?? "-"))
-        data["Details"]?.append(SingleTitledInfoCellData(title: "Status",data: status?.bezeichnung ?? "-"))
-        data["Details"]?.append(MemoTitledInfoCellData(title: "Bemerkung",data: bemerkung ?? ""))
-        data["Details"]?.append(MemoTitledInfoCellData(title: "Material",data: material ?? ""))
+        if monteur != nil || status != nil || bemerkung != nil || material != nil || datum != nil {
+            data["Details"]=[]
+            if datum != nil || monteur != nil {
+                data["Details"]?.append(DoubleTitledInfoCellData(titleLeft: "Monteur", dataLeft: monteur ?? "-", titleRight: "Datum", dataRight: datum?.toDateString() ?? "-"))
+            }
+            if let s=status {
+                data["Details"]?.append(SingleTitledInfoCellData(title: "Status",data: s.bezeichnung ?? "-"))
+            }
+            if let bem=bemerkung {
+                data["Details"]?.append(MemoTitledInfoCellData(title: "Bemerkung",data: bem))
+            }
+            if let mat=material {
+                data["Details"]?.append(MemoTitledInfoCellData(title: "Material",data: mat))
+            }
+            
+        }
+        
+       
+        if aktionen.count>0 {
+            data["Aktionen"]=[]
+        }
+        for aktion in aktionen {
+            if let aktionstitle=aktion.aenderung {
+                if let von=aktion.alt, nach=aktion.neu {
+                    var aktionDetails: [String: [CellData]] = ["main":[]]
+                    aktionDetails["main"]?.append(SimpleInfoCellData(data: aktionstitle))
+                    aktionDetails["main"]?.append(SingleTitledInfoCellData(title: "von",data: von))
+                    aktionDetails["main"]?.append(SingleTitledInfoCellData(title: "nach",data: nach))
+                    data["Aktionen"]?.append(SingleTitledInfoCellDataWithDetails(title: aktionstitle,data: nach,details: aktionDetails,sections: ["main"]))
+
+                }
+                else if let von=aktion.alt{
+                    data["Aktionen"]?.append(SingleTitledInfoCellData(title: aktionstitle,data: von))
+                }
+                else if let nach=aktion.neu{
+                    data["Aktionen"]?.append(SingleTitledInfoCellData(title: aktionstitle,data: nach))
+                }
+                else {
+                    data["Aktionen"]?.append(SimpleInfoCellData(data: aktionstitle))
+                }
+            }
+        }
+        
         data["DeveloperInfo"]=[]
         data["DeveloperInfo"]?.append(SingleTitledInfoCellData(title: "Key", data: "\(getType().tableName())/\(id)"))
         return data
     }
     @objc func getDataSectionKeys() -> [String] {
-        return ["main","Details","DeveloperInfo"]
+        return ["main","Details","Aktionen","DeveloperInfo"]
     }
     
     // MARK: - RightSwipeActionProvider Impl
@@ -255,6 +298,23 @@ class Status: BaseEntity {
         id <- map["id"];
         bezeichnung <- map["bezeichnung"];
         schluessel <- map["schluessel"];
+    }
+}
+
+class ArbeitsprotokollAktion: BaseEntity {
+    var aenderung: String?
+    var alt: String?
+    var neu: String?
+    
+    required init?(_ map: Map) {
+        super.init(map)
+    }
+    
+    override func mapping(map: Map) {
+        id <- map["id"];
+        aenderung <- map["aenderung"];
+        alt <- map["alt"];
+        neu <- map["neu"];
     }
 }
 
