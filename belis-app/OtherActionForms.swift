@@ -45,7 +45,7 @@ class SonstigesAction : ObjectAction {
     }
 }
 class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate, UINavigationControllerDelegate, Refreshable {
-    enum ParamterType:String {
+    enum PT:String {
         case PRUEFDATUM
         case DOKUMENT
     }
@@ -64,9 +64,13 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
         let form = FormDescriptor()
         form.title = "Prüfung"
         let section2 = FormSectionDescriptor()
-        var row = FormRowDescriptor(tag: ParamterType.PRUEFDATUM.rawValue, rowType: .Date, title: "Prüfdatum")
-        //section2.headerTitle = "Informationen zu den durchgeführten Tätigkeiten"
+        var row = FormRowDescriptor(tag: PT.PRUEFDATUM.rawValue, rowType: .Date, title: "Prüfdatum")
+        row.value=NSDate()
+        
         section2.addRow(row)
+        row = FormRowDescriptor(tag: PT.DOKUMENT.rawValue, rowType: .BooleanSwitch, title: "inkl. Foto")
+        section2.addRow(row)
+//
 //        row = FormRowDescriptor(tag: "", rowType: .Button, title: "Foto erstellen")
 //        row.configuration[FormRowDescriptor.Configuration.DidSelectClosure] = {
 //            super.formVC.view.endEditing(true)
@@ -107,23 +111,23 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         print("DetailVC FINISH")
-        if let x = (callBacker as? UIImagePickerControllerDelegate) {
-            x.imagePickerController!(picker, didFinishPickingMediaWithInfo: info)
-        }
+//        if let x = (callBacker as? UIImagePickerControllerDelegate) {
+//            x.imagePickerController!(picker, didFinishPickingMediaWithInfo: info)
+//        }
         //picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
         
     }
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         print("DetailVC CANCEL")
-        if let x = (callBacker as? UIImagePickerControllerDelegate) {
-            x.imagePickerControllerDidCancel!(picker)
-        }
+//        if let x = (callBacker as? UIImagePickerControllerDelegate) {
+//            x.imagePickerControllerDidCancel!(picker)
+//        }
         //picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
         
     }
     
     func refresh() {
-        
+        print("refresh")
     }
     
     override func getPreferredSize()->CGSize {
@@ -131,14 +135,39 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
     }
     
     override func save(){
-        print("HELL SAVE")
-        
+        if arbeitsprotokoll_id != -1 {
+            let content = formVC.form.formValues() as!  [String : AnyObject]
+            showWaiting()
+            let apc=getParameterContainer()
+            let date=content[PT.PRUEFDATUM.rawValue]!
+            let nowDouble = date.timeIntervalSince1970
+            let millis = Int64(nowDouble*1000) + Int64(nowDouble/1000)
+            let param = "\(millis)"
+            apc.append(PT.PRUEFDATUM.rawValue, value: param)
+            
+            
+//            if let mitFoto=content[PT.DOKUMENT.rawValue] as? Bool{
+//                if mitFoto{
+//                    let picker = MainViewController.IMAGE_PICKER
+//                    picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+//                    picker.mediaTypes = UIImagePickerController.availableMediaTypesForSourceType(.PhotoLibrary)!
+//                    picker.delegate = self
+//                    self.callBacker=FotoPickerCallBacker(yourself: self.entity ,refreshable: self)
+//                    
+//                    picker.allowsEditing = true
+//                    //picker.showsCameraControls=true
+//                    picker.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
+//                    super.formVC.presentViewController(picker, animated: true, completion: { () -> Void in  })
+//                }
+//            }
+            
+            CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollMauerlaschePruefung", params: apc, handler: defaultAfterSaveHandler)
+        }
     }
-    
     
 }
 class SchaltstellenRevisionAction : ObjectAction {
-    enum ParamterType:String {
+    enum PT:String {
         case PRUEFDATUM
     }
     override init(){
@@ -149,7 +178,8 @@ class SchaltstellenRevisionAction : ObjectAction {
         let form = FormDescriptor()
         form.title = "Revision"
         let section2 = FormSectionDescriptor()
-        let row = FormRowDescriptor(tag: ParamterType.PRUEFDATUM.rawValue, rowType: .Date, title: "Prüfdatum")
+        let row = FormRowDescriptor(tag: PT.PRUEFDATUM.rawValue, rowType: .Date, title: "Prüfdatum")
+        row.value=NSDate()
         section2.addRow(row)
         form.sections = [section2]
         return form
@@ -161,12 +191,16 @@ class SchaltstellenRevisionAction : ObjectAction {
     }
     
     override func save(){
-        print("HELL SAVE")
-        
+        if arbeitsprotokoll_id != -1 {
+            let content = formVC.form.formValues() as!  [String : AnyObject]
+            showWaiting()
+            let apc=getParameterContainer()
+            let date=content[PT.PRUEFDATUM.rawValue]!
+            let nowDouble = date.timeIntervalSince1970
+            let millis = Int64(nowDouble*1000) + Int64(nowDouble/1000)
+            let param = "\(millis)"
+            apc.append(PT.PRUEFDATUM.rawValue, value: param)
+            CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollSchaltstelleRevision", params: apc, handler: defaultAfterSaveHandler)
+        }
     }
-    
-    override func cancel(){
-        print("HELL CANCEL")
-    }
-    
 }
