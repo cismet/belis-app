@@ -13,27 +13,29 @@ import CoreGraphics
 
 struct WebHostingGlyps {
     static var glyphs: [String: String] = [
-        "icon-ceilinglight":"\u{f4ec}",
-        "icon-nut":"\u{f427}",
-        "icon-line":"\u{f1bf}",
-        "icon-lightningalt":"\u{f2a8}",
-        "icon-connected":"\u{f51c}",
-        "icon-noteslist":"\u{f5c6}",
-        "icon-notestasks":"\u{f5c7}",
-        "icon-stickynotealt":"\u{f60e}",
-        "icon-tag":"\u{f032}",
-         "icon-map-marker":"\u{f220}",
-        "icon-antenna":"\u{f3ec}",
-        "icon-document":"\u{f0c2}",
-        "icon-camera":"\u{f19b}",
-        "icon-horizontalexpand":"\u{f578}",
-        "icon-switch":"\u{f28a}",
-        "icon-certificatealt":"\u{f058}",
-        "icon-chevron-down":"\u{f48b}",
-        "icon-chevron-left":"\u{f489}",
-        "icon-chevron-right":"\u{f488}",
-        "icon-chevron-up":"\u{f48a}",
-        "icon-world":"\u{f4f3}"
+        "icon-ceilinglight":"\u{f4ec}",             //Leuchte
+        "icon-nut":"\u{f427}",                      //Mauerlaschen
+        "icon-line":"\u{f1bf}",                     //Leitungen
+        "icon-lightningalt":"\u{f2a8}",             //
+        "icon-connected":"\u{f51c}",                //Abzweigdose
+        "icon-squarea":"\u{f6c5}",                  //Abzweigdose*
+        "icon-noteslist":"\u{f5c6}",                //Protokoll
+        "icon-notestasks":"\u{f5c7}",               //
+        "icon-stickynotealt":"\u{f60e}",            //
+        "icon-tag":"\u{f032}",                      //
+        "icon-map-marker":"\u{f220}",               //
+        "icon-antenna":"\u{f3ec}",                  //
+        "icon-document":"\u{f0c2}",                 //
+        "icon-camera":"\u{f19b}",                   //
+        "icon-horizontalexpand":"\u{f578}",         //Standorte
+        "icon-switch":"\u{f28a}",                   //Schaltstelle
+        "icon-certificatealt":"\u{f058}",           //Connection-Settings
+        "icon-chevron-down":"\u{f48b}",             //Menu
+        "icon-chevron-left":"\u{f489}",             //Back-Button
+        "icon-chevron-right":"\u{f488}",            //Detail-Button
+        "icon-chevron-up":"\u{f48a}",               //
+        "icon-polygonlasso":"\u{f397}",             //Freie Geometrie
+        "icon-world":"\u{f4f3}"                     //Zoom auf alle Objekte
     ]
     
 }

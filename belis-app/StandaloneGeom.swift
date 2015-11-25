@@ -40,7 +40,7 @@ class StandaloneGeom: GeoBaseEntity, ObjectActionProvider {
         return true;
     }
     override func getAnnotationCalloutGlyphIconName() -> String {
-        return "icon-nut";
+        return "icon-polygonlasso";
     }
     
     // MARK: - CellInformationProviderProtocol Impl
@@ -62,7 +62,7 @@ class StandaloneGeom: GeoBaseEntity, ObjectActionProvider {
         return getMainTitle()
     }
     @objc func getDetailGlyphIconString() -> String {
-        return "icon-nut"
+        return "icon-polygonlasso"
     }
     @objc func getAllData() -> [String: [CellData]] {
         var data: [String: [CellData]] = ["main":[]]

@@ -30,7 +30,6 @@
 		2D46EEEE1BF49185004E3D9E /* StandaloneGeom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D46EEED1BF49185004E3D9E /* StandaloneGeom.swift */; };
 		2D46EEF11BF4A75F004E3D9E /* MastActionForms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D46EEF01BF4A75F004E3D9E /* MastActionForms.swift */; };
 		2D46EEF31BF4A771004E3D9E /* LeuchteActionForms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D46EEF21BF4A771004E3D9E /* LeuchteActionForms.swift */; };
-		2D46EEF51BF4B453004E3D9E /* ProtokollStatusForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D46EEF41BF4B453004E3D9E /* ProtokollStatusForm.swift */; };
 		2D53983A1B945C4C001C865F /* Icon-60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5398391B945C4C001C865F /* Icon-60@3x.png */; };
 		2D53983C1B945C58001C865F /* Icon-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D53983B1B945C58001C865F /* Icon-40.png */; };
 		2D53983E1B945C63001C865F /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D53983D1B945C63001C865F /* Icon-Small.png */; };
@@ -138,7 +137,6 @@
 		2D46EEED1BF49185004E3D9E /* StandaloneGeom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandaloneGeom.swift; sourceTree = "<group>"; };
 		2D46EEF01BF4A75F004E3D9E /* MastActionForms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MastActionForms.swift; sourceTree = "<group>"; };
 		2D46EEF21BF4A771004E3D9E /* LeuchteActionForms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeuchteActionForms.swift; sourceTree = "<group>"; };
-		2D46EEF41BF4B453004E3D9E /* ProtokollStatusForm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProtokollStatusForm.swift; sourceTree = "<group>"; };
 		2D5398391B945C4C001C865F /* Icon-60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-60@3x.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-60@3x.png"; sourceTree = "<group>"; };
 		2D53983B1B945C58001C865F /* Icon-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-40.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-40.png"; sourceTree = "<group>"; };
 		2D53983D1B945C63001C865F /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-Small.png"; sourceTree = "<group>"; };
@@ -270,7 +268,6 @@
 			children = (
 				2D46EEF01BF4A75F004E3D9E /* MastActionForms.swift */,
 				2D46EEF21BF4A771004E3D9E /* LeuchteActionForms.swift */,
-				2D46EEF41BF4B453004E3D9E /* ProtokollStatusForm.swift */,
 				2D82A5CA1BFC7FF8000B29A7 /* ObjectAction.swift */,
 				2D82A5CC1BFCB61B000B29A7 /* GenericFormViewController.swift */,
 				2D82A5CE1BFCB92F000B29A7 /* OtherActionForms.swift */,
@@ -754,7 +751,6 @@
 				2D5FB32B1A67CCA60041020C /* WKTParser.m in Sources */,
 				2D5FB3301A67CCA60041020C /* WKTString.m in Sources */,
 				2D5FB3451A67CCEB0041020C /* Standort.swift in Sources */,
-				2D46EEF51BF4B453004E3D9E /* ProtokollStatusForm.swift in Sources */,
 				2D5FB3271A67CCA60041020C /* WKTGeometry.m in Sources */,
 				2D5FB3441A67CCEB0041020C /* Schaltstelle.swift in Sources */,
 				2D1ED1851B8344BD0004AAFA /* CidsOperations.swift in Sources */,

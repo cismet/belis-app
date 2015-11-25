@@ -42,7 +42,7 @@ class Abzweigdose : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvi
         return true;
     }
     override func getAnnotationCalloutGlyphIconName() -> String {
-        return "icon-nut";
+        return "icon-squarea";
     }
     
     // MARK: - CellInformationProviderProtocol Impl
@@ -64,7 +64,7 @@ class Abzweigdose : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvi
         return "Mauerlasche"
     }
     @objc func getDetailGlyphIconString() -> String {
-        return "icon-nut"
+        return "icon-squarea"
     }
     @objc func getAllData() -> [String: [CellData]] {
         var data: [String: [CellData]] = ["main":[]]

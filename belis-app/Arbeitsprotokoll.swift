@@ -66,7 +66,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         if let gbe=attachedGeoBaseEntity {
             return gbe.getAnnotationCalloutGlyphIconName()
         }
-        return "icon-ceilinglight"
+        return "icon-notestasks"
     }
     
     // MARK: - essential overrides BaseEntity
@@ -178,7 +178,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         return "Protokoll"
     }
     @objc func getDetailGlyphIconString() -> String {
-        return "icon-switch"
+        return "icon-noteslist"
     }
     @objc func getAllData() -> [String: [CellData]] {
         var data: [String: [CellData]] = ["main":[]]
