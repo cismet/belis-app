@@ -18,10 +18,11 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
     var bemerkung: String?
     var defekt: String?
     var datum: NSDate?
-    var status: Status?
+    var status: ArbeitsprotokollStatus?
     var veranlassungsnummer: String?
     var protokollnummer: Int?
     
+    var statusIcons: [String:String]=["0":"🕒","1":"✅","2":"❗️"]
     
     var standort: Standort?
     var mauerlasche: Mauerlasche?
@@ -154,6 +155,12 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         return "ohne Veranlassung"
     }
     func getTertiaryInfo() -> String{
+        if let skey=status?.schluessel {
+            if let icon=statusIcons[skey] {
+                return icon
+            }
+        }
+        
         if let st=status?.bezeichnung{
             return st
         }
@@ -244,14 +251,36 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         let status=MGSwipeButton(title: "Status", backgroundColor: UIColor(red: 255.0/255.0, green: 107.0/255.0, blue: 107.0/255.0, alpha: 1.0) ,callback: {
             (sender: MGSwipeTableCell!) -> Bool in
             if let mainVC=CidsConnector.sharedInstance().mainVC {
-                if let protDetailView = mainVC.storyboard?.instantiateViewControllerWithIdentifier("formView") as? GenericFormViewController {
-                    protDetailView.form=ProtokollStatusForm(protokoll: self, vc: protDetailView)
-                    let detailNC=UINavigationController(rootViewController: protDetailView)
-                    detailNC.modalInPopover=true
-                    let popC=UIPopoverController(contentViewController: detailNC)
-                    popC.setPopoverContentSize(CGSize(width: 400, height: 500), animated: false)
-                    popC.presentPopoverFromRect(sender.bounds, inView: sender, permittedArrowDirections: .Left, animated: true)
-                }
+//                if let protDetailView = mainVC.storyboard?.instantiateViewControllerWithIdentifier("formView") as? GenericFormViewController {
+//                    protDetailView.form=ProtokollStatusForm(protokoll: self, vc: protDetailView)
+//
+//                    func save() {
+//                        print("saive")
+//                    }
+//                    func cancel() {
+//                        print("caaancel")
+//                    }
+//                    
+//                    protDetailView.saveHandler=save
+//                    protDetailView.cancelHandler=cancel
+//                    
+//                    let detailNC=UINavigationController(rootViewController: protDetailView)
+//                    detailNC.modalInPopover=true
+//                    let popC=UIPopoverController(contentViewController: detailNC)
+//                    popC.setPopoverContentSize(CGSize(width: 400, height: 500), animated: false)
+//                    popC.presentPopoverFromRect(sender.bounds, inView: sender, permittedArrowDirections: .Left, animated: true)
+//                    
+//                }
+                let oAction=ProtokollStatusUpdateAction(protokoll: self)
+                oAction.sender=sender
+                oAction.mainVC=mainVC
+                oAction.arbeitsprotokoll_id=self.id
+                oAction.formVC.form=oAction.getFormDescriptor()
+                let detailNC=UINavigationController(rootViewController: oAction.formVC)
+                detailNC.modalInPopover=true
+                let popC=UIPopoverController(contentViewController: detailNC)
+                popC.setPopoverContentSize(oAction.getPreferredSize(), animated: false)
+                popC.presentPopoverFromRect(sender.bounds, inView: sender, permittedArrowDirections: .Left, animated: true)
             }
             
             return true
@@ -286,7 +315,8 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
     }
 }
 
-class Status: BaseEntity {
+class ArbeitsprotokollStatus: BaseEntity {
+    static let CLASSID=57
     var bezeichnung: String?
     var schluessel: String?
     
@@ -298,6 +328,10 @@ class Status: BaseEntity {
         id <- map["id"];
         bezeichnung <- map["bezeichnung"];
         schluessel <- map["schluessel"];
+    }
+    
+    class func ascending(lhs: ArbeitsprotokollStatus, rhs: ArbeitsprotokollStatus) -> Bool {
+        return lhs.schluessel < rhs.schluessel
     }
 }
 
@@ -316,6 +350,8 @@ class ArbeitsprotokollAktion: BaseEntity {
         alt <- map["alt"];
         neu <- map["neu"];
     }
+    
+    
 }
 
 

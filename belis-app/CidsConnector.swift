@@ -132,6 +132,7 @@ public class CidsConnector {
     var loggedIn=false
     var selectedTeam: Team?
     var selectedTeamId: String?
+    var lastMonteur: String?
     
     // MARK: - Lists
     var sortedTeamListKeys: [String]=[]
@@ -146,7 +147,8 @@ public class CidsConnector {
     var sortedRundsteuerempfaengerListKeys: [String]=[]
     var rundsteuerempfaengerList: [String:Rundsteuerempfaenger]=[:]
     
-    
+    var sortedArbeitsprotokollStatusListKeys: [String]=[]
+    var arbeitsprotokollStatusList: [String:ArbeitsprotokollStatus]=[:]
     
     // MARK: - constructor
     init(){
@@ -249,6 +251,36 @@ public class CidsConnector {
     }
     func getBackgroundLists() {
         
+        func arbeitsprotokollstatusCompletionHandler(operation: GetAllEntitiesOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue){
+            if (error == nil) {
+                // Success
+                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                if let checkeddata: [String : AnyObject] = getJson(data) {
+                    let json =  checkeddata["$collection"] as! [[String : AnyObject]];
+                    if let apsts = Mapper<ArbeitsprotokollStatus>().mapArray(json) {
+                        
+                        print("\(apsts.count) Protokollstati vorhanden")
+                        let sortedApsts=apsts.sort(ArbeitsprotokollStatus.ascending)
+                        self.sortedArbeitsprotokollStatusListKeys=[]
+                        for aps in sortedApsts {
+                            self.arbeitsprotokollStatusList.updateValue(aps, forKey: "\(aps.id)")
+                            self.sortedArbeitsprotokollStatusListKeys.append("\(aps.id)")
+                        }
+                        print("\(apsts.count) Protokollstati abgelegt")
+                    }
+                    else {
+                        print("no json data for \(operation.url)")
+                        //self.searchResults[0].append(Leuchte())
+                        
+                    }
+                }else {
+                    // Failure
+                    print("URL Session Task Failed: %@", error.localizedDescription);
+                }
+            }
+        }
+        let arbeitsprotokollstatiOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "arbeitsprotokollstatus", user: login, pass: password, queue: backgroundQeue, completionHandler: arbeitsprotokollstatusCompletionHandler)
         
         func leuchtentypenCompletionHandler(operation: GetAllEntitiesOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue){
             if (error == nil) {
@@ -368,7 +400,7 @@ public class CidsConnector {
         }
         let rundsteuerempfaengerOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "rundsteuerempfaenger", user: login, pass: password, queue: backgroundQeue, completionHandler: rundsteuerempfaengerCompletionHandler)
         
-        
+        arbeitsprotokollstatiOperation.enqueue()
         leuchtentypenOperation.enqueue()
         leuchtmittelOperation.enqueue()
         rundsteuerempfaengerOperation.enqueue()

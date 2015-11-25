@@ -29,6 +29,12 @@ class LoginViewController: UIViewController {
         if let st = storedTeam as? String {
             CidsConnector.sharedInstance().selectedTeamId=st
         }
+        
+        let storedMonteur: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("lastMonteur")
+        if let storedMonteurString=storedMonteur as? String {
+            CidsConnector.sharedInstance().lastMonteur=storedMonteurString
+        }
+
         // Do any additional setup after loading the view, typically from a nib.
     }
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
