@@ -180,7 +180,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" mapType="standard" pitchEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fWn-J2-ozd">
-                                <rect key="frame" x="200" y="44" width="400" height="556"/>
+                                <rect key="frame" x="200" y="74" width="400" height="526"/>
                                 <gestureRecognizers/>
                             </mapView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" placeholderIntrinsicWidth="1024" placeholderIntrinsicHeight="768" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="58" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="7Kb-8o-11z">
@@ -382,6 +382,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="CN5-5g-J3R" firstAttribute="top" secondItem="Vle-ou-viq" secondAttribute="bottom" id="39A-13-V8S"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Vle-ou-viq" secondAttribute="trailing" constant="-20" id="4nh-JD-8G3" userLabel="BOT Horizontal Space - (-20) - View - BottomToolbar"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Wda-ui-DdU" secondAttribute="trailing" constant="-20" id="4pz-Cm-eNV"/>
                             <constraint firstItem="Wda-ui-DdU" firstAttribute="top" secondItem="m61-XT-Tbh" secondAttribute="bottom" id="6ny-k3-Gs8" userLabel="TOP Vertical Space - TopToolbar - Top Layout Guide"/>
@@ -394,11 +395,17 @@
                             <constraint firstAttribute="trailingMargin" secondItem="Wda-ui-DdU" secondAttribute="trailing" constant="-20" id="Jo1-cT-fgB" userLabel="TOP Horizontal Space - (-20) - View - TopToolbar"/>
                             <constraint firstItem="fWn-J2-ozd" firstAttribute="bottom" secondItem="Uvj-up-cn7" secondAttribute="bottomMargin" id="QKh-uU-mlz" userLabel="MAP Vertical Space - Map View - View"/>
                             <constraint firstItem="Wda-ui-DdU" firstAttribute="top" secondItem="Uvj-up-cn7" secondAttribute="topMargin" constant="30" id="Qsy-fq-5AU"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="fWn-J2-ozd" secondAttribute="trailing" constant="-20" id="WwJ-pP-A0g"/>
                             <constraint firstItem="Vle-ou-viq" firstAttribute="leading" secondItem="7Kb-8o-11z" secondAttribute="trailing" id="bEb-MF-jOI" userLabel="BOT Horizontal Space - BottomToolbar - Table View"/>
                             <constraint firstAttribute="trailingMargin" secondItem="fWn-J2-ozd" secondAttribute="trailing" constant="-20" id="d5j-o5-wHz" userLabel="MAP Horizontal Space - (-20) - View - Map View"/>
                             <constraint firstItem="CN5-5g-J3R" firstAttribute="top" secondItem="Vle-ou-viq" secondAttribute="bottom" id="ftA-Kh-2pG" userLabel="BOT Vertical Space - Bottom Layout Guide - BottomToolbar"/>
+                            <constraint firstItem="CN5-5g-J3R" firstAttribute="top" secondItem="fWn-J2-ozd" secondAttribute="bottom" id="hHj-fj-Voq"/>
                             <constraint firstItem="7Kb-8o-11z" firstAttribute="top" secondItem="Wda-ui-DdU" secondAttribute="bottom" id="klN-Bp-c5I" userLabel="TV Vertical Space - Table View - TopToolbar"/>
+                            <constraint firstItem="Vle-ou-viq" firstAttribute="leading" secondItem="7Kb-8o-11z" secondAttribute="trailing" id="my5-4Z-7YP"/>
                             <constraint firstItem="fWn-J2-ozd" firstAttribute="leading" secondItem="Uvj-up-cn7" secondAttribute="leadingMargin" priority="900" constant="-20" id="obo-ak-AVb"/>
+                            <constraint firstItem="fWn-J2-ozd" firstAttribute="leading" secondItem="7Kb-8o-11z" secondAttribute="trailing" constant="8" id="xgY-Yh-iaV"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Vle-ou-viq" secondAttribute="trailing" constant="-20" id="zEr-Vy-waF"/>
+                            <constraint firstItem="fWn-J2-ozd" firstAttribute="top" secondItem="Wda-ui-DdU" secondAttribute="bottom" id="zg2-PD-EP6"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
