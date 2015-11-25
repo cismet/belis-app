@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import SwiftForms
 
 class AdditionalFunctionalityPopoverViewController: UIViewController {
 
     var mainVC: MainViewController!;
 
+    @IBOutlet weak var teamChooserButton: UIButton!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -35,6 +37,31 @@ class AdditionalFunctionalityPopoverViewController: UIViewController {
         }
     }
 
+    @IBAction func chooseTeamTapped(sender: AnyObject) {    
+        self.dismissViewControllerAnimated(true) { () -> Void in
+            let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.Alert)
+            for teamKey in CidsConnector.sharedInstance().sortedTeamListKeys {
+                let team=CidsConnector.sharedInstance().teamList[teamKey]!
+                alertController.addAction(UIAlertAction(title:team.name ?? "-", style: .Default, handler: {
+                    (alert: UIAlertAction) -> Void in
+                    CidsConnector.sharedInstance().selectedTeam=team
+                    NSUserDefaults.standardUserDefaults().setObject("\(team.id)", forKey: "teamid")
+                    CidsConnector.sharedInstance().mainVC?.clearAll()
+                    CidsConnector.sharedInstance().mainVC?.itemArbeitsauftrag.title="Kein Arbeitsauftrag ausgewählt (\(CidsConnector.sharedInstance().selectedTeam?.name ?? "-"))"
+                }))
+                
+            }
+            //alertController.modalPresentationStyle = UIModalPresentationStyle.Popover
+//            let popover = alertController.popoverPresentationController!
+//            popover.permittedArrowDirections = .Left
+//            popover.sourceView = self.teamChooserButton
+//            popover.sourceRect = self.teamChooserButton.bounds
+            self.mainVC.presentViewController(alertController, animated: true, completion: nil)
+        }
+        
+
+    
+    }
     /*
     // MARK: - Navigation
 
@@ -46,3 +73,4 @@ class AdditionalFunctionalityPopoverViewController: UIViewController {
     */
 
 }
+

@@ -131,6 +131,7 @@ public class CidsConnector {
     var start=CidsConnector.currentTimeMillis();
     var loggedIn=false
     var selectedTeam: Team?
+    var selectedTeamId: String?
     
     // MARK: - Lists
     var sortedTeamListKeys: [String]=[]
@@ -194,51 +195,60 @@ public class CidsConnector {
             else {
                 print("Error\(error)")
             }
-            
-            handler(loggedIn)
-            getLists()
+            if (loggedIn) {
+                func teamsCompletionHandler(operation: GetAllEntitiesOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue){
+                    if (error == nil) {
+                        // Success
+                        let statusCode = (response as! NSHTTPURLResponse).statusCode
+                        print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                        if let checkeddata: [String : AnyObject] = getJson(data) {
+                            let json =  checkeddata["$collection"] as! [[String : AnyObject]];
+                            if let teams = Mapper<Team>().mapArray(json) {
+                                
+                                print("\(teams.count) Teams vorhanden")
+                                let sortedTeams=teams.sort(Team.ascending)
+                                self.sortedTeamListKeys=[]
+                                for t in sortedTeams {
+                                    self.teamList.updateValue(t, forKey: "\(t.id)")
+                                    self.sortedTeamListKeys.append("\(t.id)")
+                                }
+                                print("\(teams.count) Teams abgelegt")
+                                if let tid=CidsConnector.sharedInstance().selectedTeamId {
+                                    if let t=CidsConnector.sharedInstance().teamList[tid]{
+                                        CidsConnector.sharedInstance().selectedTeam=t
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            print("no json data for \(operation.url)")
+                            //self.searchResults[0].append(Leuchte())
+                            
+                        }
+                    }else {
+                        // Failure
+                        print("URL Session Task Failed: %@", error.localizedDescription);
+                    }
+                    
+                    handler(loggedIn)
+
+                }
+                
+                let teamsOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "team", user: login, pass: password, queue: blockingQueue, completionHandler: teamsCompletionHandler)
+                
+                teamsOperation.enqueue()
+                getBackgroundLists()
+            }
+            else {
+                handler(loggedIn)
+            }
+
         }
         let loginOp=LoginOperation(baseUrl: baseUrl, domain: domain,user: login, pass: password,completionHandler: cH)
         loginOp.enqueue()
     }
-    func getLists() {
-        func teamsCompletionHandler(operation: GetAllEntitiesOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue){
-            if (error == nil) {
-                // Success
-                let statusCode = (response as! NSHTTPURLResponse).statusCode
-                print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
-                if let checkeddata: [String : AnyObject] = getJson(data) {
-                    let json =  checkeddata["$collection"] as! [[String : AnyObject]];
-                    if let teams = Mapper<Team>().mapArray(json) {
-                        
-                        print("\(teams.count) Teams vorhanden")
-                        let sortedTeams=teams.sort(Team.ascending)
-                        self.sortedTeamListKeys=[]
-                        for t in sortedTeams {
-                            self.teamList.updateValue(t, forKey: "\(t.id)")
-                            self.sortedTeamListKeys.append("\(t.id)")
-                        }
-                        print("\(teams.count) Teams abgelegt")
-                        //                        if self.queue.operationCount==1 {
-                        //                            let duration = (CidsConnector.currentTimeMillis() - self.start)
-                        //                            handler();
-                        //                            print("loaded \(duration)");
-                        //
-                        //                        }
-                    }
-                }
-                else {
-                    print("no json data for \(operation.url)")
-                    //self.searchResults[0].append(Leuchte())
-                    
-                }
-            }else {
-                // Failure
-                print("URL Session Task Failed: %@", error.localizedDescription);
-            }
-            
-        }
-        let teamsOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "team", user: login, pass: password, queue: backgroundQeue, completionHandler: teamsCompletionHandler)
+    func getBackgroundLists() {
+        
         
         func leuchtentypenCompletionHandler(operation: GetAllEntitiesOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue){
             if (error == nil) {
@@ -359,7 +369,6 @@ public class CidsConnector {
         let rundsteuerempfaengerOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "rundsteuerempfaenger", user: login, pass: password, queue: backgroundQeue, completionHandler: rundsteuerempfaengerCompletionHandler)
         
         
-        teamsOperation.enqueue()
         leuchtentypenOperation.enqueue()
         leuchtmittelOperation.enqueue()
         rundsteuerempfaengerOperation.enqueue()
@@ -380,12 +389,12 @@ public class CidsConnector {
             return nil
         }
     }
-    func searchArbeitsauftraegeForTeam(team: String, handler: () -> ()) {
+    func searchArbeitsauftraegeForTeam(team: Team, handler: () -> ()) {
         assert(loggedIn)
         var qp=QueryParameters(list:[
             SingleQueryParameter(key: "arbeitsauftragEnabled", value: true),
             SingleQueryParameter(key: "activeObjectsOnly", value: true),
-            SingleQueryParameter(key: "zugewiesenAn", value: 18) //39
+            SingleQueryParameter(key: "zugewiesenAn", value: team.id) //39
             ]);
         func mySearchCompletionHandler(data : NSData!, response : NSURLResponse!, error : NSError!) -> Void {
             if (error == nil) {

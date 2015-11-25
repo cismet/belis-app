@@ -24,6 +24,11 @@ class LoginViewController: UIViewController {
         if let storedUserString=storedLogin as? String {
             txtLogin.text=storedUserString
         }
+        
+        let storedTeam: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("teamid")
+        if let st = storedTeam as? String {
+            CidsConnector.sharedInstance().selectedTeamId=st
+        }
         // Do any additional setup after loading the view, typically from a nib.
     }
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
@@ -38,7 +43,8 @@ class LoginViewController: UIViewController {
     // MARK: - IBActions
     @IBAction func loginButtonTabbed(sender: AnyObject) {
         NSUserDefaults.standardUserDefaults().setObject(txtLogin.text!, forKey: "login")
-        let waiting = UIAlertController(title: "Anmeldung", message: "Sie werden am System angemeldet...", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        let waiting = UIAlertController(title: "Anmeldung", message: "Sie werden am System angemeldet ...", preferredStyle: UIAlertControllerStyle.Alert)
         self.presentViewController(waiting, animated: true, completion: nil)
         
         func loginhandler(success: Bool) {

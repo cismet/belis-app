@@ -113,6 +113,22 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         print(UIDevice.currentDevice().identifierForVendor!.UUIDString)
         
         
+        if let _=CidsConnector.sharedInstance().selectedTeam {
+//            let alert = UIAlertView()
+//            alert.title = "Ausgewähltes Team"
+//            alert.message = "\(t.name ?? "???")"
+//            alert.addButtonWithTitle("Ok")
+//            alert.show()
+        }
+        else {
+            let alert = UIAlertView()
+            alert.title = "Kein Team ausgewählt"
+            alert.message = "Ohne ausgewähltes Team können Sie keine Arbeitsaufträge aufrufen."
+            alert.addButtonWithTitle("Ok")
+            alert.show()
+        }
+        
+        itemArbeitsauftrag.title="Kein Arbeitsauftrag ausgewählt (\(CidsConnector.sharedInstance().selectedTeam?.name ?? "-"))"
         
     }
     override func didReceiveMemoryWarning() {
@@ -506,29 +522,39 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
     }
     @IBAction func lookUpButtonTabbed(sender: AnyObject) {
-        selectArbeitsauftrag(nil,showActivityIndicator: false)
-        removeAllEntityObjects()
-        progressHUD.showInView(self.view,animated: true)
-        CidsConnector.sharedInstance().searchArbeitsauftraegeForTeam("") { () -> () in
-            dispatch_async(dispatch_get_main_queue()) {
-                CidsConnector.sharedInstance().sortSearchResults()
-                self.tableView.reloadData();
-                var annos: [MKAnnotation]=[]
-                
-                for (_, objArray) in CidsConnector.sharedInstance().searchResults{
-                    for obj in objArray {
-                        obj.addToMapView(self.mapView);
-                        if let anno=obj.mapObject as? MKAnnotation {
-                            annos.append(anno)
+        if let team = CidsConnector.sharedInstance().selectedTeam {
+            selectArbeitsauftrag(nil,showActivityIndicator: false)
+            removeAllEntityObjects()
+            progressHUD.showInView(self.view,animated: true)
+            CidsConnector.sharedInstance().searchArbeitsauftraegeForTeam(team) { () -> () in
+                dispatch_async(dispatch_get_main_queue()) {
+                    CidsConnector.sharedInstance().sortSearchResults()
+                    self.tableView.reloadData();
+                    var annos: [MKAnnotation]=[]
+                    
+                    for (_, objArray) in CidsConnector.sharedInstance().searchResults{
+                        for obj in objArray {
+                            obj.addToMapView(self.mapView);
+                            if let anno=obj.mapObject as? MKAnnotation {
+                                annos.append(anno)
+                            }
                         }
                     }
-                }
-                self.progressHUD.dismissAnimated(true)
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.zoomToFitMapAnnotations(annos)
+                    self.progressHUD.dismissAnimated(true)
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.zoomToFitMapAnnotations(annos)
+                    }
                 }
             }
         }
+        else {
+            let alert = UIAlertView()
+            alert.title = "Kein Team ausgewählt"
+            alert.message = "Bitte wählen Sie zuerst ein Team aus"
+            alert.addButtonWithTitle("Ok")
+            alert.show()
+        }
+        
         
     }
     @IBAction func focusItemTabbed(sender: AnyObject) {
@@ -650,7 +676,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             CidsConnector.sharedInstance().allArbeitsauftraegeBeforeCurrentSelection=CidsConnector.sharedInstance().searchResults
             fillArbeitsauftragIntoTable(aa)
         } else {
-            itemArbeitsauftrag.title="Kein Arbeitsauftrag ausgewählt"
+            itemArbeitsauftrag.title="Kein Arbeitsauftrag ausgewählt (\(CidsConnector.sharedInstance().selectedTeam?.name ?? "-"))"
             self.removeAllEntityObjects()
             CidsConnector.sharedInstance().searchResults=CidsConnector.sharedInstance().allArbeitsauftraegeBeforeCurrentSelection
             
@@ -664,7 +690,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func fillArbeitsauftragIntoTable(arbeitsauftrag: Arbeitsauftrag) {
         removeAllEntityObjects()
         
-        itemArbeitsauftrag.title=arbeitsauftrag.nummer!
+        itemArbeitsauftrag.title="\(arbeitsauftrag.nummer!) (\(CidsConnector.sharedInstance().selectedTeam?.name ?? "-"))"
         
         
         if let protokolle=arbeitsauftrag.protokolle {
@@ -899,6 +925,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
         }
     }
+    func clearAll() {
+        CidsConnector.sharedInstance().selectedArbeitsauftrag=nil
+        CidsConnector.sharedInstance().allArbeitsauftraegeBeforeCurrentSelection=[Entity: [GeoBaseEntity]]()
+        CidsConnector.sharedInstance().veranlassungsCache=[String:Veranlassung]()
+        removeAllEntityObjects()
+    }
+    
+    
     func removeAllEntityObjects(){
         for (_, entityArray) in CidsConnector.sharedInstance().searchResults{
             for obj in entityArray {

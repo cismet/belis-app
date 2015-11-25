@@ -335,7 +335,7 @@
                                         </connections>
                                     </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="BtE-3Q-gu8"/>
-                                    <barButtonItem systemItem="bookmarks" id="CYg-ry-sRN">
+                                    <barButtonItem systemItem="bookmarks" id="CYg-ry-sRN" userLabel="Arbeitsauftraege laden">
                                         <connections>
                                             <action selector="lookUpButtonTabbed:" destination="Kou-sk-bUr" id="Dvx-ij-MTN"/>
                                         </connections>
@@ -451,7 +451,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D2a-FR-f0y" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="830" y="250"/>
+            <point key="canvasLocation" x="902" y="202"/>
         </scene>
         <!--cids System-->
         <scene sceneID="yaB-HI-qYi">
@@ -762,22 +762,32 @@
                         <viewControllerLayoutGuide type="bottom" id="VOz-5x-fub"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="bdu-2o-86n">
-                        <rect key="frame" x="0.0" y="0.0" width="300" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="300" height="64"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vl8-rz-INZ">
-                                <rect key="frame" x="0.0" y="6" width="300" height="30"/>
+                                <rect key="frame" x="74" y="6" width="153" height="30"/>
                                 <state key="normal" title="Abmelden"/>
                                 <connections>
                                     <action selector="logoutButtonTabbed:" destination="Zlj-eS-du0" eventType="touchUpInside" id="tjX-yQ-utf"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b1x-dX-Ksv">
+                                <rect key="frame" x="50" y="44" width="201" height="30"/>
+                                <state key="normal" title="Teamauswahl"/>
+                                <connections>
+                                    <action selector="chooseTeamTapped:" destination="Zlj-eS-du0" eventType="touchUpInside" id="I8d-HX-Ozg"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <value key="contentSizeForViewInPopover" type="size" width="300" height="44"/>
+                    <value key="contentSizeForViewInPopover" type="size" width="300" height="76"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="300" height="44"/>
+                    <size key="freeformSize" width="300" height="64"/>
+                    <connections>
+                        <outlet property="teamChooserButton" destination="b1x-dX-Ksv" id="FEB-Ne-2fg"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jYu-3j-hMM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
