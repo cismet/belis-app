@@ -233,7 +233,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
                     data["Aktionen"]?.append(SingleTitledInfoCellData(title: aktionstitle,data: nach))
                 }
                 else {
-                    data["Aktionen"]?.append(SimpleInfoCellData(data: aktionstitle))
+                    data["Aktionen"]?.append(SingleTitledInfoCellData(title: aktionstitle,data: "-"))
                 }
             }
         }

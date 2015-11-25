@@ -46,7 +46,9 @@ class AnstricharbeitenAction : ObjectAction {
             let millis = Int64(nowDouble*1000) + Int64(nowDouble/1000)
             let param = "\(millis)"
             apc.append(PT.ANSTRICHDATUM.rawValue, value: param)
-            apc.append(PT.ANSTRICHFARBE.rawValue, value: content[PT.ANSTRICHFARBE.rawValue]!)
+            if let farbe=content[PT.ANSTRICHFARBE.rawValue] {
+                apc.append(PT.ANSTRICHFARBE.rawValue, value: farbe)
+            }
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollStandortAnstricharbeiten", params: apc, handler: defaultAfterSaveHandler)
         }
     }
@@ -145,7 +147,9 @@ class MasterneuerungAction : ObjectAction {
             let millis = Int64(nowDouble*1000) + Int64(nowDouble/1000)
             let param = "\(millis)"
             apc.append(PT.INBETRIEBNAHMEDATUM.rawValue, value: param)
-            apc.append(PT.MONTAGEFIRMA.rawValue, value: content[PT.MONTAGEFIRMA.rawValue]!)
+            if let firma=content[PT.MONTAGEFIRMA.rawValue] {
+                apc.append(PT.MONTAGEFIRMA.rawValue, value: firma)
+            }
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollStandortMasterneuerung", params: apc, handler: defaultAfterSaveHandler)
         }
     }
@@ -237,7 +241,9 @@ class StandsicherheitspruefungAction : ObjectAction {
             let parampdn = "\(millispdn)"
             
             apc.append(PT.PRUEFDATUM.rawValue, value: parampd)
-            apc.append(PT.VERFAHREN.rawValue, value: content[PT.VERFAHREN.rawValue]!)
+            if let verfahren=content[PT.VERFAHREN.rawValue] {
+                apc.append(PT.VERFAHREN.rawValue, value: verfahren)
+            }
             apc.append(PT.NAECHSTES_PRUEFDATUM.rawValue, value: parampdn)
 
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollStandortStandsicherheitspruefung", params: apc, handler: defaultAfterSaveHandler)

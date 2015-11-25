@@ -60,8 +60,9 @@ class LeuchtenerneuerungAction : ObjectAction {
             apc.append(PT.INBETRIEBNAHMEDATUM.rawValue, value: param)
             
             
-            let x=content[PT.LEUCHTENTYP.rawValue]
-            apc.append(PT.LEUCHTENTYP.rawValue, value: x!)
+            if let x=content[PT.LEUCHTENTYP.rawValue] {
+                apc.append(PT.LEUCHTENTYP.rawValue, value: x)
+            }
 
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollLeuchteLeuchtenerneuerung", params: apc, handler: defaultAfterSaveHandler)
         }
@@ -146,10 +147,13 @@ class LeuchtmittelwechselEPAction : ObjectAction {
             let paramwd = "\(milliswd)"
             apc.append(PT.WECHSELDATUM.rawValue, value: paramwd)
             //------------------
-            let lid=content[PT.LEUCHTMITTEL.rawValue]
-            apc.append(PT.LEUCHTMITTEL.rawValue, value: lid!)
+            if let lid=content[PT.LEUCHTMITTEL.rawValue] {
+                apc.append(PT.LEUCHTMITTEL.rawValue, value: lid)
+            }
             //------------------
-            apc.append(PT.LEBENSDAUER.rawValue, value: content[PT.LEBENSDAUER.rawValue]!)
+            if let lebensdauer=content[PT.LEBENSDAUER.rawValue] {
+                apc.append(PT.LEBENSDAUER.rawValue, value: lebensdauer)
+            }
 
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollLeuchteLeuchtmittelwechselElekpruefung", params: apc, handler: defaultAfterSaveHandler)
         }
@@ -204,10 +208,13 @@ class LeuchtmittelwechselAction : ObjectAction {
             let paramwd = "\(milliswd)"
             apc.append(PT.WECHSELDATUM.rawValue, value: paramwd)
             //------------------
-            let lid=content[PT.LEUCHTMITTEL.rawValue]
-            apc.append(PT.LEUCHTMITTEL.rawValue, value: lid!)
+            if let lid=content[PT.LEUCHTMITTEL.rawValue] {
+                apc.append(PT.LEUCHTMITTEL.rawValue, value: lid)
+            }
             //------------------
-            apc.append(PT.LEBENSDAUER.rawValue, value: content[PT.LEBENSDAUER.rawValue]!)
+            if let lebensdauer=content[PT.LEBENSDAUER.rawValue] {
+                apc.append(PT.LEBENSDAUER.rawValue, value: lebensdauer)
+            }
             
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollLeuchteLeuchtmittelwechsel", params: apc, handler: defaultAfterSaveHandler)
         }
@@ -259,8 +266,9 @@ class RundsteuerempfaengerwechselAction : ObjectAction {
             let paramwd = "\(milliswd)"
             apc.append(PT.EINBAUDATUM.rawValue, value: paramwd)
             //------------------
-            let rid=content[PT.RUNDSTEUEREMPFAENGER.rawValue]
-            apc.append(PT.RUNDSTEUEREMPFAENGER.rawValue, value: rid!)
+            if let rid=content[PT.RUNDSTEUEREMPFAENGER.rawValue]{
+                apc.append(PT.RUNDSTEUEREMPFAENGER.rawValue, value: rid)
+            }
             
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollLeuchteRundsteuerempfaengerwechsel", params: apc, handler: defaultAfterSaveHandler)
         }
@@ -349,8 +357,9 @@ class VorschaltgeraetwechselAction : ObjectAction {
             let paramwd = "\(milliswd)"
             apc.append(PT.WECHSELDATUM.rawValue, value: paramwd)
             //------------------
-            let vid=content[PT.VORSCHALTGERAET.rawValue]
-            apc.append(PT.VORSCHALTGERAET.rawValue, value: vid!)
+            if let vid=content[PT.VORSCHALTGERAET.rawValue]{
+                apc.append(PT.VORSCHALTGERAET.rawValue, value: vid)
+            }
             
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollLeuchteVorschaltgeraetwechsel", params: apc, handler: defaultAfterSaveHandler)
         }

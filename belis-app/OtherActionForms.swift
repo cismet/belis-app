@@ -39,8 +39,13 @@ class SonstigesAction : ObjectAction {
             let content = formVC.form.formValues() as!  [String : AnyObject]
             showWaiting()
             let apc=getParameterContainer()
-            apc.append(PT.BEMERKUNG.rawValue, value: content[PT.BEMERKUNG.rawValue]!)
-            CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollFortfuehrungsantrag", params: apc, handler: defaultAfterSaveHandler)
+            if let bemerkung=content[PT.BEMERKUNG.rawValue] {
+                apc.append(PT.BEMERKUNG.rawValue, value: bemerkung)
+                CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollFortfuehrungsantrag", params: apc, handler: defaultAfterSaveHandler)
+            }
+            else {
+                showSuccess()
+            }
         }
     }
 }
@@ -293,12 +298,17 @@ class ProtokollStatusUpdateAction : ObjectAction {
             let param = "\(millis)"
             apc.append(PT.DATUM.rawValue, value: param)
             //------------------
-            let sid=content[PT.STATUS.rawValue]
-            apc.append(PT.STATUS.rawValue, value: sid!)
+            if let sid=content[PT.STATUS.rawValue]{
+                apc.append(PT.STATUS.rawValue, value: sid)
+            }
             //------------------
-            apc.append(PT.BEMERKUNG.rawValue, value: content[PT.BEMERKUNG.rawValue]!)
+            if let bem=content[PT.BEMERKUNG.rawValue] {
+                apc.append(PT.BEMERKUNG.rawValue, value: bem)
+            }
             //------------------
-            apc.append(PT.MATERIAL.rawValue, value: content[PT.MATERIAL.rawValue]!)
+            if let mat=content[PT.MATERIAL.rawValue] {
+                apc.append(PT.MATERIAL.rawValue, value: mat)
+            }
             //------------------
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollStatusAenderung", params: apc, handler: defaultAfterSaveHandler)
            
