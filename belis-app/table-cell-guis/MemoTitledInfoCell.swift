@@ -16,6 +16,7 @@ class MemoTitledInfoCell: UITableViewCell,CellDataUI {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        lblData.editable=false
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
