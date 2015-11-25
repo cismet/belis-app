@@ -475,6 +475,12 @@ public class CidsConnector {
                                                     getVeranlassungByNummer(veranlassungsnummer, handler: { (veranlassung) -> () in
                                                         if let v=veranlassung {
                                                             self.veranlassungsCache.updateValue(v, forKey: veranlassungsnummer)
+                                                            if self.selectedArbeitsauftrag != nil {
+                                                                lazyMainQueueDispatch({ () -> () in
+                                                                    self.mainVC?.tableView.reloadData()
+                                                                })
+                                                            }
+                                                            
                                                         }
                                                     })
                                                 }

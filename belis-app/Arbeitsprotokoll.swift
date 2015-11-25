@@ -151,8 +151,14 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
                     return "V\(vnr)"
                 }
             }
+            else {
+                return "Veranlassung wird geladen ..."
+            }
         }
-        return "ohne Veranlassung"
+        else {
+            return "ohne Veranlassung"
+        }
+        
     }
     func getTertiaryInfo() -> String{
         if let skey=status?.schluessel {
