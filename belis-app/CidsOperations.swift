@@ -165,7 +165,7 @@ class GetAllEntitiesOperation: CidsRequestOperation {
         super.init(user:user,pass:pass)
         self.qu=queue
         self.completionHandler=completionHandler
-        url="\(baseUrl)/\(domain).\(entityName)?limit=30"
+        url="\(baseUrl)/\(domain).\(entityName)?limit=10000000"
     }
     
     override func main() {
