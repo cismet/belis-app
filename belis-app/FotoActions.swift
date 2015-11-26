@@ -157,8 +157,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
                         "DOKUMENT_URL":"http://board.cismet.de/belis/\(fileName)\n\(pictureName)"])
                     CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {(success:Bool) -> () in
                         assert(!NSThread.isMainThread() )
-                        dispatch_async(dispatch_get_main_queue()) {
-                            
+                        lazyMainQueueDispatch({ () -> () in
                             picker.dismissViewControllerAnimated(true, completion: nil)
                             if success {
                                 print("Everything is going to be 200-OK")
@@ -172,7 +171,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
                             progressHUD.dismissAfterDelay(NSTimeInterval(1), animated: true)
                             progressHUD.indicatorView=JGProgressHUDIndeterminateIndicatorView()
                             progressHUD.dismissAnimated(true)
-                        }
+                        })
                     })
                 }
             }

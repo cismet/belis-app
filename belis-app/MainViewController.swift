@@ -462,7 +462,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         CidsConnector.sharedInstance().search(ewktMapExtent, leuchtenEnabled: isLeuchtenEnabled, mastenEnabled: isMastenEnabled, mauerlaschenEnabled: isMauerlaschenEnabled, leitungenEnabled: isleitungenEnabled,schaltstellenEnabled: isSchaltstelleEnabled ) {
             
             assert(!NSThread.isMainThread() )
-            dispatch_async(dispatch_get_main_queue()) {
+            lazyMainQueueDispatch({ () -> () in
                 CidsConnector.sharedInstance().sortSearchResults()
                 self.tableView.reloadData();
                 
@@ -474,7 +474,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     }
                 }
                 self.progressHUD.dismissAnimated(true)
-            }
+            })
         }
         
     }
@@ -527,7 +527,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             removeAllEntityObjects()
             progressHUD.showInView(self.view,animated: true)
             CidsConnector.sharedInstance().searchArbeitsauftraegeForTeam(team) { () -> () in
-                dispatch_async(dispatch_get_main_queue()) {
+                lazyMainQueueDispatch({ () -> () in
                     CidsConnector.sharedInstance().sortSearchResults()
                     self.tableView.reloadData();
                     var annos: [MKAnnotation]=[]
@@ -541,10 +541,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                         }
                     }
                     self.progressHUD.dismissAnimated(true)
-                    dispatch_async(dispatch_get_main_queue()) {
+                    lazyMainQueueDispatch({ () -> () in
                         self.zoomToFitMapAnnotations(annos)
-                    }
-                }
+                    })
+                })
             }
         }
         else {
@@ -588,9 +588,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 }
             }
         }
-        dispatch_async(dispatch_get_main_queue()) {
+        lazyMainQueueDispatch({ () -> () in
             self.zoomToFitMapAnnotations(annos)
-        }
+        })
     }
     // MARK: - Selector functions
     func back(sender: UIBarButtonItem) {
@@ -706,10 +706,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func visualizeAllSearchResultsInMap(zoomToShowAll zoomToShowAll: Bool,showActivityIndicator:Bool ) {
-        func doIt(){
+        lazyMainQueueDispatch({ () -> () in
             self.selectedAnnotation=nil
-            self.mapView.deselectAnnotation(selectedAnnotation, animated: false)
-
+            self.mapView.deselectAnnotation(self.selectedAnnotation, animated: false)
+            
             var annos: [MKAnnotation]=[]
             for (_, objArray) in CidsConnector.sharedInstance().searchResults{
                 for obj in objArray {
@@ -726,15 +726,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             if showActivityIndicator {
                 self.progressHUD.dismissAnimated(true)
             }
-        }
-        if NSThread.isMainThread() {
-            doIt()
-        }
-        else {
-            dispatch_async(dispatch_get_main_queue()) {
-               doIt()
-            }
-        }
+
+        })
+
     }
     
     // MARK: - public functions
@@ -936,15 +930,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func removeAllEntityObjects(){
         for (_, entityArray) in CidsConnector.sharedInstance().searchResults{
             for obj in entityArray {
-                dispatch_async(dispatch_get_main_queue()) {
+                lazyMainQueueDispatch({ () -> () in
                     obj.removeFromMapView(self.mapView);
-                }
+                })
             }
         }
         CidsConnector.sharedInstance().searchResults=[Entity: [GeoBaseEntity]]()
-        dispatch_async(dispatch_get_main_queue()) {
+        lazyMainQueueDispatch({ () -> () in
             self.tableView.reloadData();
-        }
+        })
     }
     func delay(delay:Double, closure:()->()) {
         dispatch_after(
