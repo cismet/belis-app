@@ -438,8 +438,12 @@ public class CidsConnector {
                     let json =  checkeddata["$collection"] as! [[String : AnyObject]];
                     if let nodes = Mapper<CidsObjectNode>().mapArray(json) {
                         
-                        
-                        print(nodes.count);
+                        if nodes.count>1 {
+                            showWaitingHUD(text: "\(nodes.count) Arbeitsaufträge laden", maximumValue:nodes.count )
+                        }
+                        else {
+                            showWaitingHUD(text: "Arbeitsauftrag laden", maximumValue:nodes.count )
+                        }
                         self.blockingQueue.cancelAllOperations()
                         self.searchResults=[Entity: [GeoBaseEntity]]()
                         self.start=CidsConnector.currentTimeMillis();
@@ -448,7 +452,9 @@ public class CidsConnector {
                             handler()
                         }
                         else {
+                            var i=0
                             for node in nodes {
+                                setProgressInWaitingHUD(++i)
                                 print("\(node.classId!) : \(node.objectId!)")
                                 let rightEntity=Entity.byClassId(node.classId!)!
                                 assert(rightEntity==Entity.ARBEITSAUFTRAEGE)
@@ -638,8 +644,14 @@ public class CidsConnector {
                     var json =  checkeddata["$collection"] as! [[String : AnyObject]];
                     if let nodes = Mapper<CidsObjectNode>().mapArray(json) {
                         
-                        
-                        print(nodes.count);
+                        if (nodes.count>1) {
+                            showWaitingHUD(text:"\(nodes.count) Objekte laden")
+                        }
+                        else {
+                            showWaitingHUD(text:"Objekt laden")
+                        }
+
+
                         self.blockingQueue.cancelAllOperations()
                         self.searchResults=[Entity: [GeoBaseEntity]]()
                         self.start=CidsConnector.currentTimeMillis();

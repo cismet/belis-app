@@ -324,3 +324,44 @@ public func lazyMainQueueDispatch(closure: ()->()){
         }
     }
 }
+
+public func showWaitingHUD(text text:String = "", view:UIView? = nil, maximumValue:Int = 0) {
+    
+    lazyMainQueueDispatch({ () -> () in
+        CidsConnector.sharedInstance().mainVC?.progressHUD.textLabel.text=text
+//        if maximumValue>0 {
+//            CidsConnector.sharedInstance().mainVC?.progressHUD.progress=0
+//            CidsConnector.sharedInstance().mainVC?.progressHUD.
+//        }
+        if let v=view {
+            CidsConnector.sharedInstance().mainVC?.progressHUD.showInView(v,animated: true)
+        }else {
+            CidsConnector.sharedInstance().mainVC?.progressHUD.showInView(CidsConnector.sharedInstance().mainVC?.view,animated: true)
+        }
+    })
+}
+
+public func setProgressInWaitingHUD(value: Int) {
+    
+//    CidsConnector.sharedInstance().mainVC?.progressHUD.progress=
+}
+
+public func hideWaitingHUD(delayedText delayedText:String = "", delay:Int = 0) {
+    
+    lazyMainQueueDispatch({ () -> () in
+        CidsConnector.sharedInstance().mainVC?.progressHUD.textLabel.text=delayedText
+        CidsConnector.sharedInstance().mainVC?.progressHUD.dismissAfterDelay(NSTimeInterval(delay), animated: true)
+        delayed(Double(delay)) {
+         CidsConnector.sharedInstance().mainVC?.progressHUD.textLabel.text=nil
+        }
+    })
+}
+
+public func delayed(delay:Double, closure:()->()) {
+    dispatch_after(
+        dispatch_time(
+            DISPATCH_TIME_NOW,
+            Int64(delay * Double(NSEC_PER_SEC))
+        ),
+        dispatch_get_main_queue(), closure)
+}

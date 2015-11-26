@@ -405,7 +405,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         print("didChangeUserTrackingMode")
     }
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
-        delay(0.0)
+        delayed(0.0)
             {
                 if !view.annotation!.isKindOfClass(MatchingSearchItemsAnnotations) {
                     if view.annotation !== self.selectedAnnotation {
@@ -420,7 +420,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         print("didSelectAnnotationView >> \(view.annotation!.title)")
     }
     func mapView(mapView: MKMapView, didDeselectAnnotationView view: MKAnnotationView) {
-        delay(0.0)
+        delayed(0.0)
             {
                 if view.annotation === self.selectedAnnotation {
                     if let selAnno=self.selectedAnnotation {
@@ -438,8 +438,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         self.tableView.reloadData();
         
-        progressHUD.showInView(self.view,animated: true)
-        
+        showWaitingHUD(text:"Objektsuche")
         var mRect : MKMapRect
         if focusToggle.on {
             mRect = createFocusRect()
@@ -473,7 +472,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                         
                     }
                 }
-                self.progressHUD.dismissAnimated(true)
+                hideWaitingHUD()
             }
         }
         
@@ -525,7 +524,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if let team = CidsConnector.sharedInstance().selectedTeam {
             selectArbeitsauftrag(nil,showActivityIndicator: false)
             removeAllEntityObjects()
-            progressHUD.showInView(self.view,animated: true)
+            showWaitingHUD(text:"Arbeitsaufträge suchen")
             CidsConnector.sharedInstance().searchArbeitsauftraegeForTeam(team) { () -> () in
                 dispatch_async(dispatch_get_main_queue()) {
                     CidsConnector.sharedInstance().sortSearchResults()
@@ -540,7 +539,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                             }
                         }
                     }
+
                     self.progressHUD.dismissAnimated(true)
+                    hideWaitingHUD(delayedText: "Veranlassungen werden im\nHintergrund nachgeladen", delay: 2)
+                    
                     dispatch_async(dispatch_get_main_queue()) {
                         self.zoomToFitMapAnnotations(annos)
                     }
@@ -664,7 +666,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         CidsConnector.sharedInstance().selectedArbeitsauftrag=arbeitsauftrag
         if showActivityIndicator {
-            progressHUD.showInView(self.view, animated: true)
+            showWaitingHUD()
         }
         let overlays=self.mapView.overlays
             self.mapView.removeOverlays(overlays)
@@ -724,7 +726,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 
             }
             if showActivityIndicator {
-                self.progressHUD.dismissAnimated(true)
+                hideWaitingHUD()
             }
         }
         if NSThread.isMainThread() {
@@ -946,14 +948,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             self.tableView.reloadData();
         }
     }
-    func delay(delay:Double, closure:()->()) {
-        dispatch_after(
-            dispatch_time(
-                DISPATCH_TIME_NOW,
-                Int64(delay * Double(NSEC_PER_SEC))
-            ),
-            dispatch_get_main_queue(), closure)
-    }
+   
     
     // MARK: - private funcs
     private func geoSearch(){
