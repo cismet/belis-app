@@ -11,6 +11,7 @@ import ObjectMapper
 import ImageIO
 import AssetsLibrary
 import UIKit
+import JGProgressHUD
 
 extension NSDate
 {
@@ -325,14 +326,13 @@ public func lazyMainQueueDispatch(closure: ()->()){
     }
 }
 
-public func showWaitingHUD(text text:String = "", view:UIView? = nil, maximumValue:Int = 0) {
+public func showWaitingHUD(text text:String = "", view:UIView? = nil,indeterminate:Bool = true) {
     
     lazyMainQueueDispatch({ () -> () in
         CidsConnector.sharedInstance().mainVC?.progressHUD.textLabel.text=text
-//        if maximumValue>0 {
-//            CidsConnector.sharedInstance().mainVC?.progressHUD.progress=0
-//            CidsConnector.sharedInstance().mainVC?.progressHUD.
-//        }
+        if indeterminate {
+                CidsConnector.sharedInstance().mainVC?.progressHUD.indicatorView=JGProgressHUDIndeterminateIndicatorView()
+        }
         if let v=view {
             CidsConnector.sharedInstance().mainVC?.progressHUD.showInView(v,animated: true)
         }else {
@@ -341,9 +341,12 @@ public func showWaitingHUD(text text:String = "", view:UIView? = nil, maximumVal
     })
 }
 
-public func setProgressInWaitingHUD(value: Int) {
-    
-//    CidsConnector.sharedInstance().mainVC?.progressHUD.progress=
+public func setProgressInWaitingHUD(progress: Float) {
+    lazyMainQueueDispatch({ () -> () in
+        print(progress)
+        CidsConnector.sharedInstance().mainVC?.progressHUD.indicatorView=JGProgressHUDRingIndicatorView()
+        CidsConnector.sharedInstance().mainVC?.progressHUD.progress=progress
+    })
 }
 
 public func hideWaitingHUD(delayedText delayedText:String = "", delay:Int = 0) {
@@ -351,8 +354,10 @@ public func hideWaitingHUD(delayedText delayedText:String = "", delay:Int = 0) {
     lazyMainQueueDispatch({ () -> () in
         CidsConnector.sharedInstance().mainVC?.progressHUD.textLabel.text=delayedText
         CidsConnector.sharedInstance().mainVC?.progressHUD.dismissAfterDelay(NSTimeInterval(delay), animated: true)
-        delayed(Double(delay)) {
-         CidsConnector.sharedInstance().mainVC?.progressHUD.textLabel.text=nil
+        delayed(Double(delay)+0.5) {
+            lazyMainQueueDispatch({ () -> () in
+                CidsConnector.sharedInstance().mainVC?.progressHUD.textLabel.text=nil
+            })
         }
     })
 }

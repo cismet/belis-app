@@ -439,10 +439,10 @@ public class CidsConnector {
                     if let nodes = Mapper<CidsObjectNode>().mapArray(json) {
                         
                         if nodes.count>1 {
-                            showWaitingHUD(text: "\(nodes.count) Arbeitsaufträge laden", maximumValue:nodes.count )
+                            showWaitingHUD(text: "\(nodes.count) Arbeitsaufträge laden", indeterminate: false )
                         }
                         else {
-                            showWaitingHUD(text: "Arbeitsauftrag laden", maximumValue:nodes.count )
+                            showWaitingHUD(text: "Arbeitsauftrag laden", indeterminate: false )
                         }
                         self.blockingQueue.cancelAllOperations()
                         self.searchResults=[Entity: [GeoBaseEntity]]()
@@ -454,7 +454,6 @@ public class CidsConnector {
                         else {
                             var i=0
                             for node in nodes {
-                                setProgressInWaitingHUD(++i)
                                 print("\(node.classId!) : \(node.objectId!)")
                                 let rightEntity=Entity.byClassId(node.classId!)!
                                 assert(rightEntity==Entity.ARBEITSAUFTRAEGE)
@@ -468,7 +467,9 @@ public class CidsConnector {
                                         if let json: [String : AnyObject] = getJson(data) {
                                             var aa:Arbeitsauftrag?
                                             aa = Mapper<Arbeitsauftrag>().map(json)!
-                                            
+                                            let progress=Float(++i)/Float(nodes.count)
+                                            setProgressInWaitingHUD(progress)
+
                                             if let auftrag=aa {
                                                 if let _=self.searchResults[Entity.ARBEITSAUFTRAEGE] {
                                                     self.searchResults[Entity.ARBEITSAUFTRAEGE]!.append(auftrag)
@@ -645,7 +646,7 @@ public class CidsConnector {
                     if let nodes = Mapper<CidsObjectNode>().mapArray(json) {
                         
                         if (nodes.count>1) {
-                            showWaitingHUD(text:"\(nodes.count) Objekte laden")
+                            showWaitingHUD(text:"\(nodes.count) Objekte laden", indeterminate: false)
                         }
                         else {
                             showWaitingHUD(text:"Objekt laden")
@@ -660,6 +661,7 @@ public class CidsConnector {
                             handler()
                         }
                         else {
+                            var i=0
                             for node in nodes {
                                 print("\(node.classId!) : \(node.objectId!)")
                                 let rightEntity=Entity.byClassId(node.classId!)!
@@ -689,7 +691,9 @@ public class CidsConnector {
                                             default:
                                                 print("could not find object from entity \(operation.entityName)")
                                             }
-                                            
+                                            let progress=Float(++i)/Float(nodes.count)
+                                            setProgressInWaitingHUD(progress)
+
                                             if let gbe=gbEntity {
                                                 if let _=self.searchResults[rightEntity] {
                                                     self.searchResults[rightEntity]!.append(gbe)

@@ -540,8 +540,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                         }
                     }
 
-                    self.progressHUD.dismissAnimated(true)
-                    hideWaitingHUD(delayedText: "Veranlassungen werden im\nHintergrund nachgeladen", delay: 2)
+                    hideWaitingHUD(delayedText: "Veranlassungen werden im\nHintergrund nachgeladen", delay: 1)
                     
                     dispatch_async(dispatch_get_main_queue()) {
                         self.zoomToFitMapAnnotations(annos)
