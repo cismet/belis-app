@@ -472,17 +472,22 @@ public class CidsConnector {
                                                 }
                                                 
                                                 for veranlassungsnummer in auftrag.getVeranlassungsnummern() {
-                                                    getVeranlassungByNummer(veranlassungsnummer, handler: { (veranlassung) -> () in
-                                                        if let v=veranlassung {
-                                                            self.veranlassungsCache.updateValue(v, forKey: veranlassungsnummer)
-                                                            if self.selectedArbeitsauftrag != nil {
-                                                                lazyMainQueueDispatch({ () -> () in
-                                                                    self.mainVC?.tableView.reloadData()
-                                                                })
+                                                    if let _=self.veranlassungsCache[veranlassungsnummer] {
+                                                        print("cacheHit")
+                                                    }
+                                                    else {
+                                                        getVeranlassungByNummer(veranlassungsnummer, handler: { (veranlassung) -> () in
+                                                            if let v=veranlassung {
+                                                                self.veranlassungsCache.updateValue(v, forKey: veranlassungsnummer)
+                                                                if self.selectedArbeitsauftrag != nil {
+                                                                    lazyMainQueueDispatch({ () -> () in
+                                                                        self.mainVC?.tableView.reloadData()
+                                                                    })
+                                                                }
+                                                                
                                                             }
-                                                            
-                                                        }
-                                                    })
+                                                        })
+                                                    }
                                                 }
                                             }
                                             
