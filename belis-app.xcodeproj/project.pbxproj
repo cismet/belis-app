@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C4CF4FA976B7C8D589D81E7 /* Pods_belis_appTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 108BB485D968A36C1A37EFE3 /* Pods_belis_appTests.framework */; };
 		2D0A979C1ADBC4C8005312BA /* Strasse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0A979B1ADBC4C8005312BA /* Strasse.swift */; };
 		2D0B7F651AB3451700E33A6C /* SingleTitledInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0B7F631AB3451700E33A6C /* SingleTitledInfoCell.swift */; };
 		2D0B7F661AB3451700E33A6C /* SingleTitledInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D0B7F641AB3451700E33A6C /* SingleTitledInfoCell.xib */; };
@@ -26,10 +27,12 @@
 		2D3DC3611A94F65E0035575A /* SwiftTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3DC3601A94F65E0035575A /* SwiftTools.swift */; };
 		2D407C201AC2ECD40083013A /* DetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D407C1E1AC2ECD40083013A /* DetailVC.swift */; };
 		2D407C211AC2ECD40083013A /* DetailVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D407C1F1AC2ECD40083013A /* DetailVC.xib */; };
+		2D46EEEE1BF49185004E3D9E /* StandaloneGeom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D46EEED1BF49185004E3D9E /* StandaloneGeom.swift */; };
+		2D46EEF11BF4A75F004E3D9E /* MastActionForms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D46EEF01BF4A75F004E3D9E /* MastActionForms.swift */; };
+		2D46EEF31BF4A771004E3D9E /* LeuchteActionForms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D46EEF21BF4A771004E3D9E /* LeuchteActionForms.swift */; };
 		2D53983A1B945C4C001C865F /* Icon-60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5398391B945C4C001C865F /* Icon-60@3x.png */; };
 		2D53983C1B945C58001C865F /* Icon-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D53983B1B945C58001C865F /* Icon-40.png */; };
 		2D53983E1B945C63001C865F /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D53983D1B945C63001C865F /* Icon-Small.png */; };
-		2D5692101AE119B700545D62 /* ObjectMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D56920F1AE119B700545D62 /* ObjectMapper.framework */; };
 		2D5FB2D21A67C7320041020C /* belis_app.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D01A67C7320041020C /* belis_app.xcdatamodeld */; };
 		2D5FB2D91A67C7320041020C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D81A67C7320041020C /* Images.xcassets */; };
 		2D5FB2E81A67C7320041020C /* belis_appTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2E71A67C7320041020C /* belis_appTests.swift */; };
@@ -46,7 +49,7 @@
 		2D5FB30E1A67CC340041020C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3061A67CC340041020C /* MainViewController.swift */; };
 		2D5FB30F1A67CC340041020C /* SelectionPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3071A67CC340041020C /* SelectionPopoverViewController.swift */; };
 		2D5FB3101A67CC340041020C /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3081A67CC340041020C /* TableViewCell.swift */; };
-		2D5FB3121A67CC780041020C /* MyOSMMKTileOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3111A67CC780041020C /* MyOSMMKTileOverlay.swift */; };
+		2D5FB3121A67CC780041020C /* MyOverlays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3111A67CC780041020C /* MyOverlays.swift */; };
 		2D5FB3271A67CCA60041020C /* WKTGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3141A67CCA60041020C /* WKTGeometry.m */; };
 		2D5FB3281A67CCA60041020C /* WKTGeometryCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3161A67CCA60041020C /* WKTGeometryCollection.m */; };
 		2D5FB3291A67CCA60041020C /* WKTLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3181A67CCA60041020C /* WKTLine.m */; };
@@ -71,6 +74,9 @@
 		2D65AABC1AB09B8E00621A0A /* cismetSignet2k.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D65AABB1AB09B8E00621A0A /* cismetSignet2k.png */; };
 		2D6867501B02397900B0C2EE /* BaseEntityAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D68674F1B02397900B0C2EE /* BaseEntityAction.swift */; };
 		2D81C2A51AA84B710051876C /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D81C2A41AA84B710051876C /* Secrets.swift */; };
+		2D82A5CB1BFC7FF8000B29A7 /* ObjectAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D82A5CA1BFC7FF8000B29A7 /* ObjectAction.swift */; };
+		2D82A5CD1BFCB61B000B29A7 /* GenericFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D82A5CC1BFCB61B000B29A7 /* GenericFormViewController.swift */; };
+		2D82A5CF1BFCB92F000B29A7 /* OtherActionForms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D82A5CE1BFCB92F000B29A7 /* OtherActionForms.swift */; };
 		2D939DDB1A6905D500FB2AFB /* CidsConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */; };
 		2D939DEF1A690A6300FB2AFB /* CidsUtilityClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D939DEE1A690A6300FB2AFB /* CidsUtilityClasses.swift */; };
 		2D9952231AA5FFC600B5E02E /* DokumentPreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9952211AA5FFC600B5E02E /* DokumentPreviewVC.swift */; };
@@ -86,11 +92,13 @@
 		2DB6E8C21A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */; };
 		2DB6E8C31A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */; };
 		2DB8E80E1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB8E80D1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift */; };
+		2DDF34FB1BDE1F5D00C3047D /* AdditionalFunctionalityPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DDF34FA1BDE1F5D00C3047D /* AdditionalFunctionalityPopoverViewController.swift */; };
 		2DE8B1A41B25C3EA00FCEBA7 /* testbild.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DE8B1A31B25C3EA00FCEBA7 /* testbild.png */; };
 		2DEDB58B1AFCCDC9004ADC92 /* schaltstelle.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DEDB58A1AFCCDC9004ADC92 /* schaltstelle.png */; };
 		2DF2C7DD1AB6E2FE00F3A2FC /* SimpleInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF2C7DC1AB6E2FE00F3A2FC /* SimpleInfoCell.swift */; };
 		2DF5EBCC1AFB6F9100062669 /* mast.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DF5EBCB1AFB6F9100062669 /* mast.png */; };
 		2DF6A9BC1A82541900E20FBF /* MappingStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */; };
+		FF431EFC15C82F46A0B83967 /* Pods_belis_app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EED8D3848BFD41A9686D772 /* Pods_belis_app.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +112,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		108BB485D968A36C1A37EFE3 /* Pods_belis_appTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_belis_appTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1655E151C5017305DDA8CE94 /* Pods-belis-app.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-belis-app.release.xcconfig"; path = "Pods/Target Support Files/Pods-belis-app/Pods-belis-app.release.xcconfig"; sourceTree = "<group>"; };
 		2D0A979B1ADBC4C8005312BA /* Strasse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Strasse.swift; sourceTree = "<group>"; };
 		2D0B7F631AB3451700E33A6C /* SingleTitledInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SingleTitledInfoCell.swift; path = "table-cell-guis/SingleTitledInfoCell.swift"; sourceTree = "<group>"; };
 		2D0B7F641AB3451700E33A6C /* SingleTitledInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SingleTitledInfoCell.xib; path = "table-cell-guis/SingleTitledInfoCell.xib"; sourceTree = "<group>"; };
@@ -124,10 +134,12 @@
 		2D3DC3601A94F65E0035575A /* SwiftTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftTools.swift; sourceTree = "<group>"; };
 		2D407C1E1AC2ECD40083013A /* DetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailVC.swift; sourceTree = "<group>"; };
 		2D407C1F1AC2ECD40083013A /* DetailVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailVC.xib; sourceTree = "<group>"; };
+		2D46EEED1BF49185004E3D9E /* StandaloneGeom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandaloneGeom.swift; sourceTree = "<group>"; };
+		2D46EEF01BF4A75F004E3D9E /* MastActionForms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MastActionForms.swift; sourceTree = "<group>"; };
+		2D46EEF21BF4A771004E3D9E /* LeuchteActionForms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeuchteActionForms.swift; sourceTree = "<group>"; };
 		2D5398391B945C4C001C865F /* Icon-60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-60@3x.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-60@3x.png"; sourceTree = "<group>"; };
 		2D53983B1B945C58001C865F /* Icon-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-40.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-40.png"; sourceTree = "<group>"; };
 		2D53983D1B945C63001C865F /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-Small.png"; sourceTree = "<group>"; };
-		2D56920F1AE119B700545D62 /* ObjectMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ObjectMapper.framework; path = Carthage/Build/iOS/ObjectMapper.framework; sourceTree = "<group>"; };
 		2D5FB2C91A67C7320041020C /* belis-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "belis-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D5FB2CD1A67C7320041020C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2D5FB2D11A67C7320041020C /* belis_app.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = belis_app.xcdatamodel; sourceTree = "<group>"; };
@@ -149,7 +161,7 @@
 		2D5FB3061A67CC340041020C /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		2D5FB3071A67CC340041020C /* SelectionPopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectionPopoverViewController.swift; sourceTree = "<group>"; };
 		2D5FB3081A67CC340041020C /* TableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
-		2D5FB3111A67CC780041020C /* MyOSMMKTileOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyOSMMKTileOverlay.swift; sourceTree = "<group>"; };
+		2D5FB3111A67CC780041020C /* MyOverlays.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyOverlays.swift; sourceTree = "<group>"; };
 		2D5FB3131A67CCA60041020C /* WKTGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKTGeometry.h; sourceTree = "<group>"; };
 		2D5FB3141A67CCA60041020C /* WKTGeometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WKTGeometry.m; sourceTree = "<group>"; };
 		2D5FB3151A67CCA60041020C /* WKTGeometryCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WKTGeometryCollection.h; sourceTree = "<group>"; };
@@ -184,6 +196,9 @@
 		2D65AABB1AB09B8E00621A0A /* cismetSignet2k.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cismetSignet2k.png; sourceTree = "<group>"; };
 		2D68674F1B02397900B0C2EE /* BaseEntityAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseEntityAction.swift; sourceTree = "<group>"; };
 		2D81C2A41AA84B710051876C /* Secrets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		2D82A5CA1BFC7FF8000B29A7 /* ObjectAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectAction.swift; sourceTree = "<group>"; };
+		2D82A5CC1BFCB61B000B29A7 /* GenericFormViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericFormViewController.swift; sourceTree = "<group>"; };
+		2D82A5CE1BFCB92F000B29A7 /* OtherActionForms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OtherActionForms.swift; sourceTree = "<group>"; };
 		2D939DD31A67D5D200FB2AFB /* belis-app.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "belis-app.playground"; sourceTree = "<group>"; };
 		2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsConnector.swift; sourceTree = "<group>"; };
 		2D939DEE1A690A6300FB2AFB /* CidsUtilityClasses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsUtilityClasses.swift; sourceTree = "<group>"; };
@@ -198,11 +213,16 @@
 		2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "webhostinghub-glyphs.ttf"; sourceTree = "<group>"; };
 		2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebHostingGlyph.swift; sourceTree = "<group>"; };
 		2DB8E80D1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleUrlPreviewInfoCell.swift; sourceTree = "<group>"; };
+		2DDF34FA1BDE1F5D00C3047D /* AdditionalFunctionalityPopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdditionalFunctionalityPopoverViewController.swift; sourceTree = "<group>"; };
 		2DE8B1A31B25C3EA00FCEBA7 /* testbild.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testbild.png; sourceTree = "<group>"; };
 		2DEDB58A1AFCCDC9004ADC92 /* schaltstelle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = schaltstelle.png; sourceTree = "<group>"; };
 		2DF2C7DC1AB6E2FE00F3A2FC /* SimpleInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleInfoCell.swift; sourceTree = "<group>"; };
 		2DF5EBCB1AFB6F9100062669 /* mast.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mast.png; sourceTree = "<group>"; };
 		2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MappingStuff.swift; sourceTree = "<group>"; };
+		8EED8D3848BFD41A9686D772 /* Pods_belis_app.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_belis_app.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		93AF52810D28D566103CEBEC /* Pods-belis-appTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-belis-appTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-belis-appTests/Pods-belis-appTests.release.xcconfig"; sourceTree = "<group>"; };
+		D72B05BBF2B40E7BE9695D91 /* Pods-belis-app.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-belis-app.debug.xcconfig"; path = "Pods/Target Support Files/Pods-belis-app/Pods-belis-app.debug.xcconfig"; sourceTree = "<group>"; };
+		F65AFE6FB3F1CBB7755A7F8A /* Pods-belis-appTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-belis-appTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-belis-appTests/Pods-belis-appTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,7 +233,7 @@
 				2D9D3B1C1A9F77B50049F46F /* UIKit.framework in Frameworks */,
 				2D9D3B1A1A9F777D0049F46F /* QuickLook.framework in Frameworks */,
 				2D5FB2F21A67CA570041020C /* MapKit.framework in Frameworks */,
-				2D5692101AE119B700545D62 /* ObjectMapper.framework in Frameworks */,
+				FF431EFC15C82F46A0B83967 /* Pods_belis_app.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,6 +241,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C4CF4FA976B7C8D589D81E7 /* Pods_belis_appTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,6 +263,18 @@
 			name = components;
 			sourceTree = "<group>";
 		};
+		2D46EEEF1BF4A73B004E3D9E /* actionForms */ = {
+			isa = PBXGroup;
+			children = (
+				2D46EEF01BF4A75F004E3D9E /* MastActionForms.swift */,
+				2D46EEF21BF4A771004E3D9E /* LeuchteActionForms.swift */,
+				2D82A5CA1BFC7FF8000B29A7 /* ObjectAction.swift */,
+				2D82A5CC1BFCB61B000B29A7 /* GenericFormViewController.swift */,
+				2D82A5CE1BFCB92F000B29A7 /* OtherActionForms.swift */,
+			);
+			name = actionForms;
+			sourceTree = "<group>";
+		};
 		2D5FB2C01A67C7320041020C = {
 			isa = PBXGroup;
 			children = (
@@ -250,7 +283,6 @@
 				2D53983D1B945C63001C865F /* Icon-Small.png */,
 				2D53983B1B945C58001C865F /* Icon-40.png */,
 				2D5398391B945C4C001C865F /* Icon-60@3x.png */,
-				2D56920F1AE119B700545D62 /* ObjectMapper.framework */,
 				2D9D3B1B1A9F77B50049F46F /* UIKit.framework */,
 				2D9D3B191A9F777D0049F46F /* QuickLook.framework */,
 				2D5FB2F11A67CA570041020C /* MapKit.framework */,
@@ -258,6 +290,8 @@
 				2D5FB2E41A67C7320041020C /* belis-appTests */,
 				2D5FB2CA1A67C7320041020C /* Products */,
 				2D939DD31A67D5D200FB2AFB /* belis-app.playground */,
+				A8C0E0CEE0710E33AD2C46C0 /* Pods */,
+				BB67F872BED992D88CCD6BAD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -330,7 +364,7 @@
 		2D5FB2FD1A67CB870041020C /* tools */ = {
 			isa = PBXGroup;
 			children = (
-				2D5FB3111A67CC780041020C /* MyOSMMKTileOverlay.swift */,
+				2D5FB3111A67CC780041020C /* MyOverlays.swift */,
 				2D1ED1861B8344C80004AAFA /* CidsSessionFactory.swift */,
 				2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */,
 				2D1ED1841B8344BD0004AAFA /* CidsOperations.swift */,
@@ -362,6 +396,7 @@
 				2D3DC3591A94E2C60035575A /* DMSUrl.swift */,
 				2D3DC35E1A94EBA50035575A /* Timestamp.swift */,
 				2D0A979B1ADBC4C8005312BA /* Strasse.swift */,
+				2D46EEED1BF49185004E3D9E /* StandaloneGeom.swift */,
 			);
 			name = data;
 			sourceTree = "<group>";
@@ -418,14 +453,36 @@
 		2DB6E8C91A9DD5D500D4EA4E /* viewController */ = {
 			isa = PBXGroup;
 			children = (
+				2D46EEEF1BF4A73B004E3D9E /* actionForms */,
 				2D9D3AC41A9E18E90049F46F /* details */,
 				2D5FB3081A67CC340041020C /* TableViewCell.swift */,
 				2D5FB3071A67CC340041020C /* SelectionPopoverViewController.swift */,
 				2D9CAD601B94A05A00A3EB07 /* CidsConnectionSettingsViewController.swift */,
 				2D5FB3061A67CC340041020C /* MainViewController.swift */,
 				2D5FB3041A67CC340041020C /* LoginViewController.swift */,
+				2DDF34FA1BDE1F5D00C3047D /* AdditionalFunctionalityPopoverViewController.swift */,
 			);
 			name = viewController;
+			sourceTree = "<group>";
+		};
+		A8C0E0CEE0710E33AD2C46C0 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D72B05BBF2B40E7BE9695D91 /* Pods-belis-app.debug.xcconfig */,
+				1655E151C5017305DDA8CE94 /* Pods-belis-app.release.xcconfig */,
+				F65AFE6FB3F1CBB7755A7F8A /* Pods-belis-appTests.debug.xcconfig */,
+				93AF52810D28D566103CEBEC /* Pods-belis-appTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		BB67F872BED992D88CCD6BAD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8EED8D3848BFD41A9686D772 /* Pods_belis_app.framework */,
+				108BB485D968A36C1A37EFE3 /* Pods_belis_appTests.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -435,10 +492,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D5FB2EB1A67C7320041020C /* Build configuration list for PBXNativeTarget "belis-app" */;
 			buildPhases = (
+				3420DE70143CE9460DE3C3EC /* Check Pods Manifest.lock */,
 				2D5FB2C51A67C7320041020C /* Sources */,
 				2D5FB2C61A67C7320041020C /* Frameworks */,
 				2D5FB2C71A67C7320041020C /* Resources */,
-				2D5692111AE119C800545D62 /* ShellScript */,
+				B0C2F260B18D504B6D609C90 /* Embed Pods Frameworks */,
+				803E5400F482E84100CD4B0B /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -453,9 +512,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D5FB2EE1A67C7320041020C /* Build configuration list for PBXNativeTarget "belis-appTests" */;
 			buildPhases = (
+				B79F0C687922106AC9899B5B /* Check Pods Manifest.lock */,
 				2D5FB2DD1A67C7320041020C /* Sources */,
 				2D5FB2DE1A67C7320041020C /* Frameworks */,
 				2D5FB2DF1A67C7320041020C /* Resources */,
+				6BE982757CBC312EDC4A8919 /* Embed Pods Frameworks */,
+				59CD90DC2B7AA7727C93B3D0 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -556,19 +618,95 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2D5692111AE119C800545D62 /* ShellScript */ = {
+		3420DE70143CE9460DE3C3EC /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/ObjectMapper.framework",
 			);
+			name = "Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		59CD90DC2B7AA7727C93B3D0 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-belis-appTests/Pods-belis-appTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6BE982757CBC312EDC4A8919 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-belis-appTests/Pods-belis-appTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		803E5400F482E84100CD4B0B /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-belis-app/Pods-belis-app-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B0C2F260B18D504B6D609C90 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-belis-app/Pods-belis-app-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B79F0C687922106AC9899B5B /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -583,12 +721,13 @@
 				2D81C2A51AA84B710051876C /* Secrets.swift in Sources */,
 				2D5FB33C1A67CCEB0041020C /* Abzweigdose.swift in Sources */,
 				2D3DC3561A8BA86E0035575A /* UIProtocols.swift in Sources */,
+				2DDF34FB1BDE1F5D00C3047D /* AdditionalFunctionalityPopoverViewController.swift in Sources */,
 				2DF6A9BC1A82541900E20FBF /* MappingStuff.swift in Sources */,
 				2D407C201AC2ECD40083013A /* DetailVC.swift in Sources */,
 				2D9D3AD61A9E23DD0049F46F /* AF+ImageView+Extension.swift in Sources */,
 				2D5FB32A1A67CCA60041020C /* WKTLineM.m in Sources */,
 				2DB6E8C21A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */,
-				2D5FB3121A67CC780041020C /* MyOSMMKTileOverlay.swift in Sources */,
+				2D5FB3121A67CC780041020C /* MyOverlays.swift in Sources */,
 				2DF2C7DD1AB6E2FE00F3A2FC /* SimpleInfoCell.swift in Sources */,
 				2D5FB3401A67CCEB0041020C /* GeoBaseEntity.swift in Sources */,
 				2D3DC35F1A94EBA50035575A /* Timestamp.swift in Sources */,
@@ -601,10 +740,12 @@
 				2D5FB30C1A67CC340041020C /* LoginViewController.swift in Sources */,
 				2D5FB3411A67CCEB0041020C /* Leitung.swift in Sources */,
 				2D0B7F6D1AB3456D00E33A6C /* MemoTitledInfoCell.swift in Sources */,
+				2D82A5CD1BFCB61B000B29A7 /* GenericFormViewController.swift in Sources */,
 				2D5FB3461A67CCEB0041020C /* Veranlassung.swift in Sources */,
 				2D5FB33E1A67CCEB0041020C /* Arbeitsprotokoll.swift in Sources */,
 				2D9D3AD41A9E239A0049F46F /* AF+Image+Extension.swift in Sources */,
 				2D5FB33D1A67CCEB0041020C /* Arbeitsauftrag.swift in Sources */,
+				2D46EEEE1BF49185004E3D9E /* StandaloneGeom.swift in Sources */,
 				2D5FB32E1A67CCA60041020C /* WKTPolygon.m in Sources */,
 				2D5FB3091A67CC340041020C /* AppDelegate.swift in Sources */,
 				2D5FB32B1A67CCA60041020C /* WKTParser.m in Sources */,
@@ -614,7 +755,9 @@
 				2D5FB3441A67CCEB0041020C /* Schaltstelle.swift in Sources */,
 				2D1ED1851B8344BD0004AAFA /* CidsOperations.swift in Sources */,
 				2D5FB2D21A67C7320041020C /* belis_app.xcdatamodeld in Sources */,
+				2D46EEF31BF4A771004E3D9E /* LeuchteActionForms.swift in Sources */,
 				2D5FB32C1A67CCA60041020C /* WKTPoint.m in Sources */,
+				2D82A5CB1BFC7FF8000B29A7 /* ObjectAction.swift in Sources */,
 				2D9952231AA5FFC600B5E02E /* DokumentPreviewVC.swift in Sources */,
 				2D5FB30E1A67CC340041020C /* MainViewController.swift in Sources */,
 				2D5FB3431A67CCEB0041020C /* Mauerlasche.swift in Sources */,
@@ -623,7 +766,9 @@
 				2D5FB3101A67CC340041020C /* TableViewCell.swift in Sources */,
 				2D6867501B02397900B0C2EE /* BaseEntityAction.swift in Sources */,
 				2D5FB3281A67CCA60041020C /* WKTGeometryCollection.m in Sources */,
+				2D82A5CF1BFCB92F000B29A7 /* OtherActionForms.swift in Sources */,
 				2D5FB32D1A67CCA60041020C /* WKTPointM.m in Sources */,
+				2D46EEF11BF4A75F004E3D9E /* MastActionForms.swift in Sources */,
 				2D939DDB1A6905D500FB2AFB /* CidsConnector.swift in Sources */,
 				2D1ED1871B8344C80004AAFA /* CidsSessionFactory.swift in Sources */,
 				2D939DEF1A690A6300FB2AFB /* CidsUtilityClasses.swift in Sources */,
@@ -736,15 +881,12 @@
 		};
 		2D5FB2EC1A67C7320041020C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D72B05BBF2B40E7BE9695D91 /* Pods-belis-app.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				INFOPLIST_FILE = "belis-app/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -759,15 +901,12 @@
 		};
 		2D5FB2ED1A67C7320041020C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1655E151C5017305DDA8CE94 /* Pods-belis-app.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
-				);
 				INFOPLIST_FILE = "belis-app/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -775,12 +914,14 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "belis-app/belis-app-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
 		2D5FB2EF1A67C7320041020C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F65AFE6FB3F1CBB7755A7F8A /* Pods-belis-appTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -797,6 +938,7 @@
 		};
 		2D5FB2F01A67C7320041020C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 93AF52810D28D566103CEBEC /* Pods-belis-appTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = "belis-appTests/Info.plist";

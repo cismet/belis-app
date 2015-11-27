@@ -1,16 +1,17 @@
 //
-//  Abzweigdose.swift
-//  Experiments
+//  StandaloneGeom.swift
+//  belis-app
 //
-//  Created by Thorsten Hell on 10/12/14.
-//  Copyright (c) 2014 cismet. All rights reserved.
+//  Created by Thorsten Hell on 12.11.15.
+//  Copyright © 2015 cismet. All rights reserved.
 //
 
 import Foundation
 import ObjectMapper
 
-class Abzweigdose : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvider, ObjectActionProvider {
-    var dokumente: [DMSUrl]=[]
+class StandaloneGeom: GeoBaseEntity, ObjectActionProvider {
+    var dokumente: [DMSUrl] = []
+    var bezeichnung: String?
     
     // MARK: - required init because of ObjectMapper
     required init?(_ map: Map) {
@@ -20,12 +21,9 @@ class Abzweigdose : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvi
     // MARK: - essential overrides BaseEntity
     override func mapping(map: Map) {
         id <- map["id"];
-        dokumente <- map["dokumente"];
-        
-        //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
+        bezeichnung <- map["bezeichnung"];
+        dokumente <- map["ar_dokumente"];
         wgs84WKT <- map["fk_geom.wgs84_wkt"]
-        
-        
     }
     override func getType() -> Entity {
         return Entity.ABZWEIGDOSEN
@@ -42,15 +40,15 @@ class Abzweigdose : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvi
         return true;
     }
     override func getAnnotationCalloutGlyphIconName() -> String {
-        return "icon-squarea";
+        return "icon-polygonlasso";
     }
     
     // MARK: - CellInformationProviderProtocol Impl
     func getMainTitle() -> String{
-        return "AZD \(id)"
+        return "FG \(bezeichnung ?? "")"
     }
     func getSubTitle() -> String{
-            return "Abzweigdose"
+        return "Freie Geometrie"
     }
     func getTertiaryInfo() -> String{
         return ""
@@ -61,15 +59,15 @@ class Abzweigdose : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvi
     
     // MARK: - CellDataProvider Impl
     @objc func getTitle() -> String {
-        return "Mauerlasche"
+        return getMainTitle()
     }
     @objc func getDetailGlyphIconString() -> String {
-        return "icon-squarea"
+        return "icon-polygonlasso"
     }
     @objc func getAllData() -> [String: [CellData]] {
         var data: [String: [CellData]] = ["main":[]]
-
-        data["main"]?.append(SingleTitledInfoCellData(title: "Id", data: "\(id)"))
+        
+        data["main"]?.append(SingleTitledInfoCellData(title: "Bezeichnung", data: bezeichnung ?? ""))
         
         if dokumente.count>0 {
             for doc in dokumente {
@@ -90,4 +88,5 @@ class Abzweigdose : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvi
     @objc func getAllObjectActions() -> [ObjectAction]{
         return [SonstigesAction()]
     }
+
 }

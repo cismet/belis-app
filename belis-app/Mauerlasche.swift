@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
+class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer, ObjectActionProvider {
     var erstellungsjahr: Int?
     var laufendeNummer: Int?
     var material: Mauerlaschenmaterial?
@@ -72,6 +72,14 @@ class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProv
     }
     
     
+    // MARK: - CellDataProvider Impl
+    @objc func getTitle() -> String {
+        return "Mauerlasche"
+    }
+    
+    @objc func getDetailGlyphIconString() -> String {
+        return "icon-nut"
+    }
     @objc func getAllData() -> [String: [CellData]] {
         var data: [String: [CellData]] = ["main":[]]
         if let mat=material?.bezeichnung {
@@ -130,7 +138,7 @@ class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProv
 
         return actions
     }
-    
+        
     func addDocument(document: DMSUrl) {
         dokumente.append(document)
     }
@@ -165,7 +173,10 @@ class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProv
         return ""
     }
     
-    
+    // MARK: - ObjectActionProvider
+    @objc func getAllObjectActions() -> [ObjectAction]{
+        return [MauerlaschenPruefungAction(entity: self),SonstigesAction()]
+    }
 }
 
 class Mauerlaschenmaterial : BaseEntity{

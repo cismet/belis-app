@@ -9,16 +9,19 @@
 import Foundation
 import ObjectMapper
 
-class Leitung : GeoBaseEntity ,CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
+class Leitung : GeoBaseEntity ,CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer, ObjectActionProvider {
     var material: Leitungsmaterial?
     var leitungstyp: Leitungstyp?
     var querschnitt: Querschnitt?
     var dokumente: [DMSUrl] = []
     var laenge: Float?
-    
+
+    // MARK: - required init because of ObjectMapper
     required init?(_ map: Map) {
         super.init(map)
     }
+    
+    // MARK: - essential overrides BaseEntity
     override func getType() -> Entity {
         return Entity.LEITUNGEN
     }
@@ -34,6 +37,25 @@ class Leitung : GeoBaseEntity ,CellInformationProviderProtocol, CellDataProvider
         wgs84WKT <- map["fk_geom.wgs84_wkt"]
         
         
+    }
+    
+    // MARK: - essential overrides GeoBaseEntity
+    override func getAnnotationTitle() -> String{
+        return "\(getMainTitle()) - \(getSubTitle())"
+    }
+    override func canShowCallout() -> Bool{
+        return true;
+    }
+    override func getAnnotationCalloutGlyphIconName() -> String {
+        return "icon-line";
+    }
+    
+    // MARK: - CellDataProvider Impl
+    @objc func getTitle() -> String {
+        return "Leitung"
+    }
+    @objc func getDetailGlyphIconString() -> String {
+        return "icon-line"
     }
     @objc func getAllData() -> [String: [CellData]] {
         var data: [String: [CellData]] = ["main":[]]
@@ -60,7 +82,7 @@ class Leitung : GeoBaseEntity ,CellInformationProviderProtocol, CellDataProvider
         return ["main","Dokumente","DeveloperInfo"]
     }
     
-    // Actions
+    // MARK: - ActionProvider Impl
     @objc func getAllActions() -> [BaseEntityAction] {
         
         
@@ -72,24 +94,12 @@ class Leitung : GeoBaseEntity ,CellInformationProviderProtocol, CellDataProvider
         return actions
     }
     
+    // MARK: - DocumentContainer Impl
     func addDocument(document: DMSUrl) {
         dokumente.append(document)
     }
-    
-    override func getAnnotationTitle() -> String{
-        return "\(getMainTitle()) - \(getSubTitle())"
-    }
-
-    override func canShowCallout() -> Bool{
-        return true;
-    }
-
-    override func getAnnotationCalloutGlyphIconName() -> String {
-        return "icon-line";
-    }
    
-    // CellInformationProviderProtocol
-    
+    // MARK: - CellInformationProviderProtocol Impl
     func getMainTitle() -> String{
         if let mat = leitungstyp?.bezeichnung {
             return mat
@@ -124,6 +134,10 @@ class Leitung : GeoBaseEntity ,CellInformationProviderProtocol, CellDataProvider
         return ""
     }
 
+    // MARK: - ObjectActionProvider impl
+    @objc func getAllObjectActions() -> [ObjectAction]{
+        return [SonstigesAction()]
+    }
 }
 
 class Leitungsmaterial : BaseEntity{

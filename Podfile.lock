@@ -1,0 +1,19 @@
+PODS:
+  - JGProgressHUD (1.3.1)
+  - MGSwipeTableCell (HEAD based on 1.5.3)
+  - ObjectMapper (1.0.1)
+  - SwiftForms (1.0.2)
+
+DEPENDENCIES:
+  - JGProgressHUD
+  - MGSwipeTableCell (HEAD)
+  - ObjectMapper (~> 1.0)
+  - SwiftForms
+
+SPEC CHECKSUMS:
+  JGProgressHUD: 153053a21d81208cb5f659691996bcefce6a9885
+  MGSwipeTableCell: 5ae3b9a15efda26b201adc8676b24040febe6ff6
+  ObjectMapper: 98524bac0dca46c6b3d5ee02cd410fc700ec6ce2
+  SwiftForms: c439aca9cf462383a1292c028bd14915de42bf6b
+
+COCOAPODS: 0.39.0

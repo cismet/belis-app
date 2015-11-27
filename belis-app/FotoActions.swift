@@ -9,16 +9,17 @@
 import Foundation
 import AssetsLibrary
 import ImageIO
+import JGProgressHUD
 
 class ChooseFotoAction : BaseEntityAction {
     init(yourself: BaseEntity) {
         super.init(title: "Foto auswählen",style: UIAlertActionStyle.Default, handler: {
             (action: UIAlertAction! , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
-            let picker = (detailVC as! DetailVC).mainVC.imagePicker
+            let picker = MainViewController.IMAGE_PICKER
             picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
             picker.mediaTypes = UIImagePickerController.availableMediaTypesForSourceType(.PhotoLibrary)!
             picker.delegate = detailVC as! DetailVC
-            (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: yourself,detailVC: (detailVC as! DetailVC))
+            (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: yourself,refreshable: (detailVC as! DetailVC))
             picker.allowsEditing = true
             picker.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
             detailVC.presentViewController(picker, animated: true, completion: nil)
@@ -32,10 +33,10 @@ class TakeFotoAction : BaseEntityAction {
             (action: UIAlertAction! , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
             if(UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
                 //load the camera interface
-                let picker = (detailVC as! DetailVC).mainVC.imagePicker
+                let picker = MainViewController.IMAGE_PICKER
                 picker.sourceType = UIImagePickerControllerSourceType.Camera
                 picker.delegate = detailVC as! DetailVC
-                (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: yourself,detailVC: (detailVC as! DetailVC))
+                (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: yourself,refreshable: (detailVC as! DetailVC))
                 
                 picker.allowsEditing = true
                 //picker.showsCameraControls=true
@@ -59,10 +60,10 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
     var library = ALAssetsLibrary()
     
     var selfEntity: BaseEntity
-    var detailVC: DetailVC
-    init (yourself: BaseEntity, detailVC: DetailVC){
+    var refreshable: Refreshable
+    init (yourself: BaseEntity, refreshable: Refreshable){
         selfEntity=yourself
-        self.detailVC=detailVC
+        self.refreshable=refreshable
         if let _ = selfEntity as? DocumentContainer {
             
         }
@@ -77,12 +78,8 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         // var mediaType:String = info[UIImagePickerControllerEditedImage] as! String
         
-        var actInd : UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(0,0, 150, 150)) as UIActivityIndicatorView
-        actInd.center =  picker.view.center
-        actInd.hidesWhenStopped = true;
-        actInd.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
-        picker.view.addSubview(actInd)
-        
+        let progressHUD = JGProgressHUD(style: JGProgressHUDStyle.Dark)
+        progressHUD.showInView(picker.view,animated: true)
         var tField: UITextField!
         
         func configurationTextField(textField: UITextField!)
@@ -105,7 +102,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             var imageToSave:UIImage
             
             imageToSave = info[UIImagePickerControllerOriginalImage]as! UIImage
-            actInd.startAnimating();
+            progressHUD.showInView(picker.view,animated: true)
             let metadata = info[UIImagePickerControllerMediaMetadata] as? NSDictionary
             
             
@@ -160,19 +157,21 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
                         "DOKUMENT_URL":"http://board.cismet.de/belis/\(fileName)\n\(pictureName)"])
                     CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {(success:Bool) -> () in
                         assert(!NSThread.isMainThread() )
-                        dispatch_async(dispatch_get_main_queue()) {
-                            actInd.stopAnimating()
-                            actInd.removeFromSuperview()
+                        lazyMainQueueDispatch({ () -> () in
                             picker.dismissViewControllerAnimated(true, completion: nil)
                             if success {
                                 print("Everything is going to be 200-OK")
                                 (self.selfEntity as! DocumentContainer).addDocument(DMSUrl(name:pictureName, fileName:fileName))
-                                self.detailVC.refresh()
+                                self.refreshable.refresh()
+                                progressHUD.indicatorView=JGProgressHUDSuccessIndicatorView()
                             }
                             else {
-                                
+                                progressHUD.indicatorView=JGProgressHUDErrorIndicatorView()
                             }
-                        }
+                            progressHUD.dismissAfterDelay(NSTimeInterval(1), animated: true)
+                            progressHUD.indicatorView=JGProgressHUDIndeterminateIndicatorView()
+                            progressHUD.dismissAnimated(true)
+                        })
                     })
                 }
             }
@@ -183,6 +182,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             
             
         }))
+        progressHUD.dismiss()
         picker.presentViewController(alert, animated: true, completion: {
             print("completion block")
         })

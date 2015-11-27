@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider,ActionProvider, DocumentContainer{
+class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider,ActionProvider, DocumentContainer, ObjectActionProvider{
     
     var erstellungsjahr: NSDate?
     var laufendeNummer: Int?
@@ -25,14 +25,16 @@ class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInf
     var monteur: String?
     var rundsteuerempfaenger: Rundsteuerempfaenger?
     var einbaudatumRundsteuerempfaenger: NSDate?
-        
+    
+    // MARK: - required init because of ObjectMapper
     required init?(_ map: Map) {
         super.init(map)
     }
+
+    // MARK: - essential overrides BaseEntity
     override func getType() -> Entity {
         return Entity.SCHALTSTELLEN
     }
-
     override func mapping(map: Map) {
         super.id <- map["id"];
         erstellungsjahr <- (map["erstellungsjahr"],DateTransformFromMillisecondsTimestamp())
@@ -54,8 +56,22 @@ class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInf
         wgs84WKT <- map["fk_geom.wgs84_wkt"]
 
     }
-    // CellInformationProviderProtocol
-    
+
+    // MARK: - essential overrides GeoBaseEntity
+    override func getAnnotationImageName() -> String{
+        return "schaltstelle.png";
+    }
+    override func getAnnotationTitle() -> String{
+        return getMainTitle();
+    }
+    override func canShowCallout() -> Bool{
+        return true
+    }
+    override func getAnnotationCalloutGlyphIconName() -> String {
+        return "icon-switch"
+    }
+
+    // MARK: - CellInformationProviderProtocol Impl
     func getMainTitle() -> String{
         var s=""
         
@@ -84,44 +100,27 @@ class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInf
         return ""
     }
     
-    
-    //CallOutInformationProviderProtocol
-    
-    func getTitle() -> String {
+    // MARK: - CallOutInformationProviderProtocol Impl
+    func getCalloutTitle() -> String {
         return getAnnotationTitle()
     }
     func getGlyphIconName() -> String {
         return "icon-switch"
     }
-    
     func getDetailViewID() -> String{
         return "SchaltstelleDetails"
     }
-    
     func canShowDetailInformation() -> Bool{
         return true
     }
     
-    
-    //Override GeoBaseEntity
-    override func getAnnotationImageName() -> String{
-        return "schaltstelle.png";
+    // MARK: - CellDataProvider Impl
+    @objc func getTitle() -> String {
+        return "Schaltstelle"
     }
-    
-    override func getAnnotationTitle() -> String{
-        return getMainTitle();
-    }
-    
-    override func canShowCallout() -> Bool{
-        return true
-    }
-    override func getAnnotationCalloutGlyphIconName() -> String {
+    @objc func getDetailGlyphIconString() -> String {
         return "icon-switch"
     }
-    
-    
-    
-    //CellDataProvider
     @objc func getAllData() -> [String: [CellData]] {
         var details: [String: [CellData]] = ["main":[]]
         details["main"]?.append(SimpleInfoCellData(data: getMainTitle()))
@@ -220,7 +219,8 @@ class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInf
     @objc func getDataSectionKeys() -> [String] {
         return ["main","Dokumente","DeveloperInfo"]
     }
-    // Actions
+
+    // MARK: - ActionProvider Impl
     @objc func getAllActions() -> [BaseEntityAction] {
         
         
@@ -231,9 +231,15 @@ class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInf
         
         return actions
     }
-    
+
+    // MARK: - DocumentContainer Impl
     func addDocument(document: DMSUrl) {
         dokumente.append(document)
+    }
+    
+    // MARK: - ObjectActionProvider Impl
+    @objc func getAllObjectActions() -> [ObjectAction]{
+        return [SchaltstellenRevisionAction(),SonstigesAction()]
     }
 }
 

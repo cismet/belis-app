@@ -13,6 +13,8 @@ import ObjectMapper
 class Strasse : BaseEntity{
     var name: String?
     var key: String?
+
+    // MARK: - required init because of ObjectMapper
     override func mapping(map: Map) {
         super.id <- map["id"]
         name <- map["strasse"]

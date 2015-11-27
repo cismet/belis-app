@@ -8,7 +8,7 @@
 
 import Foundation
 import ObjectMapper
-class Leuchte : GeoBaseEntity, CallOutInformationProviderProtocol, CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer {
+class Leuchte : GeoBaseEntity,  CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer, ObjectActionProvider {
     var strasse: Strasse?
     var energielieferant: Energielieferant?
     var rundsteuerempfaenger: Rundsteuerempfaenger?
@@ -42,7 +42,12 @@ class Leuchte : GeoBaseEntity, CallOutInformationProviderProtocol, CellInformati
     var monteur: String?
     var einbaudatum: NSDate?
     
- 
+    // MARK: - required init because of ObjectMapper
+    required init?(_ map: Map) {
+        super.init(map)
+    }
+    
+    // MARK: - essential overrides
     override func mapping(map: Map) {
         id <- map["id"];
         strasse <- map["fk_strassenschluessel"]
@@ -85,8 +90,28 @@ class Leuchte : GeoBaseEntity, CallOutInformationProviderProtocol, CellInformati
     override func getType() -> Entity {
         return Entity.LEUCHTEN
     }
+
+    // MARK: - essential overrides GeoBaseEntity
+    override func getAnnotationImageName() -> String{
+        return "leuchte.png";
+    }
+    override func getAnnotationTitle() -> String{
+        return getMainTitle();
+    }
+    override func canShowCallout() -> Bool{
+        return true
+    }
+    override func getAnnotationCalloutGlyphIconName() -> String {
+        return "icon-ceilinglight"
+    }
     
-    //CellDataProvider
+    //MARK: - CellDataProvider Impl
+    @objc func getTitle() -> String {
+        return "Leuchte"
+    }
+    @objc func getDetailGlyphIconString() -> String {
+        return "icon-ceilinglight"
+    }
     @objc func getAllData() -> [String: [CellData]] {
         var data: [String: [CellData]] = ["main":[]]
         data["main"]?.append(SimpleInfoCellData(data: getSubTitle()))
@@ -135,8 +160,9 @@ class Leuchte : GeoBaseEntity, CallOutInformationProviderProtocol, CellInformati
         //Mast
         if mastVorhanden {
             if let s=standort {
-                let mastDetails: [String: [CellData]] = s.getAllData()
-                data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Mast",details: mastDetails, sections: ["main","DeveloperInfo"]))
+                // let mastDetails: [String: [CellData]] = s.getAllData()
+                // data["main"]?.append(SimpleInfoCellDataWithDetails(data: "Mast",details: mastDetails, sections: "main","DeveloperInfo"]))
+                data["main"]?.append(SimpleInfoCellDataWithDetailsDrivenByWholeObject(data: "Mast",detailObject: s, showSubActions: true))
             }
             else {
                 //serious error
@@ -281,8 +307,7 @@ class Leuchte : GeoBaseEntity, CallOutInformationProviderProtocol, CellInformati
         return ["main","Dokumente","DeveloperInfo"]
     }
     
-    
-    // Actions
+    // MARK: - ActionProvider Impl
     @objc func getAllActions() -> [BaseEntityAction] {
         
         
@@ -294,44 +319,12 @@ class Leuchte : GeoBaseEntity, CallOutInformationProviderProtocol, CellInformati
         return actions
     }
     
+    // MARK: - DocumentContainer Impl
     func addDocument(document: DMSUrl) {
         dokumente.append(document)
     }
     
-    override func getAnnotationImageName() -> String{
-        return "leuchte.png";
-    }
-    
-    override func getAnnotationTitle() -> String{
-        return getMainTitle();
-    }
-    
-    override func canShowCallout() -> Bool{
-        return true
-    }
-    override func getAnnotationCalloutGlyphIconName() -> String {
-        return "icon-ceilinglight"
-    }
-    
-    
-    func getTitle() -> String {
-        return getAnnotationTitle()
-    }
-    func getGlyphIconName() -> String {
-        return "icon-ceilinglight"
-    }
-    
-    func getDetailViewID() -> String{
-        return "LeuchtenDetails"
-    }
-    
-    func canShowDetailInformation() -> Bool{
-        return true
-    }
-    
-    
-    // CellInformationProviderProtocol
-    
+    // MARK: - CellInformationProviderProtocol Impl
     func getMainTitle() -> String{
         var typPart:String
         if let typKey = typ?.leuchtenTyp {
@@ -374,6 +367,24 @@ class Leuchte : GeoBaseEntity, CallOutInformationProviderProtocol, CellInformati
         return ""
     }
     
+    // MARK: - ObjectActionProvider
+    @objc func getAllObjectActions() -> [ObjectAction]{
+        return [LeuchtenerneuerungAction(),LeuchtmittelwechselEPAction(),LeuchtmittelwechselAction(),RundsteuerempfaengerwechselAction(), SonderturnusAction(), VorschaltgeraetwechselAction(), SonstigesAction()]
+    }
+ 
+    // MARK: - object functions
+    func getCallOutTitle() -> String {
+        return getAnnotationTitle()
+    }
+    func getGlyphIconName() -> String {
+        return "icon-ceilinglight"
+    }
+    func getDetailViewID() -> String{
+        return "LeuchtenDetails"
+    }
+    func canShowDetailInformation() -> Bool{
+        return true
+    }
     
 }
 
@@ -403,6 +414,9 @@ class Rundsteuerempfaenger : BaseEntity{
         anschlusswert <- map["anschlusswert"]
         programm <- map["programm"]
         foto <- map["foto"]
+    }
+    class func ascending(lhs: Rundsteuerempfaenger, rhs: Rundsteuerempfaenger) -> Bool {
+        return "\(lhs.herrsteller_rs)-\(lhs.rs_typ)" < "\(rhs.herrsteller_rs)-\(rhs.rs_typ)"
     }
 }
 
@@ -438,6 +452,10 @@ class LeuchtenTyp : BaseEntity{
         foto <- map["foto"]
         dokumente <- map["dokumente"]
         typenbezeichnung <- map["typenbezeichnung"]
+    }
+    
+    class func ascending(lhs: LeuchtenTyp, rhs: LeuchtenTyp) -> Bool {
+        return lhs.leuchtenTyp < rhs.leuchtenTyp
     }
 }
 
@@ -480,6 +498,9 @@ class Leuchtmittel : BaseEntity{
         super.id <- map["id"]
         hersteller <- map["hersteller"]
         lichtfarbe <- map["lichtfarbe"]
+    }
+    class func ascending(lhs: Leuchtmittel, rhs: Leuchtmittel) -> Bool {
+        return "\(lhs.hersteller)-\(lhs.lichtfarbe)" < "\(rhs.hersteller)-\(rhs.lichtfarbe)"
     }
 }
 

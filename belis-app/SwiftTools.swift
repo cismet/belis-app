@@ -11,6 +11,7 @@ import ObjectMapper
 import ImageIO
 import AssetsLibrary
 import UIKit
+import JGProgressHUD
 
 extension NSDate
 {
@@ -22,6 +23,38 @@ extension NSDate
     }
 }
 
+class DateTransformFromString : TransformType {
+    var dateFormat:String
+    init(format: String) {
+        dateFormat=format
+    }
+    func transformFromJSON(value: AnyObject?) -> NSDate? {
+        if let s = value as? String {
+            let dateStringFormatter = NSDateFormatter()
+            dateStringFormatter.dateFormat = dateFormat
+
+            if let ret=dateStringFormatter.dateFromString(s) {
+                return ret
+            }
+            else {
+                //error
+            }
+            
+        }
+        
+        return nil
+    }
+    func transformToJSON(value: NSDate?) -> Int? {
+        if let d=value {
+            let ms:Int = Int(d.timeIntervalSince1970*1000.0)
+            return ms
+        }
+        return nil
+    }
+
+}
+
+
 class DateTransformFromMillisecondsTimestamp : TransformType {
     
     func transformFromJSON(value: AnyObject?) -> NSDate? {
@@ -29,6 +62,7 @@ class DateTransformFromMillisecondsTimestamp : TransformType {
             let dms=Double(ms)
             return NSDate(timeIntervalSince1970: NSTimeInterval(dms/1000.0))
         }
+        
        return nil
     }
     func transformToJSON(value: NSDate?) -> Int? {
@@ -279,4 +313,70 @@ extension String
             return prefix + (lastChar != lastChar.uppercaseString ? suffix : suffix.uppercaseString)
         }
     }
+}
+
+public func lazyMainQueueDispatch(closure: ()->()){
+    if NSThread.isMainThread() {
+        closure()
+    }
+    else {
+        dispatch_async(dispatch_get_main_queue()) {
+            closure()
+        }
+    }
+}
+
+public func showWaitingHUD(text text:String = "", view:UIView? = nil,indeterminate:Bool = true) {
+    
+    lazyMainQueueDispatch({ () -> () in
+        if text=="" {
+            CidsConnector.sharedInstance().mainVC?.progressHUD.textLabel.text=nil
+        }
+        else {
+            CidsConnector.sharedInstance().mainVC?.progressHUD.textLabel.text=text
+        }
+        if indeterminate {
+                CidsConnector.sharedInstance().mainVC?.progressHUD.indicatorView=JGProgressHUDIndeterminateIndicatorView()
+        }
+        if let v=view {
+            CidsConnector.sharedInstance().mainVC?.progressHUD.showInView(v,animated: true)
+        }else {
+            CidsConnector.sharedInstance().mainVC?.progressHUD.showInView(CidsConnector.sharedInstance().mainVC?.view,animated: true)
+        }
+    })
+}
+
+public func setProgressInWaitingHUD(progress: Float) {
+    lazyMainQueueDispatch({ () -> () in
+        print(progress)
+        CidsConnector.sharedInstance().mainVC?.progressHUD.indicatorView=JGProgressHUDRingIndicatorView()
+        CidsConnector.sharedInstance().mainVC?.progressHUD.progress=progress
+    })
+}
+
+public func hideWaitingHUD(delayedText delayedText:String = "", delay:Int = 0) {
+    
+    lazyMainQueueDispatch({ () -> () in
+        if delayedText=="" {
+            CidsConnector.sharedInstance().mainVC?.progressHUD.textLabel.text=nil
+        }
+        else {
+            CidsConnector.sharedInstance().mainVC?.progressHUD.textLabel.text=delayedText
+        }
+        CidsConnector.sharedInstance().mainVC?.progressHUD.dismissAfterDelay(NSTimeInterval(delay), animated: true)
+        delayed(Double(delay)+0.5) {
+            lazyMainQueueDispatch({ () -> () in
+                CidsConnector.sharedInstance().mainVC?.progressHUD.textLabel.text=nil
+            })
+        }
+    })
+}
+
+public func delayed(delay:Double, closure:()->()) {
+    dispatch_after(
+        dispatch_time(
+            DISPATCH_TIME_NOW,
+            Int64(delay * Double(NSEC_PER_SEC))
+        ),
+        dispatch_get_main_queue(), closure)
 }

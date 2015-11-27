@@ -7,15 +7,19 @@
 //
 
 import UIKit
+import MGSwipeTableCell
 
-class TableViewCell: UITableViewCell {
+class TableViewCell: MGSwipeTableCell {
 
+    var baseEntity:BaseEntity?
+    
     @IBOutlet weak var lblBezeichnung: UILabel!
     
     @IBOutlet weak var lblStrasse: UILabel!
     
     @IBOutlet weak var lblSubText: UILabel!
     
+    @IBOutlet weak var lblZusatzinfo: UILabel!
     
     
     override func awakeFromNib() {

@@ -8,33 +8,31 @@
 
 import Foundation
 import ObjectMapper
+import MGSwipeTableCell
 
-class GeoBaseEntity : BaseEntity{
+class GeoBaseEntity : BaseEntity, LeftSwipeActionProvider{
     var mapObject : NSObject?;
     private var geom :WKTGeometry?
-
-    
-    override init(){
-        super.init()
-    }
     
     var wgs84WKT : String?
         {
         didSet {
             //println("geoString="+wgs84WKT!);
             if let wgs84WKTSTring=wgs84WKT {
-                geom=WKTParser.parseGeometry(wgs84WKTSTring);
+                geom=WKTParser.parseGeometry(wgs84WKTSTring)
                 if ( geom is WKTPoint){
                     let point=geom as! WKTPoint;
                     mapObject=GeoBaseEntityPointAnnotation(geoBaseEntity: self, point: point)
-//                    println("GeoBaseEntityPointAnnotation set")
-                
                 }
                 else if (geom is WKTLine) {
                     let line=geom as! WKTLine;
                     mapObject=GeoBaseEntityStyledMkPolylineAnnotation(line: line, geoBaseEntity: self)
                     (mapObject! as! GeoBaseEntityStyledMkPolylineAnnotation).geoBaseEntity=self
-//                    println("GeoBaseEntityStyledMkPolylineAnnotation set")
+                }
+                else if (geom is WKTPolygon) {
+                    let polygon=geom as! WKTPolygon
+                    mapObject=GeoBaseEntityStyledMkPolygonAnnotation(polyg: polygon, geoBaseEntity: self)
+                     (mapObject! as! GeoBaseEntityStyledMkPolygonAnnotation).geoBaseEntity=self
                 }
                 
             }
@@ -46,31 +44,18 @@ class GeoBaseEntity : BaseEntity{
         
     }
     
-    func addToMapView(mapView:MKMapView) {
-        if let mo=mapObject {
-            if let moPoint=mo as? GeoBaseEntityPointAnnotation {
-                mapView.addAnnotation(moPoint)
-            }
-            else if let moLine=mo as? GeoBaseEntityStyledMkPolylineAnnotation {
-                mapView.addOverlay(moLine)
-                mapView.addAnnotation(moLine)
+    
+    // MARK: - Constructor
+    override init(){
+        super.init()
+    }
 
-            }
-        }
+    // MARK: - required init because of ObjectMapper
+    required init?(_ map: Map) {
+        super.init(map)
     }
     
-    
-    func removeFromMapView(mapView:MKMapView) {
-        if let mo=mapObject {
-            if let moPoint=mo as? GeoBaseEntityPointAnnotation {
-                mapView.removeAnnotation(moPoint)
-            }
-            else if let moLine=mo as? GeoBaseEntityStyledMkPolylineAnnotation {
-                mapView.removeOverlay(moLine)
-            }
-        }
-    }
-    
+    // MARK: - essential overrides GeoBaseEntity
     func getAnnotationTitle() -> String{
         return "";
     }
@@ -84,7 +69,49 @@ class GeoBaseEntity : BaseEntity{
         return "";
     }
     
-    
+    // MARK: - LeftSwipeActionProvider Impl
+    func getLeftSwipeActions() -> [MGSwipeButton] {
+        let zoomC=UIColor(red: 199.0/255.0, green: 244.0/255.0, blue: 100.0/255.0, alpha: 1.0)
+        
+        let zoom=MGSwipeButton(title: "Zoom", backgroundColor: zoomC ,callback: {
+            (sender: MGSwipeTableCell!) -> Bool in
+            if let anno=self.mapObject as? MKAnnotation, mainVC=CidsConnector.sharedInstance().mainVC {
+                 mainVC.zoomToFitMapAnnotations([anno])
+            }
+            return true
+        })
+        return [zoom]
+    }
+    // MARK: - object functions
+    func addToMapView(mapView:MKMapView) {
+        if let mo=mapObject {
+            if let moPoint=mo as? GeoBaseEntityPointAnnotation {
+                mapView.addAnnotation(moPoint)
+            }
+            else if let moLine=mo as? GeoBaseEntityStyledMkPolylineAnnotation {
+                mapView.addOverlay(moLine)
+                mapView.addAnnotation(moLine)
+            }
+            else if let moPolygon=mo as? GeoBaseEntityStyledMkPolygonAnnotation {
+                mapView.addOverlay(moPolygon)
+                mapView.addAnnotation(moPolygon)
+                
+            }
+        }
+    }
+    func removeFromMapView(mapView:MKMapView) {
+        if let mo=mapObject {
+            if let moPoint=mo as? GeoBaseEntityPointAnnotation {
+                mapView.removeAnnotation(moPoint)
+            }
+            else if let moLine=mo as? GeoBaseEntityStyledMkPolylineAnnotation {
+                mapView.removeOverlay(moLine)
+            }
+            else if let moPoly=mo as? GeoBaseEntityStyledMkPolygonAnnotation {
+                mapView.removeOverlay(moPoly)
+            }
+        }
+    }
     func liesIn(coordinateRegion: MKCoordinateRegion ) -> Bool{
         let region = coordinateRegion;
         
@@ -129,15 +156,6 @@ class GeoBaseEntity : BaseEntity{
         }
         
     }
-    
-    
-    required init?(_ map: Map) {
-        super.init(map)
-    }
-    override func mapping(map: Map) {
-        
-    }
-    
     
 }
 
@@ -192,6 +210,33 @@ class GeoBaseEntityStyledMkPolylineAnnotation:MKPolyline{
     
 }
 
+
+class GeoBaseEntityStyledMkPolygonAnnotation:MKPolygon{
+    var shouldShowCallout = false
+    var geoBaseEntity: GeoBaseEntity
+    var imageName: String!
+    var glyphName: String!
+    override init() {
+        geoBaseEntity = GeoBaseEntity()
+    }
+    
+    convenience init(polyg: WKTPolygon, geoBaseEntity: GeoBaseEntity) {
+        self.init()
+        let mPolyg=polyg.toMapPolygon()
+        mPolyg.title="."
+        self.init(points: mPolyg.points(), count: mPolyg.pointCount)
+        imageName=geoBaseEntity.getAnnotationImageName();
+        glyphName=geoBaseEntity.getAnnotationCalloutGlyphIconName();
+        title=geoBaseEntity.getAnnotationTitle();
+        //        subtitle=geoBaseEntity.getAnnotationSubTitle();
+        shouldShowCallout=geoBaseEntity.canShowCallout();
+    }
+    func getGeoBaseEntity() -> GeoBaseEntity {
+        return geoBaseEntity
+    }
+    
+}
+
 class HighlightedMkPolyline:MKPolyline{
     
 }
@@ -200,4 +245,16 @@ protocol GeoBaseEntityProvider {
     func getGeoBaseEntity() -> GeoBaseEntity
 }
 
+protocol PolygonStyler {
+    func getStrokeColor()->UIColor
+    func getLineWidth()->CGFloat
+    func getFillColor()->UIColor
+}
+struct PolygonStylerConstants {
+    static let strokeColor=UIColor(red: 96.0/255.0, green: 224.0/255.0, blue: 173.0/255.0, alpha: 0.8)
+    static let fillColor=UIColor(red: 229.0/255.0, green: 252.0/255.0, blue: 194.0/255.0, alpha: 0.8)
+    static let lineWidth: CGFloat=5.0
+    
+    
+}
 

@@ -126,7 +126,59 @@ class GetEntityOperation: CidsRequestOperation {
             request.HTTPMethod = "GET"
             
             request.addValue(authHeader, forHTTPHeaderField: "Authorization") //correct passwd
-            //            request.addValue("Basic V2VuZGxpbmdNQEJFTElTMjp3bWJlbGlzeHh4eA==", forHTTPHeaderField: "Authorization") //wrong passwd
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            let session=sessionFactory.getNewCidsSession()
+            /* Start a new Task */
+            task = session.dataTaskWithRequest(request, completionHandler: { (data : NSData?, response : NSURLResponse?, error : NSError?) -> Void in
+                if let handler=self.completionHandler {
+                    handler(operation: self, data: data, response: response, error: error, queue: self.qu)
+                }
+                else {
+                    if (error == nil) {
+                        // Success
+                        let statusCode = (response as! NSHTTPURLResponse).statusCode
+                        print("URL Session Task Succeeded: HTTP \(statusCode)")
+                    }
+                    else {
+                        // Failure
+                        print("URL Session Task Failed: %@", error!.localizedDescription);
+                    }
+                }
+                
+                
+                self.executing=false
+                self.finished = true
+                self.task=nil
+            })
+            if let t=self.task {
+                t.resume()
+            }
+        }
+    }
+}
+
+class GetAllEntitiesOperation: CidsRequestOperation {
+    var entityName=""
+    var completionHandler: ((operation:GetAllEntitiesOperation, data : NSData!, response : NSURLResponse!, error : NSError!, queue: NSOperationQueue) -> ())?
+    
+    init(baseUrl: String, domain: String,entityName:String, user: String, pass:String, queue: NSOperationQueue, completionHandler: (operation:GetAllEntitiesOperation, data : NSData!, response : NSURLResponse!, error : NSError!, queue: NSOperationQueue) -> ()) {
+        super.init(user:user,pass:pass)
+        self.qu=queue
+        self.completionHandler=completionHandler
+        url="\(baseUrl)/\(domain).\(entityName)?limit=10000000"
+    }
+    
+    override func main() {
+        if self.cancelled {
+            return
+        }
+        else  {
+            let nsurl = NSURL(string: url)
+            
+            let request = NSMutableURLRequest(URL: nsurl!)
+            request.HTTPMethod = "GET"
+            
+            request.addValue(authHeader, forHTTPHeaderField: "Authorization") //correct passwd
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             let session=sessionFactory.getNewCidsSession()
             /* Start a new Task */
@@ -175,7 +227,6 @@ class LoginOperation: CidsRequestOperation {
             request.HTTPMethod = "GET"
             
             request.addValue(authHeader, forHTTPHeaderField: "Authorization") //correct passwd
-            //            request.addValue("Basic V2VuZGxpbmdNQEJFTElTMjp3bWJlbGlzeHh4eA==", forHTTPHeaderField: "Authorization") //wrong passwd
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             let session=sessionFactory.getPickyNewCidsSession()
             /* Start a new Task */
@@ -205,14 +256,15 @@ class LoginOperation: CidsRequestOperation {
     }
 }
 
+
 class SearchOperation: CidsRequestOperation {
     var parameters:QueryParameters?
     var completionHandler: ((data : NSData!, response : NSURLResponse!, error : NSError!) -> Void)?
     
-    init(baseUrl: String, user: String, pass:String, parameters:QueryParameters,completionHandler: ((data : NSData!, response : NSURLResponse!, error : NSError!) -> Void)!) {
+    init(baseUrl: String, searchKey:String, user: String, pass:String, parameters:QueryParameters,completionHandler: ((data : NSData!, response : NSURLResponse!, error : NSError!) -> Void)!) {
         super.init(user: user, pass: pass)
         self.parameters=parameters
-        url="\(baseUrl)/searches/BELIS2.de.cismet.belis2.server.search.BelisObjectsWktSearch/results"
+        url="\(baseUrl)/searches/\(searchKey)/results"
         self.completionHandler=completionHandler
     }
     
@@ -233,6 +285,7 @@ class SearchOperation: CidsRequestOperation {
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
         
         let y = Mapper().toJSON(parameters!)
+        print(Mapper().toJSONString(parameters!, prettyPrint: true)!)
         request.HTTPBody=try? NSJSONSerialization.dataWithJSONObject(y, options: NSJSONWritingOptions())
         
         /* Start a new Task */
@@ -282,7 +335,8 @@ class ServerActionOperation: CidsRequestOperation {
         URL = self.NSURLByAppendingQueryParameters(URL, queryParameters: URLParams)
         let request = NSMutableURLRequest(URL: URL!)
         request.HTTPMethod = "POST"
-        request.addValue("Basic V2VuZGxpbmdNQEJFTElTMjp3bWJlbGlz", forHTTPHeaderField: "Authorization")
+        //request.addValue("Basic V2VuZGxpbmdNQEJFTElTMjp3bWJlbGlz", forHTTPHeaderField: "Authorization")
+        request.addValue(authHeader, forHTTPHeaderField: "Authorization")
         request.addValue("multipart/form-data; boundary=nFcUS6GTpcRsBnbvYHhdwyggifFtKeLm", forHTTPHeaderField: "Content-Type")
         
         let paramsAsJSON:String=Mapper().toJSONString(params!, prettyPrint: false)!
