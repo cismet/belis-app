@@ -66,10 +66,10 @@ public class ObjectAction: NSObject {
             //refresh
             CidsConnector.sharedInstance().refreshArbeitsauftrag(CidsConnector.sharedInstance().selectedArbeitsauftrag, handler: { (success) -> () in
                 if success {
-                    dispatch_async(dispatch_get_main_queue()) {
+                    lazyMainQueueDispatch({ () -> () in
                         CidsConnector.sharedInstance().mainVC?.tableView.reloadData()
                         self.showSuccess()
-                    }
+                    })
                 }
             })
             

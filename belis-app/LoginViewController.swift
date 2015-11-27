@@ -57,16 +57,15 @@ class LoginViewController: UIViewController {
             if (success) {
                 let mainView = self.storyboard?.instantiateViewControllerWithIdentifier("mainView") as! MainViewController;
                 mainView.loginViewController=self
-                dispatch_async(dispatch_get_main_queue(),{
+                lazyMainQueueDispatch({ () -> () in
                     waiting.dismissViewControllerAnimated(true, completion: {
                         self.presentViewController(mainView, animated: true, completion: {} );
                     })
-                    
                 })
                 
             }
             else {
-                dispatch_async(dispatch_get_main_queue(),{
+                lazyMainQueueDispatch({ () -> () in
                     self.txtPass.text="";
                     waiting.dismissViewControllerAnimated(true, completion: {
                         

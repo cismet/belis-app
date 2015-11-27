@@ -329,7 +329,12 @@ public func lazyMainQueueDispatch(closure: ()->()){
 public func showWaitingHUD(text text:String = "", view:UIView? = nil,indeterminate:Bool = true) {
     
     lazyMainQueueDispatch({ () -> () in
-        CidsConnector.sharedInstance().mainVC?.progressHUD.textLabel.text=text
+        if text=="" {
+            CidsConnector.sharedInstance().mainVC?.progressHUD.textLabel.text=nil
+        }
+        else {
+            CidsConnector.sharedInstance().mainVC?.progressHUD.textLabel.text=text
+        }
         if indeterminate {
                 CidsConnector.sharedInstance().mainVC?.progressHUD.indicatorView=JGProgressHUDIndeterminateIndicatorView()
         }
@@ -352,7 +357,12 @@ public func setProgressInWaitingHUD(progress: Float) {
 public func hideWaitingHUD(delayedText delayedText:String = "", delay:Int = 0) {
     
     lazyMainQueueDispatch({ () -> () in
-        CidsConnector.sharedInstance().mainVC?.progressHUD.textLabel.text=delayedText
+        if delayedText=="" {
+            CidsConnector.sharedInstance().mainVC?.progressHUD.textLabel.text=nil
+        }
+        else {
+            CidsConnector.sharedInstance().mainVC?.progressHUD.textLabel.text=delayedText
+        }
         CidsConnector.sharedInstance().mainVC?.progressHUD.dismissAfterDelay(NSTimeInterval(delay), animated: true)
         delayed(Double(delay)+0.5) {
             lazyMainQueueDispatch({ () -> () in

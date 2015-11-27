@@ -165,9 +165,9 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         if let provider=objectToShow as? CellDataProvider{
             sections=provider.getDataSectionKeys()
             setCellData(provider.getAllData())
-            dispatch_async(dispatch_get_main_queue(),{
+            lazyMainQueueDispatch({ () -> () in
                 self.tableView.reloadData()
-            });
+            })
         }
     }
 

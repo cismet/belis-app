@@ -114,11 +114,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         
         if let _=CidsConnector.sharedInstance().selectedTeam {
-//            let alert = UIAlertView()
-//            alert.title = "Ausgewähltes Team"
-//            alert.message = "\(t.name ?? "???")"
-//            alert.addButtonWithTitle("Ok")
-//            alert.show()
+            //            let alert = UIAlertView()
+            //            alert.title = "Ausgewähltes Team"
+            //            alert.message = "\(t.name ?? "???")"
+            //            alert.addButtonWithTitle("Ok")
+            //            alert.show()
         }
         else {
             let alert = UIAlertView()
@@ -180,7 +180,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
         }
         cell.delegate=self
-
+        
         if let left=cell.baseEntity as? LeftSwipeActionProvider {
             cell.leftButtons=left.getLeftSwipeActions()
         }
@@ -196,23 +196,23 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         
         
-                //let fav=MGSwipeButton(title: "Fav", backgroundColor: UIColor.blueColor())
+        //let fav=MGSwipeButton(title: "Fav", backgroundColor: UIColor.blueColor())
         
-
+        
         cell.leftSwipeSettings.transition = MGSwipeTransition.Static
         
         //configure right buttons
         
-//        let delete=MGSwipeButton(title: "Delete", backgroundColor: UIColor.redColor())
-//        let more=MGSwipeButton(title: "More",backgroundColor: UIColor.lightGrayColor())
-//        
-//        cell.rightButtons = [delete,more]
-//        cell.rightSwipeSettings.transition =  MGSwipeTransition.Static
-
+        //        let delete=MGSwipeButton(title: "Delete", backgroundColor: UIColor.redColor())
+        //        let more=MGSwipeButton(title: "More",backgroundColor: UIColor.lightGrayColor())
+        //
+        //        cell.rightButtons = [delete,more]
+        //        cell.rightSwipeSettings.transition =  MGSwipeTransition.Static
+        
         cell.leftExpansion.threshold=1.5
         cell.leftExpansion.fillOnTrigger=true
         //cell.leftExpansion.buttonIndex=0
-
+        
         
         return cell
     }
@@ -229,7 +229,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-
+    
     //MARK: UITableViewDelegate
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
         print("didSelectRowAtIndexPath")
@@ -283,7 +283,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else if let polygon = overlay as? GeoBaseEntityStyledMkPolygonAnnotation {
             let polygonRenderer = MKPolygonRenderer(overlay: polygon)
-
+            
             if let styler = polygon.getGeoBaseEntity() as? PolygonStyler {
                 polygonRenderer.strokeColor =  styler.getStrokeColor()
                 polygonRenderer.lineWidth = styler.getLineWidth()
@@ -481,7 +481,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if let gbe=CidsConnector.sharedInstance().selectedArbeitsauftrag {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
             shownDetails=detailVC
-             let cellDataProvider=gbe as CellDataProvider
+            let cellDataProvider=gbe as CellDataProvider
             detailVC.sections=cellDataProvider.getDataSectionKeys()
             detailVC.setCellData(cellDataProvider.getAllData())
             detailVC.objectToShow=gbe
@@ -500,7 +500,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             popC.presentPopoverFromBarButtonItem(itemArbeitsauftrag, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
         }
         else if let indexPath=tableView.indexPathForSelectedRow , aa = CidsConnector.sharedInstance().searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row] as? Arbeitsauftrag {
-                selectArbeitsauftrag(aa)
+            selectArbeitsauftrag(aa)
         }
         
         
@@ -539,7 +539,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                             }
                         }
                     }
-
+                    
                     hideWaitingHUD(delayedText: "Veranlassungen werden im\nHintergrund nachgeladen", delay: 1)
                     
                     dispatch_async(dispatch_get_main_queue()) {
@@ -601,7 +601,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     CidsConnector.sharedInstance().selectedArbeitsauftrag=nil
                     self.selectArbeitsauftrag(nil)
                     self.shownDetails=nil
-
+                    
             })
         }
     }
@@ -661,17 +661,17 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let sel=selectedAnnotation
         selectedAnnotation=nil
         if let s=sel {
-         mapView.deselectAnnotation(s, animated: false)
+            mapView.deselectAnnotation(s, animated: false)
         }
         CidsConnector.sharedInstance().selectedArbeitsauftrag=arbeitsauftrag
         if showActivityIndicator {
             showWaitingHUD()
         }
         let overlays=self.mapView.overlays
-            self.mapView.removeOverlays(overlays)
-            for anno in self.mapView.selectedAnnotations {
-                self.mapView.deselectAnnotation(anno, animated: false)
-            }
+        self.mapView.removeOverlays(overlays)
+        for anno in self.mapView.selectedAnnotations {
+            self.mapView.deselectAnnotation(anno, animated: false)
+        }
         var zoomToShowAll=true
         if let aa=arbeitsauftrag {
             CidsConnector.sharedInstance().allArbeitsauftraegeBeforeCurrentSelection=CidsConnector.sharedInstance().searchResults
@@ -710,7 +710,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         func doIt(){
             self.selectedAnnotation=nil
             self.mapView.deselectAnnotation(selectedAnnotation, animated: false)
-
+            
             var annos: [MKAnnotation]=[]
             for (_, objArray) in CidsConnector.sharedInstance().searchResults{
                 for obj in objArray {
@@ -733,7 +733,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         else {
             dispatch_async(dispatch_get_main_queue()) {
-               doIt()
+                doIt()
             }
         }
     }
@@ -947,7 +947,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             self.tableView.reloadData();
         }
     }
-   
+    
     
     // MARK: - private funcs
     private func geoSearch(){
@@ -1044,10 +1044,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-//    func textFieldShouldReturn(textField: UITextField) -> Bool {
-//        self.view.endEditing(true)
-//        return false
-//    }
+    //    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    //        self.view.endEditing(true)
+    //        return false
+    //    }
     
     
 }
