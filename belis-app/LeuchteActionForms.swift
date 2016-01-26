@@ -34,7 +34,7 @@ class LeuchtenerneuerungAction : ObjectAction {
         row.configuration[FormRowDescriptor.Configuration.Options] = CidsConnector.sharedInstance().sortedLeuchtenTypListKeys
         row.configuration[FormRowDescriptor.Configuration.TitleFormatterClosure] = { value in
             let typ=CidsConnector.sharedInstance().leuchtentypList[value as! String]
-            return "\(typ!.leuchtenTyp!) - \(typ!.fabrikat!)"
+            return "\(typ?.leuchtenTyp ?? "unbekannter Typ") - \(typ?.fabrikat ?? "unbekanntes Fabrikat")"
             } as TitleFormatterClosure
         
         section0.addRow(row)
