@@ -37,9 +37,15 @@ class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProv
         return Entity.MAUERLASCHEN
     }
 
-    override func getAnnotationImageName() -> String{
-        return "mauerlasche.png";
+    override func getAnnotationImage(status: String?) -> UIImage{
+        if let s=status {
+            if let color=Arbeitsprotokoll.statusColors[s] {
+                return GlyphTools.sharedInstance().getGlyphedAnnotationImage("icon-plaque",color: color);
+            }
+        }
+        return GlyphTools.sharedInstance().getGlyphedAnnotationImage("icon-plaque",fontSize: 5,color: UIColor(red: 167.0/255.0, green: 219.0/255.0, blue: 216.0/255.0, alpha: 0.8));
     }
+    
     override func getAnnotationTitle() -> String{
         return getMainTitle();
     }

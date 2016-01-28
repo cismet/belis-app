@@ -119,7 +119,7 @@ public extension UIImage {
     
     :returns: A new UIImage
     */
-    convenience init?(text: String, font: UIFont = UIFont.systemFontOfSize(18), color: UIColor = UIColor.whiteColor(), backgroundColor: UIColor = UIColor.grayColor(), size:CGSize = CGSizeMake(100, 100), offset: CGPoint = CGPoint(x: 0, y: 0))
+    convenience init?(charText: String, font: UIFont = UIFont.systemFontOfSize(18), color: UIColor = UIColor.whiteColor(), backgroundColor: UIColor = UIColor.grayColor(), size:CGSize = CGSizeMake(100, 100), offset: CGPoint = CGPoint(x: 0, y: 0))
     {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         let context = UIGraphicsGetCurrentContext()
@@ -129,7 +129,7 @@ public extension UIImage {
         style.alignment = .Center
         let attr = [NSFontAttributeName:font, NSForegroundColorAttributeName:color, NSParagraphStyleAttributeName:style]
         let rect = CGRect(x: offset.x, y: offset.y, width: size.width, height: size.height)
-        text.drawInRect(rect, withAttributes: attr)
+        charText.drawInRect(rect, withAttributes: attr)
         self.init(CGImage:UIGraphicsGetImageFromCurrentImageContext().CGImage!)
         UIGraphicsEndImageContext()
     }

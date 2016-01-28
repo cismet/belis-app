@@ -27,8 +27,8 @@ class CidsConnectionSettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setGlyphLabel(serverCertIconLabel, glyphName: "icon-certificatealt")
-        setGlyphLabel(clientCertIconLabel, glyphName: "icon-certificatealt")
+        GlyphTools.sharedInstance().setGlyphLabel(serverCertIconLabel, glyphName: "icon-certificatealt")
+        GlyphTools.sharedInstance().setGlyphLabel(clientCertIconLabel, glyphName: "icon-certificatealt")
         clientCertIconLabel.textColor=gray
         serverCertIconLabel.textColor=orange
         clientCertTextLabel.textColor=green
@@ -178,15 +178,5 @@ class CidsConnectionSettingsViewController: UIViewController {
     // Pass the selected object to the new view controller.
     }
     */
-    
-    
-    func setGlyphLabel(label: UILabel, glyphName: String) {
-        if let glyph=WebHostingGlyps.glyphs[glyphName] {
-            label.font = UIFont(name: "WebHostingHub-Glyphs", size: 20)
-            label.textAlignment=NSTextAlignment.Center
-            label.text=glyph
-            label.sizeToFit()
-        }
-    }
     
 }

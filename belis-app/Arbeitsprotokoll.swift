@@ -22,7 +22,10 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
     var veranlassungsnummer: String?
     var protokollnummer: Int?
     
-    var statusIcons: [String:String]=["0":"🕒","1":"✅","2":"❗️"]
+    static var statusIcons: [String:String]=["0":"🕒","1":"✅","2":"❗️"]
+    static var statusColors: [String:UIColor]=["0":UIColor(red: 253.0/255.0, green: 173.0/255.0, blue: 0.0/255.0, alpha: 1.0),
+        "1":UIColor(red: 168.0/255.0, green: 202.0/255.0, blue: 39.0/255.0, alpha: 1.0),
+        "2":UIColor(red: 247.0/255.0, green: 68.0/255.0, blue: 68.0/255.0, alpha: 1.0)]
     
     var standort: Standort?
     var mauerlasche: Mauerlasche?
@@ -44,11 +47,16 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
     }
     
     // MARK: - essential overrides GeoBaseEntity
-    override func getAnnotationImageName() -> String{
+    override func getAnnotationImage(status: String?) -> UIImage{
         if let gbe=attachedGeoBaseEntity {
-            return gbe.getAnnotationImageName()
+            if let skey=self.status?.schluessel {
+                return gbe.getAnnotationImage(skey)
+            }
+            else {
+                return gbe.getAnnotationImage()
+            }
         }
-        return "leuchte.png";
+        return UIImage();
     }
     override func getAnnotationTitle() -> String{
         if let gbe=attachedGeoBaseEntity {
@@ -162,7 +170,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
     }
     func getTertiaryInfo() -> String{
         if let skey=status?.schluessel {
-            if let icon=statusIcons[skey] {
+            if let icon=Arbeitsprotokoll.statusIcons[skey] {
                 return icon
             }
         }

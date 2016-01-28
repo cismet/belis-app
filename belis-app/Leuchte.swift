@@ -92,8 +92,13 @@ class Leuchte : GeoBaseEntity,  CellInformationProviderProtocol, CellDataProvide
     }
 
     // MARK: - essential overrides GeoBaseEntity
-    override func getAnnotationImageName() -> String{
-        return "leuchte.png";
+    override func getAnnotationImage(status: String?) -> UIImage{
+        if let s=status {
+            if let color=Arbeitsprotokoll.statusColors[s] {
+                return GlyphTools.sharedInstance().getGlyphedAnnotationImage("icon-circlerecordempty",color: color);
+            }
+        }
+        return GlyphTools.sharedInstance().getGlyphedAnnotationImage("icon-circlerecordempty");
     }
     override func getAnnotationTitle() -> String{
         return getMainTitle();
