@@ -20,13 +20,8 @@ class GenericFormViewController: FormViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Speichern", style: .Plain, target: self, action: "save")
-        if let mainVC=CidsConnector.sharedInstance().mainVC {
-            let image=mainVC.getGlyphedImage("icon-chevron-left", fontsize: 11, size: CGSize(width: 14, height: 14))
+            let image=GlyphTools.sharedInstance().getGlyphedImage("icon-chevron-left", fontsize: 11, size: CGSize(width: 14, height: 14))
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: UIBarButtonItemStyle.Plain , target: self, action: "cancel")
-        }
-        else  {
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: "cancel:")
-        }
         
     }
     

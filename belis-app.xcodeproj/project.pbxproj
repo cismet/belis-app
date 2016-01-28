@@ -30,6 +30,7 @@
 		2D46EEEE1BF49185004E3D9E /* StandaloneGeom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D46EEED1BF49185004E3D9E /* StandaloneGeom.swift */; };
 		2D46EEF11BF4A75F004E3D9E /* MastActionForms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D46EEF01BF4A75F004E3D9E /* MastActionForms.swift */; };
 		2D46EEF31BF4A771004E3D9E /* LeuchteActionForms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D46EEF21BF4A771004E3D9E /* LeuchteActionForms.swift */; };
+		2D52D90D1C59072200BB3DED /* webhostinghub-glyphs.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D52D90C1C59029700BB3DED /* webhostinghub-glyphs.ttf */; };
 		2D53983A1B945C4C001C865F /* Icon-60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5398391B945C4C001C865F /* Icon-60@3x.png */; };
 		2D53983C1B945C58001C865F /* Icon-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D53983B1B945C58001C865F /* Icon-40.png */; };
 		2D53983E1B945C63001C865F /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D53983D1B945C63001C865F /* Icon-Small.png */; };
@@ -39,9 +40,6 @@
 		2D5FB2F21A67CA570041020C /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D5FB2F11A67CA570041020C /* MapKit.framework */; };
 		2D5FB2F41A67CAA60041020C /* wupp.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2F31A67CAA60041020C /* wupp.gpx */; };
 		2D5FB2F91A67CB120041020C /* belisBack.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2F51A67CB120041020C /* belisBack.png */; };
-		2D5FB2FA1A67CB120041020C /* leuchte.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2F61A67CB120041020C /* leuchte.png */; };
-		2D5FB2FB1A67CB120041020C /* mauerlasche.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2F71A67CB120041020C /* mauerlasche.png */; };
-		2D5FB2FC1A67CB120041020C /* ml.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2F81A67CB120041020C /* ml.png */; };
 		2D5FB3091A67CC340041020C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3011A67CC340041020C /* AppDelegate.swift */; };
 		2D5FB30B1A67CC340041020C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB3031A67CC340041020C /* LaunchScreen.xib */; };
 		2D5FB30C1A67CC340041020C /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB3041A67CC340041020C /* LoginViewController.swift */; };
@@ -87,16 +85,13 @@
 		2D9D3B1A1A9F777D0049F46F /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D9D3B191A9F777D0049F46F /* QuickLook.framework */; };
 		2D9D3B1C1A9F77B50049F46F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D9D3B1B1A9F77B50049F46F /* UIKit.framework */; };
 		2DB10EE91B299CA200B78852 /* FotoActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB10EE81B299CA200B78852 /* FotoActions.swift */; };
-		2DB6E8BC1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */; };
-		2DB6E8BD1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */; };
-		2DB6E8C21A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */; };
-		2DB6E8C31A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */; };
+		2DB6E8C21A9CA4DB00D4EA4E /* Glyphs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* Glyphs.swift */; };
+		2DB6E8C31A9CA4DB00D4EA4E /* Glyphs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E8C11A9CA4DB00D4EA4E /* Glyphs.swift */; };
 		2DB8E80E1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB8E80D1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift */; };
 		2DDF34FB1BDE1F5D00C3047D /* AdditionalFunctionalityPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DDF34FA1BDE1F5D00C3047D /* AdditionalFunctionalityPopoverViewController.swift */; };
 		2DE8B1A41B25C3EA00FCEBA7 /* testbild.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DE8B1A31B25C3EA00FCEBA7 /* testbild.png */; };
 		2DEDB58B1AFCCDC9004ADC92 /* schaltstelle.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DEDB58A1AFCCDC9004ADC92 /* schaltstelle.png */; };
 		2DF2C7DD1AB6E2FE00F3A2FC /* SimpleInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF2C7DC1AB6E2FE00F3A2FC /* SimpleInfoCell.swift */; };
-		2DF5EBCC1AFB6F9100062669 /* mast.png in Resources */ = {isa = PBXBuildFile; fileRef = 2DF5EBCB1AFB6F9100062669 /* mast.png */; };
 		2DF6A9BC1A82541900E20FBF /* MappingStuff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */; };
 		FF431EFC15C82F46A0B83967 /* Pods_belis_app.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EED8D3848BFD41A9686D772 /* Pods_belis_app.framework */; };
 /* End PBXBuildFile section */
@@ -137,6 +132,7 @@
 		2D46EEED1BF49185004E3D9E /* StandaloneGeom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandaloneGeom.swift; sourceTree = "<group>"; };
 		2D46EEF01BF4A75F004E3D9E /* MastActionForms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MastActionForms.swift; sourceTree = "<group>"; };
 		2D46EEF21BF4A771004E3D9E /* LeuchteActionForms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeuchteActionForms.swift; sourceTree = "<group>"; };
+		2D52D90C1C59029700BB3DED /* webhostinghub-glyphs.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "webhostinghub-glyphs.ttf"; sourceTree = "<group>"; };
 		2D5398391B945C4C001C865F /* Icon-60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-60@3x.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-60@3x.png"; sourceTree = "<group>"; };
 		2D53983B1B945C58001C865F /* Icon-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-40.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-40.png"; sourceTree = "<group>"; };
 		2D53983D1B945C63001C865F /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-Small.png"; sourceTree = "<group>"; };
@@ -150,9 +146,6 @@
 		2D5FB2F11A67CA570041020C /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		2D5FB2F31A67CAA60041020C /* wupp.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = wupp.gpx; sourceTree = "<group>"; };
 		2D5FB2F51A67CB120041020C /* belisBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = belisBack.png; sourceTree = "<group>"; };
-		2D5FB2F61A67CB120041020C /* leuchte.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leuchte.png; sourceTree = "<group>"; };
-		2D5FB2F71A67CB120041020C /* mauerlasche.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mauerlasche.png; sourceTree = "<group>"; };
-		2D5FB2F81A67CB120041020C /* ml.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ml.png; sourceTree = "<group>"; };
 		2D5FB3001A67CC330041020C /* belis-app-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "belis-app-Bridging-Header.h"; sourceTree = "<group>"; };
 		2D5FB3011A67CC340041020C /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2D5FB3031A67CC340041020C /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
@@ -210,14 +203,12 @@
 		2D9D3B191A9F777D0049F46F /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		2D9D3B1B1A9F77B50049F46F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		2DB10EE81B299CA200B78852 /* FotoActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FotoActions.swift; sourceTree = "<group>"; };
-		2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "webhostinghub-glyphs.ttf"; sourceTree = "<group>"; };
-		2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebHostingGlyph.swift; sourceTree = "<group>"; };
+		2DB6E8C11A9CA4DB00D4EA4E /* Glyphs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Glyphs.swift; sourceTree = "<group>"; };
 		2DB8E80D1AC3058F000340FE /* SimpleUrlPreviewInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleUrlPreviewInfoCell.swift; sourceTree = "<group>"; };
 		2DDF34FA1BDE1F5D00C3047D /* AdditionalFunctionalityPopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdditionalFunctionalityPopoverViewController.swift; sourceTree = "<group>"; };
 		2DE8B1A31B25C3EA00FCEBA7 /* testbild.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testbild.png; sourceTree = "<group>"; };
 		2DEDB58A1AFCCDC9004ADC92 /* schaltstelle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = schaltstelle.png; sourceTree = "<group>"; };
 		2DF2C7DC1AB6E2FE00F3A2FC /* SimpleInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleInfoCell.swift; sourceTree = "<group>"; };
-		2DF5EBCB1AFB6F9100062669 /* mast.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mast.png; sourceTree = "<group>"; };
 		2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MappingStuff.swift; sourceTree = "<group>"; };
 		8EED8D3848BFD41A9686D772 /* Pods_belis_app.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_belis_app.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		93AF52810D28D566103CEBEC /* Pods-belis-appTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-belis-appTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-belis-appTests/Pods-belis-appTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -328,14 +319,10 @@
 				2D1ED1891B8349B70004AAFA /* client.cert.dev.p12 */,
 				2D1ED1881B8349AD0004AAFA /* server.cert.dev.der */,
 				2D65AABB1AB09B8E00621A0A /* cismetSignet2k.png */,
-				2DB6E8BB1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf */,
 				2D2934261A84D4BF0034181F /* handle.png */,
+				2D52D90C1C59029700BB3DED /* webhostinghub-glyphs.ttf */,
 				2D5FB2F51A67CB120041020C /* belisBack.png */,
-				2D5FB2F61A67CB120041020C /* leuchte.png */,
-				2DF5EBCB1AFB6F9100062669 /* mast.png */,
 				2DEDB58A1AFCCDC9004ADC92 /* schaltstelle.png */,
-				2D5FB2F71A67CB120041020C /* mauerlasche.png */,
-				2D5FB2F81A67CB120041020C /* ml.png */,
 				2D5FB2F31A67CAA60041020C /* wupp.gpx */,
 				2D5FB2CD1A67C7320041020C /* Info.plist */,
 				2DE8B1A31B25C3EA00FCEBA7 /* testbild.png */,
@@ -371,7 +358,7 @@
 				2D939DEE1A690A6300FB2AFB /* CidsUtilityClasses.swift */,
 				2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */,
 				2D3DC3601A94F65E0035575A /* SwiftTools.swift */,
-				2DB6E8C11A9CA4DB00D4EA4E /* WebHostingGlyph.swift */,
+				2DB6E8C11A9CA4DB00D4EA4E /* Glyphs.swift */,
 				2D9D3AD31A9E239A0049F46F /* AF+Image+Extension.swift */,
 				2D9D3AD51A9E23DD0049F46F /* AF+ImageView+Extension.swift */,
 			);
@@ -579,6 +566,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D52D90D1C59072200BB3DED /* webhostinghub-glyphs.ttf in Resources */,
 				2D1ED18B1B8349CF0004AAFA /* server.cert.dev.der in Resources */,
 				2D1ED18A1B8349CB0004AAFA /* client.cert.dev.p12 in Resources */,
 				2D5FB2F41A67CAA60041020C /* wupp.gpx in Resources */,
@@ -592,17 +580,12 @@
 				2D0B7F6A1AB3454100E33A6C /* DoubleTitledInfoCell.xib in Resources */,
 				2D53983A1B945C4C001C865F /* Icon-60@3x.png in Resources */,
 				2D53983C1B945C58001C865F /* Icon-40.png in Resources */,
-				2D5FB2FC1A67CB120041020C /* ml.png in Resources */,
 				2D5FB2F91A67CB120041020C /* belisBack.png in Resources */,
-				2DB6E8BC1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */,
 				2D0E2C571B9EF0620092FA9B /* Icon-76@2x.png in Resources */,
 				2D5FB30D1A67CC340041020C /* Main.storyboard in Resources */,
 				2DE8B1A41B25C3EA00FCEBA7 /* testbild.png in Resources */,
 				2D5FB30B1A67CC340041020C /* LaunchScreen.xib in Resources */,
-				2D5FB2FB1A67CB120041020C /* mauerlasche.png in Resources */,
-				2DF5EBCC1AFB6F9100062669 /* mast.png in Resources */,
 				2D2934271A84D4BF0034181F /* handle.png in Resources */,
-				2D5FB2FA1A67CB120041020C /* leuchte.png in Resources */,
 				2D5FB2D91A67C7320041020C /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -611,7 +594,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2DB6E8BD1A9C894B00D4EA4E /* webhostinghub-glyphs.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -726,7 +708,7 @@
 				2D407C201AC2ECD40083013A /* DetailVC.swift in Sources */,
 				2D9D3AD61A9E23DD0049F46F /* AF+ImageView+Extension.swift in Sources */,
 				2D5FB32A1A67CCA60041020C /* WKTLineM.m in Sources */,
-				2DB6E8C21A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */,
+				2DB6E8C21A9CA4DB00D4EA4E /* Glyphs.swift in Sources */,
 				2D5FB3121A67CC780041020C /* MyOverlays.swift in Sources */,
 				2DF2C7DD1AB6E2FE00F3A2FC /* SimpleInfoCell.swift in Sources */,
 				2D5FB3401A67CCEB0041020C /* GeoBaseEntity.swift in Sources */,
@@ -781,7 +763,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2DB6E8C31A9CA4DB00D4EA4E /* WebHostingGlyph.swift in Sources */,
+				2DB6E8C31A9CA4DB00D4EA4E /* Glyphs.swift in Sources */,
 				2D5FB2E81A67C7320041020C /* belis_appTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

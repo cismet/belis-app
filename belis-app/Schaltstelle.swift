@@ -58,8 +58,13 @@ class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInf
     }
 
     // MARK: - essential overrides GeoBaseEntity
-    override func getAnnotationImageName() -> String{
-        return "schaltstelle.png";
+    override func getAnnotationImage(status: String?) -> UIImage{
+        if let s=status {
+            if let color=Arbeitsprotokoll.statusColors[s] {
+                return GlyphTools.sharedInstance().getGlyphedAnnotationImage("icon-squarepause",color: color);
+            }
+        }
+        return GlyphTools.sharedInstance().getGlyphedAnnotationImage("icon-squarepause");
     }
     override func getAnnotationTitle() -> String{
         return getMainTitle();

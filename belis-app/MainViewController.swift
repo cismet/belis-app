@@ -103,11 +103,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //UINavigationController(rootViewController: self)
         textfieldGeoSearch.delegate=self
         bbiMoreFunctionality.setTitleTextAttributes([
-            NSFontAttributeName : UIFont(name: "WebHostingHub-Glyphs", size: 16)!],
+            NSFontAttributeName : UIFont(name: GlyphTools.glyphFontName, size: 16)!],
             forState: UIControlState.Normal)
         bbiMoreFunctionality.title=WebHostingGlyps.glyphs["icon-chevron-down"]
         bbiZoomToAllObjects.setTitleTextAttributes([
-            NSFontAttributeName : UIFont(name: "WebHostingHub-Glyphs", size: 20)!],
+            NSFontAttributeName : UIFont(name: GlyphTools.glyphFontName, size: 20)!],
             forState: UIControlState.Normal)
         bbiZoomToAllObjects.title=WebHostingGlyps.glyphs["icon-world"]
         print(UIDevice.currentDevice().identifierForVendor!.UUIDString)
@@ -324,8 +324,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             //the view is dequeued or created...
             
             anView!.canShowCallout = gbePA.shouldShowCallout;
-            anView!.image = UIImage(named: gbePA.imageName);
-            
+            anView!.image = gbePA.annotationImage
+
             
             if let label=GlyphTools.sharedInstance().getGlyphedLabel(gbePA.glyphName) {
                 label.textColor=UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)
@@ -362,7 +362,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             //Set annotation-specific properties **AFTER**
             //the view is dequeued or created...
-            anView!.image = UIImage(named: gbeSMKPA.imageName);
+            anView!.image = gbeSMKPA.annotationImage;
             anView!.canShowCallout = gbeSMKPA.shouldShowCallout;
             anView!.alpha=0.9
             return anView
@@ -390,7 +390,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             //Set annotation-specific properties **AFTER**
             //the view is dequeued or created...
-            anView!.image = UIImage(named: gbeSPGA.imageName);
+            anView!.image = gbeSPGA.annotationImage;
             anView!.canShowCallout = gbeSPGA.shouldShowCallout;
             anView!.alpha=0.9
             return anView
@@ -490,7 +490,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let icon=UIBarButtonItem()
             icon.action="back:"
             //icon.image=getGlyphedImage("icon-chevron-left")
-            icon.image=getGlyphedImage("icon-chevron-left", fontsize: 11, size: CGSize(width: 14, height: 14))
+            icon.image=GlyphTools.sharedInstance().getGlyphedImage("icon-chevron-left", fontsize: 11, size: CGSize(width: 14, height: 14))
             detailVC.navigationItem.leftBarButtonItem = icon
             
             let detailNC=UINavigationController(rootViewController: detailVC)
@@ -909,7 +909,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 detailVC.objectToShow=gbe
                 detailVC.title=cellDataProvider.getTitle()
                 let icon=UIBarButtonItem()
-                icon.image=getGlyphedImage(cellDataProvider.getDetailGlyphIconString())
+                icon.image=GlyphTools.sharedInstance().getGlyphedImage(cellDataProvider.getDetailGlyphIconString())
                 detailVC.navigationItem.leftBarButtonItem = icon
             }
             if let actionProvider=gbe as? ActionProvider {
@@ -957,7 +957,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             matchingSearchItemsAnnotations.removeAll(keepCapacity: false)
         }
         let request = MKLocalSearchRequest()
-        request.naturalLanguageQuery = textfieldGeoSearch.text
+        request.naturalLanguageQuery = "Wuppertal, \(textfieldGeoSearch.text!)"
         request.region = mapView.region
         
         let search = MKLocalSearch(request: request)
@@ -1032,18 +1032,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
     }
-    func getGlyphedImage(glyphName: String, fontsize: CGFloat = 14, size: CGSize = CGSize(width: 20,height:20), offset: CGPoint = CGPoint(x: 0, y: 2), color: UIColor = UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0),backgroundcolor:UIColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0) ) -> UIImage? {
-        if let glyph=WebHostingGlyps.glyphs[glyphName] {
-            
-            let font=UIFont(name: "WebHostingHub-Glyphs", size: fontsize)!
-            let image=UIImage(text: glyph, font: font, color: color, backgroundColor: backgroundcolor, size: size, offset: offset)
-            return image
-        }
-        else  {
-            return nil
-        }
-    }
-    
+       
     //    func textFieldShouldReturn(textField: UITextField) -> Bool {
     //        self.view.endEditing(true)
     //        return false

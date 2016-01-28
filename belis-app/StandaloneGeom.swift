@@ -30,8 +30,8 @@ class StandaloneGeom: GeoBaseEntity, ObjectActionProvider {
     }
     
     // MARK: - essential overrides GeoBaseEntity
-    override func getAnnotationImageName() -> String{
-        return "mauerlasche.png";
+    override func getAnnotationImage(status: String?) -> UIImage{
+        return GlyphTools.sharedInstance().getGlyphedAnnotationImage("icon-squarerecord");
     }
     override func getAnnotationTitle() -> String{
         return getMainTitle();

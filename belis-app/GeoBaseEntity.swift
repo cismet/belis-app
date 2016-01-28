@@ -59,8 +59,8 @@ class GeoBaseEntity : BaseEntity, LeftSwipeActionProvider{
     func getAnnotationTitle() -> String{
         return "";
     }
-    func getAnnotationImageName() -> String{
-        return "";
+    func getAnnotationImage(status: String?=nil) -> UIImage{
+        return UIImage();
     }
     func canShowCallout() -> Bool{
         return false;
@@ -161,7 +161,7 @@ class GeoBaseEntity : BaseEntity, LeftSwipeActionProvider{
 
 
 class GeoBaseEntityPointAnnotation:MKPointAnnotation, GeoBaseEntityProvider{
-    var imageName: String!
+    var annotationImage: UIImage!
     var glyphName: String!
     var shouldShowCallout = false
     var geoBaseEntity: GeoBaseEntity
@@ -170,7 +170,7 @@ class GeoBaseEntityPointAnnotation:MKPointAnnotation, GeoBaseEntityProvider{
         super.init()
         let mPoint=point.toMapPointAnnotation();
         coordinate=mPoint.coordinate;
-        imageName=geoBaseEntity.getAnnotationImageName();
+        annotationImage=geoBaseEntity.getAnnotationImage();
         glyphName=geoBaseEntity.getAnnotationCalloutGlyphIconName();
         title=geoBaseEntity.getAnnotationTitle();
         //        subtitle=geoBaseEntity.getAnnotationSubTitle();
@@ -184,7 +184,7 @@ class GeoBaseEntityPointAnnotation:MKPointAnnotation, GeoBaseEntityProvider{
 }
 
 class GeoBaseEntityStyledMkPolylineAnnotation:MKPolyline{
-    var imageName: String!
+    var annotationImage: UIImage!
     var glyphName: String!
     var shouldShowCallout = false
     var geoBaseEntity: GeoBaseEntity
@@ -198,7 +198,7 @@ class GeoBaseEntityStyledMkPolylineAnnotation:MKPolyline{
         let mLine=line.toMapLine();
         mLine.title="."
         self.init(points: mLine.points(), count: mLine.pointCount)
-        imageName=geoBaseEntity.getAnnotationImageName();
+        annotationImage=geoBaseEntity.getAnnotationImage();
         glyphName=geoBaseEntity.getAnnotationCalloutGlyphIconName();
         title=geoBaseEntity.getAnnotationTitle();
         //        subtitle=geoBaseEntity.getAnnotationSubTitle();
@@ -214,7 +214,7 @@ class GeoBaseEntityStyledMkPolylineAnnotation:MKPolyline{
 class GeoBaseEntityStyledMkPolygonAnnotation:MKPolygon{
     var shouldShowCallout = false
     var geoBaseEntity: GeoBaseEntity
-    var imageName: String!
+    var annotationImage: UIImage!
     var glyphName: String!
     override init() {
         geoBaseEntity = GeoBaseEntity()
@@ -225,7 +225,7 @@ class GeoBaseEntityStyledMkPolygonAnnotation:MKPolygon{
         let mPolyg=polyg.toMapPolygon()
         mPolyg.title="."
         self.init(points: mPolyg.points(), count: mPolyg.pointCount)
-        imageName=geoBaseEntity.getAnnotationImageName();
+        annotationImage=geoBaseEntity.getAnnotationImage();
         glyphName=geoBaseEntity.getAnnotationCalloutGlyphIconName();
         title=geoBaseEntity.getAnnotationTitle();
         //        subtitle=geoBaseEntity.getAnnotationSubTitle();
