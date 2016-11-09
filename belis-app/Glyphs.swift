@@ -56,11 +56,11 @@ class GlyphTools {
         return self.instance
     }
     
-    func getGlyphedLabel(glyphName: String) -> UILabel? {
+    func getGlyphedLabel(_ glyphName: String) -> UILabel? {
         if let glyph=WebHostingGlyps.glyphs[glyphName] {
-            let label=UILabel(frame: CGRectMake(0, 0, 25,25))
+            let label=UILabel(frame: CGRect(x: 0, y: 0, width: 25,height: 25))
             label.font = UIFont(name: GlyphTools.glyphFontName, size: 20)
-            label.textAlignment=NSTextAlignment.Center
+            label.textAlignment=NSTextAlignment.center
             label.text=glyph
             label.sizeToFit()
             return label
@@ -69,12 +69,12 @@ class GlyphTools {
             return nil
         }
     }
-    func getGlyphedButton(glyphName: String) -> UIButton? {
+    func getGlyphedButton(_ glyphName: String) -> UIButton? {
         if let glyph=WebHostingGlyps.glyphs[glyphName] {
-            let btn=UIButton(frame: CGRectMake(0, 0, 25,25))
+            let btn=UIButton(frame: CGRect(x: 0, y: 0, width: 25,height: 25))
             btn.titleLabel!.font = UIFont(name: GlyphTools.glyphFontName, size: 20)
-            btn.titleLabel!.textAlignment=NSTextAlignment.Center
-            btn.setTitle(glyph, forState: UIControlState.Normal)
+            btn.titleLabel!.textAlignment=NSTextAlignment.center
+            btn.setTitle(glyph, for: UIControlState())
             btn.sizeToFit()
             return btn
         }
@@ -84,7 +84,7 @@ class GlyphTools {
     }
     
     
-    func getGlyphedAnnotationImage(glyphName: String, fontSize: CGFloat=7.0, color: UIColor = UIColor.blackColor(),backgroundcolor:UIColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0) ) -> UIImage {
+    func getGlyphedAnnotationImage(_ glyphName: String, fontSize: CGFloat=7.0, color: UIColor = UIColor.black,backgroundcolor:UIColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0) ) -> UIImage {
         if let glyph=WebHostingGlyps.glyphs[glyphName] {
 
             let font=UIFont(name: GlyphTools.glyphFontName, size: fontSize)!
@@ -96,7 +96,7 @@ class GlyphTools {
 
     }
     
-    func getGlyphedImage(glyphName: String, fontsize: CGFloat = 14, size: CGSize = CGSize(width: 20,height:20), offset: CGPoint = CGPoint(x: 0, y: 2), color: UIColor = UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0),backgroundcolor:UIColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0) ) -> UIImage {
+    func getGlyphedImage(_ glyphName: String, fontsize: CGFloat = 14, size: CGSize = CGSize(width: 20,height:20), offset: CGPoint = CGPoint(x: 0, y: 2), color: UIColor = UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0),backgroundcolor:UIColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0) ) -> UIImage {
         if let glyph=WebHostingGlyps.glyphs[glyphName] {
             
             let font=UIFont(name: GlyphTools.glyphFontName, size: fontsize)!
@@ -108,25 +108,25 @@ class GlyphTools {
 
     }
     
-    private func getTextImage(charText: String, font: UIFont = UIFont.systemFontOfSize(18), color: UIColor = UIColor.whiteColor(), backgroundColor: UIColor = UIColor.grayColor(), size:CGSize = CGSizeMake(100, 100), offset: CGPoint = CGPoint(x: 0, y: 0)) -> UIImage   {
+    fileprivate func getTextImage(_ charText: String, font: UIFont = UIFont.systemFont(ofSize: 18), color: UIColor = UIColor.white, backgroundColor: UIColor = UIColor.gray, size:CGSize = CGSize(width: 100, height: 100), offset: CGPoint = CGPoint(x: 0, y: 0)) -> UIImage   {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         let context = UIGraphicsGetCurrentContext()
-        CGContextSetFillColorWithColor(context, backgroundColor.CGColor)
-        CGContextFillRect(context, CGRect(origin: CGPoint(x: 0, y: 0), size: size))
+        context?.setFillColor(backgroundColor.cgColor)
+        context?.fill(CGRect(origin: CGPoint(x: 0, y: 0), size: size))
         let style = NSMutableParagraphStyle()
-        style.alignment = .Center
+        style.alignment = .center
         let attr = [NSFontAttributeName:font, NSForegroundColorAttributeName:color, NSParagraphStyleAttributeName:style]
         let rect = CGRect(x: offset.x, y: offset.y, width: size.width, height: size.height)
-        charText.drawInRect(rect, withAttributes: attr)
-        let result=UIImage(CGImage:UIGraphicsGetImageFromCurrentImageContext().CGImage!)
+        charText.draw(in: rect, withAttributes: attr)
+        let result=UIImage(cgImage:(UIGraphicsGetImageFromCurrentImageContext()?.cgImage!)!)
         UIGraphicsEndImageContext()
         return result;
     }
     
-    func setGlyphLabel(label: UILabel, glyphName: String) {
+    func setGlyphLabel(_ label: UILabel, glyphName: String) {
         if let glyph=WebHostingGlyps.glyphs[glyphName] {
             label.font = UIFont(name: GlyphTools.glyphFontName, size: 20)
-            label.textAlignment=NSTextAlignment.Center
+            label.textAlignment=NSTextAlignment.center
             label.text=glyph
             label.sizeToFit()
         }

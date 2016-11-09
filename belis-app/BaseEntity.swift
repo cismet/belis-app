@@ -16,8 +16,8 @@ class BaseEntity : Mappable {
         
     }
     // MARK: - required init because of ObjectMapper
-    required init?(_ map: Map) {
-        mapping(map)
+    required init?(map: Map) {
+        mapping(map: map)
     }
   
     // MARK: - essential methods

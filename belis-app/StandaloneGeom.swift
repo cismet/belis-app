@@ -14,8 +14,8 @@ class StandaloneGeom: GeoBaseEntity, ObjectActionProvider {
     var bezeichnung: String?
     
     // MARK: - required init because of ObjectMapper
-    required init?(_ map: Map) {
-        super.init(map)
+    required init?(map: Map) {
+        super.init(map: map)
     }
     
     // MARK: - essential overrides BaseEntity
@@ -30,7 +30,7 @@ class StandaloneGeom: GeoBaseEntity, ObjectActionProvider {
     }
     
     // MARK: - essential overrides GeoBaseEntity
-    override func getAnnotationImage(status: String?) -> UIImage{
+    override func getAnnotationImage(_ status: String?) -> UIImage{
         return GlyphTools.sharedInstance().getGlyphedAnnotationImage("icon-squarerecord");
     }
     override func getAnnotationTitle() -> String{

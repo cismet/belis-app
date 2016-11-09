@@ -18,26 +18,26 @@ class SelectionPopoverViewController: UIViewController {
     @IBOutlet weak var switchMasten: UISwitch!
     @IBOutlet weak var switchSchaltstellen: UISwitch!
     
-    @IBAction func leuchtenSwitchToggled(sender: AnyObject) {
-        mainVC.isLeuchtenEnabled=switchLeuchten.on
+    @IBAction func leuchtenSwitchToggled(_ sender: AnyObject) {
+        mainVC.isLeuchtenEnabled=switchLeuchten.isOn
     }
     
-    @IBAction func mastenSwitchToggled(sender: AnyObject) {
-        mainVC.isMastenEnabled=switchMasten.on
+    @IBAction func mastenSwitchToggled(_ sender: AnyObject) {
+        mainVC.isMastenEnabled=switchMasten.isOn
     }
     
-    @IBAction func mauerlaschenSwitchToggled(sender: AnyObject) {
-        mainVC.isMauerlaschenEnabled=switchMauerlaschen.on
-    }
-    
-    
-    @IBAction func leitungenSwitchToggled(sender: AnyObject) {
-        mainVC.isleitungenEnabled=switchLeitungen.on
+    @IBAction func mauerlaschenSwitchToggled(_ sender: AnyObject) {
+        mainVC.isMauerlaschenEnabled=switchMauerlaschen.isOn
     }
     
     
-    @IBAction func schaltstellenSwitchToggled(sender: AnyObject) {
-        mainVC.isSchaltstelleEnabled=switchSchaltstellen.on
+    @IBAction func leitungenSwitchToggled(_ sender: AnyObject) {
+        mainVC.isleitungenEnabled=switchLeitungen.isOn
+    }
+    
+    
+    @IBAction func schaltstellenSwitchToggled(_ sender: AnyObject) {
+        mainVC.isSchaltstelleEnabled=switchSchaltstellen.isOn
     }
     
     

@@ -57,7 +57,11 @@ class Url : BaseEntity{
     }
     required init?(_ map: Map) {
         super.init()
-        mapping(map)
+        mapping(map: map)
+    }
+    
+    required init?(map: Map) {
+        fatalError("init(map:) has not been implemented")
     }
     
     
@@ -85,8 +89,8 @@ class UrlBase : BaseEntity{
     
     }
     
-    required init?(_ map: Map) {
-        super.init(map)
+    required init?(map: Map) {
+        super.init(map: map)
     }
 
     

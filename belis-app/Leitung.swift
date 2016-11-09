@@ -17,8 +17,8 @@ class Leitung : GeoBaseEntity ,CellInformationProviderProtocol, CellDataProvider
     var laenge: Float?
 
     // MARK: - required init because of ObjectMapper
-    required init?(_ map: Map) {
-        super.init(map)
+    required init?(map: Map) {
+        super.init(map: map)
     }
     
     // MARK: - essential overrides BaseEntity
@@ -95,7 +95,7 @@ class Leitung : GeoBaseEntity ,CellInformationProviderProtocol, CellDataProvider
     }
     
     // MARK: - DocumentContainer Impl
-    func addDocument(document: DMSUrl) {
+    func addDocument(_ document: DMSUrl) {
         dokumente.append(document)
     }
    

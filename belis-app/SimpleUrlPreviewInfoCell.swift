@@ -10,7 +10,7 @@ import Foundation
 
 class SimpleUrlPreviewInfoCell : UITableViewCell, CellDataUI {
     
-    func fillFromCellData(cellData: CellData) {
+    func fillFromCellData(_ cellData: CellData) {
         if let d=cellData as? SimpleUrlPreviewInfoCellData{
             super.textLabel!.text=d.title
         }
@@ -34,9 +34,9 @@ class SimpleUrlPreviewInfoCellData : CellData, SimpleCellActionProvider {
         return "simpleUrl"
     }
     
-    @objc func action(vc:UIViewController) {
+    @objc func action(_ vc:UIViewController) {
         let previewVC=DokumentPreviewVC(nibName: "DokumentPreviewVC", bundle: nil)
-        previewVC.nsUrlToLoad=NSURL(string: self.url )
+        previewVC.nsUrlToLoad=URL(string: self.url )
         vc.navigationController?.pushViewController(previewVC, animated: true)
     }
 

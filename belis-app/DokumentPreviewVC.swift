@@ -10,7 +10,7 @@ import UIKit
  
 class DokumentPreviewVC: UIViewController , UIWebViewDelegate {
 
-    var nsUrlToLoad: NSURL?
+    var nsUrlToLoad: URL?
     var urlToLoad: String?
     
     @IBOutlet weak var webview: UIWebView!
@@ -22,7 +22,7 @@ class DokumentPreviewVC: UIViewController , UIWebViewDelegate {
 //        self.navigationItem.setRightBarButtonItems([a,b], animated: true)
         
         webview.scalesPageToFit=true
-        webview.contentMode=UIViewContentMode.ScaleAspectFit
+        webview.contentMode=UIViewContentMode.scaleAspectFit
         webview.delegate=self
         
         if let nsu=nsUrlToLoad {
@@ -31,7 +31,7 @@ class DokumentPreviewVC: UIViewController , UIWebViewDelegate {
             
         }
         else if let url=urlToLoad{
-            if let nsu=NSURL(string: url){
+            if let nsu=URL(string: url){
                 nsUrlToLoad=nsu
                 loadUrl(nsu)
             }
@@ -54,20 +54,20 @@ class DokumentPreviewVC: UIViewController , UIWebViewDelegate {
     
     func someAction() {
         // 1
-        let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .ActionSheet)
+        let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
         
         // 2
-        let deleteAction = UIAlertAction(title: "Delete", style: .Default, handler: {
+        let deleteAction = UIAlertAction(title: "Delete", style: .default, handler: {
             (alert: UIAlertAction) -> Void in
             print("File Deleted")
         })
-        let saveAction = UIAlertAction(title: "Save", style: .Default, handler: {
+        let saveAction = UIAlertAction(title: "Save", style: .default, handler: {
             (alert: UIAlertAction) -> Void in
             print("File Saved")
         })
         
         //
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
             (alert: UIAlertAction) -> Void in
             print("Cancelled")
         })
@@ -79,7 +79,7 @@ class DokumentPreviewVC: UIViewController , UIWebViewDelegate {
         optionMenu.addAction(cancelAction)
         
         // 5
-        self.presentViewController(optionMenu, animated: true, completion: nil)
+        self.present(optionMenu, animated: true, completion: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -98,10 +98,10 @@ class DokumentPreviewVC: UIViewController , UIWebViewDelegate {
     }
     */
     
-    func loadUrl(url: NSURL){
+    func loadUrl(_ url: URL){
         
-        if url.path!.endsWith(".jpg", caseSensitive: false) || url.path!.endsWith(".png", caseSensitive: false) {
-            var imageUrl="http://\(Secrets.getWebDavAuthString())@\(url.host!)\(url.path!)"
+        if url.path.endsWith(".jpg", caseSensitive: false) || url.path.endsWith(".png", caseSensitive: false) {
+            var imageUrl="http://\(Secrets.getWebDavAuthString())@\(url.host!)\(url.path)"
             //        imageUrl=test
             if imageUrl.endsWith(".jpg", caseSensitive: false) {
                 imageUrl=imageUrl+".thumbnail.jpg"
@@ -115,16 +115,16 @@ class DokumentPreviewVC: UIViewController , UIWebViewDelegate {
             webview.loadHTMLString(body, baseURL: nil)
         }
         else {
-            let request = NSMutableURLRequest(URL: url, cachePolicy: NSURLRequestCachePolicy.ReturnCacheDataElseLoad, timeoutInterval: 100)
+            let request = NSMutableURLRequest(url: url, cachePolicy: NSURLRequest.CachePolicy.returnCacheDataElseLoad, timeoutInterval: 100)
 
         let loginString = NSString(format: "%@", Secrets.getWebDavAuthString())
-        let loginData: NSData = loginString.dataUsingEncoding(NSUTF8StringEncoding)!
-        let base64LoginString = loginData.base64EncodedStringWithOptions([])
+        let loginData: Data = loginString.data(using: String.Encoding.utf8.rawValue)!
+        let base64LoginString = loginData.base64EncodedString(options: [])
 //        var defaultCredentials: NSURLCredential = NSURLCredential(user: login, password: password, persistence: NSURLCredentialPersistence.ForSession);
         
        request.setValue("Basic \(base64LoginString)", forHTTPHeaderField: "Authorization")
             //NSURLConnection(request: request, delegate: self)
-            webview.loadRequest(request)
+            webview.loadRequest(request as URLRequest)
         }
     }
     
@@ -133,17 +133,17 @@ class DokumentPreviewVC: UIViewController , UIWebViewDelegate {
 //        
 //        return true
 //    }
-    func webViewDidStartLoad(webView: UIWebView) {
+    func webViewDidStartLoad(_ webView: UIWebView) {
         print("start")
         
     }
-    func webViewDidFinishLoad(webView: UIWebView) {
+    func webViewDidFinishLoad(_ webView: UIWebView) {
         print("finished")
     }
-    func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
-        if let err=error {
-        print("Failed with error:\(err.localizedDescription)")
-        }
+    func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
+        
+        print("Failed with error:\(error.localizedDescription)")
+        
     }
 
     

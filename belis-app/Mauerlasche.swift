@@ -15,7 +15,7 @@ class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProv
     var material: Mauerlaschenmaterial?
     var strasse: Strasse?
     var dokumente: [DMSUrl] = []
-    var pruefdatum: NSDate?
+    var pruefdatum: Date?
     var monteur: String?
     var bemerkung: String?
     var foto: DMSUrl?
@@ -29,15 +29,15 @@ class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProv
         self.wgs84WKT=geoString;
     }
 
-    required init?(_ map: Map) {
-        super.init(map)
+    required init?(map: Map) {
+        super.init(map: map)
     }
 
     override func getType() -> Entity {
         return Entity.MAUERLASCHEN
     }
 
-    override func getAnnotationImage(status: String?) -> UIImage{
+    override func getAnnotationImage(_ status: String?) -> UIImage{
         if let s=status {
             if let color=Arbeitsprotokoll.statusColors[s] {
                 return GlyphTools.sharedInstance().getGlyphedAnnotationImage("icon-plaque",color: color);
@@ -145,7 +145,7 @@ class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProv
         return actions
     }
         
-    func addDocument(document: DMSUrl) {
+    func addDocument(_ document: DMSUrl) {
         dokumente.append(document)
     }
 

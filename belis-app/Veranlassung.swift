@@ -25,13 +25,13 @@ class Veranlassung : BaseEntity, CellDataProvider  {
     var abzweigdosen: [Abzweigdose] = []
     var leuchten: [Leuchte] = []
     var bezeichnung: String?
-    var datum: NSDate?
+    var datum: Date?
     var schaltstellen: [Schaltstelle] = []
     var leitungen: [Leitung] = []
 
     // MARK: - required init because of ObjectMapper
-    required init?(_ map: Map) {
-        super.init(map)
+    required init?(map: Map) {
+        super.init(map: map)
     }
     
     // MARK: - essential overrides BaseEntity
@@ -89,8 +89,8 @@ class Infobaustein: BaseEntity {
     var pflichtfeld: Bool?
     var wert: String?
     var bezeichnung: String?
-    required init?(_ map: Map) {
-        super.init(map)
+    required init?(map: Map) {
+        super.init(map: map)
     }
     
     override func mapping(map: Map) {
@@ -107,8 +107,8 @@ class InfobausteinTemplate: BaseEntity {
     var schluessel: String?
     var bezeichnung: String?
     var bausteine: [Infobaustein]=[]
-    required init?(_ map: Map) {
-        super.init(map)
+    required init?(map: Map) {
+        super.init(map: map)
     }
     
     override func mapping(map: Map) {
@@ -123,8 +123,8 @@ class Veranlassungsart: BaseEntity {
     var schluessel: String?
     var bezeichnung: String?
 
-    required init?(_ map: Map) {
-        super.init(map)
+    required init?(map: Map) {
+        super.init(map: map)
     }
     
     override func mapping(map: Map) {

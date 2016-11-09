@@ -12,8 +12,8 @@ import Foundation
 class BaseEntityAction : NSObject{
     var title:String
     var style:UIAlertActionStyle
-    var handler: (UIAlertAction!, BaseEntityAction, BaseEntity,UIViewController)->Void
-    init(title: String, style: UIAlertActionStyle, handler: (UIAlertAction!, BaseEntityAction, BaseEntity,UIViewController)->Void){
+    var handler: (UIAlertAction?, BaseEntityAction, BaseEntity,UIViewController)->Void
+    init(title: String, style: UIAlertActionStyle, handler: @escaping (UIAlertAction?, BaseEntityAction, BaseEntity,UIViewController)->Void){
         self.title=title
         self.style=style
         self.handler=handler
@@ -21,5 +21,5 @@ class BaseEntityAction : NSObject{
 }
 
 protocol DocumentContainer {
-    func addDocument(document: DMSUrl)
+    func addDocument(_ document: DMSUrl)
 }

@@ -22,11 +22,11 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         super.viewDidLoad()
         tableView.delegate=self
         // Do any additional setup after loading the view.
-        tableView.registerNib(UINib(nibName: "SingleTitledInfoCell", bundle: nil), forCellReuseIdentifier: "singleTitled")
-        tableView.registerNib(UINib(nibName: "DoubleTitledInfoCell", bundle: nil), forCellReuseIdentifier: "doubleTitled")
-        tableView.registerNib(UINib(nibName: "MemoTitledInfoCell", bundle: nil), forCellReuseIdentifier: "memoTitled")
-        tableView.registerClass(SimpleInfoCell.self, forCellReuseIdentifier: "simple")
-        tableView.registerClass(SimpleUrlPreviewInfoCell.self, forCellReuseIdentifier: "simpleUrl")
+        tableView.register(UINib(nibName: "SingleTitledInfoCell", bundle: nil), forCellReuseIdentifier: "singleTitled")
+        tableView.register(UINib(nibName: "DoubleTitledInfoCell", bundle: nil), forCellReuseIdentifier: "doubleTitled")
+        tableView.register(UINib(nibName: "MemoTitledInfoCell", bundle: nil), forCellReuseIdentifier: "memoTitled")
+        tableView.register(SimpleInfoCell.self, forCellReuseIdentifier: "simple")
+        tableView.register(SimpleUrlPreviewInfoCell.self, forCellReuseIdentifier: "simpleUrl")
         tableView.rowHeight=UITableViewAutomaticDimension
     }
  
@@ -35,14 +35,14 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         // Dispose of any resources that can be recreated.
     }
     
-    func setCellData(data:[String: [CellData]]){
+    func setCellData(_ data:[String: [CellData]]){
         self.data=data
     }
     
     func moreAction() {
         
         if actions.count>0 {
-            let optionMenu = UIAlertController(title: nil, message: "Aktion auswählen", preferredStyle: UIAlertControllerStyle.ActionSheet)
+            let optionMenu = UIAlertController(title: nil, message: "Aktion auswählen", preferredStyle: UIAlertControllerStyle.actionSheet)
             
             for action in actions {
                 let alertAction = UIAlertAction(title: action.title, style: action.style, handler: {
@@ -55,12 +55,12 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
                 optionMenu.addAction(alertAction)
             }
             
-            self.presentViewController(optionMenu, animated: true, completion: nil)
+            self.present(optionMenu, animated: true, completion: nil)
         }
         
     }
     
-    func doIt (alert: UIAlertAction!) {
+    func doIt (_ alert: UIAlertAction!) {
         print("mine")
     }
     
@@ -76,17 +76,17 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
     */
     
     // MARK: UITableViewDataSource
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionKey: String = sections[section]
         return data[sectionKey]?.count ?? 0
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let row=indexPath.row
-        let section = indexPath.section
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let row=(indexPath as NSIndexPath).row
+        let section = (indexPath as NSIndexPath).section
         let sectionKey: String = sections[section]
         let dataItem: CellData = data[sectionKey]![row]
         let cellReuseId=dataItem.getCellReuseIdentifier()
-        let cell: UITableViewCell  = tableView.dequeueReusableCellWithIdentifier(cellReuseId)! as UITableViewCell
+        let cell: UITableViewCell  = tableView.dequeueReusableCell(withIdentifier: cellReuseId)! as UITableViewCell
         if let filler = cell as? CellDataUI {
             filler.fillFromCellData(dataItem)
         }
@@ -95,7 +95,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         }
         return cell
     }
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if  sections.count>section{
             let sectionKey: String = sections[section]
             if section==0 || (data[sectionKey]?.count ?? 0)==0 {
@@ -109,28 +109,28 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
             return 0
         }
     }
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        let row=indexPath.row
-        let section = indexPath.section
+        let row=(indexPath as NSIndexPath).row
+        let section = (indexPath as NSIndexPath).section
         let sectionKey: String = sections[section]
         let dataItem: CellData = data[sectionKey]![row]
         let cellReuseId=dataItem.getCellReuseIdentifier()
-        let cell: UITableViewCell  = tableView.dequeueReusableCellWithIdentifier(cellReuseId)! as UITableViewCell
+        let cell: UITableViewCell  = tableView.dequeueReusableCell(withIdentifier: cellReuseId)! as UITableViewCell
         if let heightProvider = cell as? CellDataUI {
             return heightProvider.getPreferredCellHeight()
         }
         return 44
     }
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
     
     
     // MARK: UITableViewDelegate
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
-        let row=indexPath.row
-        let section = indexPath.section
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+        let row=(indexPath as NSIndexPath).row
+        let section = (indexPath as NSIndexPath).section
         let sectionKey: String = sections[section]
         let dataItem: CellData = data[sectionKey]![row]
         if let actionProvider = dataItem as? SimpleCellActionProvider {
@@ -138,12 +138,12 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         }
     }
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sections[section]
     }
 
     // MARK: UIImagePickerControllerDelegate
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         print("DetailVC FINISH")
         if let x = (callBacker as? UIImagePickerControllerDelegate) {
             x.imagePickerController!(picker, didFinishPickingMediaWithInfo: info)
@@ -151,7 +151,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         //picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
         
     }
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         print("DetailVC CANCEL")
         if let x = (callBacker as? UIImagePickerControllerDelegate) {
             x.imagePickerControllerDidCancel!(picker)

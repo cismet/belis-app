@@ -12,7 +12,7 @@ import MGSwipeTableCell
 
 class GeoBaseEntity : BaseEntity, LeftSwipeActionProvider{
     var mapObject : NSObject?;
-    private var geom :WKTGeometry?
+    fileprivate var geom :WKTGeometry?
     
     var wgs84WKT : String?
         {
@@ -51,15 +51,15 @@ class GeoBaseEntity : BaseEntity, LeftSwipeActionProvider{
     }
 
     // MARK: - required init because of ObjectMapper
-    required init?(_ map: Map) {
-        super.init(map)
+    required init?(map: Map) {
+        super.init(map: map)
     }
     
     // MARK: - essential overrides GeoBaseEntity
     func getAnnotationTitle() -> String{
         return "";
     }
-    func getAnnotationImage(status: String?=nil) -> UIImage{
+    func getAnnotationImage(_ status: String?=nil) -> UIImage{
         return UIImage();
     }
     func canShowCallout() -> Bool{
@@ -75,7 +75,7 @@ class GeoBaseEntity : BaseEntity, LeftSwipeActionProvider{
         
         let zoom=MGSwipeButton(title: "Zoom", backgroundColor: zoomC ,callback: {
             (sender: MGSwipeTableCell!) -> Bool in
-            if let anno=self.mapObject as? MKAnnotation, mainVC=CidsConnector.sharedInstance().mainVC {
+            if let anno=self.mapObject as? MKAnnotation, let mainVC=CidsConnector.sharedInstance().mainVC {
                  mainVC.zoomToFitMapAnnotations([anno])
             }
             return true
@@ -83,36 +83,36 @@ class GeoBaseEntity : BaseEntity, LeftSwipeActionProvider{
         return [zoom]
     }
     // MARK: - object functions
-    func addToMapView(mapView:MKMapView) {
+    func addToMapView(_ mapView:MKMapView) {
         if let mo=mapObject {
             if let moPoint=mo as? GeoBaseEntityPointAnnotation {
                 mapView.addAnnotation(moPoint)
             }
             else if let moLine=mo as? GeoBaseEntityStyledMkPolylineAnnotation {
-                mapView.addOverlay(moLine)
+                mapView.add(moLine)
                 mapView.addAnnotation(moLine)
             }
             else if let moPolygon=mo as? GeoBaseEntityStyledMkPolygonAnnotation {
-                mapView.addOverlay(moPolygon)
+                mapView.add(moPolygon)
                 mapView.addAnnotation(moPolygon)
                 
             }
         }
     }
-    func removeFromMapView(mapView:MKMapView) {
+    func removeFromMapView(_ mapView:MKMapView) {
         if let mo=mapObject {
             if let moPoint=mo as? GeoBaseEntityPointAnnotation {
                 mapView.removeAnnotation(moPoint)
             }
             else if let moLine=mo as? GeoBaseEntityStyledMkPolylineAnnotation {
-                mapView.removeOverlay(moLine)
+                mapView.remove(moLine)
             }
             else if let moPoly=mo as? GeoBaseEntityStyledMkPolygonAnnotation {
-                mapView.removeOverlay(moPoly)
+                mapView.remove(moPoly)
             }
         }
     }
-    func liesIn(coordinateRegion: MKCoordinateRegion ) -> Bool{
+    func liesIn(_ coordinateRegion: MKCoordinateRegion ) -> Bool{
         let region = coordinateRegion;
         
         let center   = region.center;
@@ -137,7 +137,7 @@ class GeoBaseEntity : BaseEntity, LeftSwipeActionProvider{
         }
         else if mapObject is MKPolyline {
             let line = mapObject as! MKPolyline;
-            var coords = [CLLocationCoordinate2D](count: line.pointCount, repeatedValue: kCLLocationCoordinate2DInvalid);
+            var coords = [CLLocationCoordinate2D](repeating: kCLLocationCoordinate2DInvalid, count: line.pointCount);
             line.getCoordinates(&coords, range: NSMakeRange(0, line.pointCount));
             
             for coord in coords {
@@ -169,7 +169,7 @@ class GeoBaseEntityPointAnnotation:MKPointAnnotation, GeoBaseEntityProvider{
         self.geoBaseEntity=geoBaseEntity
         super.init()
         let mPoint=point.toMapPointAnnotation();
-        coordinate=mPoint.coordinate;
+        coordinate=(mPoint?.coordinate)!;
         annotationImage=geoBaseEntity.getAnnotationImage();
         glyphName=geoBaseEntity.getAnnotationCalloutGlyphIconName();
         title=geoBaseEntity.getAnnotationTitle();
@@ -196,8 +196,8 @@ class GeoBaseEntityStyledMkPolylineAnnotation:MKPolyline{
     convenience init(line: WKTLine, geoBaseEntity: GeoBaseEntity) {
         self.init()
         let mLine=line.toMapLine();
-        mLine.title="."
-        self.init(points: mLine.points(), count: mLine.pointCount)
+        mLine?.title="."
+        self.init(points: (mLine?.points())!, count: (mLine?.pointCount)!)
         annotationImage=geoBaseEntity.getAnnotationImage();
         glyphName=geoBaseEntity.getAnnotationCalloutGlyphIconName();
         title=geoBaseEntity.getAnnotationTitle();
@@ -223,8 +223,8 @@ class GeoBaseEntityStyledMkPolygonAnnotation:MKPolygon{
     convenience init(polyg: WKTPolygon, geoBaseEntity: GeoBaseEntity) {
         self.init()
         let mPolyg=polyg.toMapPolygon()
-        mPolyg.title="."
-        self.init(points: mPolyg.points(), count: mPolyg.pointCount)
+        mPolyg?.title="."
+        self.init(points: (mPolyg?.points())!, count: (mPolyg?.pointCount)!)
         annotationImage=geoBaseEntity.getAnnotationImage();
         glyphName=geoBaseEntity.getAnnotationCalloutGlyphIconName();
         title=geoBaseEntity.getAnnotationTitle();

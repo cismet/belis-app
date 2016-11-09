@@ -9,18 +9,18 @@
 import Foundation
 
 class SimpleInfoCell : UITableViewCell, CellDataUI {
-    func fillFromCellData(cellData: CellData) {
+    func fillFromCellData(_ cellData: CellData) {
         if let d=cellData as? SimpleInfoCellData{
             super.textLabel!.text=d.data
-            accessoryType=UITableViewCellAccessoryType.None
+            accessoryType=UITableViewCellAccessoryType.none
 
         }else if let d=cellData as? SimpleInfoCellDataWithDetails{
             super.textLabel!.text=d.data
-            accessoryType=UITableViewCellAccessoryType.DisclosureIndicator
+            accessoryType=UITableViewCellAccessoryType.disclosureIndicator
 
         }else if let d=cellData as? SimpleInfoCellDataWithDetailsDrivenByWholeObject{
             super.textLabel!.text=d.data
-            accessoryType=UITableViewCellAccessoryType.DisclosureIndicator
+            accessoryType=UITableViewCellAccessoryType.disclosureIndicator
         }
     }
     func getPreferredCellHeight() -> CGFloat {
@@ -60,7 +60,7 @@ class SimpleInfoCellDataWithDetails : CellData,SimpleCellActionProvider {
     }
     
     
-    @objc func action(vc:UIViewController) {
+    @objc func action(_ vc:UIViewController) {
         let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
         detailVC.sections=sections
         detailVC.setCellData(details)
@@ -86,7 +86,7 @@ class SimpleInfoCellDataWithDetailsDrivenByWholeObject : CellData,SimpleCellActi
     }
     
     
-    @objc func action(vc:UIViewController) {
+    @objc func action(_ vc:UIViewController) {
         let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
         detailVC.sections=(detailObject as! CellDataProvider).getDataSectionKeys()
         detailVC.setCellData((detailObject as! CellDataProvider).getAllData())
@@ -95,7 +95,7 @@ class SimpleInfoCellDataWithDetailsDrivenByWholeObject : CellData,SimpleCellActi
         detailVC.objectToShow=detailObject
         if showSubActions {
             if let actionProvider = detailObject as? ActionProvider  {
-                let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
+                let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.action, target: detailVC, action:Selector(("moreAction")))
                 detailVC.navigationItem.rightBarButtonItem = action
                 detailVC.actions=actionProvider.getAllActions()
             }

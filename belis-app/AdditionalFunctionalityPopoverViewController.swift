@@ -25,10 +25,10 @@ class AdditionalFunctionalityPopoverViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func logoutButtonTabbed(sender: AnyObject) {
+    @IBAction func logoutButtonTabbed(_ sender: AnyObject) {
         if let lvc=mainVC.loginViewController {
-            self.dismissViewControllerAnimated(true, completion: {
-                self.mainVC.dismissViewControllerAnimated(true, completion: {
+            self.dismiss(animated: true, completion: {
+                self.mainVC.dismiss(animated: true, completion: {
                     lvc.txtPass.text=""
                 })
                 
@@ -37,15 +37,15 @@ class AdditionalFunctionalityPopoverViewController: UIViewController {
         }
     }
 
-    @IBAction func chooseTeamTapped(sender: AnyObject) {    
-        self.dismissViewControllerAnimated(true) { () -> Void in
-            let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.Alert)
+    @IBAction func chooseTeamTapped(_ sender: AnyObject) {    
+        self.dismiss(animated: true) { () -> Void in
+            let alertController = UIAlertController(title: nil, message: nil, preferredStyle: UIAlertControllerStyle.alert)
             for teamKey in CidsConnector.sharedInstance().sortedTeamListKeys {
                 let team=CidsConnector.sharedInstance().teamList[teamKey]!
-                alertController.addAction(UIAlertAction(title:team.name ?? "-", style: .Default, handler: {
+                alertController.addAction(UIAlertAction(title:team.name ?? "-", style: .default, handler: {
                     (alert: UIAlertAction) -> Void in
                     CidsConnector.sharedInstance().selectedTeam=team
-                    NSUserDefaults.standardUserDefaults().setObject("\(team.id)", forKey: "teamid")
+                    UserDefaults.standard.set("\(team.id)", forKey: "teamid")
                     CidsConnector.sharedInstance().mainVC?.clearAll()
                     CidsConnector.sharedInstance().mainVC?.itemArbeitsauftrag.title="Kein Arbeitsauftrag ausgewählt (\(CidsConnector.sharedInstance().selectedTeam?.name ?? "-"))"
                 }))
@@ -56,7 +56,7 @@ class AdditionalFunctionalityPopoverViewController: UIViewController {
 //            popover.permittedArrowDirections = .Left
 //            popover.sourceView = self.teamChooserButton
 //            popover.sourceRect = self.teamChooserButton.bounds
-            self.mainVC.presentViewController(alertController, animated: true, completion: nil)
+            self.mainVC.present(alertController, animated: true, completion: nil)
         }
         
 

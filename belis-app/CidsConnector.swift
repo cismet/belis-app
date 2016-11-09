@@ -10,7 +10,7 @@ import Foundation
 import ObjectMapper
 import Security
 
-public class CidsConnector {
+open class CidsConnector {
     
     // MARK: - fill simulator value
     #if arch(i386) || arch(x86_64)
@@ -32,17 +32,17 @@ public class CidsConnector {
     // MARK: - Values with custom getters and setters
     var tlsEnabled=false {
         didSet {
-            NSUserDefaults.standardUserDefaults().setObject(tlsEnabled, forKey: "tlsEnabled")
+            UserDefaults.standard.set(tlsEnabled, forKey: "tlsEnabled")
         }
     }
     var pureBaseUrl="192.168.178.38" {
         didSet {
-            NSUserDefaults.standardUserDefaults().setObject(pureBaseUrl, forKey: "cidsPureBaseURL")
+            UserDefaults.standard.set(pureBaseUrl, forKey: "cidsPureBaseURL")
         }
     }
     var baseUrlport="8890" {
         didSet {
-            NSUserDefaults.standardUserDefaults().setObject(baseUrlport, forKey: "cidsBaseURLPort")
+            UserDefaults.standard.set(baseUrlport, forKey: "cidsBaseURLPort")
         }
     }
     
@@ -59,13 +59,13 @@ public class CidsConnector {
     
     var docFolder: String {
         get {
-            return NSSearchPathForDirectoriesInDomains(.DocumentDirectory,.UserDomainMask,true)[0]
+            return NSSearchPathForDirectoriesInDomains(.documentDirectory,.userDomainMask,true)[0]
         }
     }
     
     var serverCert: String?{
         didSet {
-            NSUserDefaults.standardUserDefaults().setObject(serverCert, forKey: "serverCert")
+            UserDefaults.standard.set(serverCert, forKey: "serverCert")
         }
     }
     var serverCertPath: String {
@@ -79,14 +79,14 @@ public class CidsConnector {
                 }
             }
             else {
-                return NSBundle.mainBundle().pathForResource("server.cert.dev", ofType:"der")!
+                return Bundle.main.path(forResource: "server.cert.dev", ofType:"der")!
             }
         }
     }
     
     var clientCert: String? {
         didSet {
-            NSUserDefaults.standardUserDefaults().setObject(clientCert, forKey: "clientCert")
+            UserDefaults.standard.set(clientCert, forKey: "clientCert")
         }
     }
     
@@ -101,24 +101,24 @@ public class CidsConnector {
                 }
             }
             else {
-                return NSBundle.mainBundle().pathForResource("client.cert.dev", ofType: "p12")!
+                return Bundle.main.path(forResource: "client.cert.dev", ofType: "p12")!
             }
         }
     }
     
     var clientCertContainerPass: String = ""{
         didSet {
-            NSUserDefaults.standardUserDefaults().setObject(clientCertContainerPass, forKey: "clientCertContainerPass")
+            UserDefaults.standard.set(clientCertContainerPass, forKey: "clientCertContainerPass")
         }
     }
     
     // MARK: - other variables
-    private var login : String!
-    private var password : String!
-    private let domain = "BELIS2"
+    fileprivate var login : String!
+    fileprivate var password : String!
+    fileprivate let domain = "BELIS2"
     
-    let blockingQueue = NSOperationQueue()
-    let backgroundQeue = NSOperationQueue()
+    let blockingQueue = OperationQueue()
+    let backgroundQeue = OperationQueue()
     
     var searchResults=[Entity: [GeoBaseEntity]]()
     
@@ -126,7 +126,7 @@ public class CidsConnector {
     var selectedArbeitsauftrag: Arbeitsauftrag?
     
     var veranlassungsCache=[String:Veranlassung]()
-    let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+    let configuration = URLSessionConfiguration.default
     var mainVC:MainViewController?
     var start=CidsConnector.currentTimeMillis();
     var loggedIn=false
@@ -153,29 +153,29 @@ public class CidsConnector {
     // MARK: - constructor
     init(){
         
-        let storedTLSEnabled: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("tlsEnabled")
+        let storedTLSEnabled: AnyObject? = UserDefaults.standard.object(forKey: "tlsEnabled") as AnyObject?
         if let storedTLSEnabledAsBool=storedTLSEnabled as? Bool {
             tlsEnabled=storedTLSEnabledAsBool
         }
-        let storedPureUrlBase: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("cidsPureBaseURL")
+        let storedPureUrlBase: AnyObject? = UserDefaults.standard.object(forKey: "cidsPureBaseURL") as AnyObject?
         if let storedPureUrlBaseAsString=storedPureUrlBase as? String {
             pureBaseUrl=storedPureUrlBaseAsString
         }
         
-        let storedPort: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("cidsBaseURLPort")
+        let storedPort: AnyObject? = UserDefaults.standard.object(forKey: "cidsBaseURLPort") as AnyObject?
         if let storedPortAsString=storedPort as? String {
             baseUrlport=storedPortAsString
         }
         
-        let storedServerCertPath: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("serverCert")
+        let storedServerCertPath: AnyObject? = UserDefaults.standard.object(forKey: "serverCert") as AnyObject?
         if let storedServerCertPathString=storedServerCertPath as? String {
             serverCert=storedServerCertPathString
         }
-        let storedClientCertPath: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("clientCert")
+        let storedClientCertPath: AnyObject? = UserDefaults.standard.object(forKey: "clientCert") as AnyObject?
         if let storedClientCertPathString=storedClientCertPath as? String {
             clientCert=storedClientCertPathString
         }
-        let storedClientCertContainerPass: AnyObject? = NSUserDefaults.standardUserDefaults().objectForKey("clientCertContainerPass")
+        let storedClientCertContainerPass: AnyObject? = UserDefaults.standard.object(forKey: "clientCertContainerPass") as AnyObject?
         if let storedClientCertContainerPassString=storedClientCertContainerPass as? String {
             clientCertContainerPass=storedClientCertContainerPassString
         }
@@ -185,10 +185,10 @@ public class CidsConnector {
     }
     
     // MARK: - functions
-    func login(user :String, password :String, handler: (Bool) -> ()) {
+    func login(_ user :String, password :String, handler: @escaping (Bool) -> ()) {
         self.login=user+"@"+domain
         self.password=password
-        func cH(loggedIn: Bool, error: NSError?) -> () {
+        func cH(_ loggedIn: Bool, error: Error?) -> () {
             self.loggedIn=loggedIn
             
             if loggedIn {
@@ -198,17 +198,17 @@ public class CidsConnector {
                 print("Error\(error)")
             }
             if (loggedIn) {
-                func teamsCompletionHandler(operation: GetAllEntitiesOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue){
+                func teamsCompletionHandler(_ operation: GetAllEntitiesOperation, data: Data!, response: URLResponse!, error: Error!, queue: OperationQueue){
                     if (error == nil) {
                         // Success
-                        let statusCode = (response as! NSHTTPURLResponse).statusCode
+                        let statusCode = (response as! HTTPURLResponse).statusCode
                         print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                         if let checkeddata: [String : AnyObject] = getJson(data) {
                             let json =  checkeddata["$collection"] as! [[String : AnyObject]];
-                            if let teams = Mapper<Team>().mapArray(json) {
+                            if let teams = Mapper<Team>().mapArray(JSONArray: json) {
                                 
                                 print("\(teams.count) Teams vorhanden")
-                                let sortedTeams=teams.sort(Team.ascending)
+                                let sortedTeams=teams.sorted(by: Team.ascending)
                                 self.sortedTeamListKeys=[]
                                 for t in sortedTeams {
                                     self.teamList.updateValue(t, forKey: "\(t.id)")
@@ -236,7 +236,7 @@ public class CidsConnector {
 
                 }
                 
-                let teamsOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "team", user: login, pass: password, queue: blockingQueue, completionHandler: teamsCompletionHandler)
+                let teamsOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "team", user: login, pass: password, queue: blockingQueue, completionHandler: teamsCompletionHandler as! (GetAllEntitiesOperation, Data?, URLResponse?, Error?, OperationQueue) -> ())
                 
                 teamsOperation.enqueue()
                 getBackgroundLists()
@@ -246,22 +246,22 @@ public class CidsConnector {
             }
 
         }
-        let loginOp=LoginOperation(baseUrl: baseUrl, domain: domain,user: login, pass: password,completionHandler: cH)
+        let loginOp=LoginOperation(baseUrl: baseUrl, domain: domain,user: login, pass: password,completionHandler: cH )
         loginOp.enqueue()
     }
     func getBackgroundLists() {
         
-        func arbeitsprotokollstatusCompletionHandler(operation: GetAllEntitiesOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue){
+        func arbeitsprotokollstatusCompletionHandler(_ operation: GetAllEntitiesOperation, data: Data!, response: URLResponse!, error: Error!, queue: OperationQueue){
             if (error == nil) {
                 // Success
-                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                let statusCode = (response as! HTTPURLResponse).statusCode
                 print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                 if let checkeddata: [String : AnyObject] = getJson(data) {
                     let json =  checkeddata["$collection"] as! [[String : AnyObject]];
-                    if let apsts = Mapper<ArbeitsprotokollStatus>().mapArray(json) {
+                    if let apsts = Mapper<ArbeitsprotokollStatus>().mapArray(JSONArray: json) {
                         
                         print("\(apsts.count) Protokollstati vorhanden")
-                        let sortedApsts=apsts.sort(ArbeitsprotokollStatus.ascending)
+                        let sortedApsts=apsts.sorted(by: ArbeitsprotokollStatus.ascending)
                         self.sortedArbeitsprotokollStatusListKeys=[]
                         for aps in sortedApsts {
                             self.arbeitsprotokollStatusList.updateValue(aps, forKey: "\(aps.id)")
@@ -280,19 +280,19 @@ public class CidsConnector {
                 }
             }
         }
-        let arbeitsprotokollstatiOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "arbeitsprotokollstatus", user: login, pass: password, queue: backgroundQeue, completionHandler: arbeitsprotokollstatusCompletionHandler)
+        let arbeitsprotokollstatiOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "arbeitsprotokollstatus", user: login, pass: password, queue: backgroundQeue, completionHandler: arbeitsprotokollstatusCompletionHandler as! (GetAllEntitiesOperation, Data?, URLResponse?, Error?, OperationQueue) -> ())
         
-        func leuchtentypenCompletionHandler(operation: GetAllEntitiesOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue){
+        func leuchtentypenCompletionHandler(_ operation: GetAllEntitiesOperation, data: Data!, response: URLResponse!, error: Error!, queue: OperationQueue){
             if (error == nil) {
                 // Success
-                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                let statusCode = (response as! HTTPURLResponse).statusCode
                 print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                 if let checkeddata: [String : AnyObject] = getJson(data) {
                     let json =  checkeddata["$collection"] as! [[String : AnyObject]];
-                    if let lts = Mapper<LeuchtenTyp>().mapArray(json) {
+                    if let lts = Mapper<LeuchtenTyp>().mapArray(JSONArray: json) {
                         
                         print("\(lts.count) Leuchtentypen vorhanden")
-                        let sortedLts=lts.sort(LeuchtenTyp.ascending)
+                        let sortedLts=lts.sorted(by: LeuchtenTyp.ascending)
                         self.sortedLeuchtenTypListKeys=[]
                         for lt in sortedLts {
                             self.leuchtentypList.updateValue(lt, forKey: "\(lt.id)")
@@ -319,19 +319,19 @@ public class CidsConnector {
             }
             
         }
-        let leuchtentypenOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "tkey_leuchtentyp", user: login, pass: password, queue: backgroundQeue, completionHandler: leuchtentypenCompletionHandler)
+        let leuchtentypenOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "tkey_leuchtentyp", user: login, pass: password, queue: backgroundQeue, completionHandler: leuchtentypenCompletionHandler as! (GetAllEntitiesOperation, Data?, URLResponse?, Error?, OperationQueue) -> ())
         
-        func leuchtmittelCompletionHandler(operation: GetAllEntitiesOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue){
+        func leuchtmittelCompletionHandler(_ operation: GetAllEntitiesOperation, data: Data!, response: URLResponse!, error: Error!, queue: OperationQueue){
             if (error == nil) {
                 // Success
-                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                let statusCode = (response as! HTTPURLResponse).statusCode
                 print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                 if let checkeddata: [String : AnyObject] = getJson(data) {
                     let json =  checkeddata["$collection"] as! [[String : AnyObject]];
-                    if let lms = Mapper<Leuchtmittel>().mapArray(json) {
+                    if let lms = Mapper<Leuchtmittel>().mapArray(JSONArray: json) {
                         
                         print("\(lms.count) Leuchtmittel vorhanden")
-                        let sortedLms=lms.sort(Leuchtmittel.ascending)
+                        let sortedLms=lms.sorted(by: Leuchtmittel.ascending)
                         self.sortedLeuchtmittelListKeys=[]
                         for lm in sortedLms {
                             self.leuchtmittelList.updateValue(lm, forKey: "\(lm.id)")
@@ -359,19 +359,19 @@ public class CidsConnector {
             
         }
         
-        let leuchtmittelOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "leuchtmittel", user: login, pass: password, queue: backgroundQeue, completionHandler: leuchtmittelCompletionHandler)
+        let leuchtmittelOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "leuchtmittel", user: login, pass: password, queue: backgroundQeue, completionHandler: leuchtmittelCompletionHandler as! (GetAllEntitiesOperation, Data?, URLResponse?, Error?, OperationQueue) -> ())
         
-        func rundsteuerempfaengerCompletionHandler(operation: GetAllEntitiesOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue){
+        func rundsteuerempfaengerCompletionHandler(_ operation: GetAllEntitiesOperation, data: Data!, response: URLResponse!, error: Error!, queue: OperationQueue){
             if (error == nil) {
                 // Success
-                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                let statusCode = (response as! HTTPURLResponse).statusCode
                 print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                 if let checkeddata: [String : AnyObject] = getJson(data) {
                     let json =  checkeddata["$collection"] as! [[String : AnyObject]];
-                    if let rses = Mapper<Rundsteuerempfaenger>().mapArray(json) {
+                    if let rses = Mapper<Rundsteuerempfaenger>().mapArray(JSONArray: json) {
                         
                         print("\(rses.count) Rundsteuerempfänger vorhanden")
-                        let sortedRses=rses.sort(Rundsteuerempfaenger.ascending)
+                        let sortedRses=rses.sorted(by: Rundsteuerempfaenger.ascending)
                         self.sortedRundsteuerempfaengerListKeys=[]
                         for rse in sortedRses {
                             self.rundsteuerempfaengerList.updateValue(rse, forKey: "\(rse.id)")
@@ -398,7 +398,7 @@ public class CidsConnector {
             }
             
         }
-        let rundsteuerempfaengerOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "rundsteuerempfaenger", user: login, pass: password, queue: backgroundQeue, completionHandler: rundsteuerempfaengerCompletionHandler)
+        let rundsteuerempfaengerOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "rundsteuerempfaenger", user: login, pass: password, queue: backgroundQeue, completionHandler: rundsteuerempfaengerCompletionHandler as! (GetAllEntitiesOperation, Data?, URLResponse?, Error?, OperationQueue) -> ())
         
         arbeitsprotokollstatiOperation.enqueue()
         leuchtentypenOperation.enqueue()
@@ -408,35 +408,35 @@ public class CidsConnector {
     }
     func sortSearchResults() {
         for key in searchResults.keys {
-            searchResults[key]?.sortInPlace {
+            searchResults[key]?.sort {
                 return $0.id < $1.id
             }
         }
     }
-    func getJson(data: NSData) -> [String: AnyObject]?{
+    func getJson(_ data: Data) -> [String: AnyObject]?{
         do {
-            return try NSJSONSerialization.JSONObjectWithData(data, options: []) as? [String: AnyObject]
+            return try JSONSerialization.jsonObject(with: data, options: []) as? [String: AnyObject]
         }
         catch {
             return nil
         }
     }
-    func searchArbeitsauftraegeForTeam(team: Team, handler: () -> ()) {
+    func searchArbeitsauftraegeForTeam(_ team: Team, handler: @escaping () -> ()) {
         assert(loggedIn)
         var qp=QueryParameters(list:[
-            SingleQueryParameter(key: "arbeitsauftragEnabled", value: true),
-            SingleQueryParameter(key: "activeObjectsOnly", value: true),
-            SingleQueryParameter(key: "zugewiesenAn", value: team.id) //39
+            SingleQueryParameter(key: "arbeitsauftragEnabled", value: true as AnyObject),
+            SingleQueryParameter(key: "activeObjectsOnly", value: true as AnyObject),
+            SingleQueryParameter(key: "zugewiesenAn", value: team.id as AnyObject) //39
             ]);
-        func mySearchCompletionHandler(data : NSData!, response : NSURLResponse!, error : NSError!) -> Void {
+        func mySearchCompletionHandler(_ data : Data!, response : URLResponse!, error : Error!) -> Void {
             if (error == nil) {
                 print("Arbeitsaufträge Search kein Fehler")
-                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                let statusCode = (response as! HTTPURLResponse).statusCode
                 print("URL Session Task Succeeded: HTTP \(statusCode)")
                 
                 if let checkeddata: [String : AnyObject] = getJson(data) {
                     let json =  checkeddata["$collection"] as! [[String : AnyObject]];
-                    if let nodes = Mapper<CidsObjectNode>().mapArray(json) {
+                    if let nodes = Mapper<CidsObjectNode>().mapArray(JSONArray: json) {
                         
                         if nodes.count>1 {
                             showWaitingHUD(text: "\(nodes.count) Arbeitsaufträge laden", indeterminate: false )
@@ -458,16 +458,17 @@ public class CidsConnector {
                                 let rightEntity=Entity.byClassId(node.classId!)!
                                 assert(rightEntity==Entity.ARBEITSAUFTRAEGE)
                                 let classKey=rightEntity.tableName()
-                                func getAACompletionHandler(operation:GetEntityOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue) -> (){
+                                func getAACompletionHandler(_ operation:GetEntityOperation, data: Data!, response: URLResponse!, error: Error!, queue: OperationQueue) -> (){
                                     if (error == nil) {
                                         // Success
-                                        let statusCode = (response as! NSHTTPURLResponse).statusCode
+                                        let statusCode = (response as! HTTPURLResponse).statusCode
                                         print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                                         
                                         if let json: [String : AnyObject] = getJson(data) {
                                             var aa:Arbeitsauftrag?
-                                            aa = Mapper<Arbeitsauftrag>().map(json)!
-                                            let progress=Float(++i)/Float(nodes.count)
+                                            aa = Mapper<Arbeitsauftrag>().map(JSON: json)!
+                                            i=i+1
+                                            let progress=Float(i)/Float(nodes.count)
                                             setProgressInWaitingHUD(progress)
 
                                             if let auftrag=aa {
@@ -515,7 +516,7 @@ public class CidsConnector {
                                         print("URL Session Task Failed: %@", error.localizedDescription);
                                     }
                                 }
-                                let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: getAACompletionHandler)
+                                let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: getAACompletionHandler as! (GetEntityOperation, Data?, URLResponse?, Error?, OperationQueue) -> ())
                                 
                                 op.enqueue()
                             }
@@ -533,16 +534,16 @@ public class CidsConnector {
         sop.enqueue()
         
     }
-    func refreshArbeitsauftrag(arbeitsauftrag: Arbeitsauftrag?, handler: (success: Bool)->() ){
+    func refreshArbeitsauftrag(_ arbeitsauftrag: Arbeitsauftrag?, handler: @escaping (_ success: Bool)->() ){
         if let _=arbeitsauftrag {
-            func completionHandler(operation:GetEntityOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue) -> (){
+            func completionHandler(_ operation:GetEntityOperation, data: Data!, response: URLResponse!, error: Error!, queue: OperationQueue) -> (){
                 if (error == nil) {
                     // Success
-                    let statusCode = (response as! NSHTTPURLResponse).statusCode
+                    let statusCode = (response as! HTTPURLResponse).statusCode
                     print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                     if let json: [String : AnyObject] = getJson(data) {
                         //let sel=self.mainVC!.tableView.indexPathForSelectedRow
-                        let entity = Mapper<Arbeitsauftrag>().map(json)
+                        let entity = Mapper<Arbeitsauftrag>().map(JSON: json)
                         if let aa=entity {
                             CidsConnector.sharedInstance().selectedArbeitsauftrag=aa
                             var tmp=CidsConnector.sharedInstance().allArbeitsauftraegeBeforeCurrentSelection
@@ -553,7 +554,7 @@ public class CidsConnector {
                                        CidsConnector.sharedInstance().allArbeitsauftraegeBeforeCurrentSelection[Entity.ARBEITSAUFTRAEGE]![i]=aa
                                         break
                                     }
-                                    i++
+                                    i += 1
                                 }
                             }
                             
@@ -563,7 +564,7 @@ public class CidsConnector {
                             //  self.mainVC!.tableView.selectRowAtIndexPath(s, animated: false, scrollPosition: UITableViewScrollPosition.None)
                             //  }
 
-                            handler(success: true)
+                            handler(true)
                             return
                         }
                         
@@ -577,23 +578,23 @@ public class CidsConnector {
                     print("URL Session Task Failed: %@", error.localizedDescription);
                 }
                 
-                handler(success: false)
+                handler(false)
             }
-            let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: Entity.ARBEITSAUFTRAEGE.tableName(), id: arbeitsauftrag!.id, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: completionHandler)
+            let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: Entity.ARBEITSAUFTRAEGE.tableName(), id: arbeitsauftrag!.id, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: completionHandler as! (GetEntityOperation, Data?, URLResponse?, Error?, OperationQueue) -> ())
             op.enqueue()
         }
     }
-    func getVeranlassungByNummer(vnr:String, handler: (veranlassung:Veranlassung?) -> ()) {
+    func getVeranlassungByNummer(_ vnr:String, handler: @escaping (_ veranlassung:Veranlassung?) -> ()) {
         assert(loggedIn)
         
         var qp=QueryParameters(list:[
-            SingleQueryParameter(key: "nummer", value: vnr)
+            SingleQueryParameter(key: "nummer", value: vnr as AnyObject)
             ]);
         
-        func mySearchCompletionHandler(data : NSData!, response : NSURLResponse!, error : NSError!) -> Void {
+        func mySearchCompletionHandler(_ data : Data!, response : URLResponse!, error : Error!) -> Void {
             if (error == nil) {
                 // Success
-                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                let statusCode = (response as! HTTPURLResponse).statusCode
                 print("URL Session Task Succeeded: HTTP \(statusCode)")
                 
                 if let cidsJsonCollection: [String : AnyObject] = getJson(data) {
@@ -601,8 +602,8 @@ public class CidsConnector {
                     
                     if let jsonArray=cidsJsonCollection["$collection"] as? [AnyObject] {
                         var veranlassung: Veranlassung?
-                        veranlassung = Mapper<Veranlassung>().map(jsonArray[0])
-                        handler(veranlassung: veranlassung)
+                        veranlassung = Mapper<Veranlassung>().map(JSON: jsonArray[0] as! [String : Any])
+                        handler(veranlassung)
                     }
                 }
                 else {
@@ -614,7 +615,7 @@ public class CidsConnector {
                 // Failure
                 print("URL Session Task Failed: %@", error.localizedDescription);
             }
-            handler(veranlassung: nil)
+            handler(nil)
         }
         
         
@@ -623,27 +624,27 @@ public class CidsConnector {
         sop.enqueue()
         
     }
-    func search(ewktMapContent: String,leuchtenEnabled: Bool, mastenEnabled: Bool,mauerlaschenEnabled: Bool, leitungenEnabled: Bool, schaltstellenEnabled: Bool, handler: () -> ()) {
+    func search(_ ewktMapContent: String,leuchtenEnabled: Bool, mastenEnabled: Bool,mauerlaschenEnabled: Bool, leitungenEnabled: Bool, schaltstellenEnabled: Bool, handler: @escaping () -> ()) {
         assert(loggedIn)
         var qp=QueryParameters(list:[
-            SingleQueryParameter(key: "LeuchteEnabled", value: leuchtenEnabled),
-            SingleQueryParameter(key: "MastOhneLeuchtenEnabled", value: mastenEnabled),
-            SingleQueryParameter(key: "MauerlascheEnabled", value: mauerlaschenEnabled),
-            SingleQueryParameter(key: "LeitungEnabled", value: leitungenEnabled),
-            SingleQueryParameter(key: "SchaltstelleEnabled", value: schaltstellenEnabled),
-            SingleQueryParameter(key: "GeometryFromWkt", value: ewktMapContent)
+            SingleQueryParameter(key: "LeuchteEnabled", value: leuchtenEnabled as AnyObject),
+            SingleQueryParameter(key: "MastOhneLeuchtenEnabled", value: mastenEnabled as AnyObject),
+            SingleQueryParameter(key: "MauerlascheEnabled", value: mauerlaschenEnabled as AnyObject),
+            SingleQueryParameter(key: "LeitungEnabled", value: leitungenEnabled as AnyObject),
+            SingleQueryParameter(key: "SchaltstelleEnabled", value: schaltstellenEnabled as AnyObject),
+            SingleQueryParameter(key: "GeometryFromWkt", value: ewktMapContent as AnyObject)
             ]);
         
-        func mySearchCompletionHandler(data : NSData!, response : NSURLResponse!, error : NSError!) -> Void {
+        func mySearchCompletionHandler(_ data : Data!, response : URLResponse!, error : Error!) -> Void {
             if (error == nil) {
                 // Success
-                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                let statusCode = (response as! HTTPURLResponse).statusCode
                 print("URL Session Task Succeeded: HTTP \(statusCode)")
-                var err: NSError?
+                var err: Error?
                 
                 if let checkeddata: [String : AnyObject] = getJson(data) {
                     var json =  checkeddata["$collection"] as! [[String : AnyObject]];
-                    if let nodes = Mapper<CidsObjectNode>().mapArray(json) {
+                    if let nodes = Mapper<CidsObjectNode>().mapArray(JSONArray: json) {
                         
                         if (nodes.count>1) {
                             showWaitingHUD(text:"\(nodes.count) Objekte laden", indeterminate: false)
@@ -668,10 +669,10 @@ public class CidsConnector {
                                 let classKey=rightEntity.tableName()
                                 
                                 
-                                func completionHandler(operation:GetEntityOperation, data: NSData!, response: NSURLResponse!, error: NSError!, queue: NSOperationQueue) -> (){
+                                func completionHandler(_ operation:GetEntityOperation, data: Data!, response: URLResponse!, error: Error!, queue: OperationQueue) -> (){
                                     if (error == nil) {
                                         // Success
-                                        let statusCode = (response as! NSHTTPURLResponse).statusCode
+                                        let statusCode = (response as! HTTPURLResponse).statusCode
                                         print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                                         
                                         if let json: [String : AnyObject] = getJson(data) {
@@ -679,19 +680,20 @@ public class CidsConnector {
                                             
                                             switch (rightEntity){
                                             case .LEUCHTEN:
-                                                gbEntity = Mapper<Leuchte>().map(json)!
+                                                gbEntity = Mapper<Leuchte>().map(JSON: json)!
                                             case .MASTEN:
-                                                gbEntity = Mapper<Standort>().map(json)!
+                                                gbEntity = Mapper<Standort>().map(JSON: json)!
                                             case .MAUERLASCHEN:
-                                                gbEntity = Mapper<Mauerlasche>().map(json)!
+                                                gbEntity = Mapper<Mauerlasche>().map(JSON: json)!
                                             case .LEITUNGEN:
-                                                gbEntity = Mapper<Leitung>().map(json)!
+                                                gbEntity = Mapper<Leitung>().map(JSON: json)!
                                             case .SCHALTSTELLEN:
-                                                gbEntity = Mapper<Schaltstelle>().map(json)!
+                                                gbEntity = Mapper<Schaltstelle>().map(JSON: json)!
                                             default:
                                                 print("could not find object from entity \(operation.entityName)")
                                             }
-                                            let progress=Float(++i)/Float(nodes.count)
+                                            i=i+1
+                                            let progress=Float(i)/Float(nodes.count)
                                             setProgressInWaitingHUD(progress)
 
                                             if let gbe=gbEntity {
@@ -722,7 +724,7 @@ public class CidsConnector {
                                         print("URL Session Task Failed: %@", error.localizedDescription);
                                     }
                                 }
-                                let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: completionHandler)
+                                let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: completionHandler as! (GetEntityOperation, Data?, URLResponse?, Error?, OperationQueue) -> ())
                                 
                                 op.enqueue()
                             }
@@ -746,33 +748,33 @@ public class CidsConnector {
         sop.enqueue()
         
     }
-    func executeSimpleServerAction(actionName actionName: String!, params: ActionParameterContainer, handler: (success:Bool) -> ()) {
+    func executeSimpleServerAction(actionName: String!, params: ActionParameterContainer, handler: @escaping (_ success:Bool) -> ()) {
         assert(loggedIn)
         
-        func myActionCompletionHandler(data : NSData!, response : NSURLResponse!, error : NSError!) -> Void {
+        func myActionCompletionHandler(_ data : Data!, response : URLResponse!, error : Error!) -> Void {
             if (error == nil) {
                 // Success
-                let statusCode = (response as! NSHTTPURLResponse).statusCode
+                let statusCode = (response as! HTTPURLResponse).statusCode
                 print("Action-URL Session Task no Error: HTTP Status Code\(statusCode)")
                 if statusCode == 200 {
-                    handler(success:true)
+                    handler(true)
                 }
                 else {
-                    handler(success:false)
+                    handler(false)
                 }
             }
             else {
                 // Failure
                 print("ActionURL Session Task Failed: %@", error.localizedDescription);
-                handler(success:false)
+                handler(false)
             }
             
         }
         
-        let op=ServerActionOperation(baseUrl: baseUrl, user: login, pass: password, actionName: actionName,params:params, completionHandler: myActionCompletionHandler)
+        let op=ServerActionOperation(baseUrl: baseUrl, user: login, pass: password, actionName: actionName,params:params, completionHandler: myActionCompletionHandler as! (Data?, URLResponse?, Error?) -> Void)
         op.enqueue()
     }
-    func uploadImageToWebDAV(image: UIImage, fileName: String , completionHandler: (data : NSData!, response : NSURLResponse!, error : NSError!) -> Void) {
+    func uploadImageToWebDAV(_ image: UIImage, fileName: String , completionHandler: @escaping (_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void) {
         assert(loggedIn)
         
         let baseUrl="http://board.cismet.de/belis"
@@ -780,7 +782,7 @@ public class CidsConnector {
         let up=WebDavUploadImageOperation(baseUrl: baseUrl, user: Secrets.getWebDavUser(), pass: Secrets.getWebDavPass(), fileName: fileName, image:image) {
             (data, response, error) -> Void in
             
-            completionHandler(data: data, response: response, error: error)
+            completionHandler(data, response, error)
         }
         
         up.enqueue()
@@ -788,7 +790,7 @@ public class CidsConnector {
     
     // MARK: - class functions
     class func currentTimeMillis() -> Int64{
-        let nowDouble = NSDate().timeIntervalSince1970
+        let nowDouble = Date().timeIntervalSince1970
         return Int64(nowDouble*1000) + Int64(nowDouble/1000)
     }
 }
@@ -807,10 +809,10 @@ enum Entity : String{
     case STANDALONEGEOMS="Geometrie"
     
     static let allValues=[LEUCHTEN,MASTEN,MAUERLASCHEN,LEITUNGEN,SCHALTSTELLEN,ARBEITSAUFTRAEGE,VERANLASSUNGEN,PROTOKOLLE,ABZWEIGDOSEN,STANDALONEGEOMS]
-    static func byIndex(index: Int) -> Entity {
+    static func byIndex(_ index: Int) -> Entity {
         return allValues[index]
     }
-    static func byClassId(cid: Int) -> Entity? {
+    static func byClassId(_ cid: Int) -> Entity? {
         let dict=[27:LEUCHTEN, 26:MASTEN, 52:MAUERLASCHEN, 49:LEITUNGEN,51:SCHALTSTELLEN, 47:ARBEITSAUFTRAEGE,35:VERANLASSUNGEN,54:PROTOKOLLE, 50:ABZWEIGDOSEN,56:STANDALONEGEOMS]
         return dict[cid]
     }

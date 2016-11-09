@@ -17,21 +17,21 @@ class SingleTitledInfoCell: UITableViewCell, CellDataUI{
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
     
-    func fillFromCellData(cellData :CellData){
+    func fillFromCellData(_ cellData :CellData){
         if let d=cellData as? SingleTitledInfoCellData {
             lblTitle.text=d.title
             lblData.text=d.data
-            accessoryType=UITableViewCellAccessoryType.None
+            accessoryType=UITableViewCellAccessoryType.none
         } else if let d=cellData as? SingleTitledInfoCellDataWithDetails {
             lblTitle.text=d.title
             lblData.text=d.data
-            accessoryType=UITableViewCellAccessoryType.DisclosureIndicator
+            accessoryType=UITableViewCellAccessoryType.disclosureIndicator
         }
         
     }
@@ -75,7 +75,7 @@ class SingleTitledInfoCellDataWithDetails:CellData, SimpleCellActionProvider {
         return "singleTitled"
     }
     
-    @objc func action(vc:UIViewController) {
+    @objc func action(_ vc:UIViewController) {
         let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
         detailVC.sections=sections
         detailVC.setCellData(details)

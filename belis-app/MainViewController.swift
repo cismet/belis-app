@@ -38,9 +38,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var selectedAnnotation : MKAnnotation?;
     var user="";
     var pass="";
-    var timer = NSTimer();
+    var timer = Timer();
     
-    let progressHUD = JGProgressHUD(style: JGProgressHUDStyle.Dark)
+    let progressHUD = JGProgressHUD(style: JGProgressHUDStyle.dark)
     
     
     var gotoUserLocationButton:MKUserTrackingBarButtonItem!;
@@ -67,7 +67,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         gotoUserLocationButton=MKUserTrackingBarButtonItem(mapView:mapView);
         
-        mapToolbar.items!.insert(gotoUserLocationButton,atIndex:0 );
+        mapToolbar.items!.insert(gotoUserLocationButton,at:0 );
         
         //delegate stuff
         locationManager.delegate=self;
@@ -83,34 +83,34 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let lng: CLLocationDegrees = 7.21241877946317
         let initLocation: CLLocationCoordinate2D = CLLocationCoordinate2DMake(lat, lng)
         
-        mapView.rotateEnabled=false;
-        mapView.zoomEnabled=true;
+        mapView.isRotateEnabled=false;
+        mapView.isZoomEnabled=true;
         mapView.showsBuildings=true;
         
-        mapView.setCenterCoordinate(initLocation, animated: true);
+        mapView.setCenter(initLocation, animated: true);
         mapView.camera.altitude = 50;
         
         focusRectShape.opacity = 0.4
         focusRectShape.lineWidth = 2
         focusRectShape.lineJoin = kCALineJoinMiter
-        focusRectShape.strokeColor = UIColor(red: 0.29, green: 0.53, blue: 0.53, alpha: 1).CGColor
-        focusRectShape.fillColor = UIColor(red: 0.51, green: 0.76, blue: 0.6, alpha: 1).CGColor
+        focusRectShape.strokeColor = UIColor(red: 0.29, green: 0.53, blue: 0.53, alpha: 1).cgColor
+        focusRectShape.fillColor = UIColor(red: 0.51, green: 0.76, blue: 0.6, alpha: 1).cgColor
         
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("mapTapped:"))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(MainViewController.mapTapped(_:)))
         mapView.addGestureRecognizer(tapGestureRecognizer)
         
         //UINavigationController(rootViewController: self)
         textfieldGeoSearch.delegate=self
         bbiMoreFunctionality.setTitleTextAttributes([
             NSFontAttributeName : UIFont(name: GlyphTools.glyphFontName, size: 16)!],
-            forState: UIControlState.Normal)
+            for: UIControlState())
         bbiMoreFunctionality.title=WebHostingGlyps.glyphs["icon-chevron-down"]
         bbiZoomToAllObjects.setTitleTextAttributes([
             NSFontAttributeName : UIFont(name: GlyphTools.glyphFontName, size: 20)!],
-            forState: UIControlState.Normal)
+            for: UIControlState())
         bbiZoomToAllObjects.title=WebHostingGlyps.glyphs["icon-world"]
-        print(UIDevice.currentDevice().identifierForVendor!.UUIDString)
+        print(UIDevice.current.identifierForVendor!.uuidString)
         
         
         if let _=CidsConnector.sharedInstance().selectedTeam {
@@ -124,7 +124,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let alert = UIAlertView()
             alert.title = "Kein Team ausgewählt"
             alert.message = "Ohne ausgewähltes Team können Sie keine Arbeitsaufträge aufrufen."
-            alert.addButtonWithTitle("Ok")
+            alert.addButton(withTitle: "Ok")
             alert.show()
         }
         
@@ -135,24 +135,24 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
         if (segue.identifier == "showSearchSelectionPopover") {
-            let selectionVC = segue.destinationViewController as! SelectionPopoverViewController
+            let selectionVC = segue.destination as! SelectionPopoverViewController
             selectionVC.mainVC=self;
         }
         else if (segue.identifier == "showAdditionalFunctionalityPopover") {
-            let additionalFuncVC = segue.destinationViewController as! AdditionalFunctionalityPopoverViewController
+            let additionalFuncVC = segue.destination as! AdditionalFunctionalityPopoverViewController
             additionalFuncVC.mainVC=self;
         }
         
     }
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         focusRectShape.removeFromSuperlayer()
-        coordinator.animateAlongsideTransition(nil, completion: { context in
-            if UIDevice.currentDevice().orientation.isLandscape.boolValue {
+        coordinator.animate(alongsideTransition: nil, completion: { context in
+            if UIDevice.current.orientation.isLandscape {
                 print("landscape")
             } else {
                 print("portraight")
@@ -163,13 +163,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     //MARK: UITableViewDataSource
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return CidsConnector.sharedInstance().searchResults[Entity.byIndex(section)]?.count ?? 0
     }
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell: TableViewCell = tableView.dequeueReusableCellWithIdentifier("firstCellPrototype")as! TableViewCell
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell: TableViewCell = tableView.dequeueReusableCell(withIdentifier: "firstCellPrototype")as! TableViewCell
         //        var cellInfoProvider: CellInformationProviderProtocol = NoCellInformation()
-        cell.baseEntity=CidsConnector.sharedInstance().searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row]
+        cell.baseEntity=CidsConnector.sharedInstance().searchResults[Entity.byIndex((indexPath as NSIndexPath).section)]?[(indexPath as NSIndexPath).row]
         
         if let obj=cell.baseEntity {
             if let cellInfoProvider=obj as? CellInformationProviderProtocol {
@@ -199,7 +199,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //let fav=MGSwipeButton(title: "Fav", backgroundColor: UIColor.blueColor())
         
         
-        cell.leftSwipeSettings.transition = MGSwipeTransition.Static
+        cell.leftSwipeSettings.transition = MGSwipeTransition.static
         
         //configure right buttons
         
@@ -216,14 +216,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         return cell
     }
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return Entity.allValues.count
     }
-    func swipeTableCell(cell: MGSwipeTableCell!, shouldHideSwipeOnTap point: CGPoint) -> Bool {
+    func swipeTableCell(_ cell: MGSwipeTableCell!, shouldHideSwipeOnTap point: CGPoint) -> Bool {
         return true
     }
-    func swipeTableCellWillBeginSwiping(cell: MGSwipeTableCell!) {
-        if let myTableViewCell=cell as? TableViewCell, gbe=myTableViewCell.baseEntity as? GeoBaseEntity {
+    func swipeTableCellWillBeginSwiping(_ cell: MGSwipeTableCell!) {
+        if let myTableViewCell=cell as? TableViewCell, let gbe=myTableViewCell.baseEntity as? GeoBaseEntity {
             self.selectOnMap(gbe)
             self.selectInTable(gbe, scrollToShow: false)
         }
@@ -231,15 +231,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     
     //MARK: UITableViewDelegate
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         print("didSelectRowAtIndexPath")
-        if let obj=CidsConnector.sharedInstance().searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row] {
+        if let obj=CidsConnector.sharedInstance().searchResults[Entity.byIndex((indexPath as NSIndexPath).section)]?[(indexPath as NSIndexPath).row] {
             selectOnMap(obj)
             //          lastSelection=obj
         }
         
     }
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if let array=CidsConnector.sharedInstance().searchResults[Entity.byIndex(section)]{
             if (array.count>0){
                 return 25
@@ -247,7 +247,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         return 0.0
     }
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let title=Entity.byIndex(section).rawValue
         if let array=CidsConnector.sharedInstance().searchResults[Entity.byIndex(section)]{
             return title + " \(array.count)"
@@ -259,12 +259,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     // MARK: CLLocationManagerDelegate
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
     }
     
     // MARK: NKMapViewDelegates
-    func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         
         if overlay is MKPolyline {
             if overlay is GeoBaseEntityStyledMkPolylineAnnotation {
@@ -304,15 +304,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return MKOverlayRenderer()
         
     }
-    func mapView(mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         //        println(mapView.region.span.latitudeDelta);
     }
-    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if (annotation is GeoBaseEntityPointAnnotation){
             let gbePA=annotation as! GeoBaseEntityPointAnnotation;
             let reuseId = "belisAnnotation"
             
-            var anView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId)
+            var anView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId)
             if anView == nil {
                 anView = MKAnnotationView(annotation: gbePA, reuseIdentifier: reuseId)
                 
@@ -334,7 +334,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             
             if let btn=GlyphTools.sharedInstance().getGlyphedButton("icon-chevron-right"){
-                btn.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0), forState: UIControlState.Normal)
+                btn.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0), for: UIControlState())
                 anView!.rightCalloutAccessoryView=btn
             }
             anView!.alpha=0.9
@@ -342,7 +342,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         } else if (annotation is GeoBaseEntityStyledMkPolylineAnnotation){
             let gbeSMKPA=annotation as! GeoBaseEntityStyledMkPolylineAnnotation;
             let reuseId = "belisAnnotation"
-            var anView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId)
+            var anView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId)
             if anView == nil {
                 anView = MKAnnotationView(annotation: gbeSMKPA, reuseIdentifier: reuseId)
                 
@@ -356,7 +356,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 anView!.leftCalloutAccessoryView=label
             }
             if let btn=GlyphTools.sharedInstance().getGlyphedButton("icon-chevron-right"){
-                btn.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0), forState: UIControlState.Normal)
+                btn.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0), for: UIControlState())
                 anView!.rightCalloutAccessoryView=btn
             }
             
@@ -370,7 +370,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         } else if (annotation is GeoBaseEntityStyledMkPolygonAnnotation){
             let gbeSPGA=annotation as! GeoBaseEntityStyledMkPolygonAnnotation;
             let reuseId = "belisAnnotation"
-            var anView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId)
+            var anView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId)
             if anView == nil {
                 anView = MKAnnotationView(annotation: gbeSPGA, reuseIdentifier: reuseId)
                 
@@ -384,7 +384,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 anView!.leftCalloutAccessoryView=label
             }
             if let btn=GlyphTools.sharedInstance().getGlyphedButton("icon-chevron-right"){
-                btn.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0), forState: UIControlState.Normal)
+                btn.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0), for: UIControlState())
                 anView!.rightCalloutAccessoryView=btn
             }
             
@@ -401,13 +401,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         return nil;
     }
-    func mapView(mapView: MKMapView, didChangeUserTrackingMode mode: MKUserTrackingMode, animated: Bool) {
+    func mapView(_ mapView: MKMapView, didChange mode: MKUserTrackingMode, animated: Bool) {
         print("didChangeUserTrackingMode")
     }
-    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         delayed(0.0)
             {
-                if !view.annotation!.isKindOfClass(MatchingSearchItemsAnnotations) {
+                if !view.annotation!.isKind(of: MatchingSearchItemsAnnotations.self) {
                     if view.annotation !== self.selectedAnnotation {
                         mapView.deselectAnnotation(view.annotation, animated: false)
                         if let selAnno=self.selectedAnnotation {
@@ -419,7 +419,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         print("didSelectAnnotationView >> \(view.annotation!.title)")
     }
-    func mapView(mapView: MKMapView, didDeselectAnnotationView view: MKAnnotationView) {
+    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
         delayed(0.0)
             {
                 if view.annotation === self.selectedAnnotation {
@@ -433,14 +433,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     //MARK: - IBActions
-    @IBAction func searchButtonTabbed(sender: AnyObject) {
+    @IBAction func searchButtonTabbed(_ sender: AnyObject) {
         removeAllEntityObjects()
         
         self.tableView.reloadData();
         
         showWaitingHUD(text:"Objektsuche")
         var mRect : MKMapRect
-        if focusToggle.on {
+        if focusToggle.isOn {
             mRect = createFocusRect()
         }
         else {
@@ -460,8 +460,8 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         CidsConnector.sharedInstance().search(ewktMapExtent, leuchtenEnabled: isLeuchtenEnabled, mastenEnabled: isMastenEnabled, mauerlaschenEnabled: isMauerlaschenEnabled, leitungenEnabled: isleitungenEnabled,schaltstellenEnabled: isSchaltstelleEnabled ) {
             
-            assert(!NSThread.isMainThread() )
-            dispatch_async(dispatch_get_main_queue()) {
+            assert(!Thread.isMainThread )
+            DispatchQueue.main.async {
                 CidsConnector.sharedInstance().sortSearchResults()
                 self.tableView.reloadData();
                 
@@ -477,7 +477,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
     }
-    @IBAction func itemArbeitsauftragTapped(sender: AnyObject) {
+    @IBAction func itemArbeitsauftragTapped(_ sender: AnyObject) {
         if let gbe=CidsConnector.sharedInstance().selectedArbeitsauftrag {
             let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
             shownDetails=detailVC
@@ -488,7 +488,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             detailVC.title=cellDataProvider.getTitle()
             
             let icon=UIBarButtonItem()
-            icon.action="back:"
+            icon.action=#selector(MainViewController.back(_:))
             //icon.image=getGlyphedImage("icon-chevron-left")
             icon.image=GlyphTools.sharedInstance().getGlyphedImage("icon-chevron-left", fontsize: 11, size: CGSize(width: 14, height: 14))
             detailVC.navigationItem.leftBarButtonItem = icon
@@ -497,36 +497,36 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             selectedAnnotation=nil
             
             let popC=UIPopoverController(contentViewController: detailNC)
-            popC.presentPopoverFromBarButtonItem(itemArbeitsauftrag, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
+            popC.present(from: itemArbeitsauftrag, permittedArrowDirections: UIPopoverArrowDirection.any, animated: true)
         }
-        else if let indexPath=tableView.indexPathForSelectedRow , aa = CidsConnector.sharedInstance().searchResults[Entity.byIndex(indexPath.section)]?[indexPath.row] as? Arbeitsauftrag {
+        else if let indexPath=tableView.indexPathForSelectedRow , let aa = CidsConnector.sharedInstance().searchResults[Entity.byIndex((indexPath as NSIndexPath).section)]?[(indexPath as NSIndexPath).row] as? Arbeitsauftrag {
             selectArbeitsauftrag(aa)
         }
         
         
         
     }
-    @IBAction func mapTypeButtonTabbed(sender: AnyObject) {
+    @IBAction func mapTypeButtonTabbed(_ sender: AnyObject) {
         switch(mapTypeSegmentedControl.selectedSegmentIndex){
             
         case 0:
-            mapView.mapType=MKMapType.Standard;
+            mapView.mapType=MKMapType.standard;
         case 1:
-            mapView.mapType=MKMapType.Hybrid;
+            mapView.mapType=MKMapType.hybrid;
         case 2:
-            mapView.mapType=MKMapType.Satellite;
+            mapView.mapType=MKMapType.satellite;
         default:
-            mapView.mapType=MKMapType.Standard;
+            mapView.mapType=MKMapType.standard;
         }
         
     }
-    @IBAction func lookUpButtonTabbed(sender: AnyObject) {
+    @IBAction func lookUpButtonTabbed(_ sender: AnyObject) {
         if let team = CidsConnector.sharedInstance().selectedTeam {
             selectArbeitsauftrag(nil,showActivityIndicator: false)
             removeAllEntityObjects()
             showWaitingHUD(text:"Arbeitsaufträge suchen")
             CidsConnector.sharedInstance().searchArbeitsauftraegeForTeam(team) { () -> () in
-                dispatch_async(dispatch_get_main_queue()) {
+                DispatchQueue.main.async {
                     CidsConnector.sharedInstance().sortSearchResults()
                     self.tableView.reloadData();
                     var annos: [MKAnnotation]=[]
@@ -542,7 +542,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     
                     hideWaitingHUD(delayedText: "Veranlassungen werden im\nHintergrund nachgeladen", delay: 1)
                     
-                    dispatch_async(dispatch_get_main_queue()) {
+                    DispatchQueue.main.async {
                         self.zoomToFitMapAnnotations(annos)
                     }
                 }
@@ -552,35 +552,35 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let alert = UIAlertView()
             alert.title = "Kein Team ausgewählt"
             alert.message = "Bitte wählen Sie zuerst ein Team aus"
-            alert.addButtonWithTitle("Ok")
+            alert.addButton(withTitle: "Ok")
             alert.show()
         }
         
         
     }
-    @IBAction func focusItemTabbed(sender: AnyObject) {
-        focusToggle.setOn(!focusToggle.on, animated: true)
+    @IBAction func focusItemTabbed(_ sender: AnyObject) {
+        focusToggle.setOn(!focusToggle.isOn, animated: true)
         focusToggleValueChanged(self)
     }
-    @IBAction func focusToggleValueChanged(sender: AnyObject) {
+    @IBAction func focusToggleValueChanged(_ sender: AnyObject) {
         ensureFocusRectangleIsDisplayedWhenAndWhereItShould()
     }
-    @IBAction func brightenItemTabbed(sender: AnyObject) {
-        brightenToggle.setOn(!brightenToggle.on, animated: true)
+    @IBAction func brightenItemTabbed(_ sender: AnyObject) {
+        brightenToggle.setOn(!brightenToggle.isOn, animated: true)
         brightenToggleValueChanged(self)
     }
-    @IBAction func brightenToggleValueChanged(sender: AnyObject) {
+    @IBAction func brightenToggleValueChanged(_ sender: AnyObject) {
         ensureBrightOverlayIsDisplayedWhenItShould()
     }
-    @IBAction func geoSearchButtonTabbed(sender: AnyObject) {
+    @IBAction func geoSearchButtonTabbed(_ sender: AnyObject) {
         if textfieldGeoSearch.text! != "" {
             geoSearch()
         }
     }
-    @IBAction func geoSearchInputDidEnd(sender: AnyObject) {
+    @IBAction func geoSearchInputDidEnd(_ sender: AnyObject) {
         geoSearch()
     }
-    @IBAction func zoomToAllObjectsTapped(sender: AnyObject) {
+    @IBAction func zoomToAllObjectsTapped(_ sender: AnyObject) {
         var annos: [MKAnnotation]=[]
         for (_, objArray) in CidsConnector.sharedInstance().searchResults{
             for obj in objArray {
@@ -589,14 +589,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 }
             }
         }
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             self.zoomToFitMapAnnotations(annos)
         }
     }
     // MARK: - Selector functions
-    func back(sender: UIBarButtonItem) {
+    func back(_ sender: UIBarButtonItem) {
         if let details=shownDetails{
-            details.dismissViewControllerAnimated(true, completion:
+            details.dismiss(animated: true, completion:
                 { () -> Void in
                     CidsConnector.sharedInstance().selectedArbeitsauftrag=nil
                     self.selectArbeitsauftrag(nil)
@@ -612,7 +612,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let newOrigin = MKMapPoint(x: mRect.origin.x+newSize.width, y: mRect.origin.y+newSize.height)
         return MKMapRect(origin: newOrigin,size: newSize)
     }
-    func zoomToFitMapAnnotations(annos: [MKAnnotation]) {
+    func zoomToFitMapAnnotations(_ annos: [MKAnnotation]) {
         if annos.count == 0 {return}
         
         var topLeftCoordinate = CLLocationCoordinate2D(latitude: -90, longitude: 180)
@@ -657,7 +657,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         self.mapView.setRegion(region, animated: true)
         
     }
-    func selectArbeitsauftrag(arbeitsauftrag: Arbeitsauftrag?, showActivityIndicator: Bool = true) {
+    func selectArbeitsauftrag(_ arbeitsauftrag: Arbeitsauftrag?, showActivityIndicator: Bool = true) {
         let sel=selectedAnnotation
         selectedAnnotation=nil
         if let s=sel {
@@ -688,7 +688,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         
     }
-    func fillArbeitsauftragIntoTable(arbeitsauftrag: Arbeitsauftrag) {
+    func fillArbeitsauftragIntoTable(_ arbeitsauftrag: Arbeitsauftrag) {
         removeAllEntityObjects()
         
         itemArbeitsauftrag.title="\(arbeitsauftrag.nummer!) (\(CidsConnector.sharedInstance().selectedTeam?.name ?? "-"))"
@@ -706,7 +706,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
     
-    func visualizeAllSearchResultsInMap(zoomToShowAll zoomToShowAll: Bool,showActivityIndicator:Bool ) {
+    func visualizeAllSearchResultsInMap(zoomToShowAll: Bool,showActivityIndicator:Bool ) {
         func doIt(){
             self.selectedAnnotation=nil
             self.mapView.deselectAnnotation(selectedAnnotation, animated: false)
@@ -728,19 +728,19 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 hideWaitingHUD()
             }
         }
-        if NSThread.isMainThread() {
+        if Thread.isMainThread {
             doIt()
         }
         else {
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 doIt()
             }
         }
     }
     
     // MARK: - public functions
-    func mapTapped(sender: UITapGestureRecognizer) {
-        let touchPt = sender.locationInView(mapView)
+    func mapTapped(_ sender: UITapGestureRecognizer) {
+        let touchPt = sender.location(in: mapView)
         
         //let hittedUI = mapView.hitTest(touchPt, withEvent: nil)
         //        println(hittedUI)
@@ -759,13 +759,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         for anno: AnyObject in mapView.annotations {
             if let pointAnnotation = anno as? GeoBaseEntityPointAnnotation {
-                let cgPoint = mapView.convertCoordinate(pointAnnotation.coordinate, toPointToView: mapView)
-                let path  = CGPathCreateMutable()
-                CGPathMoveToPoint(path, nil, cgPoint.x, cgPoint.y)
-                CGPathAddLineToPoint(path, nil, cgPoint.x, cgPoint.y)
+                let cgPoint = mapView.convert(pointAnnotation.coordinate, toPointTo: mapView)
+                let path  = CGMutablePath()
+                path.move(to: cgPoint)
+                path.addLine(to: cgPoint)
                 
-                let fuzzyPath=CGPathCreateCopyByStrokingPath(path, nil, buffer, CGLineCap.Round, CGLineJoin.Round, 0.0)
-                if (CGPathContainsPoint(fuzzyPath, nil, touchPt, false)) {
+                let fuzzyPath=CGPath(__byStroking: path, transform: nil, lineWidth: buffer, lineCap: CGLineCap.round, lineJoin: CGLineJoin.round, miterLimit: 0.0)
+                
+                if (fuzzyPath?.contains(touchPt) == true) {
                     foundPoint = pointAnnotation
                     print("foundPoint")
                     selectOnMap(foundPoint?.getGeoBaseEntity())
@@ -779,38 +780,38 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             for overlay: AnyObject in mapView.overlays {
                 if let lineAnnotation  = overlay as? GeoBaseEntityStyledMkPolylineAnnotation{
-                    let path  = CGPathCreateMutable()
+                    let path  = CGMutablePath()
                     for i in 0...lineAnnotation.pointCount-1 {
                         let mapPoint = lineAnnotation.points()[i]
                         
-                        let cgPoint = mapView.convertCoordinate(MKCoordinateForMapPoint(mapPoint), toPointToView: mapView)
+                        let cgPoint = mapView.convert(MKCoordinateForMapPoint(mapPoint), toPointTo: mapView)
                         if i==0 {
-                            CGPathMoveToPoint(path, nil, cgPoint.x, cgPoint.y)
+                            path.move(to: cgPoint)
                         }
                         else {
-                            CGPathAddLineToPoint(path, nil, cgPoint.x, cgPoint.y)
+                            path.addLine(to: cgPoint);
                         }
                     }
-                    let fuzzyPath=CGPathCreateCopyByStrokingPath(path, nil, buffer, CGLineCap.Round, CGLineJoin.Round, 0.0)
-                    if (CGPathContainsPoint(fuzzyPath, nil, touchPt, false)) {
+                    let fuzzyPath=CGPath(__byStroking: path, transform: nil, lineWidth: buffer, lineCap: CGLineCap.round, lineJoin: CGLineJoin.round, miterLimit: 0.0)
+                    if (fuzzyPath?.contains(touchPt) == true) {
                         foundPolyline = lineAnnotation
                         break
                     }
                 }
                 if let polygonAnnotation  = overlay as? GeoBaseEntityStyledMkPolygonAnnotation {
-                    let path  = CGPathCreateMutable()
+                    let path  = CGMutablePath()
                     for i in 0...polygonAnnotation.pointCount-1 {
                         let mapPoint = polygonAnnotation.points()[i]
                         
-                        let cgPoint = mapView.convertCoordinate(MKCoordinateForMapPoint(mapPoint), toPointToView: mapView)
+                        let cgPoint = mapView.convert(MKCoordinateForMapPoint(mapPoint), toPointTo: mapView)
                         if i==0 {
-                            CGPathMoveToPoint(path, nil, cgPoint.x, cgPoint.y)
+                            path.move(to: cgPoint)
                         }
                         else {
-                            CGPathAddLineToPoint(path, nil, cgPoint.x, cgPoint.y)
+                            path.addLine(to: cgPoint)
                         }
                     }
-                    if (CGPathContainsPoint(path, nil, touchPt, false)) {
+                    if (path.contains(touchPt) == true ) {
                         foundPolygon=polygonAnnotation
                         break
                     }
@@ -831,9 +832,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
     }
-    func selectOnMap(geoBaseEntityToSelect : GeoBaseEntity?){
+    func selectOnMap(_ geoBaseEntityToSelect : GeoBaseEntity?){
         if  highlightedLine != nil {
-            mapView.removeOverlay(highlightedLine!);
+            mapView.remove(highlightedLine!);
         }
         if (selectedAnnotation != nil){
             mapView.deselectAnnotation(selectedAnnotation, animated: false)
@@ -854,9 +855,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             else if mapObj is GeoBaseEntityStyledMkPolylineAnnotation {
                 let line = mapObj as! GeoBaseEntityStyledMkPolylineAnnotation;
                 highlightedLine = HighlightedMkPolyline(points: line.points(), count: line.pointCount);
-                mapView.removeOverlay(line);
-                mapView.addOverlay(highlightedLine!);
-                mapView.addOverlay(line); //bring the highlightedLine below the line
+                mapView.remove(line);
+                mapView.add(highlightedLine!);
+                mapView.add(line); //bring the highlightedLine below the line
                 
             } else if mapObj is GeoBaseEntityStyledMkPolygonAnnotation {
                 //let polygon=mapObj as! GeoBaseEntityStyledMkPolygonAnnotation
@@ -867,7 +868,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             selectedAnnotation=nil
         }
     }
-    func selectInTable(geoBaseEntityToSelect : GeoBaseEntity?, scrollToShow: Bool=true){
+    func selectInTable(_ geoBaseEntityToSelect : GeoBaseEntity?, scrollToShow: Bool=true){
         if let geoBaseEntity = geoBaseEntityToSelect{
             let entity=geoBaseEntity.getType()
             
@@ -876,17 +877,17 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 var results : [GeoBaseEntity] = CidsConnector.sharedInstance().searchResults[entity]!
                 if results[i].id == geoBaseEntity.id {
                     if scrollToShow {
-                        tableView.selectRowAtIndexPath(NSIndexPath(forRow: i, inSection: entity.index()), animated: true, scrollPosition: UITableViewScrollPosition.Top)
+                        tableView.selectRow(at: IndexPath(row: i, section: entity.index()), animated: true, scrollPosition: UITableViewScrollPosition.top)
                     }
                     else {
-                        tableView.selectRowAtIndexPath(NSIndexPath(forRow: i, inSection: entity.index()), animated: true, scrollPosition: UITableViewScrollPosition.None)
+                        tableView.selectRow(at: IndexPath(row: i, section: entity.index()), animated: true, scrollPosition: UITableViewScrollPosition.none)
                     }
                     break;
                 }
             }
         }
     }
-    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         //var detailVC=LeuchtenDetailsViewController()
         //        var detailVC=storyboard!.instantiateViewControllerWithIdentifier("LeuchtenDetails") as UIViewController
         var geoBaseEntity: GeoBaseEntity?
@@ -914,7 +915,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
             if let actionProvider=gbe as? ActionProvider {
                 detailVC.actions=actionProvider.getAllActions()
-                let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Action, target: detailVC, action:"moreAction")
+                let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.action, target: detailVC, action:"moreAction")
                 detailVC.navigationItem.rightBarButtonItem = action
             }
             
@@ -923,7 +924,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             
             mapView.deselectAnnotation(view.annotation, animated: false)
             let popC=UIPopoverController(contentViewController: detailNC)
-            popC.presentPopoverFromRect(view.frame, inView: mapView, permittedArrowDirections: UIPopoverArrowDirection.Any, animated: true)
+            popC.present(from: view.frame, in: mapView, permittedArrowDirections: UIPopoverArrowDirection.any, animated: true)
         }
     }
     func clearAll() {
@@ -937,24 +938,24 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func removeAllEntityObjects(){
         for (_, entityArray) in CidsConnector.sharedInstance().searchResults{
             for obj in entityArray {
-                dispatch_async(dispatch_get_main_queue()) {
+                DispatchQueue.main.async {
                     obj.removeFromMapView(self.mapView);
                 }
             }
         }
         CidsConnector.sharedInstance().searchResults=[Entity: [GeoBaseEntity]]()
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             self.tableView.reloadData();
         }
     }
     
     
     // MARK: - private funcs
-    private func geoSearch(){
+    fileprivate func geoSearch(){
         if matchingSearchItems.count>0 {
             self.mapView.removeAnnotations(self.matchingSearchItemsAnnotations)
-            self.matchingSearchItems.removeAll(keepCapacity: false)
-            matchingSearchItemsAnnotations.removeAll(keepCapacity: false)
+            self.matchingSearchItems.removeAll(keepingCapacity: false)
+            matchingSearchItemsAnnotations.removeAll(keepingCapacity: false)
         }
         let request = MKLocalSearchRequest()
         request.naturalLanguageQuery = "Wuppertal, \(textfieldGeoSearch.text!)"
@@ -963,7 +964,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let search = MKLocalSearch(request: request)
         
         
-        search.startWithCompletionHandler({(responseIn:
+        search.start(completionHandler: {(responseIn:
             MKLocalSearchResponse?,
             errorIn: NSError?) in
             
@@ -992,23 +993,23 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     
                 }
             }
-        })
+        } as! MKLocalSearchCompletionHandler)
         
     }
-    private func ensureBrightOverlayIsDisplayedWhenItShould(){
-        if brightenToggle.on {
+    fileprivate func ensureBrightOverlayIsDisplayedWhenItShould(){
+        if brightenToggle.isOn {
             let overlays=mapView.overlays
             mapView.removeOverlays(overlays)
-            mapView.addOverlay(brightOverlay)
+            mapView.add(brightOverlay)
             mapView.addOverlays(overlays)
         }
         else {
-            mapView.removeOverlay(brightOverlay)
+            mapView.remove(brightOverlay)
         }
     }
-    private func ensureFocusRectangleIsDisplayedWhenAndWhereItShould(){
+    fileprivate func ensureFocusRectangleIsDisplayedWhenAndWhereItShould(){
         focusRectShape.removeFromSuperlayer()
-        if focusToggle.on {
+        if focusToggle.isOn {
             let path = UIBezierPath()
             let w = self.mapView.frame.width / 3
             let h = self.mapView.frame.height / 3
@@ -1021,12 +1022,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let x4 = x1
             let y4 = y3
             
-            path.moveToPoint(CGPointMake(x1, y1))
-            path.addLineToPoint(CGPointMake(x2, y2))
-            path.addLineToPoint(CGPointMake(x3, y3))
-            path.addLineToPoint(CGPointMake(x4, y4))
-            path.closePath()
-            focusRectShape.path = path.CGPath
+            path.move(to: CGPoint(x: x1, y: y1))
+            path.addLine(to: CGPoint(x: x2, y: y2))
+            path.addLine(to: CGPoint(x: x3, y: y3))
+            path.addLine(to: CGPoint(x: x4, y: y4))
+            path.close()
+            focusRectShape.path = path.cgPath
             mapView.layer.addSublayer(focusRectShape)
             
         }
