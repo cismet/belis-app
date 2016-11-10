@@ -55,15 +55,10 @@ class Url : BaseEntity{
         objectName=webdavObjectName
         urlBase=UrlBase.WEBDAVURLBASE
     }
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         super.init()
         mapping(map: map)
     }
-    
-    required init?(map: Map) {
-        fatalError("init(map:) has not been implemented")
-    }
-    
     
     var urlBase: UrlBase?
     var objectName: String?

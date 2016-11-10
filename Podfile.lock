@@ -2,14 +2,14 @@ PODS:
   - AFImageHelper (3.2.1)
   - JGProgressHUD (1.4)
   - MGSwipeTableCell (HEAD based on 1.5.6)
-  - ObjectMapper (2.2.1)
+  - ObjectMapper (HEAD based on 2.2.1)
   - SwiftForms (HEAD based on 1.7)
 
 DEPENDENCIES:
   - AFImageHelper (~> 3.2)
   - JGProgressHUD
   - MGSwipeTableCell (HEAD)
-  - ObjectMapper (~> 2.2)
+  - ObjectMapper (HEAD)
   - SwiftForms (HEAD)
 
 SPEC CHECKSUMS:

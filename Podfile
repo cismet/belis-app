@@ -5,7 +5,7 @@ platform :ios, '9.0'
 use_frameworks!
 
 target 'belis-app' do
-pod 'ObjectMapper', '~> 2.2'
+pod 'ObjectMapper', :head
 pod 'MGSwipeTableCell', :head
 pod 'SwiftForms', :head
 pod 'JGProgressHUD'
@@ -21,7 +21,7 @@ end
 end
 
 target 'belis-appTests' do
-pod 'ObjectMapper', '~> 2.2'
+pod 'ObjectMapper', :head
 pod 'MGSwipeTableCell', :head
 pod 'SwiftForms', :head
 pod 'JGProgressHUD'
