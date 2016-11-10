@@ -22,6 +22,7 @@
 		2D1ED18B1B8349CF0004AAFA /* server.cert.dev.der in Resources */ = {isa = PBXBuildFile; fileRef = 2D1ED1881B8349AD0004AAFA /* server.cert.dev.der */; };
 		2D2068B61DD37E010091DE38 /* AFImageHelper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D2068B51DD37E010091DE38 /* AFImageHelper.framework */; };
 		2D2934271A84D4BF0034181F /* handle.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D2934261A84D4BF0034181F /* handle.png */; };
+		2D3B86001DD4BFAD0005BFE5 /* FirstOwnTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3B85FF1DD4BFAD0005BFE5 /* FirstOwnTest.swift */; };
 		2D3DC3561A8BA86E0035575A /* UIProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3DC3551A8BA86E0035575A /* UIProtocols.swift */; };
 		2D3DC35A1A94E2C60035575A /* DMSUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3DC3591A94E2C60035575A /* DMSUrl.swift */; };
 		2D3DC35F1A94EBA50035575A /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3DC35E1A94EBA50035575A /* Timestamp.swift */; };
@@ -123,6 +124,7 @@
 		2D1ED1891B8349B70004AAFA /* client.cert.dev.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = client.cert.dev.p12; sourceTree = "<group>"; };
 		2D2068B51DD37E010091DE38 /* AFImageHelper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFImageHelper.framework; path = "../../Library/Developer/Xcode/DerivedData/belis-app-fujuffqoacfwqpcoyabrhbtcaodi/Build/Products/Debug-iphonesimulator/AFImageHelper.framework"; sourceTree = "<group>"; };
 		2D2934261A84D4BF0034181F /* handle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = handle.png; sourceTree = "<group>"; };
+		2D3B85FF1DD4BFAD0005BFE5 /* FirstOwnTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstOwnTest.swift; sourceTree = "<group>"; };
 		2D3DC3551A8BA86E0035575A /* UIProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIProtocols.swift; sourceTree = "<group>"; };
 		2D3DC3591A94E2C60035575A /* DMSUrl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DMSUrl.swift; sourceTree = "<group>"; };
 		2D3DC35E1A94EBA50035575A /* Timestamp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timestamp.swift; sourceTree = "<group>"; };
@@ -335,6 +337,7 @@
 			children = (
 				2D5FB2E71A67C7320041020C /* belis_appTests.swift */,
 				2D5FB2E51A67C7320041020C /* Supporting Files */,
+				2D3B85FF1DD4BFAD0005BFE5 /* FirstOwnTest.swift */,
 			);
 			path = "belis-appTests";
 			sourceTree = "<group>";
@@ -522,7 +525,7 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = cismet;
 				TargetAttributes = {
 					2D5FB2C81A67C7320041020C = {
@@ -761,6 +764,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D3B86001DD4BFAD0005BFE5 /* FirstOwnTest.swift in Sources */,
 				2DB6E8C31A9CA4DB00D4EA4E /* Glyphs.swift in Sources */,
 				2D5FB2E81A67C7320041020C /* belis_appTests.swift in Sources */,
 			);
