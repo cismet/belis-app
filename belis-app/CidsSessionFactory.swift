@@ -15,7 +15,7 @@ class CidsSessionFactory : NSObject, URLSessionDelegate{
     override init() {
         super.init()
         queue.maxConcurrentOperationCount=1
-        localServerCertData = try! Data(contentsOf: URL(fileURLWithPath: CidsConnector.sharedInstance().serverCertPath))
+        localServerCertData = try? Data(contentsOf: URL(fileURLWithPath: CidsConnector.sharedInstance().serverCertPath))
         let clientCertData = try? Data(contentsOf: URL(fileURLWithPath: CidsConnector.sharedInstance().clientCertPath));
         if let ccert=clientCertData {
             identityAndTrustForCSC = self.extractIdentity(ccert, certPassword: CidsConnector.sharedInstance().clientCertContainerPass)

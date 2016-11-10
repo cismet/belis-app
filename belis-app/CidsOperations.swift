@@ -282,9 +282,9 @@ class LoginOperation: CidsRequestOperation {
 
 class SearchOperation: CidsRequestOperation {
     var parameters:QueryParameters?
-    var completionHandler: ((_ data : Data, _ response : URLResponse, _ error : Error) -> Void)?
+    var completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)?
     
-    init(baseUrl: String, searchKey:String, user: String, pass:String, parameters:QueryParameters,completionHandler: ((_ data : Data, _ response : URLResponse, _ error : Error) -> Void)!) {
+    init(baseUrl: String, searchKey:String, user: String, pass:String, parameters:QueryParameters,completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)!) {
         super.init(user: user, pass: pass)
         self.parameters=parameters
         url="\(baseUrl)/searches/\(searchKey)/results"
@@ -314,7 +314,7 @@ class SearchOperation: CidsRequestOperation {
         /* Start a new Task */
         let task = session.dataTask(with: request, completionHandler: { (data , response , error ) in
             if let handler=self.completionHandler {
-                handler(data!, response!, error!)
+                handler(data, response, error)
             }
             else {
                 
