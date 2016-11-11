@@ -202,7 +202,7 @@ open class CidsConnector {
                     if (error == nil) {
                         // Success
                         let statusCode = (response as! HTTPURLResponse).statusCode
-                        print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                        print("teams::GetAllEntities::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                         if let checkeddata: [String : AnyObject] = getJson(data!) {
                             let json =  checkeddata["$collection"] as! [[String : AnyObject]];
                             if let teams = Mapper<Team>().mapArray(JSONArray: json) {
@@ -229,7 +229,7 @@ open class CidsConnector {
                         }
                     }else {
                         // Failure
-                        print("URL Session Task Failed: %@", error?.localizedDescription);
+                        print("teams::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription);
                     }
                     
                     handler(loggedIn)
@@ -254,7 +254,7 @@ open class CidsConnector {
             if (error == nil) {
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                print("arbeitsprotokollstati::GetAllEntities::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                 if let checkeddata: [String : AnyObject] = getJson(data!) {
                     let json =  checkeddata["$collection"] as! [[String : AnyObject]];
                     if let apsts = Mapper<ArbeitsprotokollStatus>().mapArray(JSONArray: json) {
@@ -275,7 +275,7 @@ open class CidsConnector {
                     }
                 }else {
                     // Failure
-                    print("URL Session Task Failed: %@", error?.localizedDescription);
+                    print("arbeitsprotokollstati::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription);
                 }
             }
         }
@@ -285,7 +285,7 @@ open class CidsConnector {
             if (error == nil) {
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                print("leuchtentypen::GetAllEntities::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                 if let checkeddata: [String : AnyObject] = getJson(data!) {
                     let json =  checkeddata["$collection"] as! [[String : AnyObject]];
                     if let lts = Mapper<LeuchtenTyp>().mapArray(JSONArray: json) {
@@ -314,7 +314,7 @@ open class CidsConnector {
                 }
             }else {
                 // Failure
-                print("URL Session Task Failed: %@", error?.localizedDescription);
+                print("leuchtentypen::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription);
             }
             
         }
@@ -324,7 +324,7 @@ open class CidsConnector {
             if (error == nil) {
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                print("leuchtmittel::GetAllEntities::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                 if let checkeddata: [String : AnyObject] = getJson(data!) {
                     let json =  checkeddata["$collection"] as! [[String : AnyObject]];
                     if let lms = Mapper<Leuchtmittel>().mapArray(JSONArray: json) {
@@ -353,7 +353,7 @@ open class CidsConnector {
                 }
             }else {
                 // Failure
-                print("URL Session Task Failed: %@", error?.localizedDescription);
+                print("leuchtmittel::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription);
             }
             
         }
@@ -364,7 +364,7 @@ open class CidsConnector {
             if (error == nil) {
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                print("runsdsteuerempfaenger::GetAllEntities::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                 if let checkeddata: [String : AnyObject] = getJson(data!) {
                     let json =  checkeddata["$collection"] as! [[String : AnyObject]];
                     if let rses = Mapper<Rundsteuerempfaenger>().mapArray(JSONArray: json) {
@@ -393,7 +393,7 @@ open class CidsConnector {
                 }
             }else {
                 // Failure
-                print("URL Session Task Failed: %@", error?.localizedDescription);
+                print("runsdsteuerempfaenger::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription);
             }
             
         }
@@ -461,7 +461,7 @@ open class CidsConnector {
                                     if (error == nil) {
                                         // Success
                                         let statusCode = (response as! HTTPURLResponse).statusCode
-                                        print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                                        print("arbeitsauftrag::GetEntity::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                                         
                                         if let json: [String : AnyObject] = getJson(data!) {
                                             var aa:Arbeitsauftrag?
@@ -512,7 +512,7 @@ open class CidsConnector {
                                         }
                                     }else {
                                         // Failure
-                                        print("URL Session Task Failed: %@", error?.localizedDescription);
+                                        print("arbeitsauftrag::GetEntity::URL Session Task Failed: %@", error?.localizedDescription);
                                     }
                                 }
                                 let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: getAACompletionHandler)
@@ -539,7 +539,7 @@ open class CidsConnector {
                 if (error == nil) {
                     // Success
                     let statusCode = (response as! HTTPURLResponse).statusCode
-                    print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                    print("arbeitsauftrag::GetEntity::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                     if let json: [String : AnyObject] = getJson(data!) {
                         //let sel=self.mainVC!.tableView.indexPathForSelectedRow
                         let entity = Mapper<Arbeitsauftrag>().map(JSON: json)
@@ -574,7 +574,7 @@ open class CidsConnector {
                     }
                 }else {
                     // Failure
-                    print("URL Session Task Failed: %@", error?.localizedDescription);
+                    print("arbeitsauftrag::GetEntity::URL Session Task Failed: %@", error?.localizedDescription);
                 }
                 
                 handler(false)
@@ -594,7 +594,7 @@ open class CidsConnector {
             if (error == nil) {
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("URL Session Task Succeeded: HTTP \(statusCode)")
+                print("veranlassungByNummer::Search::URL Session Task Succeeded: HTTP \(statusCode)")
                 
                 if let cidsJsonCollection: [String : AnyObject] = getJson(data!) {
                     // Content is now a cids Collection of json Data
@@ -612,7 +612,7 @@ open class CidsConnector {
             }
             else {
                 // Failure
-                print("URL Session Task Failed: %@", error?.localizedDescription);
+                print("veranlassungByNummer::Search::URL Session Task Failed: %@", error?.localizedDescription);
             }
             handler(nil)
         }
@@ -638,7 +638,7 @@ open class CidsConnector {
             if (error == nil) {
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("URL Session Task Succeeded: HTTP \(statusCode)")
+                print("mainSearch::URL Session Task Succeeded: HTTP \(statusCode)")
                 var err: Error?
                 
                 if let checkeddata: [String : AnyObject] = getJson(data!) {
@@ -672,7 +672,7 @@ open class CidsConnector {
                                     if (error == nil) {
                                         // Success
                                         let statusCode = (response as! HTTPURLResponse).statusCode
-                                        print("URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                                        print("getObject::GetEntity::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                                         
                                         if let json: [String : AnyObject] = getJson(data!) {
                                             var gbEntity:GeoBaseEntity?
@@ -720,7 +720,7 @@ open class CidsConnector {
                                         }
                                     }else {
                                         // Failure
-                                        print("URL Session Task Failed: %@", error?.localizedDescription);
+                                        print("getObject::GetEntity::URL Session Task Failed: %@", error?.localizedDescription);
                                     }
                                 }
                                 let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: completionHandler)
@@ -737,7 +737,7 @@ open class CidsConnector {
             }
             else {
                 // Failure
-                print("URL Session Task Failed: %@", error?.localizedDescription);
+                print("mainSearch::URL Session Task Failed: %@", error?.localizedDescription);
             }
             
         }
@@ -754,7 +754,7 @@ open class CidsConnector {
             if (error == nil) {
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("Action-URL Session Task no Error: HTTP Status Code\(statusCode)")
+                print("Action::URL Session Task no Error: HTTP Status Code\(statusCode)")
                 if statusCode == 200 {
                     handler(true)
                 }
@@ -764,7 +764,7 @@ open class CidsConnector {
             }
             else {
                 // Failure
-                print("ActionURL Session Task Failed: %@", error?.localizedDescription);
+                print("Action::URL Session Task Failed: %@", error?.localizedDescription);
                 handler(false)
             }
             

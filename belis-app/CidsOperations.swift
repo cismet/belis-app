@@ -160,11 +160,11 @@ class GetEntityOperation: CidsRequestOperation {
                     if (error == nil) {
                         // Success
                         let statusCode = (response as! HTTPURLResponse).statusCode
-                        print("URL Session Task Succeeded: HTTP \(statusCode)")
+                        print("getEntity::URL Session Task Succeeded: HTTP \(statusCode)")
                     }
                     else {
                         // Failure
-                        print("URL Session Task Failed: %@", error!.localizedDescription);
+                        print("getEntity::URL Session Task Failed: %@", error!.localizedDescription);
                     }
                 }
                 
@@ -213,11 +213,11 @@ class GetAllEntitiesOperation: CidsRequestOperation {
                     if (error == nil) {
                         // Success
                         let statusCode = (response as! HTTPURLResponse).statusCode
-                        print("URL Session Task Succeeded: HTTP \(statusCode)")
+                        print("getAllEntities::URL Session Task Succeeded: HTTP \(statusCode)")
                     }
                     else {
                         // Failure
-                        print("URL Session Task Failed: %@", error!.localizedDescription);
+                        print("getAllEntities::URL Session Task Failed: %@", error!.localizedDescription);
                     }
                 }
                 
@@ -321,11 +321,11 @@ class SearchOperation: CidsRequestOperation {
                 if (error == nil) {
                     // Success
                     let statusCode = (response as! HTTPURLResponse).statusCode
-                    print("URL Session Task Succeeded: HTTP \(statusCode)")
+                    print("search::URL Session Task Succeeded: HTTP \(statusCode)")
                 }
                 else {
                     // Failure
-                    print("URL Session Task Failed: %@", error!.localizedDescription);
+                    print("search::URL Session Task Failed: %@", error!.localizedDescription);
                 }
             }
             self.isExecuting=false
@@ -382,11 +382,11 @@ class ServerActionOperation: CidsRequestOperation {
                 if (error == nil) {
                     // Success
                     let statusCode = (response as! HTTPURLResponse).statusCode
-                    print("URL Session Task Succeeded: HTTP \(statusCode)")
+                    print("serverAction::URL Session Task Succeeded: HTTP \(statusCode)")
                 }
                 else {
                     // Failure
-                    print("URL Session Task Failed: %@", error!.localizedDescription);
+                    print("serverAction::URL Session Task Failed: %@", error!.localizedDescription);
                 }
             }
             
@@ -428,11 +428,11 @@ class WebDavUploadImageOperation: CidsRequestOperation {
                 if (error == nil) {
                     // Success
                     let statusCode = (response as! HTTPURLResponse).statusCode
-                    print("URL Session Task Succeeded: HTTP \(statusCode)")
+                    print("webdavUpload::URL Session Task Succeeded: HTTP \(statusCode)")
                 }
                 else {
                     // Failure
-                    print("URL Session Task Failed: %@", error!.localizedDescription);
+                    print("webdavUpload::URL Session Task Failed: %@", error!.localizedDescription);
                 }
             }
             self.isExecuting=false
