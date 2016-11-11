@@ -14,7 +14,7 @@ import JGProgressHUD
 class ChooseFotoAction : BaseEntityAction {
     init(yourself: BaseEntity) {
         super.init(title: "Foto auswählen",style: UIAlertActionStyle.default, handler: {
-            (action: UIAlertAction! , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
+            (action: UIAlertAction? , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
             let picker = MainViewController.IMAGE_PICKER
             picker.sourceType = UIImagePickerControllerSourceType.photoLibrary
             picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
@@ -23,14 +23,14 @@ class ChooseFotoAction : BaseEntityAction {
             picker.allowsEditing = true
             picker.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
             detailVC.present(picker, animated: true, completion: nil)
-        } as! (UIAlertAction?, BaseEntityAction, BaseEntity, UIViewController) -> Void)
+        } )
     }
 }
 
 class TakeFotoAction : BaseEntityAction {
     init(yourself: BaseEntity) {
         super.init(title: "Foto erstellen",style: UIAlertActionStyle.default, handler: {
-            (action: UIAlertAction! , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
+            (action: UIAlertAction? , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
             if(UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)){
                 //load the camera interface
                 let picker = MainViewController.IMAGE_PICKER
@@ -51,7 +51,7 @@ class TakeFotoAction : BaseEntityAction {
                 detailVC.present(alert, animated: true, completion: nil)
             }
             
-        } as! (UIAlertAction?, BaseEntityAction, BaseEntity, UIViewController) -> Void)
+        } ) //as! (UIAlertAction?, BaseEntityAction, BaseEntity, UIViewController) -> Void
     }
 }
 

@@ -102,15 +102,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         //UINavigationController(rootViewController: self)
         textfieldGeoSearch.delegate=self
-//        bbiMoreFunctionality.setTitleTextAttributes([
-//            NSFontAttributeName : UIFont(name: GlyphTools.glyphFontName, size: 16)!],
-//            for: UIControlState())
-//        bbiMoreFunctionality.title=WebHostingGlyps.glyphs["icon-chevron-down"]
-//        bbiZoomToAllObjects.setTitleTextAttributes([
-//            NSFontAttributeName : UIFont(name: GlyphTools.glyphFontName, size: 20)!],
-//            for: UIControlState())
-//        bbiZoomToAllObjects.title=WebHostingGlyps.glyphs["icon-world"]
-//        print(UIDevice.current.identifierForVendor!.uuidString)
+        bbiMoreFunctionality.setTitleTextAttributes([
+            NSFontAttributeName : UIFont(name: GlyphTools.glyphFontName, size: 16)!],
+            for: UIControlState())
+        bbiMoreFunctionality.title=WebHostingGlyps.glyphs["icon-chevron-down"]
+        bbiZoomToAllObjects.setTitleTextAttributes([
+            NSFontAttributeName : UIFont(name: GlyphTools.glyphFontName, size: 20)!],
+            for: UIControlState())
+        bbiZoomToAllObjects.title=WebHostingGlyps.glyphs["icon-world"]
+        print(UIDevice.current.identifierForVendor!.uuidString)
         
         
         if let _=CidsConnector.sharedInstance().selectedTeam {

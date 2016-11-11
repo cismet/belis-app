@@ -17,9 +17,9 @@ class GeoBaseEntity : BaseEntity, LeftSwipeActionProvider{
     var wgs84WKT : String?
         {
         didSet {
-            //println("geoString="+wgs84WKT!);
-            if let wgs84WKTSTring=wgs84WKT {
-                geom=WKTParser.parseGeometry(wgs84WKTSTring)
+            print("geoString didSet")
+            if let wgs84WKTString=wgs84WKT {
+                geom=WKTParser.parseGeometry(wgs84WKTString)
                 if ( geom is WKTPoint){
                     let point=geom as! WKTPoint;
                     mapObject=GeoBaseEntityPointAnnotation(geoBaseEntity: self, point: point)
