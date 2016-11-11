@@ -219,10 +219,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func numberOfSections(in tableView: UITableView) -> Int {
         return Entity.allValues.count
     }
-    func swipeTableCell(_ cell: MGSwipeTableCell!, shouldHideSwipeOnTap point: CGPoint) -> Bool {
+    func swipeTableCell(_ cell: MGSwipeTableCell, shouldHideSwipeOnTap point: CGPoint) -> Bool {
         return true
     }
-    func swipeTableCellWillBeginSwiping(_ cell: MGSwipeTableCell!) {
+    func swipeTableCellWillBeginSwiping(_ cell: MGSwipeTableCell) {
         if let myTableViewCell=cell as? TableViewCell, let gbe=myTableViewCell.baseEntity as? GeoBaseEntity {
             self.selectOnMap(gbe)
             self.selectInTable(gbe, scrollToShow: false)
@@ -915,7 +915,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
             if let actionProvider=gbe as? ActionProvider {
                 detailVC.actions=actionProvider.getAllActions()
-                let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.action, target: detailVC, action:"moreAction")
+                let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.action, target: detailVC, action:Selector(("moreAction")))
                 detailVC.navigationItem.rightBarButtonItem = action
             }
             
