@@ -141,7 +141,7 @@ class CidsConnectionSettingsViewController: UIViewController {
         }
         
         if error != nil {
-            print(error)
+            print(error ?? "no detailed errormessage available")
         }
         if (ok) {
             CidsConnector.sharedInstance().serverCert=nil
@@ -160,7 +160,7 @@ class CidsConnectionSettingsViewController: UIViewController {
         }
         
         if error != nil {
-            print(error)
+            print(error ?? "no detailed error message available")
         }
         if (ok) {
             CidsConnector.sharedInstance().clientCert=nil
