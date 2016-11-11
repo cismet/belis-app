@@ -117,6 +117,8 @@ open class CidsConnector {
     fileprivate var password : String!
     fileprivate let domain = "BELIS2"
     
+    let defaultErrorMessageNoFurtherInformation="no further Information available. Sorry :-/"
+    
     let blockingQueue = OperationQueue()
     let backgroundQeue = OperationQueue()
     
@@ -229,7 +231,7 @@ open class CidsConnector {
                         }
                     }else {
                         // Failure
-                        print("teams::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription);
+                        print("teams::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
                     }
                     
                     handler(loggedIn)
@@ -275,7 +277,7 @@ open class CidsConnector {
                     }
                 }else {
                     // Failure
-                    print("arbeitsprotokollstati::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription);
+                    print("arbeitsprotokollstati::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
                 }
             }
         }
@@ -314,7 +316,7 @@ open class CidsConnector {
                 }
             }else {
                 // Failure
-                print("leuchtentypen::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription);
+                print("leuchtentypen::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription ?? "no further Info");
             }
             
         }
@@ -353,7 +355,7 @@ open class CidsConnector {
                 }
             }else {
                 // Failure
-                print("leuchtmittel::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription);
+                print("leuchtmittel::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
             }
             
         }
@@ -393,7 +395,7 @@ open class CidsConnector {
                 }
             }else {
                 // Failure
-                print("runsdsteuerempfaenger::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription);
+                print("runsdsteuerempfaenger::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
             }
             
         }
@@ -512,7 +514,7 @@ open class CidsConnector {
                                         }
                                     }else {
                                         // Failure
-                                        print("arbeitsauftrag::GetEntity::URL Session Task Failed: %@", error?.localizedDescription);
+                                        print("arbeitsauftrag::GetEntity::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
                                     }
                                 }
                                 let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: getAACompletionHandler)
@@ -574,7 +576,7 @@ open class CidsConnector {
                     }
                 }else {
                     // Failure
-                    print("arbeitsauftrag::GetEntity::URL Session Task Failed: %@", error?.localizedDescription);
+                    print("arbeitsauftrag::GetEntity::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
                 }
                 
                 handler(false)
@@ -612,7 +614,7 @@ open class CidsConnector {
             }
             else {
                 // Failure
-                print("veranlassungByNummer::Search::URL Session Task Failed: %@", error?.localizedDescription);
+                print("veranlassungByNummer::Search::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
             }
             handler(nil)
         }
@@ -720,7 +722,7 @@ open class CidsConnector {
                                         }
                                     }else {
                                         // Failure
-                                        print("getObject::GetEntity::URL Session Task Failed: %@", error?.localizedDescription);
+                                        print("getObject::GetEntity::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
                                     }
                                 }
                                 let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: completionHandler)
@@ -737,7 +739,7 @@ open class CidsConnector {
             }
             else {
                 // Failure
-                print("mainSearch::URL Session Task Failed: %@", error?.localizedDescription);
+                print("mainSearch::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
             }
             
         }
@@ -764,7 +766,7 @@ open class CidsConnector {
             }
             else {
                 // Failure
-                print("Action::URL Session Task Failed: %@", error?.localizedDescription);
+                print("Action::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
                 handler(false)
             }
             
