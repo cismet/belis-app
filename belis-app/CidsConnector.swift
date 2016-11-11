@@ -395,7 +395,7 @@ open class CidsConnector {
                 }
             }else {
                 // Failure
-                print("runsdsteuerempfaenger::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
+                print("runsdsteuerempfaenger::GetAllEntities::URL Session Task Failed with error: \(error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation) for URL: \(operation.url)" );
             }
             
         }
@@ -752,7 +752,7 @@ open class CidsConnector {
     func executeSimpleServerAction(actionName: String!, params: ActionParameterContainer, handler: @escaping (_ success:Bool) -> ()) {
         assert(loggedIn)
         
-        func myActionCompletionHandler(_ data : Data!, response : URLResponse!, error : Error!) -> Void {
+        func myActionCompletionHandler(_ data : Data?, response : URLResponse?, error : Error?) -> Void {
             if (error == nil) {
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
@@ -772,7 +772,7 @@ open class CidsConnector {
             
         }
         
-        let op=ServerActionOperation(baseUrl: baseUrl, user: login, pass: password, actionName: actionName,params:params, completionHandler: myActionCompletionHandler as! (Data?, URLResponse?, Error?) -> Void)
+        let op=ServerActionOperation(baseUrl: baseUrl, user: login, pass: password, actionName: actionName,params:params, completionHandler: myActionCompletionHandler)
         op.enqueue()
     }
     func uploadImageToWebDAV(_ image: UIImage, fileName: String , completionHandler: @escaping (_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void) {

@@ -51,7 +51,7 @@ class TakeFotoAction : BaseEntityAction {
                 detailVC.present(alert, animated: true, completion: nil)
             }
             
-        } ) //as! (UIAlertAction?, BaseEntityAction, BaseEntity, UIViewController) -> Void
+        } ) 
     }
 }
 
@@ -146,12 +146,12 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
                 print(progress)
             }
             
-            func handleCompletion(_ data : Data!, response : URLResponse!, error : NSError!) {
+            func handleCompletion(_ data : Data?, response : URLResponse?, error : Error?) {
                 if let err = error {
                     print("error: \(err.localizedDescription)")
                 }
                 if let resp = data  {
-                    print(NSString(data: resp, encoding: String.Encoding.utf8.rawValue))
+                    print(NSString(data: resp, encoding: String.Encoding.utf8.rawValue) ?? "---")
                     let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"\(objectId)" as AnyObject,
                         "OBJEKT_TYP":objectTyp as AnyObject,
                         "DOKUMENT_URL":"http://board.cismet.de/belis/\(fileName)\n\(pictureName)" as AnyObject])
@@ -183,7 +183,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             //FIXME integrate AFImageHelper
             let thumb=imageToSave
             
-            CidsConnector.sharedInstance().uploadImageToWebDAV(thumb, fileName: fileNameThumb , completionHandler: handleCompletion as! (Data?, URLResponse?, NSError?) -> Void as! (Data?, URLResponse?, Error?) -> Void)
+            CidsConnector.sharedInstance().uploadImageToWebDAV(thumb, fileName: fileNameThumb , completionHandler: handleCompletion)
             
             
             
