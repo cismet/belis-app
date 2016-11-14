@@ -10,6 +10,7 @@ import Foundation
 import AssetsLibrary
 import ImageIO
 import JGProgressHUD
+import AlamofireImage
 
 class ChooseFotoAction : BaseEntityAction {
     init(yourself: BaseEntity) {
@@ -176,13 +177,8 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
                 }
             }
             let ratio=imageToSave.size.height/imageToSave.size.width
-//            let thumb=imageToSave.resizeToWidth(300.0)
-            
-            
-            //let thumb=imageToSave.resize(toSize: CGSize.init(width: 300.0, height:ratio*300.0))
-            //FIXME integrate AFImageHelper
-            let thumb=imageToSave
-            
+            let newSize=CGSize(width: 300.0, height:ratio*300.0)
+            let thumb = imageToSave.af_imageAspectScaled(toFill: newSize)
             CidsConnector.sharedInstance().uploadImageToWebDAV(thumb, fileName: fileNameThumb , completionHandler: handleCompletion)
             
             

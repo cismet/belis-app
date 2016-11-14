@@ -5,34 +5,17 @@ platform :ios, '9.0'
 use_frameworks!
 
 target 'belis-app' do
-pod 'ObjectMapper', :head
-pod 'MGSwipeTableCell', :head
-pod 'SwiftForms', :head
-pod 'JGProgressHUD'
-pod 'AFImageHelper', '~> 3.2'
-
-post_install do |installer|
-    installer.pods_project.targets.each do |target|
-        target.build_configurations.each do |config|
-            config.build_settings['SWIFT_VERSION'] = '3.0'
-        end
-    end
-end
+pod 'ObjectMapper', '~> 2.2'
+pod 'MGSwipeTableCell', '~>1.5'
+pod 'SwiftForms',  '~> 1.7'
+pod 'JGProgressHUD', '~> 1.4'
+pod 'AlamofireImage', '~> 3.1'
 end
 
 target 'belis-appTests' do
-pod 'ObjectMapper', :head
-pod 'MGSwipeTableCell', :head
-pod 'SwiftForms', :head
-pod 'JGProgressHUD'
-pod 'AFImageHelper', '~> 3.2'
-
-post_install do |installer|
-    installer.pods_project.targets.each do |target|
-        target.build_configurations.each do |config|
-            config.build_settings['SWIFT_VERSION'] = '3.0'
-        end
-    end
-end
-
+pod 'ObjectMapper', '~> 2.2'
+pod 'MGSwipeTableCell', '~>1.5'
+pod 'SwiftForms',  '~> 1.7'
+pod 'JGProgressHUD', '~> 1.4'
+pod 'AlamofireImage', '~> 3.1'
 end
