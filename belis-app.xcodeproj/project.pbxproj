@@ -15,6 +15,7 @@
 		2D0B7F6D1AB3456D00E33A6C /* MemoTitledInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0B7F6B1AB3456D00E33A6C /* MemoTitledInfoCell.swift */; };
 		2D0B7F6E1AB3456D00E33A6C /* MemoTitledInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D0B7F6C1AB3456D00E33A6C /* MemoTitledInfoCell.xib */; };
 		2D0E2C571B9EF0620092FA9B /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D0E2C561B9EF0620092FA9B /* Icon-76@2x.png */; };
+		2D1093D11DD9CB5700A7888B /* BelisImageFolderAndTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1093D01DD9CB5700A7888B /* BelisImageFolderAndTools.swift */; };
 		2D1ED1851B8344BD0004AAFA /* CidsOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1ED1841B8344BD0004AAFA /* CidsOperations.swift */; };
 		2D1ED1871B8344C80004AAFA /* CidsSessionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1ED1861B8344C80004AAFA /* CidsSessionFactory.swift */; };
 		2D1ED18A1B8349CB0004AAFA /* client.cert.dev.p12 in Resources */ = {isa = PBXBuildFile; fileRef = 2D1ED1891B8349B70004AAFA /* client.cert.dev.p12 */; };
@@ -116,11 +117,11 @@
 		2D0B7F6C1AB3456D00E33A6C /* MemoTitledInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MemoTitledInfoCell.xib; path = "table-cell-guis/MemoTitledInfoCell.xib"; sourceTree = "<group>"; };
 		2D0E2C541B9EF05C0092FA9B /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-76@2x.png"; sourceTree = "<group>"; };
 		2D0E2C561B9EF0620092FA9B /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-76@2x.png"; sourceTree = "<group>"; };
+		2D1093D01DD9CB5700A7888B /* BelisImageFolderAndTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BelisImageFolderAndTools.swift; sourceTree = "<group>"; };
 		2D1ED1841B8344BD0004AAFA /* CidsOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsOperations.swift; sourceTree = "<group>"; };
 		2D1ED1861B8344C80004AAFA /* CidsSessionFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsSessionFactory.swift; sourceTree = "<group>"; };
 		2D1ED1881B8349AD0004AAFA /* server.cert.dev.der */ = {isa = PBXFileReference; lastKnownFileType = file; path = server.cert.dev.der; sourceTree = "<group>"; };
 		2D1ED1891B8349B70004AAFA /* client.cert.dev.p12 */ = {isa = PBXFileReference; lastKnownFileType = file; path = client.cert.dev.p12; sourceTree = "<group>"; };
-		2D2068B51DD37E010091DE38 /* AFImageHelper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AFImageHelper.framework; path = "../../Library/Developer/Xcode/DerivedData/belis-app-fujuffqoacfwqpcoyabrhbtcaodi/Build/Products/Debug-iphonesimulator/AFImageHelper.framework"; sourceTree = "<group>"; };
 		2D2934261A84D4BF0034181F /* handle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = handle.png; sourceTree = "<group>"; };
 		2D3B85FF1DD4BFAD0005BFE5 /* FirstOwnTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstOwnTest.swift; sourceTree = "<group>"; };
 		2D3DC3551A8BA86E0035575A /* UIProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIProtocols.swift; sourceTree = "<group>"; };
@@ -192,7 +193,6 @@
 		2D82A5CA1BFC7FF8000B29A7 /* ObjectAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectAction.swift; sourceTree = "<group>"; };
 		2D82A5CC1BFCB61B000B29A7 /* GenericFormViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericFormViewController.swift; sourceTree = "<group>"; };
 		2D82A5CE1BFCB92F000B29A7 /* OtherActionForms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OtherActionForms.swift; sourceTree = "<group>"; };
-		2D939DD31A67D5D200FB2AFB /* belis-app.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "belis-app.playground"; sourceTree = "<group>"; };
 		2D939DDA1A6905D500FB2AFB /* CidsConnector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsConnector.swift; sourceTree = "<group>"; };
 		2D939DEE1A690A6300FB2AFB /* CidsUtilityClasses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsUtilityClasses.swift; sourceTree = "<group>"; };
 		2D9952211AA5FFC600B5E02E /* DokumentPreviewVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DokumentPreviewVC.swift; sourceTree = "<group>"; };
@@ -279,7 +279,6 @@
 				2D5FB2CB1A67C7320041020C /* belis-app */,
 				2D5FB2E41A67C7320041020C /* belis-appTests */,
 				2D5FB2CA1A67C7320041020C /* Products */,
-				2D939DD31A67D5D200FB2AFB /* belis-app.playground */,
 				BB67F872BED992D88CCD6BAD /* Frameworks */,
 				F90D7BC97B2CC9DE6FB103B1 /* Pods */,
 			);
@@ -359,6 +358,7 @@
 				2DF6A9BB1A82541900E20FBF /* MappingStuff.swift */,
 				2D3DC3601A94F65E0035575A /* SwiftTools.swift */,
 				2DB6E8C11A9CA4DB00D4EA4E /* Glyphs.swift */,
+				2D1093D01DD9CB5700A7888B /* BelisImageFolderAndTools.swift */,
 			);
 			name = tools;
 			sourceTree = "<group>";
@@ -453,7 +453,6 @@
 		BB67F872BED992D88CCD6BAD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2D2068B51DD37E010091DE38 /* AFImageHelper.framework */,
 				5C20008736A2BD71BCFDBC88 /* Pods_belis_app.framework */,
 				DE5093CB7B6BB15E51A21655 /* Pods_belis_appTests.framework */,
 			);
@@ -747,6 +746,7 @@
 				2D5FB3101A67CC340041020C /* TableViewCell.swift in Sources */,
 				2D6867501B02397900B0C2EE /* BaseEntityAction.swift in Sources */,
 				2D5FB3281A67CCA60041020C /* WKTGeometryCollection.m in Sources */,
+				2D1093D11DD9CB5700A7888B /* BelisImageFolderAndTools.swift in Sources */,
 				2D82A5CF1BFCB92F000B29A7 /* OtherActionForms.swift in Sources */,
 				2D5FB32D1A67CCA60041020C /* WKTPointM.m in Sources */,
 				2D46EEF11BF4A75F004E3D9E /* MastActionForms.swift in Sources */,

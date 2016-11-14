@@ -58,8 +58,9 @@ class TakeFotoAction : BaseEntityAction {
 
 
 class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    var library = ALAssetsLibrary()
     
+    let TESTPREFIX="this.is.only.a.test.can.be.deleted.without.problems"
+        
     var selfEntity: BaseEntity
     var refreshable: Refreshable
     init (yourself: BaseEntity, refreshable: Refreshable){
@@ -113,35 +114,11 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             let objectId=self.selfEntity.id
             let objectTyp=self.selfEntity.getType().tableName().lowercased()
             
-            let fileNameThumb="upload.from.ios.for.\(objectTyp).\(objectId)-\(ctm).jpg.thumbnail.jpg"
-            let fileName="upload.from.ios.for.\(objectTyp).\(objectId)-\(ctm).jpg"
+            let fileNameThumb="\(self.TESTPREFIX)upload.from.ios.for.\(objectTyp).\(objectId)-\(ctm).jpg.thumbnail.jpg"
+            let fileName="\(self.TESTPREFIX)upload.from.ios.for.\(objectTyp).\(objectId)-\(ctm).jpg"
             
             
-            
-            var newMetadata : [AnyHashable: Any]
-            if let md = metadata as? Dictionary<NSObject,AnyObject> {
-                newMetadata=md
-            }
-            else {
-                newMetadata=[AnyHashable: Any]()
-            }
-            
-            var iptcMeta=[AnyHashable: Any]()
-            iptcMeta.updateValue(pictureName, forKey: kCGImagePropertyIPTCObjectName as AnyHashable)
-            iptcMeta.updateValue("BelIS", forKey: kCGImagePropertyIPTCKeywords as AnyHashable)
-            iptcMeta.updateValue("upload to: \(fileName)", forKey: kCGImagePropertyIPTCSpecialInstructions as AnyHashable)
-           // kCGImagePropertyIPTCSpecialInstructions
-            
-            var tiffMeta=[AnyHashable: Any]()
-            tiffMeta.updateValue("http://www.cismet.de", forKey: kCGImagePropertyTIFFImageDescription as AnyHashable)
-            
-            
-            newMetadata.updateValue(iptcMeta, forKey:kCGImagePropertyIPTCDictionary as AnyHashable )
-            newMetadata.updateValue(tiffMeta, forKey:kCGImagePropertyTIFFDictionary as AnyHashable )
-            
-            
-            
-            self.library.saveImage(imageToSave, toAlbum: "BelIS-Dokumente",metadata : newMetadata, withCallback: nil)
+            BelisPhotoAlbum.sharedInstance.save(image: imageToSave, pictureName: pictureName, keywords: "BelIS", instructions: "upload to: \(fileName)", description: "https://www.cismet.de", additionalInfoAsJson: "{}")
             
             func handleProgress(_ progress:Float) {
                 print(progress)
@@ -179,8 +156,9 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             let ratio=imageToSave.size.height/imageToSave.size.width
             let newSize=CGSize(width: 300.0, height:ratio*300.0)
             let thumb = imageToSave.af_imageAspectScaled(toFill: newSize)
-            CidsConnector.sharedInstance().uploadImageToWebDAV(thumb, fileName: fileNameThumb , completionHandler: handleCompletion)
             
+            
+            CidsConnector.sharedInstance().uploadImageToWebDAV(thumb, fileName: fileNameThumb , completionHandler: handleCompletion)
             
             
             
