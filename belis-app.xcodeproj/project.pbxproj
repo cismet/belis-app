@@ -14,7 +14,6 @@
 		2D0B7F6A1AB3454100E33A6C /* DoubleTitledInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D0B7F681AB3454100E33A6C /* DoubleTitledInfoCell.xib */; };
 		2D0B7F6D1AB3456D00E33A6C /* MemoTitledInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0B7F6B1AB3456D00E33A6C /* MemoTitledInfoCell.swift */; };
 		2D0B7F6E1AB3456D00E33A6C /* MemoTitledInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2D0B7F6C1AB3456D00E33A6C /* MemoTitledInfoCell.xib */; };
-		2D0E2C571B9EF0620092FA9B /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D0E2C561B9EF0620092FA9B /* Icon-76@2x.png */; };
 		2D1093D11DD9CB5700A7888B /* BelisImageFolderAndTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1093D01DD9CB5700A7888B /* BelisImageFolderAndTools.swift */; };
 		2D1ED1851B8344BD0004AAFA /* CidsOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1ED1841B8344BD0004AAFA /* CidsOperations.swift */; };
 		2D1ED1871B8344C80004AAFA /* CidsSessionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1ED1861B8344C80004AAFA /* CidsSessionFactory.swift */; };
@@ -32,9 +31,6 @@
 		2D46EEF11BF4A75F004E3D9E /* MastActionForms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D46EEF01BF4A75F004E3D9E /* MastActionForms.swift */; };
 		2D46EEF31BF4A771004E3D9E /* LeuchteActionForms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D46EEF21BF4A771004E3D9E /* LeuchteActionForms.swift */; };
 		2D52D90D1C59072200BB3DED /* webhostinghub-glyphs.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2D52D90C1C59029700BB3DED /* webhostinghub-glyphs.ttf */; };
-		2D53983A1B945C4C001C865F /* Icon-60@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D5398391B945C4C001C865F /* Icon-60@3x.png */; };
-		2D53983C1B945C58001C865F /* Icon-40.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D53983B1B945C58001C865F /* Icon-40.png */; };
-		2D53983E1B945C63001C865F /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = 2D53983D1B945C63001C865F /* Icon-Small.png */; };
 		2D5FB2D21A67C7320041020C /* belis_app.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D01A67C7320041020C /* belis_app.xcdatamodeld */; };
 		2D5FB2D91A67C7320041020C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D5FB2D81A67C7320041020C /* Images.xcassets */; };
 		2D5FB2E81A67C7320041020C /* belis_appTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5FB2E71A67C7320041020C /* belis_appTests.swift */; };
@@ -115,7 +111,6 @@
 		2D0B7F681AB3454100E33A6C /* DoubleTitledInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DoubleTitledInfoCell.xib; path = "table-cell-guis/DoubleTitledInfoCell.xib"; sourceTree = "<group>"; };
 		2D0B7F6B1AB3456D00E33A6C /* MemoTitledInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MemoTitledInfoCell.swift; path = "table-cell-guis/MemoTitledInfoCell.swift"; sourceTree = "<group>"; };
 		2D0B7F6C1AB3456D00E33A6C /* MemoTitledInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MemoTitledInfoCell.xib; path = "table-cell-guis/MemoTitledInfoCell.xib"; sourceTree = "<group>"; };
-		2D0E2C561B9EF0620092FA9B /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-76@2x.png"; sourceTree = "<group>"; };
 		2D1093D01DD9CB5700A7888B /* BelisImageFolderAndTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BelisImageFolderAndTools.swift; sourceTree = "<group>"; };
 		2D1ED1841B8344BD0004AAFA /* CidsOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsOperations.swift; sourceTree = "<group>"; };
 		2D1ED1861B8344C80004AAFA /* CidsSessionFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsSessionFactory.swift; sourceTree = "<group>"; };
@@ -133,9 +128,6 @@
 		2D46EEF01BF4A75F004E3D9E /* MastActionForms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MastActionForms.swift; sourceTree = "<group>"; };
 		2D46EEF21BF4A771004E3D9E /* LeuchteActionForms.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeuchteActionForms.swift; sourceTree = "<group>"; };
 		2D52D90C1C59029700BB3DED /* webhostinghub-glyphs.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "webhostinghub-glyphs.ttf"; sourceTree = "<group>"; };
-		2D5398391B945C4C001C865F /* Icon-60@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-60@3x.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-60@3x.png"; sourceTree = "<group>"; };
-		2D53983B1B945C58001C865F /* Icon-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-40.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-40.png"; sourceTree = "<group>"; };
-		2D53983D1B945C63001C865F /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-Small.png"; sourceTree = "<group>"; };
 		2D5FB2C91A67C7320041020C /* belis-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "belis-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D5FB2CD1A67C7320041020C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2D5FB2D11A67C7320041020C /* belis_app.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = belis_app.xcdatamodel; sourceTree = "<group>"; };
@@ -267,10 +259,6 @@
 		2D5FB2C01A67C7320041020C = {
 			isa = PBXGroup;
 			children = (
-				2D0E2C561B9EF0620092FA9B /* Icon-76@2x.png */,
-				2D53983D1B945C63001C865F /* Icon-Small.png */,
-				2D53983B1B945C58001C865F /* Icon-40.png */,
-				2D5398391B945C4C001C865F /* Icon-60@3x.png */,
 				2D9D3B1B1A9F77B50049F46F /* UIKit.framework */,
 				2D9D3B191A9F777D0049F46F /* QuickLook.framework */,
 				2D5FB2F11A67CA570041020C /* MapKit.framework */,
@@ -573,13 +561,9 @@
 				2D9952241AA5FFC600B5E02E /* DokumentPreviewVC.xib in Resources */,
 				2D0B7F6E1AB3456D00E33A6C /* MemoTitledInfoCell.xib in Resources */,
 				2DEDB58B1AFCCDC9004ADC92 /* schaltstelle.png in Resources */,
-				2D53983E1B945C63001C865F /* Icon-Small.png in Resources */,
 				2D407C211AC2ECD40083013A /* DetailVC.xib in Resources */,
 				2D0B7F6A1AB3454100E33A6C /* DoubleTitledInfoCell.xib in Resources */,
-				2D53983A1B945C4C001C865F /* Icon-60@3x.png in Resources */,
-				2D53983C1B945C58001C865F /* Icon-40.png in Resources */,
 				2D5FB2F91A67CB120041020C /* belisBack.png in Resources */,
-				2D0E2C571B9EF0620092FA9B /* Icon-76@2x.png in Resources */,
 				2D5FB30D1A67CC340041020C /* Main.storyboard in Resources */,
 				2DE8B1A41B25C3EA00FCEBA7 /* testbild.png in Resources */,
 				2D5FB30B1A67CC340041020C /* LaunchScreen.xib in Resources */,
