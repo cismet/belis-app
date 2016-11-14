@@ -115,7 +115,6 @@
 		2D0B7F681AB3454100E33A6C /* DoubleTitledInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DoubleTitledInfoCell.xib; path = "table-cell-guis/DoubleTitledInfoCell.xib"; sourceTree = "<group>"; };
 		2D0B7F6B1AB3456D00E33A6C /* MemoTitledInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MemoTitledInfoCell.swift; path = "table-cell-guis/MemoTitledInfoCell.swift"; sourceTree = "<group>"; };
 		2D0B7F6C1AB3456D00E33A6C /* MemoTitledInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MemoTitledInfoCell.xib; path = "table-cell-guis/MemoTitledInfoCell.xib"; sourceTree = "<group>"; };
-		2D0E2C541B9EF05C0092FA9B /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-76@2x.png"; sourceTree = "<group>"; };
 		2D0E2C561B9EF0620092FA9B /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "belis-app/Images.xcassets/AppIcon.appiconset/Icon-76@2x.png"; sourceTree = "<group>"; };
 		2D1093D01DD9CB5700A7888B /* BelisImageFolderAndTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BelisImageFolderAndTools.swift; sourceTree = "<group>"; };
 		2D1ED1841B8344BD0004AAFA /* CidsOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CidsOperations.swift; sourceTree = "<group>"; };
@@ -269,7 +268,6 @@
 			isa = PBXGroup;
 			children = (
 				2D0E2C561B9EF0620092FA9B /* Icon-76@2x.png */,
-				2D0E2C541B9EF05C0092FA9B /* Icon-76@2x.png */,
 				2D53983D1B945C63001C865F /* Icon-Small.png */,
 				2D53983B1B945C58001C865F /* Icon-40.png */,
 				2D5398391B945C4C001C865F /* Icon-60@3x.png */,
