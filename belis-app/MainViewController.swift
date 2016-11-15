@@ -113,24 +113,28 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         print(UIDevice.current.identifierForVendor!.uuidString)
         
         
-        if let _=CidsConnector.sharedInstance().selectedTeam {
-            //            let alert = UIAlertView()
-            //            alert.title = "Ausgewähltes Team"
-            //            alert.message = "\(t.name ?? "???")"
-            //            alert.addButtonWithTitle("Ok")
-            //            alert.show()
-        }
-        else {
-            let alert = UIAlertView()
-            alert.title = "Kein Team ausgewählt"
-            alert.message = "Ohne ausgewähltes Team können Sie keine Arbeitsaufträge aufrufen."
-            alert.addButton(withTitle: "Ok")
-            alert.show()
-        }
         
         itemArbeitsauftrag.title="Kein Arbeitsauftrag ausgewählt (\(CidsConnector.sharedInstance().selectedTeam?.name ?? "-"))"
         
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if CidsConnector.sharedInstance().selectedTeam != nil {
+//            let alert=UIAlertController(title: "Ausgewähltes Team",message:"\(CidsConnector.sharedInstance().selectedTeam ?? "???")", preferredStyle: UIAlertControllerStyle.alert)
+//            let okButton = UIAlertAction(title: "Ok", style: .default, handler: nil)
+//            alert.addAction(okButton)
+//            self.present(alert, animated: true, completion: nil)
+            
+        }
+        else {
+            let alert=UIAlertController(title: "Kein Team ausgewählt",message:"Ohne ausgewähltes Team können Sie keine Arbeitsaufträge aufrufen.", preferredStyle: UIAlertControllerStyle.alert)
+            let okButton = UIAlertAction(title: "Ok", style: .default, handler: nil)
+            alert.addAction(okButton)
+            show(alert,sender: self)
+        }
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -549,11 +553,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
         }
         else {
-            let alert = UIAlertView()
-            alert.title = "Kein Team ausgewählt"
-            alert.message = "Bitte wählen Sie zuerst ein Team aus"
-            alert.addButton(withTitle: "Ok")
-            alert.show()
+            let alert=UIAlertController(title: "Kein Team ausgewählt",message:"Bitte wählen Sie zuerst ein Team aus", preferredStyle: UIAlertControllerStyle.alert)
+            let okButton = UIAlertAction(title: "Ok", style: .default, handler: nil)
+            alert.addAction(okButton)
+            show(alert,sender: self)
         }
         
         
