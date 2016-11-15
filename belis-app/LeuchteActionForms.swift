@@ -43,7 +43,7 @@ class LeuchtenerneuerungAction : ObjectAction {
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 140)
+        return CGSize(width: 500, height: 100)
     }
     
     override func save(){
@@ -110,7 +110,7 @@ class LeuchtmittelwechselEPAction : ObjectAction {
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 290)
+        return CGSize(width: 500, height: 250)
     }
     
     override func save(){
@@ -191,7 +191,7 @@ class LeuchtmittelwechselAction : ObjectAction {
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 190)
+        return CGSize(width: 500, height: 150)
     }
     
     override func save(){
@@ -248,7 +248,7 @@ class RundsteuerempfaengerwechselAction : ObjectAction {
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 140)
+        return CGSize(width: 500, height: 100)
     }
     
     
@@ -295,7 +295,7 @@ class SonderturnusAction : ObjectAction {
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 100)
+        return CGSize(width: 500, height: 60)
     }
     
     override func save(){
@@ -340,7 +340,7 @@ class VorschaltgeraetwechselAction : ObjectAction {
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 140)
+        return CGSize(width: 500, height: 100)
     }
     
     override func save(){

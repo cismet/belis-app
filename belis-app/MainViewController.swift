@@ -500,8 +500,11 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let detailNC=UINavigationController(rootViewController: detailVC)
             selectedAnnotation=nil
             
-            let popC=UIPopoverController(contentViewController: detailNC)
-            popC.present(from: itemArbeitsauftrag, permittedArrowDirections: UIPopoverArrowDirection.any, animated: true)
+            detailNC.modalPresentationStyle = UIModalPresentationStyle.popover
+            detailNC.popoverPresentationController?.barButtonItem = itemArbeitsauftrag
+            present(detailNC, animated: true, completion: nil)
+            
+        
         }
         else if let indexPath=tableView.indexPathForSelectedRow , let aa = CidsConnector.sharedInstance().searchResults[Entity.byIndex((indexPath as NSIndexPath).section)]?[(indexPath as NSIndexPath).row] as? Arbeitsauftrag {
             selectArbeitsauftrag(aa)
@@ -926,8 +929,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             selectedAnnotation=nil
             
             mapView.deselectAnnotation(view.annotation, animated: false)
-            let popC=UIPopoverController(contentViewController: detailNC)
-            popC.present(from: view.frame, in: mapView, permittedArrowDirections: UIPopoverArrowDirection.any, animated: true)
+            
+            detailNC.modalPresentationStyle = UIModalPresentationStyle.popover
+            detailNC.popoverPresentationController?.sourceView = mapView
+            detailNC.popoverPresentationController?.sourceRect = view.frame
+            detailNC.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.any
+            present(detailNC, animated: true, completion: nil)
+
+            
         }
     }
     func clearAll() {

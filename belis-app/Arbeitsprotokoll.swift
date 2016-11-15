@@ -276,36 +276,22 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         let status=MGSwipeButton(title: "Status", backgroundColor: UIColor(red: 255.0/255.0, green: 107.0/255.0, blue: 107.0/255.0, alpha: 1.0) ,callback: {
             (sender: MGSwipeTableCell!) -> Bool in
             if let mainVC=CidsConnector.sharedInstance().mainVC {
-//                if let protDetailView = mainVC.storyboard?.instantiateViewControllerWithIdentifier("formView") as? GenericFormViewController {
-//                    protDetailView.form=ProtokollStatusForm(protokoll: self, vc: protDetailView)
-//
-//                    func save() {
-//                        print("saive")
-//                    }
-//                    func cancel() {
-//                        print("caaancel")
-//                    }
-//                    
-//                    protDetailView.saveHandler=save
-//                    protDetailView.cancelHandler=cancel
-//                    
-//                    let detailNC=UINavigationController(rootViewController: protDetailView)
-//                    detailNC.modalInPopover=true
-//                    let popC=UIPopoverController(contentViewController: detailNC)
-//                    popC.setPopoverContentSize(CGSize(width: 400, height: 500), animated: false)
-//                    popC.presentPopoverFromRect(sender.bounds, inView: sender, permittedArrowDirections: .Left, animated: true)
-//                    
-//                }
                 let oAction=ProtokollStatusUpdateAction(protokoll: self)
                 oAction.sender=sender
                 oAction.mainVC=mainVC
                 oAction.arbeitsprotokoll_id=self.id
                 oAction.formVC.form=oAction.getFormDescriptor()
                 let detailNC=UINavigationController(rootViewController: oAction.formVC)
+                
                 detailNC.isModalInPopover=true
-                let popC=UIPopoverController(contentViewController: detailNC)
-                popC.setContentSize(oAction.getPreferredSize(), animated: false)
-                popC.present(from: sender.bounds, in: sender, permittedArrowDirections: .left, animated: true)
+                detailNC.modalPresentationStyle = UIModalPresentationStyle.popover
+                detailNC.popoverPresentationController?.sourceView = sender
+                detailNC.popoverPresentationController?.sourceRect = sender.bounds
+                detailNC.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.left
+                detailNC.preferredContentSize = oAction.getPreferredSize()
+                
+                mainVC.present(detailNC, animated: true, completion: nil)
+
             }
             
             return true

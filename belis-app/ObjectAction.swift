@@ -31,9 +31,15 @@ open class ObjectAction: NSObject {
             formVC.form=getFormDescriptor()
             let detailNC=UINavigationController(rootViewController: formVC)
             detailNC.isModalInPopover=true
-            let popC=UIPopoverController(contentViewController: detailNC)
-            popC.setContentSize(getPreferredSize(), animated: false)
-            popC.present(from: senderView.bounds, in: senderView, permittedArrowDirections: .left, animated: true)
+            
+            detailNC.modalPresentationStyle = UIModalPresentationStyle.popover
+            detailNC.popoverPresentationController?.sourceView = senderView
+            detailNC.popoverPresentationController?.sourceRect = senderView.bounds
+            detailNC.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.left
+            detailNC.preferredContentSize = getPreferredSize()
+            
+            mainVC?.present(detailNC, animated: true, completion: nil)
+
         } else {
             assertionFailure("sender was Null, therefore Boom")
         }

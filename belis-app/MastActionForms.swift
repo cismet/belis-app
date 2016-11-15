@@ -35,7 +35,7 @@ class AnstricharbeitenAction : ObjectAction {
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 140)
+        return CGSize(width: 500, height: 100)
     }
     
     override func save(){
@@ -82,7 +82,7 @@ class ElektrischePruefungAction : ObjectAction {
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 140)
+        return CGSize(width: 500, height: 100)
     }
     override func save(){
         if arbeitsprotokoll_id != -1 {
@@ -136,7 +136,7 @@ class MasterneuerungAction : ObjectAction {
         
     }
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 140)
+        return CGSize(width: 500, height: 100)
     }
     
     override func save(){
@@ -179,7 +179,7 @@ class MastRevisionAction : ObjectAction {
     
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 100)
+        return CGSize(width: 500, height: 60)
     }
     
     override func save(){
@@ -224,7 +224,7 @@ class StandsicherheitspruefungAction : ObjectAction {
         return form
     }
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 190)
+        return CGSize(width: 500, height: 150)
     }
     
     override func save(){

@@ -31,7 +31,7 @@ class SonstigesAction : ObjectAction {
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 200)
+        return CGSize(width: 500, height: 160)
     }
     
     override func save(){
@@ -138,7 +138,7 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 200)
+        return CGSize(width: 500, height: 160)
     }
     
     override func save(){
@@ -194,7 +194,7 @@ class SchaltstellenRevisionAction : ObjectAction {
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 100)
+        return CGSize(width: 500, height: 60)
     }
     
     override func save(){
@@ -277,7 +277,7 @@ class ProtokollStatusUpdateAction : ObjectAction {
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 500)
+        return CGSize(width: 500, height: 460)
     }
     
     override func save(){
