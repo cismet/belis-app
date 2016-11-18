@@ -21,22 +21,22 @@ class SonstigesAction : ObjectAction {
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
         form.title = "Sonstiges"
-        let section2 = FormSectionDescriptor()
-        let row = FormRowDescriptor(tag: PT.BEMERKUNG.rawValue, rowType: .MultilineText, title: "")
+        let section2 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+        let row = FormRowDescriptor(tag: PT.BEMERKUNG.rawValue, type: .multilineText, title: "")
         section2.headerTitle = "Informationen zu den durchgeführten Tätigkeiten"
-        section2.addRow(row)
+        section2.rows.append(row)
         form.sections = [section2]
         return form
         
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 200)
+        return CGSize(width: 500, height: 160)
     }
     
     override func save(){
         if arbeitsprotokoll_id != -1 {
-            let content = formVC.form.formValues() as!  [String : AnyObject]
+            let content = formVC.form.formValues() 
             showWaiting()
             let apc=getParameterContainer()
             if let bemerkung=content[PT.BEMERKUNG.rawValue] {
@@ -68,14 +68,16 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
         form.title = "Prüfung"
-        let section2 = FormSectionDescriptor()
-        var row = FormRowDescriptor(tag: PT.PRUEFDATUM.rawValue, rowType: .Date, title: "Prüfdatum")
-        row.value=NSDate()
+        let section2 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+        var row = FormRowDescriptor(tag: PT.PRUEFDATUM.rawValue, type: .date, title: "Prüfdatum")
+        row.value=Date() as AnyObject?
         
-        section2.addRow(row)
-        row = FormRowDescriptor(tag: PT.DOKUMENT.rawValue, rowType: .BooleanSwitch, title: "inkl. Foto")
-        section2.addRow(row)
-//
+        section2.rows.append(row)
+        row = FormRowDescriptor(tag: PT.DOKUMENT.rawValue, type: .booleanSwitch, title: "inkl. Foto")
+        section2.rows.append(row)
+
+        
+        //vorher schon auskommentiert
 //        row = FormRowDescriptor(tag: "", rowType: .Button, title: "Foto erstellen")
 //        row.configuration[FormRowDescriptor.Configuration.DidSelectClosure] = {
 //            super.formVC.view.endEditing(true)
@@ -114,7 +116,7 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
         
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         print("DetailVC FINISH")
 //        if let x = (callBacker as? UIImagePickerControllerDelegate) {
 //            x.imagePickerController!(picker, didFinishPickingMediaWithInfo: info)
@@ -122,7 +124,7 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
         //picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
         
     }
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         print("DetailVC CANCEL")
 //        if let x = (callBacker as? UIImagePickerControllerDelegate) {
 //            x.imagePickerControllerDidCancel!(picker)
@@ -136,19 +138,19 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 200)
+        return CGSize(width: 500, height: 160)
     }
     
     override func save(){
         if arbeitsprotokoll_id != -1 {
-            let content = formVC.form.formValues() as!  [String : AnyObject]
+            let content = formVC.form.formValues() 
             showWaiting()
             let apc=getParameterContainer()
             let date=content[PT.PRUEFDATUM.rawValue]!
             let nowDouble = date.timeIntervalSince1970
-            let millis = Int64(nowDouble*1000) + Int64(nowDouble/1000)
+            let millis = Int64(nowDouble!*1000) + Int64(nowDouble!/1000)
             let param = "\(millis)"
-            apc.append(PT.PRUEFDATUM.rawValue, value: param)
+            apc.append(PT.PRUEFDATUM.rawValue, value: param as AnyObject)
             
             
 //            if let mitFoto=content[PT.DOKUMENT.rawValue] as? Bool{
@@ -182,29 +184,29 @@ class SchaltstellenRevisionAction : ObjectAction {
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
         form.title = "Revision"
-        let section2 = FormSectionDescriptor()
-        let row = FormRowDescriptor(tag: PT.PRUEFDATUM.rawValue, rowType: .Date, title: "Prüfdatum")
-        row.value=NSDate()
-        section2.addRow(row)
+        let section2 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+        let row = FormRowDescriptor(tag: PT.PRUEFDATUM.rawValue, type: .date, title: "Prüfdatum")
+        row.value=Date() as AnyObject?
+        section2.rows.append(row)
         form.sections = [section2]
         return form
         
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 100)
+        return CGSize(width: 500, height: 60)
     }
     
     override func save(){
         if arbeitsprotokoll_id != -1 {
-            let content = formVC.form.formValues() as!  [String : AnyObject]
+            let content = formVC.form.formValues() 
             showWaiting()
             let apc=getParameterContainer()
             let date=content[PT.PRUEFDATUM.rawValue]!
             let nowDouble = date.timeIntervalSince1970
-            let millis = Int64(nowDouble*1000) + Int64(nowDouble/1000)
+            let millis = Int64(nowDouble!*1000) + Int64(nowDouble!/1000)
             let param = "\(millis)"
-            apc.append(PT.PRUEFDATUM.rawValue, value: param)
+            apc.append(PT.PRUEFDATUM.rawValue, value: param as AnyObject)
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollSchaltstelleRevision", params: apc, handler: defaultAfterSaveHandler)
         }
     }
@@ -227,47 +229,47 @@ class ProtokollStatusUpdateAction : ObjectAction {
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
         form.title = "Protokoll Details"
-        let section0 = FormSectionDescriptor()
+        let section0 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
         section0.headerTitle = "Status"
-        var row: FormRowDescriptor! = FormRowDescriptor(tag: PT.STATUS.rawValue, rowType: .SegmentedControl, title: "")
-        row.configuration[FormRowDescriptor.Configuration.Options] = CidsConnector.sharedInstance().sortedArbeitsprotokollStatusListKeys
-        row.configuration[FormRowDescriptor.Configuration.TitleFormatterClosure] = { value in
+        var row: FormRowDescriptor! = FormRowDescriptor(tag: PT.STATUS.rawValue, type: .segmentedControl, title: "")
+        row.configuration.selection.options = CidsConnector.sharedInstance().sortedArbeitsprotokollStatusListKeys as [AnyObject]
+        row.configuration.selection.optionTitleClosure = { value in
             let s=CidsConnector.sharedInstance().arbeitsprotokollStatusList[value as! String]
             return "\(s?.bezeichnung ?? "???")"
-            } as TitleFormatterClosure
-        row.configuration[FormRowDescriptor.Configuration.CellConfiguration] = ["segmentedControl.tintColor" : UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)]
+            }
+        row.configuration.cell.appearance = ["segmentedControl.tintColor" : UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)]
         if let statid=protokoll.status?.id {
-            row.value="\(statid)"
+            row.value="\(statid)" as AnyObject?
         }
-        section0.addRow(row)
+        section0.rows.append(row)
         
-        let section1 = FormSectionDescriptor()
-        row = FormRowDescriptor(tag: PT.MONTEUR.rawValue, rowType: .Text, title: "Monteur")
-        row.configuration[FormRowDescriptor.Configuration.CellConfiguration] = ["textField.placeholder" : "Monteurname", "textField.textAlignment" : NSTextAlignment.Right.rawValue]
+        let section1 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+        row = FormRowDescriptor(tag: PT.MONTEUR.rawValue, type: .text, title: "Monteur")
+        row.configuration.cell.appearance = ["textField.placeholder" : "Monteurname" as AnyObject, "textField.textAlignment" : NSTextAlignment.right.rawValue as AnyObject]
         if let mont=protokoll.monteur {
-            row.value=mont
+            row.value=mont as AnyObject?
         } else {
-            row.value=CidsConnector.sharedInstance().lastMonteur
+            row.value=CidsConnector.sharedInstance().lastMonteur as AnyObject?
         }
-        section1.addRow(row)
-        row = FormRowDescriptor(tag: PT.DATUM.rawValue, rowType: .Date, title: "Datum")
+        section1.rows.append(row)
+        row = FormRowDescriptor(tag: PT.DATUM.rawValue, type: .date, title: "Datum")
         if let dat=protokoll.datum {
-            row.value=dat
+            row.value=dat as AnyObject?
         }
         else {
-            row.value=NSDate()
+            row.value=Date() as AnyObject?
         }
-        section1.addRow(row)
-        let section2 = FormSectionDescriptor()
-        row = FormRowDescriptor(tag: PT.BEMERKUNG.rawValue, rowType: .MultilineText, title: "")
+        section1.rows.append(row)
+        let section2 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+        row = FormRowDescriptor(tag: PT.BEMERKUNG.rawValue, type: .multilineText, title: "")
         section2.headerTitle = "Bemerkung"
-        row.value=protokoll.bemerkung
-        section2.addRow(row)
-        let section3 = FormSectionDescriptor()
-        row = FormRowDescriptor(tag: PT.MATERIAL.rawValue, rowType: .MultilineText, title: "")
+        row.value=protokoll.bemerkung as AnyObject?
+        section2.rows.append(row)
+        let section3 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+        row = FormRowDescriptor(tag: PT.MATERIAL.rawValue, type: .multilineText, title: "")
         section3.headerTitle = "Material"
-        section3.addRow(row)
-        row.value=protokoll.material
+        section3.rows.append(row)
+        row.value=protokoll.material as AnyObject?
         
         form.sections=[section1,section0,section2,section3]
         return form
@@ -275,28 +277,28 @@ class ProtokollStatusUpdateAction : ObjectAction {
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 500)
+        return CGSize(width: 500, height: 460)
     }
     
     override func save(){
         if arbeitsprotokoll_id != -1 {
-            let content = formVC.form.formValues() as!  [String : AnyObject]
+            let content = formVC.form.formValues() 
             showWaiting()
 
             let apc=getParameterContainer()
             //------------------
             if let mont=content[PT.MONTEUR.rawValue] as?  String {
-                apc.append(PT.MONTEUR.rawValue, value: mont)
+                apc.append(PT.MONTEUR.rawValue, value: mont as AnyObject)
                 CidsConnector.sharedInstance().lastMonteur=mont
-                NSUserDefaults.standardUserDefaults().setObject(mont, forKey: "lastMonteur")
+                UserDefaults.standard.set(mont, forKey: "lastMonteur")
             }
 
             //------------------
             let date=content[PT.DATUM.rawValue]!
             let nowDouble = date.timeIntervalSince1970
-            let millis = Int64(nowDouble*1000) + Int64(nowDouble/1000)
+            let millis = Int64(nowDouble!*1000) + Int64(nowDouble!/1000)
             let param = "\(millis)"
-            apc.append(PT.DATUM.rawValue, value: param)
+            apc.append(PT.DATUM.rawValue, value: param as AnyObject)
             //------------------
             if let sid=content[PT.STATUS.rawValue]{
                 apc.append(PT.STATUS.rawValue, value: sid)

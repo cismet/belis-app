@@ -23,25 +23,25 @@ class DoubleTitledInfoCell: UITableViewCell,CellDataUI {
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
-    func fillFromCellData(cellData :CellData){
+    func fillFromCellData(_ cellData :CellData){
         if let d=cellData as? DoubleTitledInfoCellData {
             lblLeftTitle.text=d.titleLeft
             lblRightTitle.text=d.titleRight
             lblLeftData.text=d.dataLeft
             lblRightData.text=d.dataRight
-            accessoryType=UITableViewCellAccessoryType.None
+            accessoryType=UITableViewCellAccessoryType.none
             
         } else if let d=cellData as? DoubleTitledInfoCellDataWithDetails {
             lblLeftTitle.text=d.titleLeft
             lblRightTitle.text=d.titleRight
             lblLeftData.text=d.dataLeft
             lblRightData.text=d.dataRight
-            accessoryType=UITableViewCellAccessoryType.DisclosureIndicator
+            accessoryType=UITableViewCellAccessoryType.disclosureIndicator
 
         }
         
@@ -90,7 +90,7 @@ class DoubleTitledInfoCellDataWithDetails:CellData, SimpleCellActionProvider {
         return "doubleTitled"
     }
     
-    @objc func action(vc:UIViewController) {
+    @objc func action(_ vc:UIViewController) {
         let detailVC=DetailVC(nibName: "DetailVC", bundle: nil)
         detailVC.sections=sections
         detailVC.setCellData(details)

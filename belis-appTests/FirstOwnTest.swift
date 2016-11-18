@@ -1,15 +1,14 @@
 //
-//  belis_appTests.swift
-//  belis-appTests
+//  FirstOwnTest.swift
+//  belis-app
 //
-//  Created by Thorsten Hell on 15/01/15.
-//  Copyright (c) 2015 cismet. All rights reserved.
+//  Created by Thorsten Hell on 10.11.16.
+//  Copyright © 2016 cismet. All rights reserved.
 //
 
-import UIKit
 import XCTest
 
-class belis_appTests: XCTestCase {
+class FirstOwnTest: XCTestCase {
     
     override func setUp() {
         super.setUp()
@@ -23,12 +22,12 @@ class belis_appTests: XCTestCase {
     
     func testExample() {
         // This is an example of a functional test case.
-        XCTAssert(true, "Pass")
+        // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
     
     func testPerformanceExample() {
         // This is an example of a performance test case.
-        self.measure() {
+        self.measure {
             // Put the code you want to measure the time of here.
         }
     }

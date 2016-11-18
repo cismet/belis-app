@@ -10,6 +10,17 @@ import Foundation
 import ObjectMapper
 import MGSwipeTableCell
 import SwiftForms
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
 
 
 class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDataProvider, RightSwipeActionProvider {
@@ -17,7 +28,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
     var monteur: String?
     var bemerkung: String?
     var defekt: String?
-    var datum: NSDate?
+    var datum: Date?
     var status: ArbeitsprotokollStatus?
     var veranlassungsnummer: String?
     var protokollnummer: Int?
@@ -42,12 +53,12 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
     
     
     // MARK: - required init because of ObjectMapper
-    required init?(_ map: Map) {
-        super.init(map)
+    required init?(map: Map) {
+        super.init(map: map)
     }
     
     // MARK: - essential overrides GeoBaseEntity
-    override func getAnnotationImage(status: String?) -> UIImage{
+    override func getAnnotationImage(_ status: String?) -> UIImage{
         if let gbe=attachedGeoBaseEntity {
             if let skey=self.status?.schluessel {
                 return gbe.getAnnotationImage(skey)
@@ -232,7 +243,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         }
         for aktion in aktionen {
             if let aktionstitle=aktion.aenderung {
-                if let von=aktion.alt, nach=aktion.neu {
+                if let von=aktion.alt, let nach=aktion.neu {
                     var aktionDetails: [String: [CellData]] = ["main":[]]
                     aktionDetails["main"]?.append(SimpleInfoCellData(data: aktionstitle))
                     aktionDetails["main"]?.append(SingleTitledInfoCellData(title: "von",data: von))
@@ -265,36 +276,22 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         let status=MGSwipeButton(title: "Status", backgroundColor: UIColor(red: 255.0/255.0, green: 107.0/255.0, blue: 107.0/255.0, alpha: 1.0) ,callback: {
             (sender: MGSwipeTableCell!) -> Bool in
             if let mainVC=CidsConnector.sharedInstance().mainVC {
-//                if let protDetailView = mainVC.storyboard?.instantiateViewControllerWithIdentifier("formView") as? GenericFormViewController {
-//                    protDetailView.form=ProtokollStatusForm(protokoll: self, vc: protDetailView)
-//
-//                    func save() {
-//                        print("saive")
-//                    }
-//                    func cancel() {
-//                        print("caaancel")
-//                    }
-//                    
-//                    protDetailView.saveHandler=save
-//                    protDetailView.cancelHandler=cancel
-//                    
-//                    let detailNC=UINavigationController(rootViewController: protDetailView)
-//                    detailNC.modalInPopover=true
-//                    let popC=UIPopoverController(contentViewController: detailNC)
-//                    popC.setPopoverContentSize(CGSize(width: 400, height: 500), animated: false)
-//                    popC.presentPopoverFromRect(sender.bounds, inView: sender, permittedArrowDirections: .Left, animated: true)
-//                    
-//                }
                 let oAction=ProtokollStatusUpdateAction(protokoll: self)
                 oAction.sender=sender
                 oAction.mainVC=mainVC
                 oAction.arbeitsprotokoll_id=self.id
                 oAction.formVC.form=oAction.getFormDescriptor()
                 let detailNC=UINavigationController(rootViewController: oAction.formVC)
-                detailNC.modalInPopover=true
-                let popC=UIPopoverController(contentViewController: detailNC)
-                popC.setPopoverContentSize(oAction.getPreferredSize(), animated: false)
-                popC.presentPopoverFromRect(sender.bounds, inView: sender, permittedArrowDirections: .Left, animated: true)
+                
+                detailNC.isModalInPopover=true
+                detailNC.modalPresentationStyle = UIModalPresentationStyle.popover
+                detailNC.popoverPresentationController?.sourceView = sender
+                detailNC.popoverPresentationController?.sourceRect = sender.bounds
+                detailNC.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.left
+                detailNC.preferredContentSize = oAction.getPreferredSize()
+                
+                mainVC.present(detailNC, animated: true, completion: nil)
+
             }
             
             return true
@@ -305,7 +302,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
             if let mainVC=CidsConnector.sharedInstance().mainVC {
                 if let oActionProvider=self.attachedGeoBaseEntity as? ObjectActionProvider {
                     if oActionProvider.getAllObjectActions().count>0 {
-                        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+                        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
                         for oAction in oActionProvider.getAllObjectActions() {
                             oAction.sender=sender
                             oAction.mainVC=mainVC
@@ -313,12 +310,12 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
                             alertController.addAction(UIAlertAction(title: oAction.title, style: oAction.style, handler: oAction.handler))
                             
                         }
-                        alertController.modalPresentationStyle = .Popover
+                        alertController.modalPresentationStyle = .popover
                         let popover = alertController.popoverPresentationController!
-                        popover.permittedArrowDirections = .Left
+                        popover.permittedArrowDirections = .left
                         popover.sourceView = sender
                         popover.sourceRect = sender.bounds
-                        mainVC.presentViewController(alertController, animated: true, completion: nil)
+                        mainVC.present(alertController, animated: true, completion: nil)
                     }
                 }
             }
@@ -334,8 +331,8 @@ class ArbeitsprotokollStatus: BaseEntity {
     var bezeichnung: String?
     var schluessel: String?
     
-    required init?(_ map: Map) {
-        super.init(map)
+    required init?(map: Map) {
+        super.init(map: map)
     }
     
     override func mapping(map: Map) {
@@ -344,7 +341,7 @@ class ArbeitsprotokollStatus: BaseEntity {
         schluessel <- map["schluessel"];
     }
     
-    class func ascending(lhs: ArbeitsprotokollStatus, rhs: ArbeitsprotokollStatus) -> Bool {
+    class func ascending(_ lhs: ArbeitsprotokollStatus, rhs: ArbeitsprotokollStatus) -> Bool {
         return lhs.schluessel < rhs.schluessel
     }
 }
@@ -354,8 +351,8 @@ class ArbeitsprotokollAktion: BaseEntity {
     var alt: String?
     var neu: String?
     
-    required init?(_ map: Map) {
-        super.init(map)
+    required init?(map: Map) {
+        super.init(map: map)
     }
     
     override func mapping(map: Map) {

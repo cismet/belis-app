@@ -9,41 +9,41 @@
 import Foundation
 import ObjectMapper
 
-class CidsRequestOperation: NSOperation {
+class CidsRequestOperation: Operation {
     var sessionFactory=CidsSessionFactory()
-    var qu: NSOperationQueue
-    var task: NSURLSessionDataTask?
+    var qu: OperationQueue
+    var task: URLSessionDataTask?
     var baseUrl:String=""
     var domain:String="BELIS2"
     var authHeader=""
     var url=""
     
     init(user: String, pass:String){
-        self.qu=NSOperationQueue.mainQueue()
+        self.qu=OperationQueue.main
         let loginString = NSString(format: "%@:%@", user, pass)
-        let loginData: NSData = loginString.dataUsingEncoding(NSUTF8StringEncoding)!
-        let base64LoginString = loginData.base64EncodedStringWithOptions([])
+        let loginData: Data = loginString.data(using: String.Encoding.utf8.rawValue)!
+        let base64LoginString = loginData.base64EncodedString(options: [])
         authHeader="Basic \(base64LoginString)"
     }
-    override var executing : Bool {
+    override var isExecuting : Bool {
         get { return _executing }
         set {
-            willChangeValueForKey("isExecuting")
+            willChangeValue(forKey: "isExecuting")
             _executing = newValue
-            didChangeValueForKey("isExecuting")
+            didChangeValue(forKey: "isExecuting")
         }
     }
-    private var _executing : Bool=false
+    fileprivate var _executing : Bool=false
     
-    override var finished : Bool {
+    override var isFinished : Bool {
         get { return _finished }
         set {
-            willChangeValueForKey("isFinished")
+            willChangeValue(forKey: "isFinished")
             _finished = newValue
-            didChangeValueForKey("isFinished")
+            didChangeValue(forKey: "isFinished")
         }
     }
-    private var _finished : Bool=false
+    fileprivate var _finished : Bool=false
     
     
     override func cancel(){
@@ -59,16 +59,16 @@ class CidsRequestOperation: NSOperation {
     @param queryParameters The input dictionary.
     @return The created parameters string.
     */
-    func stringFromQueryParameters(queryParameters : Dictionary<String, String>) -> String {
+    func stringFromQueryParameters(_ queryParameters : Dictionary<String, String>) -> String {
         var parts: [String] = []
         for (name, value) in queryParameters {
             //let part = NSString(format: "%@=%@",name.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!, value.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!)
             let part = NSString(format: "%@=%@",
-                    name.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!,
-                    value.stringByAddingPercentEncodingWithAllowedCharacters(.URLHostAllowedCharacterSet())!)
+                    name.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!,
+                    value.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)
             parts.append(part as String)
         }
-        return parts.joinWithSeparator("&")
+        return parts.joined(separator: "&")
     }
     
     /**
@@ -77,9 +77,9 @@ class CidsRequestOperation: NSOperation {
     @param queryParameters The query parameter dictionary to add.
     @return A new NSURL.
     */
-    func NSURLByAppendingQueryParameters(URL : NSURL!, queryParameters : Dictionary<String, String>) -> NSURL {
+    func NSURLByAppendingQueryParameters(_ URL : Foundation.URL!, queryParameters : Dictionary<String, String>) -> Foundation.URL {
         let URLString : NSString = NSString(format: "%@?%@", URL.absoluteString, self.stringFromQueryParameters(queryParameters))
-        return NSURL(string: URLString as String)!
+        return Foundation.URL(string: URLString as String)!
     }
     
     func enqueue(){
@@ -105,9 +105,9 @@ class GetEntityOperation: CidsRequestOperation {
     
     var entityName=""
     
-    var completionHandler: ((operation:GetEntityOperation, data : NSData!, response : NSURLResponse!, error : NSError!, queue: NSOperationQueue) -> ())?
+    var completionHandler: ((_ operation:GetEntityOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: OperationQueue) -> ())?
     
-    init(baseUrl: String, domain: String,entityName:String, id: Int, user: String, pass:String, queue: NSOperationQueue, completionHandler: (operation:GetEntityOperation, data : NSData!, response : NSURLResponse!, error : NSError!, queue: NSOperationQueue) -> ()) {
+    init(baseUrl: String, domain: String,entityName:String, id: Int, user: String, pass:String, queue: OperationQueue, completionHandler: @escaping (_ operation:GetEntityOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: OperationQueue) -> ()) {
         super.init(user:user,pass:pass)
         self.id=id
         self.qu=queue
@@ -116,38 +116,61 @@ class GetEntityOperation: CidsRequestOperation {
     }
     
     override func main() {
-        if self.cancelled {
+        if self.isCancelled {
             return
         }
         else  {
-            let nsurl = NSURL(string: url)
+            let nsurl = URL(string: url)
             
-            let request = NSMutableURLRequest(URL: nsurl!)
-            request.HTTPMethod = "GET"
+            var request = URLRequest(url: nsurl!)
+            request.httpMethod = "GET"
             
             request.addValue(authHeader, forHTTPHeaderField: "Authorization") //correct passwd
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             let session=sessionFactory.getNewCidsSession()
             /* Start a new Task */
-            task = session.dataTaskWithRequest(request, completionHandler: { (data : NSData?, response : NSURLResponse?, error : NSError?) -> Void in
+//            task = session.dataTask(with: request, completionHandler: { (data : Data?, response : URLResponse?, error : NSError?) -> Void in
+//                if let handler=self.completionHandler {
+//                    handler(operation: self, data: data, response: response, error: error, queue: self.qu)
+//                }
+//                else {
+//                    if (error == nil) {
+//                        // Success
+//                        let statusCode = (response as! HTTPURLResponse).statusCode
+//                        print("URL Session Task Succeeded: HTTP \(statusCode)")
+//                    }
+//                    else {
+//                        // Failure
+//                        print("URL Session Task Failed: %@", error!.localizedDescription);
+//                    }
+//                }
+//                
+//                
+//                self.isExecuting=false
+//                self.isFinished = true
+//                self.task=nil
+//            })
+            
+            
+            task = session.dataTask(with: request, completionHandler: { (data, response, error) in
                 if let handler=self.completionHandler {
-                    handler(operation: self, data: data, response: response, error: error, queue: self.qu)
+                    handler(self, data, response, error, self.qu)
                 }
                 else {
                     if (error == nil) {
                         // Success
-                        let statusCode = (response as! NSHTTPURLResponse).statusCode
-                        print("URL Session Task Succeeded: HTTP \(statusCode)")
+                        let statusCode = (response as! HTTPURLResponse).statusCode
+                        print("getEntity::URL Session Task Succeeded: HTTP \(statusCode)")
                     }
                     else {
                         // Failure
-                        print("URL Session Task Failed: %@", error!.localizedDescription);
+                        print("getEntity::URL Session Task Failed: %@", error!.localizedDescription);
                     }
                 }
                 
                 
-                self.executing=false
-                self.finished = true
+                self.isExecuting=false
+                self.isFinished = true
                 self.task=nil
             })
             if let t=self.task {
@@ -159,9 +182,9 @@ class GetEntityOperation: CidsRequestOperation {
 
 class GetAllEntitiesOperation: CidsRequestOperation {
     var entityName=""
-    var completionHandler: ((operation:GetAllEntitiesOperation, data : NSData!, response : NSURLResponse!, error : NSError!, queue: NSOperationQueue) -> ())?
+    var completionHandler: ((_ operation:GetAllEntitiesOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: OperationQueue) -> ())?
     
-    init(baseUrl: String, domain: String,entityName:String, user: String, pass:String, queue: NSOperationQueue, completionHandler: (operation:GetAllEntitiesOperation, data : NSData!, response : NSURLResponse!, error : NSError!, queue: NSOperationQueue) -> ()) {
+    init(baseUrl: String, domain: String,entityName:String, user: String, pass:String, queue: OperationQueue, completionHandler: @escaping (_ operation:GetAllEntitiesOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: OperationQueue) -> ()) {
         super.init(user:user,pass:pass)
         self.qu=queue
         self.completionHandler=completionHandler
@@ -169,38 +192,38 @@ class GetAllEntitiesOperation: CidsRequestOperation {
     }
     
     override func main() {
-        if self.cancelled {
+        if self.isCancelled {
             return
         }
         else  {
-            let nsurl = NSURL(string: url)
+            let nsurl = URL(string: url)
             
-            let request = NSMutableURLRequest(URL: nsurl!)
-            request.HTTPMethod = "GET"
+            var request = URLRequest(url: nsurl!)
+            request.httpMethod = "GET"
             
             request.addValue(authHeader, forHTTPHeaderField: "Authorization") //correct passwd
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             let session=sessionFactory.getNewCidsSession()
             /* Start a new Task */
-            task = session.dataTaskWithRequest(request, completionHandler: { (data : NSData?, response : NSURLResponse?, error : NSError?) -> Void in
+            task = session.dataTask(with: request, completionHandler: { (data , response , error ) in
                 if let handler=self.completionHandler {
-                    handler(operation: self, data: data, response: response, error: error, queue: self.qu)
+                    handler(self, data, response, error, self.qu)
                 }
                 else {
                     if (error == nil) {
                         // Success
-                        let statusCode = (response as! NSHTTPURLResponse).statusCode
-                        print("URL Session Task Succeeded: HTTP \(statusCode)")
+                        let statusCode = (response as! HTTPURLResponse).statusCode
+                        print("getAllEntities::URL Session Task Succeeded: HTTP \(statusCode)")
                     }
                     else {
                         // Failure
-                        print("URL Session Task Failed: %@", error!.localizedDescription);
+                        print("getAllEntities::URL Session Task Failed: %@", error!.localizedDescription);
                     }
                 }
                 
                 
-                self.executing=false
-                self.finished = true
+                self.isExecuting=false
+                self.isFinished = true
                 self.task=nil
             })
             if let t=self.task {
@@ -211,42 +234,42 @@ class GetAllEntitiesOperation: CidsRequestOperation {
 }
 
 class LoginOperation: CidsRequestOperation {
-    var completionHandler: ((loggedIn: Bool, error: NSError?) -> ())?
-    init(baseUrl: String, domain: String, user: String, pass:String, completionHandler: (loggedIn: Bool, error: NSError?) -> ()){
+    var completionHandler: ((_ loggedIn: Bool, _ error: Error?) -> ())?
+    init(baseUrl: String, domain: String, user: String, pass:String, completionHandler: @escaping (_ loggedIn: Bool, _ error: Error?) -> ()){
         super.init(user:user,pass:pass)
         url="\(baseUrl)/classes?domain=local&limit=1&offset=0&role=all"
         self.completionHandler=completionHandler
     }
     override func main() {
-        if self.cancelled {
+        if self.isCancelled {
             return
         }
         else  {
-            let nsurl = NSURL(string: url)
-            let request = NSMutableURLRequest(URL: nsurl!)
-            request.HTTPMethod = "GET"
+            let nsurl = URL(string: url)
+            var request = URLRequest(url: nsurl!)
+            request.httpMethod = "GET"
             
             request.addValue(authHeader, forHTTPHeaderField: "Authorization") //correct passwd
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             let session=sessionFactory.getPickyNewCidsSession()
             /* Start a new Task */
-            task = session.dataTaskWithRequest(request, completionHandler: { (data : NSData?, response : NSURLResponse?, error : NSError?) -> Void in
+            task = session.dataTask(with: request, completionHandler: { (data , response , error ) in
                 if let err=error {
-                    self.completionHandler!(loggedIn: false,error: err)
+                    self.completionHandler!(false,err)
                 }
                 else {
-                    let statusCode = (response as! NSHTTPURLResponse).statusCode
+                    let statusCode = (response as! HTTPURLResponse).statusCode
                     print("URL Session Task Succeeded: HTTP \(statusCode) for \(self.url)")
                     
                     if statusCode==200 {
-                        self.completionHandler!(loggedIn: true,error: nil)
+                        self.completionHandler!(true,nil)
                     }
                     else {
-                        self.completionHandler!(loggedIn: false,error: nil)
+                        self.completionHandler!(false,nil)
                     }
                 }
-                self.executing=false
-                self.finished = true
+                self.isExecuting=false
+                self.isFinished = true
                 self.task=nil
             })
             if let t=self.task {
@@ -259,9 +282,9 @@ class LoginOperation: CidsRequestOperation {
 
 class SearchOperation: CidsRequestOperation {
     var parameters:QueryParameters?
-    var completionHandler: ((data : NSData!, response : NSURLResponse!, error : NSError!) -> Void)?
+    var completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)?
     
-    init(baseUrl: String, searchKey:String, user: String, pass:String, parameters:QueryParameters,completionHandler: ((data : NSData!, response : NSURLResponse!, error : NSError!) -> Void)!) {
+    init(baseUrl: String, searchKey:String, user: String, pass:String, parameters:QueryParameters,completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)!) {
         super.init(user: user, pass: pass)
         self.parameters=parameters
         url="\(baseUrl)/searches/\(searchKey)/results"
@@ -271,42 +294,42 @@ class SearchOperation: CidsRequestOperation {
     override func main() {
         let session=sessionFactory.getNewCidsSession()
         print(url)
-        var URL = NSURL(string: url)
+        var URL = Foundation.URL(string: url)
         let URLParams = [
             "role": "all",
             "limit": "100",
             "offset\"": "null",
         ]
         URL = NSURLByAppendingQueryParameters(URL, queryParameters: URLParams)
-        let request = NSMutableURLRequest(URL: URL!)
-        request.HTTPMethod = "POST"
+        var request = URLRequest(url: URL!)
+        request.httpMethod = "POST"
         request.addValue(authHeader, forHTTPHeaderField: "Authorization") //correct passwd
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
         
         let y = Mapper().toJSON(parameters!)
         print(Mapper().toJSONString(parameters!, prettyPrint: true)!)
-        request.HTTPBody=try? NSJSONSerialization.dataWithJSONObject(y, options: NSJSONWritingOptions())
+        request.httpBody=try? JSONSerialization.data(withJSONObject: y, options: JSONSerialization.WritingOptions())
         
         /* Start a new Task */
-        let task = session.dataTaskWithRequest(request, completionHandler: { (data : NSData?, response : NSURLResponse?, error : NSError?) -> Void in
+        let task = session.dataTask(with: request, completionHandler: { (data , response , error ) in
             if let handler=self.completionHandler {
-                handler(data: data, response: response, error: error)
+                handler(data, response, error)
             }
             else {
                 
                 if (error == nil) {
                     // Success
-                    let statusCode = (response as! NSHTTPURLResponse).statusCode
-                    print("URL Session Task Succeeded: HTTP \(statusCode)")
+                    let statusCode = (response as! HTTPURLResponse).statusCode
+                    print("search::URL Session Task Succeeded: HTTP \(statusCode)")
                 }
                 else {
                     // Failure
-                    print("URL Session Task Failed: %@", error!.localizedDescription);
+                    print("search::URL Session Task Failed: %@", error!.localizedDescription);
                 }
             }
-            self.executing=false
-            self.finished = true
+            self.isExecuting=false
+            self.isFinished = true
             self.task=nil
         })
         task.resume()
@@ -318,8 +341,8 @@ class SearchOperation: CidsRequestOperation {
 
 class ServerActionOperation: CidsRequestOperation {
     var params: ActionParameterContainer?
-    var completionHandler: ((data : NSData!, response : NSURLResponse!, error : NSError!) -> Void)?
-    init(baseUrl: String, user: String, pass:String, actionName: String, params: ActionParameterContainer, completionHandler: (data : NSData!, response : NSURLResponse!, error : NSError!) -> Void) {
+    var completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)?
+    init(baseUrl: String, user: String, pass:String, actionName: String, params: ActionParameterContainer, completionHandler: @escaping (_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void) {
         super.init(user:user, pass:pass)
         url="\(baseUrl)/actions/\(domain).\(actionName)/tasks"
         self.params=params
@@ -327,14 +350,14 @@ class ServerActionOperation: CidsRequestOperation {
     }
     override func main() {
         let session=sessionFactory.getNewCidsSession()
-        var URL = NSURL(string: url)
+        var URL = Foundation.URL(string: url)
         let URLParams = [
             "role": "all",
             "resultingInstanceType": "result",
         ]
         URL = self.NSURLByAppendingQueryParameters(URL, queryParameters: URLParams)
-        let request = NSMutableURLRequest(URL: URL!)
-        request.HTTPMethod = "POST"
+        var request = URLRequest(url: URL!)
+        request.httpMethod = "POST"
         //request.addValue("Basic V2VuZGxpbmdNQEJFTElTMjp3bWJlbGlz", forHTTPHeaderField: "Authorization")
         request.addValue(authHeader, forHTTPHeaderField: "Authorization")
         request.addValue("multipart/form-data; boundary=nFcUS6GTpcRsBnbvYHhdwyggifFtKeLm", forHTTPHeaderField: "Content-Type")
@@ -349,26 +372,26 @@ class ServerActionOperation: CidsRequestOperation {
         "--nFcUS6GTpcRsBnbvYHhdwyggifFtKeLm--\r\n"
         
         
-        request.HTTPBody = bodyString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-        let task = session.dataTaskWithRequest(request, completionHandler: { (data : NSData?, response : NSURLResponse?, error : NSError?) -> Void in
+        request.httpBody = bodyString.data(using: String.Encoding.utf8, allowLossyConversion: true)
+        let task = session.dataTask(with: request, completionHandler: { (data , response , error ) -> Void in
             if let handler=self.completionHandler {
-                handler(data: data, response: response, error: error)
+                handler(data, response, error)
             }
             else {
                 
                 if (error == nil) {
                     // Success
-                    let statusCode = (response as! NSHTTPURLResponse).statusCode
-                    print("URL Session Task Succeeded: HTTP \(statusCode)")
+                    let statusCode = (response as! HTTPURLResponse).statusCode
+                    print("serverAction::URL Session Task Succeeded: HTTP \(statusCode)")
                 }
                 else {
                     // Failure
-                    print("URL Session Task Failed: %@", error!.localizedDescription);
+                    print("serverAction::URL Session Task Failed: %@", error!.localizedDescription);
                 }
             }
             
-            self.executing=false
-            self.finished = true
+            self.isExecuting=false
+            self.isFinished = true
             self.task=nil
         })
         task.resume()
@@ -377,8 +400,8 @@ class ServerActionOperation: CidsRequestOperation {
 
 class WebDavUploadImageOperation: CidsRequestOperation {
     var image:UIImage?
-    var completionHandler: ((data : NSData!, response : NSURLResponse!, error : NSError!) -> Void)?
-    init(baseUrl: String, user: String, pass:String, fileName: String, image:UIImage, completionHandler: (data : NSData!, response : NSURLResponse!, error : NSError!) -> Void) {
+    var completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)?
+    init(baseUrl: String, user: String, pass:String, fileName: String, image:UIImage, completionHandler: @escaping (_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void) {
         super.init(user:user, pass:pass)
         url="\(baseUrl)/\(fileName)"
         self.image=image
@@ -387,35 +410,35 @@ class WebDavUploadImageOperation: CidsRequestOperation {
     }
     override func main() {
         let session=sessionFactory.getNewWebDavSession()
-        let URL = NSURL(string: url)
+        let URL = Foundation.URL(string: url)
         
-        let request = NSMutableURLRequest(URL: URL!)
-        request.HTTPMethod = "PUT"
+        var request = URLRequest(url: URL!)
+        request.httpMethod = "PUT"
         
         
         let jpg=UIImageJPEGRepresentation(image!, CGFloat(0.9))
         
-        let task = session.uploadTaskWithRequest(request, fromData: jpg) {
+        let task = session.uploadTask(with: request, from: jpg, completionHandler: {
             (data, response, error) -> Void in
             if let handler=self.completionHandler {
-                handler(data: data, response: response, error: error)
+                handler(data, response, error)
             }
             else {
                 
                 if (error == nil) {
                     // Success
-                    let statusCode = (response as! NSHTTPURLResponse).statusCode
-                    print("URL Session Task Succeeded: HTTP \(statusCode)")
+                    let statusCode = (response as! HTTPURLResponse).statusCode
+                    print("webdavUpload::URL Session Task Succeeded: HTTP \(statusCode)")
                 }
                 else {
                     // Failure
-                    print("URL Session Task Failed: %@", error!.localizedDescription);
+                    print("webdavUpload::URL Session Task Failed: %@", error!.localizedDescription);
                 }
             }
-            self.executing=false
-            self.finished = true
+            self.isExecuting=false
+            self.isFinished = true
             self.task=nil
-        }
+        }) 
         
         task.resume()
     }

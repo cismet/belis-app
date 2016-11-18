@@ -13,4 +13,3 @@
 #import "WKTPolygonM.h"
 #import "WKTString.h"
 
-#import <JGProgressHUD/JGProgressHUD.h>

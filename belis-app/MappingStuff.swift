@@ -9,21 +9,23 @@
 import Foundation
 
 class MappingTools {
-    class func distanceOfPoint(pt: MKMapPoint, toPoly : MKPolyline) -> Double {
+    class func distanceOfPoint(_ pt: MKMapPoint, toPoly : MKPolyline) -> Double {
         var distance : Double = -1.0
         
         for n in 0...toPoly.pointCount-1 {
             let ptA = toPoly.points()[n]
             let ptB = toPoly.points()[n+1]
             
-            let xDelta = Double.abs(ptB.x - ptA.x)
-            let yDelta = Double.abs(ptB.y - ptA.y)
+            let xDelta = abs(ptB.x - ptA.x)
+            let yDelta = abs(ptB.y - ptA.y)
             
             if xDelta == 0.0 && yDelta == 0.0 {
                 continue;
             }
             
-            let u = ((pt.x - ptA.x) * xDelta + (pt.y - ptA.y) * yDelta) / (xDelta * xDelta + yDelta * yDelta)
+            let diffX=pt.x - ptA.x
+            let diffY=pt.y - ptA.y
+            let u = (diffX * xDelta +  diffY * yDelta) / (xDelta * xDelta + yDelta * yDelta)
             
             var ptClosest: MKMapPoint
             
@@ -48,11 +50,11 @@ class MappingTools {
         return distance
     }
  
-    class func metersFromPixel(px: Int, atPoint: CGPoint, inMap : MKMapView) -> Double {
+    class func metersFromPixel(_ px: Int, atPoint: CGPoint, inMap : MKMapView) -> Double {
         let newX = atPoint.x + CGFloat(px)
-        let ptB = CGPointMake(newX, atPoint.y)
-        let coordA = inMap.convertPoint(atPoint, toCoordinateFromView: inMap)
-        let coordB = inMap.convertPoint(ptB, toCoordinateFromView: inMap)
+        let ptB = CGPoint(x: newX, y: atPoint.y)
+        let coordA = inMap.convert(atPoint, toCoordinateFrom: inMap)
+        let coordB = inMap.convert(ptB, toCoordinateFrom: inMap)
         
         return MKMetersBetweenMapPoints(MKMapPointForCoordinate(coordA), MKMapPointForCoordinate(coordB))
     }

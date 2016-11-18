@@ -10,30 +10,36 @@ import Foundation
 import SwiftForms
 import JGProgressHUD
 
-public class ObjectAction: NSObject {
+open class ObjectAction: NSObject {
     let PROTOKOLL_ID="PROTOKOLL_ID"
     var arbeitsprotokoll_id = -1
     
     var title:String = ""
-    var style: UIAlertActionStyle = UIAlertActionStyle.Default
+    var style: UIAlertActionStyle = UIAlertActionStyle.default
     var mainVC: UIViewController?
     var sender: UIView?
     var formVC: GenericFormViewController!
     
     override init() {
         super.init()
-        formVC = CidsConnector.sharedInstance().mainVC!.storyboard!.instantiateViewControllerWithIdentifier("formView") as! GenericFormViewController
+        formVC = CidsConnector.sharedInstance().mainVC!.storyboard!.instantiateViewController(withIdentifier: "formView") as! GenericFormViewController
         formVC.saveHandler=save
         formVC.cancelHandler=cancel
     }
-    func handler(action: UIAlertAction) {
+    func handler(_ action: UIAlertAction) {
         if let senderView=sender {
             formVC.form=getFormDescriptor()
             let detailNC=UINavigationController(rootViewController: formVC)
-            detailNC.modalInPopover=true
-            let popC=UIPopoverController(contentViewController: detailNC)
-            popC.setPopoverContentSize(getPreferredSize(), animated: false)
-            popC.presentPopoverFromRect(senderView.bounds, inView: senderView, permittedArrowDirections: .Left, animated: true)
+            detailNC.isModalInPopover=true
+            
+            detailNC.modalPresentationStyle = UIModalPresentationStyle.popover
+            detailNC.popoverPresentationController?.sourceView = senderView
+            detailNC.popoverPresentationController?.sourceRect = senderView.bounds
+            detailNC.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.left
+            detailNC.preferredContentSize = getPreferredSize()
+            
+            mainVC?.present(detailNC, animated: true, completion: nil)
+
         } else {
             assertionFailure("sender was Null, therefore Boom")
         }
@@ -58,7 +64,7 @@ public class ObjectAction: NSObject {
         return CGSize(width: 400, height: 500)
     }
    
-    func defaultAfterSaveHandler(success: Bool){
+    func defaultAfterSaveHandler(_ success: Bool){
         if !success {
             showError()
         }
@@ -77,30 +83,30 @@ public class ObjectAction: NSObject {
     }
     
     func getParameterContainer()->ActionParameterContainer{
-        return ActionParameterContainer(params: [PROTOKOLL_ID:"\(arbeitsprotokoll_id)"])
+        return ActionParameterContainer(params: [PROTOKOLL_ID:"\(arbeitsprotokoll_id)" as AnyObject])
     }
     
     func showWaiting(){
         lazyMainQueueDispatch() {
-            CidsConnector.sharedInstance().mainVC?.progressHUD.showInView(CidsConnector.sharedInstance().mainVC!.view)
+            CidsConnector.sharedInstance().mainVC?.progressHUD?.show(in: CidsConnector.sharedInstance().mainVC!.view)
         }
     }
     func showError() {
         lazyMainQueueDispatch() {
-            CidsConnector.sharedInstance().mainVC?.progressHUD.dismissAnimated(false)
-            let errorHUD=JGProgressHUD(style: JGProgressHUDStyle.Dark)
-            errorHUD.indicatorView=JGProgressHUDErrorIndicatorView()
-            errorHUD.showInView(CidsConnector.sharedInstance().mainVC!.view, animated: false)
-            errorHUD.dismissAfterDelay(NSTimeInterval(2), animated: true)
+            CidsConnector.sharedInstance().mainVC?.progressHUD?.dismiss(animated: false)
+            let errorHUD=JGProgressHUD(style: JGProgressHUDStyle.dark)
+            errorHUD?.indicatorView=JGProgressHUDErrorIndicatorView()
+            errorHUD?.show(in: CidsConnector.sharedInstance().mainVC!.view, animated: false)
+            errorHUD?.dismiss(afterDelay: TimeInterval(2), animated: true)
         }
     }
     func showSuccess() {
         lazyMainQueueDispatch(){
-            CidsConnector.sharedInstance().mainVC?.progressHUD.dismissAnimated(false)
-            let successHUD=JGProgressHUD(style: JGProgressHUDStyle.Dark)
-            successHUD.indicatorView=JGProgressHUDSuccessIndicatorView()
-            successHUD.showInView(CidsConnector.sharedInstance().mainVC!.view, animated: false)
-            successHUD.dismissAfterDelay(NSTimeInterval(1), animated: true)
+            CidsConnector.sharedInstance().mainVC?.progressHUD?.dismiss(animated: false)
+            let successHUD=JGProgressHUD(style: JGProgressHUDStyle.dark)
+            successHUD?.indicatorView=JGProgressHUDSuccessIndicatorView()
+            successHUD?.show(in: CidsConnector.sharedInstance().mainVC!.view, animated: false)
+            successHUD?.dismiss(afterDelay: TimeInterval(1), animated: true)
         }
     }
     

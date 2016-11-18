@@ -10,55 +10,57 @@ import Foundation
 import AssetsLibrary
 import ImageIO
 import JGProgressHUD
+import AlamofireImage
 
 class ChooseFotoAction : BaseEntityAction {
     init(yourself: BaseEntity) {
-        super.init(title: "Foto auswählen",style: UIAlertActionStyle.Default, handler: {
-            (action: UIAlertAction! , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
+        super.init(title: "Foto auswählen",style: UIAlertActionStyle.default, handler: {
+            (action: UIAlertAction? , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
             let picker = MainViewController.IMAGE_PICKER
-            picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
-            picker.mediaTypes = UIImagePickerController.availableMediaTypesForSourceType(.PhotoLibrary)!
+            picker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+            picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
             picker.delegate = detailVC as! DetailVC
             (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: yourself,refreshable: (detailVC as! DetailVC))
             picker.allowsEditing = true
-            picker.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-            detailVC.presentViewController(picker, animated: true, completion: nil)
-        })
+            picker.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+            detailVC.present(picker, animated: true, completion: nil)
+        } )
     }
 }
 
 class TakeFotoAction : BaseEntityAction {
     init(yourself: BaseEntity) {
-        super.init(title: "Foto erstellen",style: UIAlertActionStyle.Default, handler: {
-            (action: UIAlertAction! , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
-            if(UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)){
+        super.init(title: "Foto erstellen",style: UIAlertActionStyle.default, handler: {
+            (action: UIAlertAction? , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
+            if(UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera)){
                 //load the camera interface
                 let picker = MainViewController.IMAGE_PICKER
-                picker.sourceType = UIImagePickerControllerSourceType.Camera
+                picker.sourceType = UIImagePickerControllerSourceType.camera
                 picker.delegate = detailVC as! DetailVC
                 (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: yourself,refreshable: (detailVC as! DetailVC))
                 
                 picker.allowsEditing = true
                 //picker.showsCameraControls=true
-                picker.modalPresentationStyle = UIModalPresentationStyle.OverFullScreen
-                detailVC.presentViewController(picker, animated: true, completion: { () -> Void in  })
+                picker.modalPresentationStyle = UIModalPresentationStyle.overFullScreen
+                detailVC.present(picker, animated: true, completion: { () -> Void in  })
             }else{
                 //no camera available
-                let alert = UIAlertController(title: "Error", message: "There is no camera available", preferredStyle: .Alert)
-                alert.addAction(UIAlertAction(title: "Okay", style: .Default, handler: {(alertAction)in
-                    alert.dismissViewControllerAnimated(true, completion: nil)
+                let alert = UIAlertController(title: "Error", message: "There is no camera available", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: {(alertAction)in
+                    alert.dismiss(animated: true, completion: nil)
                 }))
-                detailVC.presentViewController(alert, animated: true, completion: nil)
+                detailVC.present(alert, animated: true, completion: nil)
             }
             
-        })
+        } ) 
     }
 }
 
 
 class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    var library = ALAssetsLibrary()
     
+    let TESTPREFIX="this.is.only.a.test.can.be.deleted.without.problems"
+        
     var selfEntity: BaseEntity
     var refreshable: Refreshable
     init (yourself: BaseEntity, refreshable: Refreshable){
@@ -75,14 +77,14 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
     
     
     //UIImagePickerControllerDelegate
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         // var mediaType:String = info[UIImagePickerControllerEditedImage] as! String
         
-        let progressHUD = JGProgressHUD(style: JGProgressHUDStyle.Dark)
-        progressHUD.showInView(picker.view,animated: true)
+        let progressHUD = JGProgressHUD(style: JGProgressHUDStyle.dark)
+        progressHUD?.show(in: picker.view,animated: true)
         var tField: UITextField!
         
-        func configurationTextField(textField: UITextField!)
+        func configurationTextField(_ textField: UITextField!)
         {
             print("generating the TextField")
             textField.placeholder = "Name hier eingeben"
@@ -90,100 +92,79 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
         }
         
         
-        func handleCancel(alertView: UIAlertAction!) {
-            picker.dismissViewControllerAnimated(true, completion: nil)
+        func handleCancel(_ alertView: UIAlertAction!) {
+            picker.dismiss(animated: true, completion: nil)
         }
         
-        var alert = UIAlertController(title: "Bildname", message: "", preferredStyle: UIAlertControllerStyle.Alert)
+        var alert = UIAlertController(title: "Bildname", message: "", preferredStyle: UIAlertControllerStyle.alert)
         
-        alert.addTextFieldWithConfigurationHandler(configurationTextField)
-        alert.addAction(UIAlertAction(title: "Abbrechen", style: UIAlertActionStyle.Cancel, handler:handleCancel))
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler:{ (UIAlertAction)in
+        alert.addTextField(configurationHandler: configurationTextField)
+        alert.addAction(UIAlertAction(title: "Abbrechen", style: UIAlertActionStyle.cancel, handler:handleCancel))
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler:{ (UIAlertAction)in
             var imageToSave:UIImage
             
             imageToSave = info[UIImagePickerControllerOriginalImage]as! UIImage
-            progressHUD.showInView(picker.view,animated: true)
+            progressHUD?.show(in: picker.view,animated: true)
             let metadata = info[UIImagePickerControllerMediaMetadata] as? NSDictionary
             
             
-            let ctm=Int64(NSDate().timeIntervalSince1970*1000)
+            let ctm=Int64(Date().timeIntervalSince1970*1000)
             let pictureName=tField.text!
             
             let objectId=self.selfEntity.id
-            let objectTyp=self.selfEntity.getType().tableName().lowercaseString
+            let objectTyp=self.selfEntity.getType().tableName().lowercased()
             
-            let fileNameThumb="upload.from.ios.for.\(objectTyp).\(objectId)-\(ctm).jpg.thumbnail.jpg"
-            let fileName="upload.from.ios.for.\(objectTyp).\(objectId)-\(ctm).jpg"
-            
-            
-            
-            var newMetadata : [NSObject:AnyObject]
-            if let md = metadata as? Dictionary<NSObject,AnyObject> {
-                newMetadata=md
-            }
-            else {
-                newMetadata=[NSObject:AnyObject]()
-            }
-            
-            var iptcMeta=[NSObject:AnyObject]()
-            iptcMeta.updateValue(pictureName, forKey: kCGImagePropertyIPTCObjectName)
-            iptcMeta.updateValue("BelIS", forKey: kCGImagePropertyIPTCKeywords)
-            iptcMeta.updateValue("upload to: \(fileName)", forKey: kCGImagePropertyIPTCSpecialInstructions)
-            kCGImagePropertyIPTCSpecialInstructions
-            
-            var tiffMeta=[NSObject:AnyObject]()
-            tiffMeta.updateValue("http://www.cismet.de", forKey: kCGImagePropertyTIFFImageDescription)
+            let fileNameThumb="\(self.TESTPREFIX)upload.from.ios.for.\(objectTyp).\(objectId)-\(ctm).jpg.thumbnail.jpg"
+            let fileName="\(self.TESTPREFIX)upload.from.ios.for.\(objectTyp).\(objectId)-\(ctm).jpg"
             
             
-            newMetadata.updateValue(iptcMeta, forKey:kCGImagePropertyIPTCDictionary )
-            newMetadata.updateValue(tiffMeta, forKey:kCGImagePropertyTIFFDictionary )
+            BelisPhotoAlbum.sharedInstance.save(image: imageToSave, pictureName: pictureName, keywords: "BelIS", instructions: "upload to: \(fileName)", description: "https://www.cismet.de", additionalInfoAsJson: "{}")
             
-            
-            
-            self.library.saveImage(imageToSave, toAlbum: "BelIS-Dokumente",metadata : newMetadata, withCallback: nil)
-            
-            func handleProgress(progress:Float) {
+            func handleProgress(_ progress:Float) {
                 print(progress)
             }
             
-            func handleCompletion(data : NSData!, response : NSURLResponse!, error : NSError!) {
+            func handleCompletion(_ data : Data?, response : URLResponse?, error : Error?) {
                 if let err = error {
                     print("error: \(err.localizedDescription)")
                 }
                 if let resp = data  {
-                    print(NSString(data: resp, encoding: NSUTF8StringEncoding))
-                    let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"\(objectId)",
-                        "OBJEKT_TYP":objectTyp,
-                        "DOKUMENT_URL":"http://board.cismet.de/belis/\(fileName)\n\(pictureName)"])
+                    print(NSString(data: resp, encoding: String.Encoding.utf8.rawValue) ?? "---")
+                    let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"\(objectId)" as AnyObject,
+                        "OBJEKT_TYP":objectTyp as AnyObject,
+                        "DOKUMENT_URL":"http://board.cismet.de/belis/\(fileName)\n\(pictureName)" as AnyObject])
                     CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {(success:Bool) -> () in
-                        assert(!NSThread.isMainThread() )
+                        assert(!Thread.isMainThread )
                         lazyMainQueueDispatch({ () -> () in
-                            picker.dismissViewControllerAnimated(true, completion: nil)
+                            picker.dismiss(animated:true , completion: nil)
                             if success {
                                 print("Everything is going to be 200-OK")
                                 (self.selfEntity as! DocumentContainer).addDocument(DMSUrl(name:pictureName, fileName:fileName))
                                 self.refreshable.refresh()
-                                progressHUD.indicatorView=JGProgressHUDSuccessIndicatorView()
+                                progressHUD!.indicatorView=JGProgressHUDSuccessIndicatorView()
                             }
                             else {
-                                progressHUD.indicatorView=JGProgressHUDErrorIndicatorView()
+                                progressHUD!.indicatorView=JGProgressHUDErrorIndicatorView()
                             }
-                            progressHUD.dismissAfterDelay(NSTimeInterval(1), animated: true)
-                            progressHUD.indicatorView=JGProgressHUDIndeterminateIndicatorView()
-                            progressHUD.dismissAnimated(true)
+                            progressHUD!.dismiss(afterDelay: TimeInterval(1), animated: true)
+                            progressHUD!.indicatorView=JGProgressHUDIndeterminateIndicatorView()
+                            progressHUD!.dismiss(animated: true)
                         })
                     })
                 }
             }
-            let thumb=imageToSave.resizeToWidth(300.0)
+            let ratio=imageToSave.size.height/imageToSave.size.width
+            let newSize=CGSize(width: 300.0, height:ratio*300.0)
+            let thumb = imageToSave.af_imageAspectScaled(toFill: newSize)
+            
+            
             CidsConnector.sharedInstance().uploadImageToWebDAV(thumb, fileName: fileNameThumb , completionHandler: handleCompletion)
             
             
             
-            
         }))
-        progressHUD.dismiss()
-        picker.presentViewController(alert, animated: true, completion: {
+        progressHUD?.dismiss()
+        picker.present(alert, animated: true, completion: {
             print("completion block")
         })
         
@@ -193,9 +174,9 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
         
     }
     
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         print("FotoPickerCallBacker CANCEL")
-        picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
+        picker.dismiss(animated: true, completion: { () -> Void in })
         
     }
 }

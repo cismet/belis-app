@@ -55,11 +55,10 @@ class Url : BaseEntity{
         objectName=webdavObjectName
         urlBase=UrlBase.WEBDAVURLBASE
     }
-    required init?(_ map: Map) {
+    required init?(map: Map) {
         super.init()
-        mapping(map)
+        mapping(map: map)
     }
-    
     
     var urlBase: UrlBase?
     var objectName: String?
@@ -85,8 +84,8 @@ class UrlBase : BaseEntity{
     
     }
     
-    required init?(_ map: Map) {
-        super.init(map)
+    required init?(map: Map) {
+        super.init(map: map)
     }
 
     

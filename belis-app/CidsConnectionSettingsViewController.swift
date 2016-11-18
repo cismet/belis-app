@@ -20,8 +20,8 @@ class CidsConnectionSettingsViewController: UIViewController {
     @IBOutlet weak var certPassTextField: UITextField!
     @IBOutlet weak var txtServerURL: UITextField!
     
-    let gray=UIColor.grayColor()
-    let black=UIColor.blackColor()
+    let gray=UIColor.gray
+    let black=UIColor.black
     let green=UIColor(red: 0.568, green: 0.91, blue: 0.486, alpha: 1.0)
     let orange=UIColor(red: 250/255, green: 105/255, blue: 0, alpha: 1.0)
     
@@ -34,8 +34,8 @@ class CidsConnectionSettingsViewController: UIViewController {
         clientCertTextLabel.textColor=green
         certPassTextField.text=CidsConnector.sharedInstance().clientCertContainerPass
         txtServerURL.text=CidsConnector.sharedInstance().pureBaseUrl
-        chkTLS.on=CidsConnector.sharedInstance().tlsEnabled
-        if (chkTLS.on && CidsConnector.sharedInstance().baseUrlport=="443")||(chkTLS.on==false && CidsConnector.sharedInstance().baseUrlport=="80"){
+        chkTLS.isOn=CidsConnector.sharedInstance().tlsEnabled
+        if (chkTLS.isOn && CidsConnector.sharedInstance().baseUrlport=="443")||(chkTLS.isOn==false && CidsConnector.sharedInstance().baseUrlport=="80"){
             txtServerURL.text=CidsConnector.sharedInstance().pureBaseUrl
         }
         else {
@@ -56,38 +56,38 @@ class CidsConnectionSettingsViewController: UIViewController {
             serverCertIconLabel.textColor=black
             serverCertTextLabel.textColor=black
             serverCertTextLabel.text="Serverzertifikat"
-            cmdServerCertRemove.hidden=false
-            chkTLS.enabled=true
+            cmdServerCertRemove.isHidden=false
+            chkTLS.isEnabled=true
             
         }
         else {
             serverCertIconLabel.textColor=gray
             serverCertTextLabel.textColor=gray
             serverCertTextLabel.text="kein Serverzertifikat"
-            cmdServerCertRemove.hidden=true
-            chkTLS.enabled=false
-            chkTLS.on=false
+            cmdServerCertRemove.isHidden=true
+            chkTLS.isEnabled=false
+            chkTLS.isOn=false
             
         }
         if CidsConnector.sharedInstance().clientCertPath != "" {
             clientCertIconLabel.textColor=black
             clientCertTextLabel.textColor=black
             clientCertTextLabel.text="Clientzertifikat"
-            cmdClientCertRemove.hidden=false
+            cmdClientCertRemove.isHidden=false
         }
         else {
             clientCertIconLabel.textColor=gray
             clientCertTextLabel.textColor=gray
             clientCertTextLabel.text="kein Clientzertifikat"
-            cmdClientCertRemove.hidden=true
+            cmdClientCertRemove.isHidden=true
         }
         
         
     }
     
-    @IBAction func checkTabbed(sender: AnyObject) {
-        let serverCertData = NSData(contentsOfFile: CidsConnector.sharedInstance().serverCertPath)
-        let clientCertData = NSData(contentsOfFile: CidsConnector.sharedInstance().clientCertPath)
+    @IBAction func checkTabbed(_ sender: AnyObject) {
+        let serverCertData = try? Data(contentsOf: URL(fileURLWithPath: CidsConnector.sharedInstance().serverCertPath))
+        let clientCertData = try? Data(contentsOf: URL(fileURLWithPath: CidsConnector.sharedInstance().clientCertPath))
         
         print("ServerCert: \(CidsConnector.sharedInstance().serverCertPath) \(serverCertData)")
         print("ClientCert: \(CidsConnector.sharedInstance().clientCertPath) \(clientCertData)")
@@ -99,16 +99,16 @@ class CidsConnectionSettingsViewController: UIViewController {
         
         
     }
-    @IBAction func passwordChanged(sender: AnyObject) {
+    @IBAction func passwordChanged(_ sender: AnyObject) {
         CidsConnector.sharedInstance().clientCertContainerPass=certPassTextField.text!
         checkAndColor()
     }
-    @IBAction func tlsEnabledChanged(sender: AnyObject) {
+    @IBAction func tlsEnabledChanged(_ sender: AnyObject) {
         serverUrlChanged(sender)
     }
-    @IBAction func serverUrlChanged(sender: AnyObject) {
+    @IBAction func serverUrlChanged(_ sender: AnyObject) {
         var defaultport="80"
-        if chkTLS.on {
+        if chkTLS.isOn {
             defaultport="443"
         }
         if txtServerURL.text!.contains(":") {
@@ -126,14 +126,14 @@ class CidsConnectionSettingsViewController: UIViewController {
             CidsConnector.sharedInstance().pureBaseUrl=txtServerURL.text!
             CidsConnector.sharedInstance().baseUrlport=defaultport
         }
-        CidsConnector.sharedInstance().tlsEnabled=chkTLS.on
+        CidsConnector.sharedInstance().tlsEnabled=chkTLS.isOn
     }
-    @IBAction func removeServerCertTabbed(sender: AnyObject) {
+    @IBAction func removeServerCertTabbed(_ sender: AnyObject) {
         
         var error:NSError?
         let ok:Bool
         do {
-            try NSFileManager().removeItemAtPath(CidsConnector.sharedInstance().serverCertPath)
+            try FileManager().removeItem(atPath: CidsConnector.sharedInstance().serverCertPath)
             ok = true
         } catch let error1 as NSError {
             error = error1
@@ -141,18 +141,18 @@ class CidsConnectionSettingsViewController: UIViewController {
         }
         
         if error != nil {
-            print(error)
+            print(error ?? "no detailed errormessage available")
         }
         if (ok) {
             CidsConnector.sharedInstance().serverCert=nil
         }
         checkAndColor()
     }
-    @IBAction func removeClientCertTabbed(sender: AnyObject) {
+    @IBAction func removeClientCertTabbed(_ sender: AnyObject) {
         var error:NSError?
         let ok:Bool
         do {
-            try NSFileManager().removeItemAtPath(CidsConnector.sharedInstance().clientCertPath)
+            try FileManager().removeItem(atPath: CidsConnector.sharedInstance().clientCertPath)
             ok = true
         } catch let error1 as NSError {
             error = error1
@@ -160,7 +160,7 @@ class CidsConnectionSettingsViewController: UIViewController {
         }
         
         if error != nil {
-            print(error)
+            print(error ?? "no detailed error message available")
         }
         if (ok) {
             CidsConnector.sharedInstance().clientCert=nil

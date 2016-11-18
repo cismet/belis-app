@@ -9,17 +9,28 @@
 import Foundation
 import ObjectMapper
 import MGSwipeTableCell
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
 
 class Arbeitsauftrag : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvider, RightSwipeActionProvider, PolygonStyler {
     var angelegtVon:String?
-    var angelegtAm: NSDate?
+    var angelegtAm: Date?
     var nummer: String?
     var protokolle: [Arbeitsprotokoll]?
     var zugewiesenAn: Team?
  
     // MARK: - required init because of ObjectMapper
-    required init?(_ map: Map) {
-        super.init(map)
+    required init?(map: Map) {
+        super.init(map: map)
     }
 
     // MARK: - essential overrides BaseEntity
@@ -164,7 +175,7 @@ class Team : BaseEntity {
         super.id <- map["id"]
         name <- map["name"]
     }
-    class func ascending(lhs: Team, rhs: Team) -> Bool {
+    class func ascending(_ lhs: Team, rhs: Team) -> Bool {
         return lhs.name < rhs.name
     }
 

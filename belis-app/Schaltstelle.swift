@@ -11,7 +11,7 @@ import ObjectMapper
 
 class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInformationProviderProtocol,CellDataProvider,ActionProvider, DocumentContainer, ObjectActionProvider{
     
-    var erstellungsjahr: NSDate?
+    var erstellungsjahr: Date?
     var laufendeNummer: Int?
     var bauart: Schaltstellenbauart?
     var strasse: Strasse?
@@ -20,15 +20,15 @@ class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInf
     var zusaetzlicheStandortbezeichnung: String?
     var hausnummer: String?
     var dokumente: [DMSUrl]=[]
-    var pruefdatum: NSDate?
+    var pruefdatum: Date?
     var foto: DMSUrl?
     var monteur: String?
     var rundsteuerempfaenger: Rundsteuerempfaenger?
-    var einbaudatumRundsteuerempfaenger: NSDate?
+    var einbaudatumRundsteuerempfaenger: Date?
     
     // MARK: - required init because of ObjectMapper
-    required init?(_ map: Map) {
-        super.init(map)
+    required init?(map: Map) {
+        super.init(map: map)
     }
 
     // MARK: - essential overrides BaseEntity
@@ -58,7 +58,7 @@ class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInf
     }
 
     // MARK: - essential overrides GeoBaseEntity
-    override func getAnnotationImage(status: String?) -> UIImage{
+    override func getAnnotationImage(_ status: String?) -> UIImage{
         if let s=status {
             if let color=Arbeitsprotokoll.statusColors[s] {
                 return GlyphTools.sharedInstance().getGlyphedAnnotationImage("icon-squarepause",color: color);
@@ -238,7 +238,7 @@ class Schaltstelle : GeoBaseEntity ,  CellInformationProviderProtocol,CallOutInf
     }
 
     // MARK: - DocumentContainer Impl
-    func addDocument(document: DMSUrl) {
+    func addDocument(_ document: DMSUrl) {
         dokumente.append(document)
     }
     

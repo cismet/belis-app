@@ -54,7 +54,7 @@ class NoCellInformation : CellInformationProviderProtocol {
 
 // MARK: - CellDataUI
 @objc protocol CellDataUI {
-    func fillFromCellData(cellData :CellData)
+    func fillFromCellData(_ cellData :CellData)
     func getPreferredCellHeight() -> CGFloat
 }
 // MARK: - SimpleCellActionProvider

@@ -8,6 +8,26 @@
 
 import Foundation
 import ObjectMapper
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 class Leuchte : GeoBaseEntity,  CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer, ObjectActionProvider {
     var strasse: Strasse?
     var energielieferant: Energielieferant?
@@ -17,7 +37,7 @@ class Leuchte : GeoBaseEntity,  CellInformationProviderProtocol, CellDataProvide
     var zaehler: Bool?
     var dk1: Doppelkommando?
     var dk2: Doppelkommando?
-    var inbetriebnahme_leuchte: NSDate?
+    var inbetriebnahme_leuchte: Date?
     var lfd_nummer: Int?
     var standort : Standort?;
     var kennziffer: Kennziffer?
@@ -34,17 +54,17 @@ class Leuchte : GeoBaseEntity,  CellInformationProviderProtocol, CellDataProvide
     var kabeluebergangskasten_sk_ii: Bool?
     var leuchtmittel: Leuchtmittel?
     var lebensdauer: Float?
-    var wechseldatum: NSDate?
-    var wartungszyklus: NSDate?
-    var wechselvorschaltgeraet: NSDate?
-    var naechster_wechsel: NSDate?
+    var wechseldatum: Date?
+    var wartungszyklus: Date?
+    var wechselvorschaltgeraet: Date?
+    var naechster_wechsel: Date?
     var vorschaltgeraet: String?
     var monteur: String?
-    var einbaudatum: NSDate?
+    var einbaudatum: Date?
     
     // MARK: - required init because of ObjectMapper
-    required init?(_ map: Map) {
-        super.init(map)
+    required init?(map: Map) {
+        super.init(map: map)
     }
     
     // MARK: - essential overrides
@@ -92,7 +112,7 @@ class Leuchte : GeoBaseEntity,  CellInformationProviderProtocol, CellDataProvide
     }
 
     // MARK: - essential overrides GeoBaseEntity
-    override func getAnnotationImage(status: String?) -> UIImage{
+    override func getAnnotationImage(_ status: String?) -> UIImage{
         if let s=status {
             if let color=Arbeitsprotokoll.statusColors[s] {
                 return GlyphTools.sharedInstance().getGlyphedAnnotationImage("icon-circlerecordempty",color: color);
@@ -325,7 +345,7 @@ class Leuchte : GeoBaseEntity,  CellInformationProviderProtocol, CellDataProvide
     }
     
     // MARK: - DocumentContainer Impl
-    func addDocument(document: DMSUrl) {
+    func addDocument(_ document: DMSUrl) {
         dokumente.append(document)
     }
     
@@ -420,7 +440,7 @@ class Rundsteuerempfaenger : BaseEntity{
         programm <- map["programm"]
         foto <- map["foto"]
     }
-    class func ascending(lhs: Rundsteuerempfaenger, rhs: Rundsteuerempfaenger) -> Bool {
+    class func ascending(_ lhs: Rundsteuerempfaenger, rhs: Rundsteuerempfaenger) -> Bool {
         return "\(lhs.herrsteller_rs)-\(lhs.rs_typ)" < "\(rhs.herrsteller_rs)-\(rhs.rs_typ)"
     }
 }
@@ -434,7 +454,7 @@ class LeuchtenTyp : BaseEntity{
     var lampe: String?
     var leistung2stufe: Float?
     var vorschaltgeraet: String?
-    var einbau_vorschaltgeraet: NSDate?
+    var einbau_vorschaltgeraet: Date?
     var leistung_reduziert: Float?
     var leistung_brutto_reduziert: Float?
     var foto: DMSUrl?
@@ -459,7 +479,7 @@ class LeuchtenTyp : BaseEntity{
         typenbezeichnung <- map["typenbezeichnung"]
     }
     
-    class func ascending(lhs: LeuchtenTyp, rhs: LeuchtenTyp) -> Bool {
+    class func ascending(_ lhs: LeuchtenTyp, rhs: LeuchtenTyp) -> Bool {
         return lhs.leuchtenTyp < rhs.leuchtenTyp
     }
 }
@@ -504,7 +524,7 @@ class Leuchtmittel : BaseEntity{
         hersteller <- map["hersteller"]
         lichtfarbe <- map["lichtfarbe"]
     }
-    class func ascending(lhs: Leuchtmittel, rhs: Leuchtmittel) -> Bool {
+    class func ascending(_ lhs: Leuchtmittel, rhs: Leuchtmittel) -> Bool {
         return "\(lhs.hersteller)-\(lhs.lichtfarbe)" < "\(rhs.hersteller)-\(rhs.lichtfarbe)"
     }
 }

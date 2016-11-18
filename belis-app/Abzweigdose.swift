@@ -13,8 +13,8 @@ class Abzweigdose : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvi
     var dokumente: [DMSUrl]=[]
     
     // MARK: - required init because of ObjectMapper
-    required init?(_ map: Map) {
-        super.init(map)
+    required init?(map: Map) {
+        super.init(map: map)
     }
     
     // MARK: - essential overrides BaseEntity
@@ -32,7 +32,7 @@ class Abzweigdose : GeoBaseEntity,CellInformationProviderProtocol, CellDataProvi
     }
     
     // MARK: - essential overrides GeoBaseEntity
-    override func getAnnotationImage(status: String?) -> UIImage{
+    override func getAnnotationImage(_ status: String?) -> UIImage{
         if let s=status {
             if let color=Arbeitsprotokoll.statusColors[s] {
                 return GlyphTools.sharedInstance().getGlyphedAnnotationImage("icon-squarerecord",color: color);

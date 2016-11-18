@@ -15,8 +15,8 @@ class CidsObjectNode : Mappable {
     var classId :Int?;
     var objectId :Int?;
     
-    required init?(_ map: Map) {
-        mapping(map)
+    required init?(map: Map) {
+        mapping(map: map)
     }
     func mapping(map: Map) {
         classId <- map["LEGACY_CLASS_ID"];
@@ -30,10 +30,10 @@ class SingleQueryParameter : Mappable {
     var value: AnyObject?;
     init(){
         self.key="?";
-        self.value="?";
+        self.value="?" as AnyObject?;
     }
-    required init?(_ map: Map) {
-        mapping(map)
+    required init?(map: Map) {
+        mapping(map: map)
     }
     init(key: String, value: AnyObject) {
         self.key=key;
@@ -52,8 +52,8 @@ class QueryParameters : Mappable {
     init(list: [SingleQueryParameter]) {
         self.list=list;
     }
-    required init?(_ map: Map) {
-        mapping(map)
+    required init?(map: Map) {
+        mapping(map: map)
     }
     func mapping(map: Map) {
         list <- map["list"];
@@ -69,13 +69,13 @@ class ActionParameterContainer : Mappable {
     init(params: [String : AnyObject]) {
         self.params=params;
     }
-    required init?(_ map: Map) {
-        mapping(map)
+    required init?(map: Map) {
+        mapping(map: map)
     }
     func mapping(map: Map) {
         params <- map["parameters"];
     }
-    func append(key: String, value: AnyObject) {
+    func append(_ key: String, value: AnyObject) {
         params.updateValue(value, forKey: key)
     }
 }

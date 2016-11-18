@@ -21,31 +21,33 @@ class AnstricharbeitenAction : ObjectAction {
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
         form.title = "Anstricharbeiten"
-        let section0 = FormSectionDescriptor()
-        var row = FormRowDescriptor(tag: PT.ANSTRICHDATUM.rawValue, rowType: .Date, title: "Mastanstrich")
-        row.value=NSDate()
-        section0.addRow(row)
-        row = FormRowDescriptor(tag: PT.ANSTRICHFARBE.rawValue, rowType: .Name, title: "Anstrichfarbe")
-        row.configuration[FormRowDescriptor.Configuration.CellConfiguration] = ["textField.textAlignment" : NSTextAlignment.Right.rawValue]
-        section0.addRow(row)
+        let section0 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+        var row = FormRowDescriptor(tag: PT.ANSTRICHDATUM.rawValue, type: .date, title: "Mastanstrich")
+        row.value=Date() as AnyObject?
+        section0.rows.append(row)
+        row = FormRowDescriptor(tag: PT.ANSTRICHFARBE.rawValue, type: .name, title: "Anstrichfarbe")
+        row.configuration.cell.appearance=["textField.textAlignment" : NSTextAlignment.right.rawValue as AnyObject]
+        
+        
+        section0.rows.append(row)
         form.sections = [section0]
         return form
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 140)
+        return CGSize(width: 500, height: 100)
     }
     
     override func save(){
         if arbeitsprotokoll_id != -1 {
-            let content = formVC.form.formValues() as!  [String : AnyObject]
+            let content = formVC.form.formValues() 
             showWaiting()
             let apc=getParameterContainer()
             let date=content[PT.ANSTRICHDATUM.rawValue]!
             let nowDouble = date.timeIntervalSince1970
-            let millis = Int64(nowDouble*1000) + Int64(nowDouble/1000)
+            let millis = Int64(nowDouble!*1000) + Int64(nowDouble!/1000)
             let param = "\(millis)"
-            apc.append(PT.ANSTRICHDATUM.rawValue, value: param)
+            apc.append(PT.ANSTRICHDATUM.rawValue, value: param as AnyObject)
             if let farbe=content[PT.ANSTRICHFARBE.rawValue] {
                 apc.append(PT.ANSTRICHFARBE.rawValue, value: farbe)
             }
@@ -69,29 +71,29 @@ class ElektrischePruefungAction : ObjectAction {
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
         form.title = "Elektrische Prüfung"
-        let section0 = FormSectionDescriptor()
-        var row = FormRowDescriptor(tag: PT.PRUEFDATUM.rawValue, rowType: .Date, title: "Elektrische Prüfung am Mast")
-        row.value=NSDate()
-        section0.addRow(row)
-        row = FormRowDescriptor(tag: PT.ERDUNG_IN_ORDNUNG.rawValue, rowType: .BooleanSwitch, title: "Erdung in Ordnung")
-        section0.addRow(row)
+        let section0 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+        var row = FormRowDescriptor(tag: PT.PRUEFDATUM.rawValue, type: .date, title: "Elektrische Prüfung am Mast")
+        row.value=Date() as AnyObject?
+        section0.rows.append(row)
+        row = FormRowDescriptor(tag: PT.ERDUNG_IN_ORDNUNG.rawValue, type: .booleanSwitch, title: "Erdung in Ordnung")
+        section0.rows.append(row)
         form.sections = [section0]
         return form
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 140)
+        return CGSize(width: 500, height: 100)
     }
     override func save(){
         if arbeitsprotokoll_id != -1 {
-            let content = formVC.form.formValues() as!  [String : AnyObject]
+            let content = formVC.form.formValues() 
             showWaiting()
             let apc=getParameterContainer()
             let date=content[PT.PRUEFDATUM.rawValue]!
             let nowDouble = date.timeIntervalSince1970
-            let millis = Int64(nowDouble*1000) + Int64(nowDouble/1000)
+            let millis = Int64(nowDouble!*1000) + Int64(nowDouble!/1000)
             let param = "\(millis)"
-            apc.append(PT.PRUEFDATUM.rawValue, value: param)
+            apc.append(PT.PRUEFDATUM.rawValue, value: param as AnyObject)
             var erdung=""
             if let erdInOrdnung=content[PT.ERDUNG_IN_ORDNUNG.rawValue] as? Bool{
                 if erdInOrdnung{
@@ -105,7 +107,7 @@ class ElektrischePruefungAction : ObjectAction {
                 erdung="nein"
             }
             
-            apc.append(PT.ERDUNG_IN_ORDNUNG.rawValue, value: erdung)
+            apc.append(PT.ERDUNG_IN_ORDNUNG.rawValue, value: erdung as AnyObject)
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollStandortElektrischePruefung", params: apc, handler: defaultAfterSaveHandler)
         }
     }
@@ -122,31 +124,31 @@ class MasterneuerungAction : ObjectAction {
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
         form.title = "Masterneuerung"
-        let section0 = FormSectionDescriptor()
-        var row = FormRowDescriptor(tag: PT.INBETRIEBNAHMEDATUM.rawValue, rowType: .Date, title: "Inbetriebnahme")
-        row.value=NSDate()
-        section0.addRow(row)
-        row = FormRowDescriptor(tag: PT.MONTAGEFIRMA.rawValue, rowType: .Name, title: "Montagefirma")
-        row.configuration[FormRowDescriptor.Configuration.CellConfiguration] = ["textField.textAlignment" : NSTextAlignment.Right.rawValue]
-        section0.addRow(row)
+        let section0 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+        var row = FormRowDescriptor(tag: PT.INBETRIEBNAHMEDATUM.rawValue, type: .date, title: "Inbetriebnahme")
+        row.value=Date() as AnyObject?
+        section0.rows.append(row)
+        row = FormRowDescriptor(tag: PT.MONTAGEFIRMA.rawValue, type: .name, title: "Montagefirma")
+        row.configuration.cell.appearance = ["textField.textAlignment" : NSTextAlignment.right.rawValue as AnyObject]
+        section0.rows.append(row)
         form.sections = [section0]
         return form
         
     }
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 140)
+        return CGSize(width: 500, height: 100)
     }
     
     override func save(){
         if arbeitsprotokoll_id != -1 {
-            let content = formVC.form.formValues() as!  [String : AnyObject]
+            let content = formVC.form.formValues() 
             showWaiting()
             let apc=getParameterContainer()
             let date=content[PT.INBETRIEBNAHMEDATUM.rawValue]!
             let nowDouble = date.timeIntervalSince1970
-            let millis = Int64(nowDouble*1000) + Int64(nowDouble/1000)
+            let millis = Int64(nowDouble!*1000) + Int64(nowDouble!/1000)
             let param = "\(millis)"
-            apc.append(PT.INBETRIEBNAHMEDATUM.rawValue, value: param)
+            apc.append(PT.INBETRIEBNAHMEDATUM.rawValue, value: param as AnyObject)
             if let firma=content[PT.MONTAGEFIRMA.rawValue] {
                 apc.append(PT.MONTAGEFIRMA.rawValue, value: firma)
             }
@@ -167,29 +169,29 @@ class MastRevisionAction : ObjectAction {
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
         form.title = "Revision"
-        let section0 = FormSectionDescriptor()
-        let row = FormRowDescriptor(tag: PT.REVISIONSDATUM.rawValue, rowType: .Date, title: "Revision")
-        row.value=NSDate()
-        section0.addRow(row)
+        let section0 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+        let row = FormRowDescriptor(tag: PT.REVISIONSDATUM.rawValue, type: .date, title: "Revision")
+        row.value=Date() as AnyObject?
+        section0.rows.append(row)
         form.sections = [section0]
         return form
     }
     
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 100)
+        return CGSize(width: 500, height: 60)
     }
     
     override func save(){
         if arbeitsprotokoll_id != -1 {
-            let content = formVC.form.formValues() as!  [String : AnyObject]
+            let content = formVC.form.formValues() 
             showWaiting()
             let apc=getParameterContainer()
             let date=content[PT.REVISIONSDATUM.rawValue]!
             let nowDouble = date.timeIntervalSince1970
-            let millis = Int64(nowDouble*1000) + Int64(nowDouble/1000)
+            let millis = Int64(nowDouble!*1000) + Int64(nowDouble!/1000)
             let param = "\(millis)"
-            apc.append(PT.REVISIONSDATUM.rawValue, value: param)
+            apc.append(PT.REVISIONSDATUM.rawValue, value: param as AnyObject)
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollStandortRevision", params: apc, handler: defaultAfterSaveHandler)
         }
     }
@@ -208,43 +210,43 @@ class StandsicherheitspruefungAction : ObjectAction {
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
         form.title = "Standsicherheitsprüfung"
-        let section0 = FormSectionDescriptor()
-        var row = FormRowDescriptor(tag: PT.PRUEFDATUM.rawValue, rowType: .Date, title: "Standsicherheitsprüfung")
-        row.value=NSDate()
-        section0.addRow(row)
-        row = FormRowDescriptor(tag: PT.VERFAHREN.rawValue, rowType: .Name, title: "Verfahren")
-        row.configuration[FormRowDescriptor.Configuration.CellConfiguration] = ["textField.textAlignment" : NSTextAlignment.Right.rawValue]
-        section0.addRow(row)
-        row = FormRowDescriptor(tag: PT.NAECHSTES_PRUEFDATUM.rawValue, rowType: .Date, title: "Nächstes Prüfdatum")
-        row.value=NSDate()
-        section0.addRow(row)
+        let section0 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+        var row = FormRowDescriptor(tag: PT.PRUEFDATUM.rawValue, type: .date, title: "Standsicherheitsprüfung")
+        row.value=Date() as AnyObject?
+        section0.rows.append(row)
+        row = FormRowDescriptor(tag: PT.VERFAHREN.rawValue, type: .name, title: "Verfahren")
+        row.configuration.cell.appearance = ["textField.textAlignment" : NSTextAlignment.right.rawValue as AnyObject]
+        section0.rows.append(row)
+        row = FormRowDescriptor(tag: PT.NAECHSTES_PRUEFDATUM.rawValue, type: .date, title: "Nächstes Prüfdatum")
+        row.value=Date() as AnyObject?
+        section0.rows.append(row)
         form.sections = [section0]
         return form
     }
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 190)
+        return CGSize(width: 500, height: 150)
     }
     
     override func save(){
         if arbeitsprotokoll_id != -1 {
-            let content = formVC.form.formValues() as!  [String : AnyObject]
+            let content = formVC.form.formValues() 
             showWaiting()
             let apc=getParameterContainer()
             let datepd=content[PT.PRUEFDATUM.rawValue]!
             let nowDoublepd = datepd.timeIntervalSince1970
-            let millispd = Int64(nowDoublepd*1000) + Int64(nowDoublepd/1000)
+            let millispd = Int64(nowDoublepd!*1000) + Int64(nowDoublepd!/1000)
             let parampd = "\(millispd)"
 
             let datepdn=content[PT.NAECHSTES_PRUEFDATUM.rawValue]!
             let nowDoublepdn = datepdn.timeIntervalSince1970
-            let millispdn = Int64(nowDoublepdn*1000) + Int64(nowDoublepdn/1000)
+            let millispdn = Int64(nowDoublepdn!*1000) + Int64(nowDoublepdn!/1000)
             let parampdn = "\(millispdn)"
             
-            apc.append(PT.PRUEFDATUM.rawValue, value: parampd)
+            apc.append(PT.PRUEFDATUM.rawValue, value: parampd as AnyObject)
             if let verfahren=content[PT.VERFAHREN.rawValue] {
                 apc.append(PT.VERFAHREN.rawValue, value: verfahren)
             }
-            apc.append(PT.NAECHSTES_PRUEFDATUM.rawValue, value: parampdn)
+            apc.append(PT.NAECHSTES_PRUEFDATUM.rawValue, value: parampdn as AnyObject)
 
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollStandortStandsicherheitspruefung", params: apc, handler: defaultAfterSaveHandler)
         }

@@ -1,3 +1,4 @@
+
 //
 //  LeuchteActionForms.swift
 //  belis-app
@@ -22,22 +23,19 @@ class LeuchtenerneuerungAction : ObjectAction {
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
         form.title = "Leuchtenerneuerung"
-        let section0 = FormSectionDescriptor()
-        var row = FormRowDescriptor(tag: PT.INBETRIEBNAHMEDATUM.rawValue, rowType: .Date, title: "Inbetriebnahme")
-        row.value=NSDate()
+        let section0 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+        var row = FormRowDescriptor(tag: PT.INBETRIEBNAHMEDATUM.rawValue, type: .date, title: "Inbetriebnahme")
+        row.value=Date() as AnyObject?
         //section0.headerTitle = "Informationen zu den durchgeführten Tätigkeiten"
-        section0.addRow(row)
-        row = FormRowDescriptor(tag: PT.LEUCHTENTYP.rawValue, rowType: .Picker, title: "Leuchtentyp")
+        section0.rows.append(row)
+        row = FormRowDescriptor(tag: PT.LEUCHTENTYP.rawValue, type: .picker, title: "Leuchtentyp")
         
-        
-        
-        row.configuration[FormRowDescriptor.Configuration.Options] = CidsConnector.sharedInstance().sortedLeuchtenTypListKeys
-        row.configuration[FormRowDescriptor.Configuration.TitleFormatterClosure] = { value in
+        row.configuration.selection.options = CidsConnector.sharedInstance().sortedLeuchtenTypListKeys as [AnyObject]
+        row.configuration.selection.optionTitleClosure = { value in
             let typ=CidsConnector.sharedInstance().leuchtentypList[value as! String]
             return "\(typ?.leuchtenTyp ?? "unbekannter Typ") - \(typ?.fabrikat ?? "unbekanntes Fabrikat")"
-            } as TitleFormatterClosure
-        
-        section0.addRow(row)
+            }
+        section0.rows.append(row)
         
         form.sections = [section0]
         return form
@@ -45,19 +43,19 @@ class LeuchtenerneuerungAction : ObjectAction {
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 140)
+        return CGSize(width: 500, height: 100)
     }
     
     override func save(){
         if arbeitsprotokoll_id != -1 {
-            let content = formVC.form.formValues() as!  [String : AnyObject]
+            let content = formVC.form.formValues() 
             showWaiting()
             let apc=getParameterContainer()
             let date=content[PT.INBETRIEBNAHMEDATUM.rawValue]!
             let nowDouble = date.timeIntervalSince1970
-            let millis = Int64(nowDouble*1000) + Int64(nowDouble/1000)
+            let millis = Int64(nowDouble!*1000) + Int64(nowDouble!/1000)
             let param = "\(millis)"
-            apc.append(PT.INBETRIEBNAHMEDATUM.rawValue, value: param)
+            apc.append(PT.INBETRIEBNAHMEDATUM.rawValue, value: param as AnyObject)
             
             
             if let x=content[PT.LEUCHTENTYP.rawValue] {
@@ -86,46 +84,46 @@ class LeuchtmittelwechselEPAction : ObjectAction {
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
         form.title = "Leuchtmittelwechsel (mit EP)"
-        let section0 = FormSectionDescriptor()
-        var row = FormRowDescriptor(tag: PT.PRUEFDATUM.rawValue, rowType: .Date, title: "Elektrische Prüfung am Mast")
-        row.value=NSDate()
-        section0.addRow(row)
-        row = FormRowDescriptor(tag: PT.ERDUNG_IN_ORDNUNG.rawValue, rowType: .BooleanSwitch, title: "Erdung in Ordnung")
-        section0.addRow(row)
-        row = FormRowDescriptor(tag: PT.WECHSELDATUM.rawValue, rowType: .Date, title: "Wechseldatum")
-        row.value=NSDate()
-        section0.addRow(row)
-        row = FormRowDescriptor(tag: PT.LEUCHTMITTEL.rawValue, rowType: .Picker, title: "eingesetztes Leuchtmittel")
-        row.configuration[FormRowDescriptor.Configuration.Options] = CidsConnector.sharedInstance().sortedLeuchtmittelListKeys
-        row.configuration[FormRowDescriptor.Configuration.TitleFormatterClosure] = { value in
+        let section0 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+        var row = FormRowDescriptor(tag: PT.PRUEFDATUM.rawValue, type: .date, title: "Elektrische Prüfung am Mast")
+        row.value=Date() as AnyObject?
+        section0.rows.append(row)
+        row = FormRowDescriptor(tag: PT.ERDUNG_IN_ORDNUNG.rawValue, type: .booleanSwitch, title: "Erdung in Ordnung")
+        section0.rows.append(row)
+        row = FormRowDescriptor(tag: PT.WECHSELDATUM.rawValue, type: .date, title: "Wechseldatum")
+        row.value=Date() as AnyObject?
+        section0.rows.append(row)
+        row = FormRowDescriptor(tag: PT.LEUCHTMITTEL.rawValue, type: .picker, title: "eingesetztes Leuchtmittel")
+        row.configuration.selection.options=CidsConnector.sharedInstance().sortedLeuchtmittelListKeys as [AnyObject]
+        row.configuration.selection.optionTitleClosure = { value in
             let lm=CidsConnector.sharedInstance().leuchtmittelList[value as! String]
             return  "\(lm?.hersteller ?? "ohne Hersteller") - \(lm?.lichtfarbe ?? "")"
-            } as TitleFormatterClosure
+            }
         
-        section0.addRow(row)
-        row = FormRowDescriptor(tag: PT.LEBENSDAUER.rawValue, rowType: .Name, title: "Lebensdauer des Leuchtmittels")
-        row.configuration[FormRowDescriptor.Configuration.CellConfiguration] = ["textField.placeholder" : "in Monaten", "textField.textAlignment" : NSTextAlignment.Right.rawValue]
-        section0.addRow(row)
+        section0.rows.append(row)
+        row = FormRowDescriptor(tag: PT.LEBENSDAUER.rawValue, type: .name, title: "Lebensdauer des Leuchtmittels")
+        row.configuration.cell.appearance = ["textField.placeholder" : "in Monaten" as AnyObject, "textField.textAlignment" : NSTextAlignment.right.rawValue as AnyObject]
+        section0.rows.append(row)
         form.sections = [section0]
         return form
         
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 290)
+        return CGSize(width: 500, height: 250)
     }
     
     override func save(){
         if arbeitsprotokoll_id != -1 {
-            let content = formVC.form.formValues() as!  [String : AnyObject]
+            let content = formVC.form.formValues() 
             showWaiting()
             let apc=getParameterContainer()
             
             let datepd=content[PT.PRUEFDATUM.rawValue]!
             let nowDoublepd = datepd.timeIntervalSince1970
-            let millispd = Int64(nowDoublepd*1000) + Int64(nowDoublepd/1000)
+            let millispd = Int64(nowDoublepd!*1000) + Int64(nowDoublepd!/1000)
             let parampd = "\(millispd)"
-            apc.append(PT.PRUEFDATUM.rawValue, value: parampd)
+            apc.append(PT.PRUEFDATUM.rawValue, value: parampd as AnyObject)
             //------------------
             var erdung=""
             if let erdInOrdnung=content[PT.ERDUNG_IN_ORDNUNG.rawValue] as? Bool{
@@ -139,13 +137,13 @@ class LeuchtmittelwechselEPAction : ObjectAction {
             else {
                 erdung="nein"
             }
-            apc.append(PT.ERDUNG_IN_ORDNUNG.rawValue, value: erdung)
+            apc.append(PT.ERDUNG_IN_ORDNUNG.rawValue, value: erdung as AnyObject)
             //------------------
             let datewd=content[PT.WECHSELDATUM.rawValue]!
             let nowDoublewd = datewd.timeIntervalSince1970
-            let milliswd = Int64(nowDoublewd*1000) + Int64(nowDoublewd/1000)
+            let milliswd = Int64(nowDoublewd!*1000) + Int64(nowDoublewd!/1000)
             let paramwd = "\(milliswd)"
-            apc.append(PT.WECHSELDATUM.rawValue, value: paramwd)
+            apc.append(PT.WECHSELDATUM.rawValue, value: paramwd as AnyObject)
             //------------------
             if let lid=content[PT.LEUCHTMITTEL.rawValue] {
                 apc.append(PT.LEUCHTMITTEL.rawValue, value: lid)
@@ -173,40 +171,40 @@ class LeuchtmittelwechselAction : ObjectAction {
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
         form.title = "Leuchtmittelwechsel"
-        let section0 = FormSectionDescriptor()
-        var row = FormRowDescriptor(tag: PT.WECHSELDATUM.rawValue, rowType: .Date, title: "Wechseldatum")
-        row.value=NSDate()
-        section0.addRow(row)
-        row = FormRowDescriptor(tag: PT.LEUCHTMITTEL.rawValue, rowType: .Picker, title: "eingesetztes Leuchtmittel")
-        row.configuration[FormRowDescriptor.Configuration.Options] = CidsConnector.sharedInstance().sortedLeuchtmittelListKeys
-        row.configuration[FormRowDescriptor.Configuration.TitleFormatterClosure] = { value in
+        let section0 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+        var row = FormRowDescriptor(tag: PT.WECHSELDATUM.rawValue, type: .date, title: "Wechseldatum")
+        row.value=Date() as AnyObject?
+        section0.rows.append(row)
+        row = FormRowDescriptor(tag: PT.LEUCHTMITTEL.rawValue, type: .picker, title: "eingesetztes Leuchtmittel")
+        row.configuration.selection.options = CidsConnector.sharedInstance().sortedLeuchtmittelListKeys as [AnyObject]
+        row.configuration.selection.optionTitleClosure = { value in
             let lm=CidsConnector.sharedInstance().leuchtmittelList[value as! String]
             return  "\(lm?.hersteller ?? "ohne Hersteller") - \(lm?.lichtfarbe ?? "")"
-            } as TitleFormatterClosure
+            }
 
-        section0.addRow(row)
-        row = FormRowDescriptor(tag: PT.LEBENSDAUER.rawValue, rowType: .Name, title: "Lebensdauer des Leuchtmittels")
-        row.configuration[FormRowDescriptor.Configuration.CellConfiguration] = ["textField.placeholder" : "in Monaten", "textField.textAlignment" : NSTextAlignment.Right.rawValue]
-        section0.addRow(row)
+        section0.rows.append(row)
+        row = FormRowDescriptor(tag: PT.LEBENSDAUER.rawValue, type: .name, title: "Lebensdauer des Leuchtmittels")
+        row.configuration.cell.appearance = ["textField.placeholder" : "in Monaten" as AnyObject, "textField.textAlignment" : NSTextAlignment.right.rawValue as AnyObject]
+        section0.rows.append(row)
         form.sections = [section0]
         return form
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 190)
+        return CGSize(width: 500, height: 150)
     }
     
     override func save(){
         if arbeitsprotokoll_id != -1 {
-            let content = formVC.form.formValues() as!  [String : AnyObject]
+            let content = formVC.form.formValues() 
             showWaiting()
             let apc=getParameterContainer()
            
             let datewd=content[PT.WECHSELDATUM.rawValue]!
             let nowDoublewd = datewd.timeIntervalSince1970
-            let milliswd = Int64(nowDoublewd*1000) + Int64(nowDoublewd/1000)
+            let milliswd = Int64(nowDoublewd!*1000) + Int64(nowDoublewd!/1000)
             let paramwd = "\(milliswd)"
-            apc.append(PT.WECHSELDATUM.rawValue, value: paramwd)
+            apc.append(PT.WECHSELDATUM.rawValue, value: paramwd as AnyObject)
             //------------------
             if let lid=content[PT.LEUCHTMITTEL.rawValue] {
                 apc.append(PT.LEUCHTMITTEL.rawValue, value: lid)
@@ -232,17 +230,17 @@ class RundsteuerempfaengerwechselAction : ObjectAction {
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
         form.title = "Rundsteuerempfängerwechsel"
-        let section0 = FormSectionDescriptor()
-        var row = FormRowDescriptor(tag: PT.EINBAUDATUM.rawValue, rowType: .Date, title: "Einbaudatum")
-        row.value=NSDate()
-        section0.addRow(row)
-        row = FormRowDescriptor(tag: PT.RUNDSTEUEREMPFAENGER.rawValue, rowType: .Picker, title: "Rundsteuerempfänger")
-        row.configuration[FormRowDescriptor.Configuration.Options] = CidsConnector.sharedInstance().sortedRundsteuerempfaengerListKeys
-        row.configuration[FormRowDescriptor.Configuration.TitleFormatterClosure] = { value in
+        let section0 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+        var row = FormRowDescriptor(tag: PT.EINBAUDATUM.rawValue, type: .date, title: "Einbaudatum")
+        row.value=Date() as AnyObject?
+        section0.rows.append(row)
+        row = FormRowDescriptor(tag: PT.RUNDSTEUEREMPFAENGER.rawValue, type: .picker, title: "Rundsteuerempfänger")
+        row.configuration.selection.options = CidsConnector.sharedInstance().sortedRundsteuerempfaengerListKeys as [AnyObject]
+        row.configuration.selection.optionTitleClosure = { value in
             let rse=CidsConnector.sharedInstance().rundsteuerempfaengerList[value as! String]
             return"\(rse?.herrsteller_rs ?? "ohne Hersteller") - \(rse?.rs_typ ?? "")"
-            } as TitleFormatterClosure
-        section0.addRow(row)
+            } 
+        section0.rows.append(row)
         form.sections = [section0]
         return form
         
@@ -250,21 +248,21 @@ class RundsteuerempfaengerwechselAction : ObjectAction {
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 140)
+        return CGSize(width: 500, height: 100)
     }
     
     
     override func save(){
         if arbeitsprotokoll_id != -1 {
-            let content = formVC.form.formValues() as!  [String : AnyObject]
+            let content = formVC.form.formValues() 
             showWaiting()
             let apc=getParameterContainer()
             
             let datewd=content[PT.EINBAUDATUM.rawValue]!
             let nowDoublewd = datewd.timeIntervalSince1970
-            let milliswd = Int64(nowDoublewd*1000) + Int64(nowDoublewd/1000)
+            let milliswd = Int64(nowDoublewd!*1000) + Int64(nowDoublewd!/1000)
             let paramwd = "\(milliswd)"
-            apc.append(PT.EINBAUDATUM.rawValue, value: paramwd)
+            apc.append(PT.EINBAUDATUM.rawValue, value: paramwd as AnyObject)
             //------------------
             if let rid=content[PT.RUNDSTEUEREMPFAENGER.rawValue]{
                 apc.append(PT.RUNDSTEUEREMPFAENGER.rawValue, value: rid)
@@ -286,10 +284,10 @@ class SonderturnusAction : ObjectAction {
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
         form.title = "Rundsteuerempfängerwechsel"
-        let section0 = FormSectionDescriptor()
-        let row = FormRowDescriptor(tag: PT.DATUM.rawValue, rowType: .Date, title: "Sonderturnus")
-        row.value=NSDate()
-        section0.addRow(row)
+        let section0 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+        let row = FormRowDescriptor(tag: PT.DATUM.rawValue, type: .date, title: "Sonderturnus")
+        row.value=Date() as AnyObject?
+        section0.rows.append(row)
         form.sections = [section0]
         return form
         
@@ -297,20 +295,20 @@ class SonderturnusAction : ObjectAction {
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 100)
+        return CGSize(width: 500, height: 60)
     }
     
     override func save(){
         if arbeitsprotokoll_id != -1 {
-            let content = formVC.form.formValues() as!  [String : AnyObject]
+            let content = formVC.form.formValues() 
             showWaiting()
             let apc=getParameterContainer()
             
             let datewd=content[PT.DATUM.rawValue]!
             let nowDoublewd = datewd.timeIntervalSince1970
-            let milliswd = Int64(nowDoublewd*1000) + Int64(nowDoublewd/1000)
+            let milliswd = Int64(nowDoublewd!*1000) + Int64(nowDoublewd!/1000)
             let paramwd = "\(milliswd)"
-            apc.append(PT.DATUM.rawValue, value: paramwd)
+            apc.append(PT.DATUM.rawValue, value: paramwd as AnyObject)
             //------------------
             
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollLeuchteSonderturnus", params: apc, handler: defaultAfterSaveHandler)
@@ -330,32 +328,32 @@ class VorschaltgeraetwechselAction : ObjectAction {
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
         form.title = "Vorschaltgerätwechsel"
-        let section0 = FormSectionDescriptor()
-        var row = FormRowDescriptor(tag: PT.WECHSELDATUM.rawValue, rowType: .Date, title: "Einbaudatum")
-        row.value=NSDate()
-        section0.addRow(row)
-        row = FormRowDescriptor(tag: PT.VORSCHALTGERAET.rawValue, rowType: .Name, title: "Vorschaltgerät")
-        row.configuration[FormRowDescriptor.Configuration.CellConfiguration] = ["textField.textAlignment" : NSTextAlignment.Right.rawValue]
-        section0.addRow(row)
+        let section0 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+        var row = FormRowDescriptor(tag: PT.WECHSELDATUM.rawValue, type: .date, title: "Einbaudatum")
+        row.value=Date() as AnyObject?
+        section0.rows.append(row)
+        row = FormRowDescriptor(tag: PT.VORSCHALTGERAET.rawValue, type: .name, title: "Vorschaltgerät")
+        row.configuration.cell.appearance = ["textField.textAlignment" : NSTextAlignment.right.rawValue as AnyObject]
+        section0.rows.append(row)
         form.sections = [section0]
         return form
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 140)
+        return CGSize(width: 500, height: 100)
     }
     
     override func save(){
         if arbeitsprotokoll_id != -1 {
-            let content = formVC.form.formValues() as!  [String : AnyObject]
+            let content = formVC.form.formValues() 
             showWaiting()
             let apc=getParameterContainer()
             
             let datewd=content[PT.WECHSELDATUM.rawValue]!
             let nowDoublewd = datewd.timeIntervalSince1970
-            let milliswd = Int64(nowDoublewd*1000) + Int64(nowDoublewd/1000)
+            let milliswd = Int64(nowDoublewd!*1000) + Int64(nowDoublewd!/1000)
             let paramwd = "\(milliswd)"
-            apc.append(PT.WECHSELDATUM.rawValue, value: paramwd)
+            apc.append(PT.WECHSELDATUM.rawValue, value: paramwd as AnyObject)
             //------------------
             if let vid=content[PT.VORSCHALTGERAET.rawValue]{
                 apc.append(PT.VORSCHALTGERAET.rawValue, value: vid)

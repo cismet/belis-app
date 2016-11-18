@@ -16,16 +16,16 @@ class MemoTitledInfoCell: UITableViewCell,CellDataUI {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        lblData.editable=false
+        lblData.isEditable=false
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
     
-    func fillFromCellData(cellData :CellData){
+    func fillFromCellData(_ cellData :CellData){
         if let d=cellData as? MemoTitledInfoCellData {
             lblTitle.text=d.title
             lblData.text=d.data

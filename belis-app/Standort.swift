@@ -8,6 +8,26 @@
 
 import Foundation
 import ObjectMapper
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 
 class Standort: GeoBaseEntity ,  CellInformationProviderProtocol, CellDataProvider,ActionProvider, DocumentContainer, ObjectActionProvider{
@@ -16,13 +36,13 @@ class Standort: GeoBaseEntity ,  CellInformationProviderProtocol, CellDataProvid
     var bezirk : Stadtbezirk?
     var mastart : Mastart?
     var klassifizierung: Mastklassifizierung?
-    var mastanstrich: NSDate?
-    var mastschutz: NSDate?
+    var mastanstrich: Date?
+    var mastschutz: Date?
     var unterhaltspflicht: MastUnterhaltspflicht?
     var typ: Masttyp?
-    var inbetriebnahme: NSDate?
+    var inbetriebnahme: Date?
     var verrechnungseinheit: Bool?
-    var letzteAenderung: NSDate?
+    var letzteAenderung: Date?
     var istVirtuellerStandort: Bool?
     var bemerkung: String?
     var montagefirma: String?
@@ -32,21 +52,21 @@ class Standort: GeoBaseEntity ,  CellInformationProviderProtocol, CellDataProvid
     var hausnummer: String?
     var dokumente: [DMSUrl] = []
     var gruendung: String?
-    var elektrischePruefung: NSDate?
+    var elektrischePruefung: Date?
     var erdung: Bool?
     var monteur: String?
-    var standsicherheitspruefung: NSDate?
+    var standsicherheitspruefung: Date?
     var verfahrenSHP: String?
     var foto: DMSUrl?
-    var naechstesPruefdatum: NSDate?
+    var naechstesPruefdatum: Date?
     var anstrichfrabe: String?
-    var revision: NSDate?
+    var revision: Date?
     var anlagengruppe: MastAnlagengruppe?
     var anbauten: String?
     
     // MARK: - required init because of ObjectMapper
-    required init?(_ map: Map) {
-        super.init(map)
+    required init?(map: Map) {
+        super.init(map: map)
     }
     
     // MARK: - essential overrides BaseEntity
@@ -94,7 +114,7 @@ class Standort: GeoBaseEntity ,  CellInformationProviderProtocol, CellDataProvid
     }
     
     // MARK: - essential overrides GeoBaseEntity
-    override func getAnnotationImage(status: String?) -> UIImage{
+    override func getAnnotationImage(_ status: String?) -> UIImage{
         if let s=status {
             if let color=Arbeitsprotokoll.statusColors[s] {
                 return GlyphTools.sharedInstance().getGlyphedAnnotationImage("icon-circlerecord",color: color);
@@ -207,7 +227,7 @@ class Standort: GeoBaseEntity ,  CellInformationProviderProtocol, CellDataProvid
                 if let urls=typ?.dokumente {
                     for url in urls {
                         mastTypDetails["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
-                        docCount++
+                        docCount += 1
                     }
                 }
             }
@@ -337,7 +357,7 @@ class Standort: GeoBaseEntity ,  CellInformationProviderProtocol, CellDataProvid
     }
     
     // MARK: - DocumentContainer Impl
-    func addDocument(document: DMSUrl) {
+    func addDocument(_ document: DMSUrl) {
         dokumente.append(document)
     }
     
