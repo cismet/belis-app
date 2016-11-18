@@ -90,6 +90,9 @@ open class CidsConnector {
         }
     }
     
+    var isCancelRequested: Bool = false
+    var postCancelHook: (()->Void)?
+    
     var clientCertPath: String {
         get {
             if !simulator {
@@ -154,7 +157,7 @@ open class CidsConnector {
     
     // MARK: - constructor
     init(){
-        
+        blockingQueue.name="blockingQueue"
         let storedTLSEnabled: AnyObject? = UserDefaults.standard.object(forKey: "tlsEnabled") as AnyObject?
         if let storedTLSEnabledAsBool=storedTLSEnabled as? Bool {
             tlsEnabled=storedTLSEnabledAsBool
@@ -235,7 +238,7 @@ open class CidsConnector {
                     }
                     
                     handler(loggedIn)
-
+                    
                 }
                 let teamsOperation=GetAllEntitiesOperation(baseUrl: baseUrl, domain: domain, entityName: "team", user: login, pass: password, queue: blockingQueue, completionHandler: teamsCompletionHandler )
                 
@@ -245,7 +248,7 @@ open class CidsConnector {
             else {
                 handler(loggedIn)
             }
-
+            
         }
         let loginOp=LoginOperation(baseUrl: baseUrl, domain: domain,user: login, pass: password,completionHandler: cH )
         loginOp.enqueue()
@@ -455,7 +458,6 @@ open class CidsConnector {
                         else {
                             var i=0
                             for node in nodes {
-                                print("\(node.classId!) : \(node.objectId!)")
                                 let rightEntity=Entity.byClassId(node.classId!)!
                                 assert(rightEntity==Entity.ARBEITSAUFTRAEGE)
                                 let classKey=rightEntity.tableName()
@@ -471,7 +473,7 @@ open class CidsConnector {
                                             i=i+1
                                             let progress=Float(i)/Float(nodes.count)
                                             setProgressInWaitingHUD(progress)
-
+                                            
                                             if let auftrag=aa {
                                                 if let _=self.searchResults[Entity.ARBEITSAUFTRAEGE] {
                                                     self.searchResults[Entity.ARBEITSAUFTRAEGE]!.append(auftrag)
@@ -517,9 +519,11 @@ open class CidsConnector {
                                         print("arbeitsauftrag::GetEntity::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
                                     }
                                 }
-                                let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: getAACompletionHandler)
-                                
-                                op.enqueue()
+                                if (!CidsConnector.sharedInstance().isCancelRequested) {
+                                    let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: getAACompletionHandler)
+                                    
+                                    op.enqueue()
+                                }
                             }
                         }
                     }
@@ -530,11 +534,21 @@ open class CidsConnector {
             }
             
         }
-        let sop=SearchOperation(baseUrl: self.baseUrl,searchKey: "BELIS2.de.cismet.belis2.server.search.ArbeitsauftragSearchStatement" , user: self.login, pass: self.password, parameters: qp, completionHandler: mySearchCompletionHandler)
-        
-        sop.enqueue()
+        if (!CidsConnector.sharedInstance().isCancelRequested) {
+            let sop=SearchOperation(baseUrl: self.baseUrl,searchKey: "BELIS2.de.cismet.belis2.server.search.ArbeitsauftragSearchStatement" , user: self.login, pass: self.password, queue:CidsConnector.sharedInstance().blockingQueue, parameters: qp, completionHandler: mySearchCompletionHandler)
+            
+            sop.enqueue()
+        }
         
     }
+    
+    func startCancelableTransaction(name:String="---", afterCancellation:@escaping (()->Void) ){
+        print("Start cancelable transaction with the name \(name)")
+        isCancelRequested=false
+        postCancelHook=afterCancellation
+    }
+    
+    
     func refreshArbeitsauftrag(_ arbeitsauftrag: Arbeitsauftrag?, handler: @escaping (_ success: Bool)->() ){
         if let _=arbeitsauftrag {
             func completionHandler(_ operation:GetEntityOperation, data: Data?, response: URLResponse?, error: Error?, queue: OperationQueue) -> (){
@@ -552,7 +566,7 @@ open class CidsConnector {
                                 var i=0
                                 for oldAA in x {
                                     if oldAA.id==aa.id {
-                                       CidsConnector.sharedInstance().allArbeitsauftraegeBeforeCurrentSelection[Entity.ARBEITSAUFTRAEGE]![i]=aa
+                                        CidsConnector.sharedInstance().allArbeitsauftraegeBeforeCurrentSelection[Entity.ARBEITSAUFTRAEGE]![i]=aa
                                         break
                                     }
                                     i += 1
@@ -564,7 +578,7 @@ open class CidsConnector {
                             //  if let s=sel  {
                             //  self.mainVC!.tableView.selectRowAtIndexPath(s, animated: false, scrollPosition: UITableViewScrollPosition.None)
                             //  }
-
+                            
                             handler(true)
                             return
                         }
@@ -581,8 +595,10 @@ open class CidsConnector {
                 
                 handler(false)
             }
-            let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: Entity.ARBEITSAUFTRAEGE.tableName(), id: arbeitsauftrag!.id, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: completionHandler)
-            op.enqueue()
+            if (!CidsConnector.sharedInstance().isCancelRequested) {
+                let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: Entity.ARBEITSAUFTRAEGE.tableName(), id: arbeitsauftrag!.id, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: completionHandler)
+                op.enqueue()
+            }
         }
     }
     func getVeranlassungByNummer(_ vnr:String, handler: @escaping (_ veranlassung:Veranlassung?) -> ()) {
@@ -619,12 +635,15 @@ open class CidsConnector {
             handler(nil)
         }
         
-        
-        let sop=SearchOperation(baseUrl: self.baseUrl, searchKey: "BELIS2.de.cismet.belis2.server.search.VeranlassungByNummerSearch", user: self.login, pass: self.password, parameters: qp, completionHandler: mySearchCompletionHandler)
-        
-        sop.enqueue()
-        
+        if (!CidsConnector.sharedInstance().isCancelRequested) {
+            
+            let sop=SearchOperation(baseUrl: self.baseUrl, searchKey: "BELIS2.de.cismet.belis2.server.search.VeranlassungByNummerSearch", user: self.login, pass: self.password, queue:CidsConnector.sharedInstance().blockingQueue, parameters: qp, completionHandler: mySearchCompletionHandler)
+            
+            sop.enqueue()
+        }
     }
+    
+    
     func search(_ ewktMapContent: String,leuchtenEnabled: Bool, mastenEnabled: Bool,mauerlaschenEnabled: Bool, leitungenEnabled: Bool, schaltstellenEnabled: Bool, handler: @escaping () -> ()) {
         assert(loggedIn)
         var qp=QueryParameters(list:[
@@ -643,110 +662,117 @@ open class CidsConnector {
                 print("mainSearch::URL Session Task Succeeded: HTTP \(statusCode)")
                 var err: Error?
                 
-                if let checkeddata: [String : AnyObject] = getJson(data!) {
-                    var json =  checkeddata["$collection"] as! [[String : AnyObject]];
-                    if let nodes = Mapper<CidsObjectNode>().mapArray(JSONArray: json) {
-                        
-                        if (nodes.count>1) {
-                            showWaitingHUD(text:"\(nodes.count) Objekte laden", indeterminate: false)
-                        }
-                        else {
-                            showWaitingHUD(text:"Objekt laden")
-                        }
-
-
-                        self.blockingQueue.cancelAllOperations()
-                        self.searchResults=[Entity: [GeoBaseEntity]]()
-                        self.start=CidsConnector.currentTimeMillis();
-                        self.blockingQueue.maxConcurrentOperationCount = 10
-                        if nodes.count==0 {
-                            handler()
-                        }
-                        else {
-                            var i=0
-                            for node in nodes {
-                                print("\(node.classId!) : \(node.objectId!)")
-                                let rightEntity=Entity.byClassId(node.classId!)!
-                                let classKey=rightEntity.tableName()
-                                
-                                
-                                func completionHandler(_ operation:GetEntityOperation, data: Data?, response: URLResponse?, error: Error?, queue: OperationQueue) -> (){
-                                    if (error == nil) {
-                                        // Success
-                                        let statusCode = (response as! HTTPURLResponse).statusCode
-                                        print("getObject::GetEntity::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
-                                        
-                                        if let json: [String : AnyObject] = getJson(data!) {
-                                            var gbEntity:GeoBaseEntity?
-                                            
-                                            switch (rightEntity){
-                                            case .LEUCHTEN:
-                                                gbEntity = Mapper<Leuchte>().map(JSON: json)!
-                                            case .MASTEN:
-                                                gbEntity = Mapper<Standort>().map(JSON: json)!
-                                            case .MAUERLASCHEN:
-                                                gbEntity = Mapper<Mauerlasche>().map(JSON: json)!
-                                            case .LEITUNGEN:
-                                                gbEntity = Mapper<Leitung>().map(JSON: json)!
-                                            case .SCHALTSTELLEN:
-                                                gbEntity = Mapper<Schaltstelle>().map(JSON: json)!
-                                            default:
-                                                print("could not find object from entity \(operation.entityName)")
-                                            }
-                                            i=i+1
-                                            let progress=Float(i)/Float(nodes.count)
-                                            setProgressInWaitingHUD(progress)
-
-                                            if let gbe=gbEntity {
-                                                if let _=self.searchResults[rightEntity] {
-                                                    self.searchResults[rightEntity]!.append(gbe)
-                                                }
-                                                else {
-                                                    self.searchResults.updateValue([gbe], forKey: rightEntity)
-                                                }
-                                            }
-                                            //println("+")
-                                            //println("\(leuchte.id)==>\(leuchte.leuchtenNummer):\(leuchte.typ)@\(leuchte.standort?.strasse)->\(leuchte.wgs84WKT)");
-                                            
-                                            if self.blockingQueue.operationCount==1 {
-                                                let duration = (CidsConnector.currentTimeMillis() - self.start)
-                                                handler();
-                                                print("loaded \(duration)");
+                if (!isCancelRequested) {
+                    if let checkeddata: [String : AnyObject] = getJson(data!) {
+                        var json =  checkeddata["$collection"] as! [[String : AnyObject]];
+                        if let nodes = Mapper<CidsObjectNode>().mapArray(JSONArray: json) {
+                            if (nodes.count>1) {
+                                showWaitingHUD(text:"\(nodes.count) Objekte laden", indeterminate: false)
+                            }
+                            else {
+                                showWaitingHUD(text:"Objekt laden")
+                            }
+                            
+                            self.blockingQueue.cancelAllOperations()
+                            self.searchResults=[Entity: [GeoBaseEntity]]()
+                            self.start=CidsConnector.currentTimeMillis();
+                            self.blockingQueue.maxConcurrentOperationCount = 10
+                            if nodes.count==0 {
+                                handler()
+                            }
+                            else {
+                                var i=0
+                                if (!isCancelRequested) {
+                                    for node in nodes {
+                                        let rightEntity=Entity.byClassId(node.classId!)!
+                                        let classKey=rightEntity.tableName()
+                                        func completionHandler(_ operation:GetEntityOperation, data: Data?, response: URLResponse?, error: Error?, queue: OperationQueue) -> (){
+                                            if (error == nil && !isCancelRequested) {
+                                                // Success
+                                                let statusCode = (response as! HTTPURLResponse).statusCode
+                                                print("getObject::GetEntity::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                                                 
+                                                if let json: [String : AnyObject] = getJson(data!) {
+                                                    var gbEntity:GeoBaseEntity?
+                                                    
+                                                    switch (rightEntity){
+                                                    case .LEUCHTEN:
+                                                        gbEntity = Mapper<Leuchte>().map(JSON: json)!
+                                                    case .MASTEN:
+                                                        gbEntity = Mapper<Standort>().map(JSON: json)!
+                                                    case .MAUERLASCHEN:
+                                                        gbEntity = Mapper<Mauerlasche>().map(JSON: json)!
+                                                    case .LEITUNGEN:
+                                                        gbEntity = Mapper<Leitung>().map(JSON: json)!
+                                                    case .SCHALTSTELLEN:
+                                                        gbEntity = Mapper<Schaltstelle>().map(JSON: json)!
+                                                    default:
+                                                        print("could not find object from entity \(operation.entityName)")
+                                                    }
+                                                    i=i+1
+                                                    let progress=Float(i)/Float(nodes.count)
+                                                    setProgressInWaitingHUD(progress)
+                                                    if (!isCancelRequested) {
+                                                        if let gbe=gbEntity {
+                                                            if let _=self.searchResults[rightEntity] {
+                                                                self.searchResults[rightEntity]!.append(gbe)
+                                                            }
+                                                            else {
+                                                                self.searchResults.updateValue([gbe], forKey: rightEntity)
+                                                            }
+                                                        }
+                                                    }
+                                                    if self.blockingQueue.operationCount==1 {
+                                                        let duration = (CidsConnector.currentTimeMillis() - self.start)
+                                                        handler();
+                                                        print("loaded \(duration)");
+                                                        
+                                                    }
+                                                    
+                                                }else {
+                                                    print("no json data for \(operation.url)")
+                                                    //self.searchResults[0].append(Leuchte())
+                                                    
+                                                }
+                                            }else if (isCancelRequested){
+                                                 print("\(CidsConnector.sharedInstance().blockingQueue.operationCount) operation alive of \(CidsConnector.sharedInstance().blockingQueue.operations.count)")
                                             }
-                                            
-                                        }else {
-                                            print("no json data for \(operation.url)")
-                                            //self.searchResults[0].append(Leuchte())
-                                            
+                                            else {
+                                                // Failure
+                                                print("\(CidsConnector.sharedInstance().blockingQueue.operationCount)getObject::GetEntity::URL Session Task Failed or Cancelled: \(error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation)");
+                  
+                                            }
                                         }
-                                    }else {
-                                        // Failure
-                                        print("getObject::GetEntity::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
+                                        if (!CidsConnector.sharedInstance().isCancelRequested) {
+                                            let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: completionHandler)
+                                            
+                                            op.enqueue()
+                                        }
                                     }
+                                    print("all nodes processed (cancelled=\(isCancelRequested))")
                                 }
-                                let op=GetEntityOperation(baseUrl: self.baseUrl, domain: self.domain, entityName: classKey, id: node.objectId!, user: self.login, pass: self.password, queue: blockingQueue, completionHandler: completionHandler)
-                                
-                                op.enqueue()
                             }
                         }
                     }
-                }
-                else {
-                    print("Problem in Request")
+                    else {
+                        print("Problem in Request")
+                    }
                 }
                 
             }
             else {
                 // Failure
-                print("mainSearch::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
+                print("mainSearch::URL Session Task Failed or Cancelled: \(error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation)");
             }
             
         }
-        
-        let sop=SearchOperation(baseUrl: self.baseUrl, searchKey: "BELIS2.de.cismet.belis2.server.search.BelisObjectsWktSearch", user: self.login, pass: self.password, parameters: qp, completionHandler: mySearchCompletionHandler)
-        
-        sop.enqueue()
+        if (!CidsConnector.sharedInstance().isCancelRequested) {
+            let sop=SearchOperation(baseUrl: self.baseUrl, searchKey: "BELIS2.de.cismet.belis2.server.search.BelisObjectsWktSearch", user: self.login, pass: self.password, queue:CidsConnector.sharedInstance().blockingQueue, parameters: qp, completionHandler: mySearchCompletionHandler)
+            
+            sop.enqueue()
+            print ("Search enqueued. Queue with \(CidsConnector.sharedInstance().blockingQueue.operationCount) operations")
+            
+        }
         
     }
     func executeSimpleServerAction(actionName: String!, params: ActionParameterContainer, handler: @escaping (_ success:Bool) -> ()) {
@@ -771,9 +797,10 @@ open class CidsConnector {
             }
             
         }
-        
-        let op=ServerActionOperation(baseUrl: baseUrl, user: login, pass: password, actionName: actionName,params:params, completionHandler: myActionCompletionHandler)
-        op.enqueue()
+        if (!CidsConnector.sharedInstance().isCancelRequested) {
+            let op=ServerActionOperation(baseUrl: baseUrl, user: login, pass: password, actionName: actionName,params:params, completionHandler: myActionCompletionHandler)
+            op.enqueue()
+        }
     }
     func uploadImageToWebDAV(_ image: UIImage, fileName: String , completionHandler: @escaping (_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void) {
         assert(loggedIn)
