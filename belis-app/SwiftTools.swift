@@ -262,40 +262,44 @@ public func lazyMainQueueDispatch(_ closure: @escaping ()->()){
     }
 }
 
-public func showWaitingHUD(text:String = "", view:UIView? = nil,indeterminate:Bool = true ) {
-    
-    let cancelTap: ((JGProgressHUD?)->Void) = { hud in
-        CidsConnector.sharedInstance().isCancelRequested=true
-        if let pch=CidsConnector.sharedInstance().postCancelHook {
-            pch()
+public func showWaitingHUD(queue: CancelableOperationQueue, text:String = "", view:UIView? = nil,indeterminate:Bool = true ) {
+    if (!queue.cancelRequested) {
+        let cancelTap: ((JGProgressHUD?)->Void) = { hud in
+            queue.cancelAllOperations()
         }
-    }
-    
-    CidsConnector.sharedInstance().mainVC?.progressHUD?.tapOnHUDViewBlock = cancelTap
-
-    lazyMainQueueDispatch({ () -> () in
-        if text=="" {
-            CidsConnector.sharedInstance().mainVC?.progressHUD?.textLabel.text=nil
-        }
-        else {
-            CidsConnector.sharedInstance().mainVC?.progressHUD?.textLabel.text=text
-        }
-        if indeterminate {
+        
+        CidsConnector.sharedInstance().mainVC?.progressHUD?.tapOnHUDViewBlock = cancelTap
+        
+        lazyMainQueueDispatch({ () -> () in
+            if text=="" {
+                CidsConnector.sharedInstance().mainVC?.progressHUD?.textLabel.text=nil
+            }
+            else {
+                CidsConnector.sharedInstance().mainVC?.progressHUD?.textLabel.text=text
+            }
+            if indeterminate {
                 CidsConnector.sharedInstance().mainVC?.progressHUD?.indicatorView=JGProgressHUDIndeterminateIndicatorView()
-        }
-        if let v=view {
-            CidsConnector.sharedInstance().mainVC?.progressHUD?.show(in: v,animated: true)
-        }else {
-            CidsConnector.sharedInstance().mainVC?.progressHUD?.show(in: CidsConnector.sharedInstance().mainVC?.view,animated: true)
-        }
-    })
+            }
+            if let v=view {
+                CidsConnector.sharedInstance().mainVC?.progressHUD?.show(in: v,animated: true)
+            }else {
+                CidsConnector.sharedInstance().mainVC?.progressHUD?.show(in: CidsConnector.sharedInstance().mainVC?.view,animated: true)
+            }
+        })
+    }
 }
 
-public func setProgressInWaitingHUD(_ progress: Float) {
-    lazyMainQueueDispatch({ () -> () in
-        CidsConnector.sharedInstance().mainVC?.progressHUD?.indicatorView=JGProgressHUDRingIndicatorView()
-        CidsConnector.sharedInstance().mainVC?.progressHUD?.progress=progress
-    })
+
+public func forceProgressInWaitingHUD(_ progress: Float) {
+        lazyMainQueueDispatch({ () -> () in
+            CidsConnector.sharedInstance().mainVC?.progressHUD?.indicatorView=JGProgressHUDRingIndicatorView()
+            CidsConnector.sharedInstance().mainVC?.progressHUD?.progress=progress
+        })
+}
+public func setProgressInWaitingHUD(_ progress: Float, forQueue: CancelableOperationQueue) {
+    if (!forQueue.cancelRequested) {
+        forceProgressInWaitingHUD(progress)
+    }
 }
 
 public func hideWaitingHUD(delayedText:String = "", delay:Int = 0) {

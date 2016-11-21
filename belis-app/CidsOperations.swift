@@ -9,17 +9,42 @@
 import Foundation
 import ObjectMapper
 
+public class CancelableOperationQueue: OperationQueue {
+    var cancelRequested=false
+    var postCancelHook: (()->Void)?
+    
+    init(name:String="---", afterCancellation:@escaping (()->Void) ){
+        super.init()
+        super.maxConcurrentOperationCount = 10
+        //setProgressInWaitingHUD(0)
+        postCancelHook=afterCancellation
+        super.name=name
+        print("Start cancelable transaction with the name \(name)")
+    }
+    
+    
+    override  public func cancelAllOperations() {
+        cancelRequested=true
+        super.cancelAllOperations()
+        if let pch=postCancelHook {
+                pch()
+        }
+    }
+}
+
+
+
 class CidsRequestOperation: Operation {
     var sessionFactory=CidsSessionFactory()
-    var qu: OperationQueue
+    var qu: CancelableOperationQueue
     var task: URLSessionDataTask?
     var baseUrl:String=""
     var domain:String="BELIS2"
     var authHeader=""
     var url=""
     
-    init(user: String, pass:String){
-        self.qu=OperationQueue.main
+    init(user: String, pass:String, queue: CancelableOperationQueue){
+        qu=queue
         let loginString = NSString(format: "%@:%@", user, pass)
         let loginData: Data = loginString.data(using: String.Encoding.utf8.rawValue)!
         let base64LoginString = loginData.base64EncodedString(options: [])
@@ -103,10 +128,10 @@ class GetEntityOperation: CidsRequestOperation {
     var id = -1
     var session:Foundation.URLSession?
     var entityName=""
-    var completionHandler: ((_ operation:GetEntityOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: OperationQueue) -> ())?
+    var completionHandler: ((_ operation:GetEntityOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: CancelableOperationQueue) -> ())?
     
-    init(baseUrl: String, domain: String,entityName:String, id: Int, user: String, pass:String, queue: OperationQueue, completionHandler: @escaping (_ operation:GetEntityOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: OperationQueue) -> ()) {
-        super.init(user:user,pass:pass)
+    init(baseUrl: String, domain: String,entityName:String, id: Int, user: String, pass:String, queue: CancelableOperationQueue, completionHandler: @escaping (_ operation:GetEntityOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: CancelableOperationQueue) -> ()) {
+        super.init(user:user,pass:pass,queue:queue)
         self.id=id
         self.qu=queue
         self.entityName=entityName
@@ -116,7 +141,7 @@ class GetEntityOperation: CidsRequestOperation {
     
     override func main() {
         print("do get \(entityName).\(id)")
-        if (self.isCancelled || CidsConnector.sharedInstance().isCancelRequested) {
+        if (self.isCancelled || qu.cancelRequested) {
             return
         }
         else  {
@@ -161,10 +186,10 @@ class GetEntityOperation: CidsRequestOperation {
 }
 class GetAllEntitiesOperation: CidsRequestOperation {
     var entityName=""
-    var completionHandler: ((_ operation:GetAllEntitiesOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: OperationQueue) -> ())?
+    var completionHandler: ((_ operation:GetAllEntitiesOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: CancelableOperationQueue) -> ())?
     
-    init(baseUrl: String, domain: String,entityName:String, user: String, pass:String, queue: OperationQueue, completionHandler: @escaping (_ operation:GetAllEntitiesOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: OperationQueue) -> ()) {
-        super.init(user:user,pass:pass)
+    init(baseUrl: String, domain: String,entityName:String, user: String, pass:String, queue: CancelableOperationQueue, completionHandler: @escaping (_ operation:GetAllEntitiesOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: CancelableOperationQueue) -> ()) {
+        super.init(user:user,pass:pass, queue:queue)
         self.qu=queue
         self.completionHandler=completionHandler
         url="\(baseUrl)/\(domain).\(entityName)?limit=10000000"
@@ -214,7 +239,7 @@ class GetAllEntitiesOperation: CidsRequestOperation {
 class LoginOperation: CidsRequestOperation {
     var completionHandler: ((_ loggedIn: Bool, _ error: Error?) -> ())?
     init(baseUrl: String, domain: String, user: String, pass:String, completionHandler: @escaping (_ loggedIn: Bool, _ error: Error?) -> ()){
-        super.init(user:user,pass:pass)
+        super.init(user:user,pass:pass,queue:CidsConnector.sharedInstance().backgroundQueue)
         url="\(baseUrl)/classes?domain=local&limit=1&offset=0&role=all"
         self.completionHandler=completionHandler
     }
@@ -259,9 +284,10 @@ class LoginOperation: CidsRequestOperation {
 class SearchOperation: CidsRequestOperation {
     var parameters:QueryParameters?
     var completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)?
-    
-    init(baseUrl: String, searchKey:String, user: String, pass:String, queue: OperationQueue, parameters:QueryParameters,completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)!) {
-        super.init(user: user, pass: pass)
+    var searchKey: String
+    init(baseUrl: String, searchKey:String, user: String, pass:String, queue: CancelableOperationQueue, parameters:QueryParameters,completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)!) {
+        self.searchKey=searchKey
+        super.init(user: user, pass: pass, queue:queue)
         self.qu=queue
         self.parameters=parameters
         url="\(baseUrl)/searches/\(searchKey)/results"
@@ -312,12 +338,18 @@ class SearchOperation: CidsRequestOperation {
         task?.resume()
         
     }
+    override func cancel() {
+        super.cancel()
+        self._finished = true
+        
+        print("cancel  \(searchKey) \(self.isCancelled),\(self.isFinished),\(self.isExecuting) ")
+    }
 }
 class ServerActionOperation: CidsRequestOperation {
     var params: ActionParameterContainer?
     var completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)?
     init(baseUrl: String, user: String, pass:String, actionName: String, params: ActionParameterContainer, completionHandler: @escaping (_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void) {
-        super.init(user:user, pass:pass)
+        super.init(user:user, pass:pass, queue:CidsConnector.sharedInstance().backgroundQueue)
         url="\(baseUrl)/actions/\(domain).\(actionName)/tasks"
         self.params=params
         self.completionHandler=completionHandler
@@ -375,7 +407,7 @@ class WebDavUploadImageOperation: CidsRequestOperation {
     var image:UIImage?
     var completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)?
     init(baseUrl: String, user: String, pass:String, fileName: String, image:UIImage, completionHandler: @escaping (_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void) {
-        super.init(user:user, pass:pass)
+        super.init(user:user, pass:pass, queue:CidsConnector.sharedInstance().backgroundQueue)
         url="\(baseUrl)/\(fileName)"
         self.image=image
         self.completionHandler=completionHandler
