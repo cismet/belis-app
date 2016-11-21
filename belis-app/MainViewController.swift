@@ -440,14 +440,14 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @IBAction func searchButtonTabbed(_ sender: AnyObject) {
         removeAllEntityObjects()
         self.tableView.reloadData();
-        CidsConnector.sharedInstance().startCancelableTransaction(name: "Objektsuche", afterCancellation: {
-            CidsConnector.sharedInstance().blockingQueue.cancelAllOperations()
+        let searchQueue=CancelableOperationQueue(name: "Objektsuche", afterCancellation: {
             self.removeAllEntityObjects()
             self.tableView.reloadData();
+            forceProgressInWaitingHUD(0)
             hideWaitingHUD()
         })
         
-        showWaitingHUD(text:"Objektsuche")
+        showWaitingHUD(queue: searchQueue, text:"Objektsuche")
         var mRect : MKMapRect
         if focusToggle.isOn {
             mRect = createFocusRect()
@@ -467,7 +467,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let ewktMapExtent="SRID=4326;POLYGON((\(x1) \(y1),\(x1) \(y2),\(x2) \(y2),\(x2) \(y1),\(x1) \(y1)))";
         
         
-        CidsConnector.sharedInstance().search(ewktMapExtent, leuchtenEnabled: isLeuchtenEnabled, mastenEnabled: isMastenEnabled, mauerlaschenEnabled: isMauerlaschenEnabled, leitungenEnabled: isleitungenEnabled,schaltstellenEnabled: isSchaltstelleEnabled ) {
+        CidsConnector.sharedInstance().search(ewktMapExtent, leuchtenEnabled: isLeuchtenEnabled, mastenEnabled: isMastenEnabled, mauerlaschenEnabled: isMauerlaschenEnabled, leitungenEnabled: isleitungenEnabled,schaltstellenEnabled: isSchaltstelleEnabled, queue: searchQueue ) {
             
             assert(!Thread.isMainThread )
             DispatchQueue.main.async {
@@ -538,15 +538,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             removeAllEntityObjects()
 
            
-            CidsConnector.sharedInstance().startCancelableTransaction(name: "Arbeitsaufträge suchen", afterCancellation: {
-                    CidsConnector.sharedInstance().blockingQueue.cancelAllOperations()
+            let aaSearchQueue=CancelableOperationQueue(name: "Arbeitsaufträge suchen", afterCancellation: {
                     self.selectArbeitsauftrag(nil,showActivityIndicator: false)
                     self.removeAllEntityObjects()
+                    forceProgressInWaitingHUD(0)
                     hideWaitingHUD()
             })
             
-            showWaitingHUD(text:"Arbeitsaufträge suchen")
-            CidsConnector.sharedInstance().searchArbeitsauftraegeForTeam(team) { () -> () in
+            showWaitingHUD(queue: aaSearchQueue, text:"Arbeitsaufträge suchen")
+            CidsConnector.sharedInstance().searchArbeitsauftraegeForTeam(team, queue: aaSearchQueue) { () -> () in
                 DispatchQueue.main.async {
                     CidsConnector.sharedInstance().sortSearchResults()
                     self.tableView.reloadData();
@@ -685,7 +685,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         CidsConnector.sharedInstance().selectedArbeitsauftrag=arbeitsauftrag
         if showActivityIndicator {
-            showWaitingHUD()
+            showWaitingHUD(queue: CancelableOperationQueue(name:"dummy", afterCancellation: {}))
         }
         let overlays=self.mapView.overlays
         self.mapView.removeOverlays(overlays)
