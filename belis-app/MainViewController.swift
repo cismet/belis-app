@@ -439,8 +439,13 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     //MARK: - IBActions
     @IBAction func searchButtonTabbed(_ sender: AnyObject) {
         removeAllEntityObjects()
-        
         self.tableView.reloadData();
+        CidsConnector.sharedInstance().startCancelableTransaction(name: "Objektsuche", afterCancellation: {
+            CidsConnector.sharedInstance().blockingQueue.cancelAllOperations()
+            self.removeAllEntityObjects()
+            self.tableView.reloadData();
+            hideWaitingHUD()
+        })
         
         showWaitingHUD(text:"Objektsuche")
         var mRect : MKMapRect
@@ -531,6 +536,15 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if let team = CidsConnector.sharedInstance().selectedTeam {
             selectArbeitsauftrag(nil,showActivityIndicator: false)
             removeAllEntityObjects()
+
+           
+            CidsConnector.sharedInstance().startCancelableTransaction(name: "Arbeitsaufträge suchen", afterCancellation: {
+                    CidsConnector.sharedInstance().blockingQueue.cancelAllOperations()
+                    self.selectArbeitsauftrag(nil,showActivityIndicator: false)
+                    self.removeAllEntityObjects()
+                    hideWaitingHUD()
+            })
+            
             showWaitingHUD(text:"Arbeitsaufträge suchen")
             CidsConnector.sharedInstance().searchArbeitsauftraegeForTeam(team) { () -> () in
                 DispatchQueue.main.async {

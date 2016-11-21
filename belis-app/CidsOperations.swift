@@ -45,8 +45,8 @@ class CidsRequestOperation: Operation {
     }
     fileprivate var _finished : Bool=false
     
-    
     override func cancel(){
+        super.cancel()
         if let t=self.task {
             t.cancel()
         }
@@ -87,7 +87,6 @@ class CidsRequestOperation: Operation {
     }
     
 }
-
 class PingOperation: CidsRequestOperation {
 //    init(baseUrl: String, domain: String,entityName:String, id: Int, user: String, pass:String, queue: NSOperationQueue, completionHandler: (operation:GetEntityOperation, data : NSData!, response : NSURLResponse!, error : NSError!, queue: NSOperationQueue) -> ()) {
 //        super.init(user:user,pass:pass)
@@ -102,21 +101,22 @@ class PingOperation: CidsRequestOperation {
 
 class GetEntityOperation: CidsRequestOperation {
     var id = -1
-    
+    var session:Foundation.URLSession?
     var entityName=""
-    
     var completionHandler: ((_ operation:GetEntityOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: OperationQueue) -> ())?
     
     init(baseUrl: String, domain: String,entityName:String, id: Int, user: String, pass:String, queue: OperationQueue, completionHandler: @escaping (_ operation:GetEntityOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: OperationQueue) -> ()) {
         super.init(user:user,pass:pass)
         self.id=id
         self.qu=queue
+        self.entityName=entityName
         self.completionHandler=completionHandler
         url="\(baseUrl)/\(domain).\(entityName)/\(id)"
     }
     
     override func main() {
-        if self.isCancelled {
+        print("do get \(entityName).\(id)")
+        if (self.isCancelled || CidsConnector.sharedInstance().isCancelRequested) {
             return
         }
         else  {
@@ -127,32 +127,9 @@ class GetEntityOperation: CidsRequestOperation {
             
             request.addValue(authHeader, forHTTPHeaderField: "Authorization") //correct passwd
             request.addValue("application/json", forHTTPHeaderField: "Accept")
-            let session=sessionFactory.getNewCidsSession()
-            /* Start a new Task */
-//            task = session.dataTask(with: request, completionHandler: { (data : Data?, response : URLResponse?, error : NSError?) -> Void in
-//                if let handler=self.completionHandler {
-//                    handler(operation: self, data: data, response: response, error: error, queue: self.qu)
-//                }
-//                else {
-//                    if (error == nil) {
-//                        // Success
-//                        let statusCode = (response as! HTTPURLResponse).statusCode
-//                        print("URL Session Task Succeeded: HTTP \(statusCode)")
-//                    }
-//                    else {
-//                        // Failure
-//                        print("URL Session Task Failed: %@", error!.localizedDescription);
-//                    }
-//                }
-//                
-//                
-//                self.isExecuting=false
-//                self.isFinished = true
-//                self.task=nil
-//            })
+            session=sessionFactory.getNewCidsSession()
             
-            
-            task = session.dataTask(with: request, completionHandler: { (data, response, error) in
+            task = session?.dataTask(with: request, completionHandler: { (data, response, error) in
                 if let handler=self.completionHandler {
                     handler(self, data, response, error, self.qu)
                 }
@@ -168,18 +145,20 @@ class GetEntityOperation: CidsRequestOperation {
                     }
                 }
                 
-                
                 self.isExecuting=false
                 self.isFinished = true
                 self.task=nil
             })
-            if let t=self.task {
-                t.resume()
-            }
+            task?.resume()
         }
     }
-}
+    override func cancel() {
+        super.cancel()
+        self._finished = true
 
+        print("cancel get \(entityName).\(id) \(self.isCancelled),\(self.isFinished),\(self.isExecuting) ")
+    }
+}
 class GetAllEntitiesOperation: CidsRequestOperation {
     var entityName=""
     var completionHandler: ((_ operation:GetAllEntitiesOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: OperationQueue) -> ())?
@@ -232,7 +211,6 @@ class GetAllEntitiesOperation: CidsRequestOperation {
         }
     }
 }
-
 class LoginOperation: CidsRequestOperation {
     var completionHandler: ((_ loggedIn: Bool, _ error: Error?) -> ())?
     init(baseUrl: String, domain: String, user: String, pass:String, completionHandler: @escaping (_ loggedIn: Bool, _ error: Error?) -> ()){
@@ -278,14 +256,13 @@ class LoginOperation: CidsRequestOperation {
         }
     }
 }
-
-
 class SearchOperation: CidsRequestOperation {
     var parameters:QueryParameters?
     var completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)?
     
-    init(baseUrl: String, searchKey:String, user: String, pass:String, parameters:QueryParameters,completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)!) {
+    init(baseUrl: String, searchKey:String, user: String, pass:String, queue: OperationQueue, parameters:QueryParameters,completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)!) {
         super.init(user: user, pass: pass)
+        self.qu=queue
         self.parameters=parameters
         url="\(baseUrl)/searches/\(searchKey)/results"
         self.completionHandler=completionHandler
@@ -312,7 +289,7 @@ class SearchOperation: CidsRequestOperation {
         request.httpBody=try? JSONSerialization.data(withJSONObject: y, options: JSONSerialization.WritingOptions())
         
         /* Start a new Task */
-        let task = session.dataTask(with: request, completionHandler: { (data , response , error ) in
+        task = session.dataTask(with: request, completionHandler: { (data , response , error ) in
             if let handler=self.completionHandler {
                 handler(data, response, error)
             }
@@ -332,13 +309,10 @@ class SearchOperation: CidsRequestOperation {
             self.isFinished = true
             self.task=nil
         })
-        task.resume()
+        task?.resume()
         
     }
 }
-
-
-
 class ServerActionOperation: CidsRequestOperation {
     var params: ActionParameterContainer?
     var completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)?
@@ -373,7 +347,7 @@ class ServerActionOperation: CidsRequestOperation {
         
         
         request.httpBody = bodyString.data(using: String.Encoding.utf8, allowLossyConversion: true)
-        let task = session.dataTask(with: request, completionHandler: { (data , response , error ) -> Void in
+        task = session.dataTask(with: request, completionHandler: { (data , response , error ) -> Void in
             if let handler=self.completionHandler {
                 handler(data, response, error)
             }
@@ -394,10 +368,9 @@ class ServerActionOperation: CidsRequestOperation {
             self.isFinished = true
             self.task=nil
         })
-        task.resume()
+        task?.resume()
     }
 }
-
 class WebDavUploadImageOperation: CidsRequestOperation {
     var image:UIImage?
     var completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)?
@@ -418,7 +391,7 @@ class WebDavUploadImageOperation: CidsRequestOperation {
         
         let jpg=UIImageJPEGRepresentation(image!, CGFloat(0.9))
         
-        let task = session.uploadTask(with: request, from: jpg, completionHandler: {
+        task = session.uploadTask(with: request, from: jpg, completionHandler: {
             (data, response, error) -> Void in
             if let handler=self.completionHandler {
                 handler(data, response, error)
@@ -440,7 +413,7 @@ class WebDavUploadImageOperation: CidsRequestOperation {
             self.task=nil
         }) 
         
-        task.resume()
+        task?.resume()
     }
 }
 

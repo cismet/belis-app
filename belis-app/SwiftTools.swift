@@ -262,8 +262,17 @@ public func lazyMainQueueDispatch(_ closure: @escaping ()->()){
     }
 }
 
-public func showWaitingHUD(text:String = "", view:UIView? = nil,indeterminate:Bool = true) {
+public func showWaitingHUD(text:String = "", view:UIView? = nil,indeterminate:Bool = true ) {
     
+    let cancelTap: ((JGProgressHUD?)->Void) = { hud in
+        CidsConnector.sharedInstance().isCancelRequested=true
+        if let pch=CidsConnector.sharedInstance().postCancelHook {
+            pch()
+        }
+    }
+    
+    CidsConnector.sharedInstance().mainVC?.progressHUD?.tapOnHUDViewBlock = cancelTap
+
     lazyMainQueueDispatch({ () -> () in
         if text=="" {
             CidsConnector.sharedInstance().mainVC?.progressHUD?.textLabel.text=nil
@@ -284,7 +293,6 @@ public func showWaitingHUD(text:String = "", view:UIView? = nil,indeterminate:Bo
 
 public func setProgressInWaitingHUD(_ progress: Float) {
     lazyMainQueueDispatch({ () -> () in
-        print(progress)
         CidsConnector.sharedInstance().mainVC?.progressHUD?.indicatorView=JGProgressHUDRingIndicatorView()
         CidsConnector.sharedInstance().mainVC?.progressHUD?.progress=progress
     })
