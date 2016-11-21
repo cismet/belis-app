@@ -46,6 +46,7 @@ class CidsRequestOperation: Operation {
     fileprivate var _finished : Bool=false
     
     override func cancel(){
+        super.cancel()
         if let t=self.task {
             t.cancel()
         }
@@ -100,21 +101,22 @@ class PingOperation: CidsRequestOperation {
 
 class GetEntityOperation: CidsRequestOperation {
     var id = -1
-    
+    var session:Foundation.URLSession?
     var entityName=""
-    
     var completionHandler: ((_ operation:GetEntityOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: OperationQueue) -> ())?
     
     init(baseUrl: String, domain: String,entityName:String, id: Int, user: String, pass:String, queue: OperationQueue, completionHandler: @escaping (_ operation:GetEntityOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: OperationQueue) -> ()) {
         super.init(user:user,pass:pass)
         self.id=id
         self.qu=queue
+        self.entityName=entityName
         self.completionHandler=completionHandler
         url="\(baseUrl)/\(domain).\(entityName)/\(id)"
     }
     
     override func main() {
-        if self.isCancelled {
+        print("do get \(entityName).\(id)")
+        if (self.isCancelled || CidsConnector.sharedInstance().isCancelRequested) {
             return
         }
         else  {
@@ -125,9 +127,9 @@ class GetEntityOperation: CidsRequestOperation {
             
             request.addValue(authHeader, forHTTPHeaderField: "Authorization") //correct passwd
             request.addValue("application/json", forHTTPHeaderField: "Accept")
-            let session=sessionFactory.getNewCidsSession()
+            session=sessionFactory.getNewCidsSession()
             
-            task = session.dataTask(with: request, completionHandler: { (data, response, error) in
+            task = session?.dataTask(with: request, completionHandler: { (data, response, error) in
                 if let handler=self.completionHandler {
                     handler(self, data, response, error, self.qu)
                 }
@@ -143,13 +145,18 @@ class GetEntityOperation: CidsRequestOperation {
                     }
                 }
                 
-                
                 self.isExecuting=false
                 self.isFinished = true
                 self.task=nil
             })
             task?.resume()
         }
+    }
+    override func cancel() {
+        super.cancel()
+        self._finished = true
+
+        print("cancel get \(entityName).\(id) \(self.isCancelled),\(self.isFinished),\(self.isExecuting) ")
     }
 }
 class GetAllEntitiesOperation: CidsRequestOperation {

@@ -446,6 +446,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             self.tableView.reloadData();
             hideWaitingHUD()
         })
+        
         showWaitingHUD(text:"Objektsuche")
         var mRect : MKMapRect
         if focusToggle.isOn {

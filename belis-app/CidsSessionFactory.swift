@@ -9,12 +9,10 @@
 import Foundation
 
 class CidsSessionFactory : NSObject, URLSessionDelegate{
-    let queue = OperationQueue()
     var localServerCertData:Data?
     var identityAndTrustForCSC:IdentityAndTrust?
     override init() {
         super.init()
-        queue.maxConcurrentOperationCount=10
         localServerCertData = try? Data(contentsOf: URL(fileURLWithPath: CidsConnector.sharedInstance().serverCertPath))
         let clientCertData = try? Data(contentsOf: URL(fileURLWithPath: CidsConnector.sharedInstance().clientCertPath));
         if let ccert=clientCertData {
@@ -26,20 +24,20 @@ class CidsSessionFactory : NSObject, URLSessionDelegate{
     func getNewCidsSession() -> Foundation.URLSession{
         let sessionConfig = URLSessionConfiguration.ephemeral
         sessionConfig.requestCachePolicy = NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData
-        return Foundation.URLSession(configuration: sessionConfig, delegate: self, delegateQueue: queue)
+        return Foundation.URLSession(configuration: sessionConfig, delegate: self, delegateQueue: CidsConnector.sharedInstance().cidsURLSessionQueue)
     }
     
     func getPickyNewCidsSession() -> Foundation.URLSession{
         let sessionConfig = URLSessionConfiguration.ephemeral
         sessionConfig.requestCachePolicy = NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData
         sessionConfig.timeoutIntervalForResource=10
-        return Foundation.URLSession(configuration: sessionConfig, delegate: self, delegateQueue: queue)
+        return Foundation.URLSession(configuration: sessionConfig, delegate: self, delegateQueue: CidsConnector.sharedInstance().cidsPickyURLSessionQueue)
     }
     
     func getNewWebDavSession() -> Foundation.URLSession{
         let sessionConfig = URLSessionConfiguration.ephemeral
         sessionConfig.requestCachePolicy = NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData
-        return Foundation.URLSession(configuration: sessionConfig, delegate: WebDavUrlSessionDelegate(), delegateQueue: queue)
+        return Foundation.URLSession(configuration: sessionConfig, delegate: WebDavUrlSessionDelegate(), delegateQueue: CidsConnector.sharedInstance().webdavURLSessionQueue)
     }
     
 

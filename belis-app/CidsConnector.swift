@@ -122,8 +122,12 @@ open class CidsConnector {
     
     let defaultErrorMessageNoFurtherInformation="no further Information available. Sorry :-/"
     
-    let blockingQueue = OperationQueue()
+    var blockingQueue = OperationQueue()
     let backgroundQeue = OperationQueue()
+    
+    let cidsURLSessionQueue = OperationQueue()
+    let cidsPickyURLSessionQueue = OperationQueue()
+    let webdavURLSessionQueue = OperationQueue()
     
     var searchResults=[Entity: [GeoBaseEntity]]()
     
@@ -158,6 +162,10 @@ open class CidsConnector {
     // MARK: - constructor
     init(){
         blockingQueue.name="blockingQueue"
+        cidsURLSessionQueue.maxConcurrentOperationCount=10
+        cidsPickyURLSessionQueue.maxConcurrentOperationCount=10
+        webdavURLSessionQueue.maxConcurrentOperationCount=10
+
         let storedTLSEnabled: AnyObject? = UserDefaults.standard.object(forKey: "tlsEnabled") as AnyObject?
         if let storedTLSEnabledAsBool=storedTLSEnabled as? Bool {
             tlsEnabled=storedTLSEnabledAsBool
@@ -437,8 +445,8 @@ open class CidsConnector {
                 print("Arbeitsaufträge Search kein Fehler")
                 let statusCode = (response as! HTTPURLResponse).statusCode
                 print("URL Session Task Succeeded: HTTP \(statusCode)")
-                
-                if let checkeddata: [String : AnyObject] = getJson(data!) {
+                if (!isCancelRequested) {
+                    if let checkeddata: [String : AnyObject] = getJson(data!) {
                     let json =  checkeddata["$collection"] as! [[String : AnyObject]];
                     if let nodes = Mapper<CidsObjectNode>().mapArray(JSONArray: json) {
                         
@@ -449,6 +457,7 @@ open class CidsConnector {
                             showWaitingHUD(text: "Arbeitsauftrag laden", indeterminate: false )
                         }
                         self.blockingQueue.cancelAllOperations()
+                        self.blockingQueue=OperationQueue()
                         self.searchResults=[Entity: [GeoBaseEntity]]()
                         self.start=CidsConnector.currentTimeMillis();
                         self.blockingQueue.maxConcurrentOperationCount = 10
@@ -457,7 +466,8 @@ open class CidsConnector {
                         }
                         else {
                             var i=0
-                            for node in nodes {
+                            if (!isCancelRequested) {
+                                for node in nodes {
                                 let rightEntity=Entity.byClassId(node.classId!)!
                                 assert(rightEntity==Entity.ARBEITSAUFTRAEGE)
                                 let classKey=rightEntity.tableName()
@@ -473,8 +483,8 @@ open class CidsConnector {
                                             i=i+1
                                             let progress=Float(i)/Float(nodes.count)
                                             setProgressInWaitingHUD(progress)
-                                            
-                                            if let auftrag=aa {
+                                            if (!isCancelRequested) {
+                                                if let auftrag=aa {
                                                 if let _=self.searchResults[Entity.ARBEITSAUFTRAEGE] {
                                                     self.searchResults[Entity.ARBEITSAUFTRAEGE]!.append(auftrag)
                                                 }
@@ -501,7 +511,7 @@ open class CidsConnector {
                                                     }
                                                 }
                                             }
-                                            
+                                            }
                                             if self.blockingQueue.operationCount==1 {
                                                 let duration = (CidsConnector.currentTimeMillis() - self.start)
                                                 handler();
@@ -525,12 +535,14 @@ open class CidsConnector {
                                     op.enqueue()
                                 }
                             }
+                            }
                         }
                     }
                 }
+                }
             }
             else {
-                print("Arbeitsaufträge Search Fehler")
+                print("Arbeitsaufträge Search Cancelled oder Fehler")
             }
             
         }
@@ -674,6 +686,7 @@ open class CidsConnector {
                             }
                             
                             self.blockingQueue.cancelAllOperations()
+                            self.blockingQueue=OperationQueue()
                             self.searchResults=[Entity: [GeoBaseEntity]]()
                             self.start=CidsConnector.currentTimeMillis();
                             self.blockingQueue.maxConcurrentOperationCount = 10
@@ -749,7 +762,6 @@ open class CidsConnector {
                                             op.enqueue()
                                         }
                                     }
-                                    print("all nodes processed (cancelled=\(isCancelRequested))")
                                 }
                             }
                         }
