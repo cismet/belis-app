@@ -60,6 +60,7 @@ open class ObjectAction: NSObject {
         //no assertion Failure because sometimes it's better to just do nothing ;-)
     }
     
+    
     func getPreferredSize()->CGSize {
         return CGSize(width: 400, height: 500)
     }
