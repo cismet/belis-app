@@ -225,6 +225,7 @@ class ProtokollStatusUpdateAction : ObjectAction {
     init(protokoll: Arbeitsprotokoll){
         super.init()
         self.protokoll=protokoll
+        formVC.preSaveCheck=preSaveCheck
     }
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
@@ -280,40 +281,50 @@ class ProtokollStatusUpdateAction : ObjectAction {
         return CGSize(width: 500, height: 460)
     }
     
+    func preSaveCheck() -> CheckResult {
+        let content = formVC.form.formValues()
+        if (content[PT.MONTEUR.rawValue] as?  String) != nil {
+            return CheckResult(passed: true)
+        }
+        else {
+            return CheckResult(passed:false, title: "Monteur angeben", withMessage: "Bei einer Statusänderung muss der Namen des Monteurs angegeben werden.")
+        }
+    }
+    
+   
     override func save(){
         if arbeitsprotokoll_id != -1 {
-            let content = formVC.form.formValues() 
-            showWaiting()
-
+            let content = formVC.form.formValues()
+            
             let apc=getParameterContainer()
             //------------------
             if let mont=content[PT.MONTEUR.rawValue] as?  String {
+                showWaiting()
+
                 apc.append(PT.MONTEUR.rawValue, value: mont as AnyObject)
                 CidsConnector.sharedInstance().lastMonteur=mont
                 UserDefaults.standard.set(mont, forKey: "lastMonteur")
-            }
-
-            //------------------
-            let date=content[PT.DATUM.rawValue]!
-            let nowDouble = date.timeIntervalSince1970
-            let millis = Int64(nowDouble!*1000) + Int64(nowDouble!/1000)
-            let param = "\(millis)"
-            apc.append(PT.DATUM.rawValue, value: param as AnyObject)
-            //------------------
-            if let sid=content[PT.STATUS.rawValue]{
-                apc.append(PT.STATUS.rawValue, value: sid)
-            }
-            //------------------
-            if let bem=content[PT.BEMERKUNG.rawValue] {
-                apc.append(PT.BEMERKUNG.rawValue, value: bem)
-            }
-            //------------------
-            if let mat=content[PT.MATERIAL.rawValue] {
-                apc.append(PT.MATERIAL.rawValue, value: mat)
-            }
-            //------------------
-            CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollStatusAenderung", params: apc, handler: defaultAfterSaveHandler)
-           
+                //------------------
+                let date=content[PT.DATUM.rawValue]!
+                let nowDouble = date.timeIntervalSince1970
+                let millis = Int64(nowDouble!*1000) + Int64(nowDouble!/1000)
+                let param = "\(millis)"
+                apc.append(PT.DATUM.rawValue, value: param as AnyObject)
+                //------------------
+                if let sid=content[PT.STATUS.rawValue]{
+                    apc.append(PT.STATUS.rawValue, value: sid)
+                }
+                //------------------
+                if let bem=content[PT.BEMERKUNG.rawValue] {
+                    apc.append(PT.BEMERKUNG.rawValue, value: bem)
+                }
+                //------------------
+                if let mat=content[PT.MATERIAL.rawValue] {
+                    apc.append(PT.MATERIAL.rawValue, value: mat)
+                }
+                //------------------
+                CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollStatusAenderung", params: apc, handler: defaultAfterSaveHandler)
+            } 
         }
     }
 }
