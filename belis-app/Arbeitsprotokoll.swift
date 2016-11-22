@@ -11,14 +11,14 @@ import ObjectMapper
 import MGSwipeTableCell
 import SwiftForms
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
-  switch (lhs, rhs) {
-  case let (l?, r?):
-    return l < r
-  case (nil, _?):
-    return true
-  default:
-    return false
-  }
+    switch (lhs, rhs) {
+    case let (l?, r?):
+        return l < r
+    case (nil, _?):
+        return true
+    default:
+        return false
+    }
 }
 
 
@@ -35,8 +35,8 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
     
     static var statusIcons: [String:String]=["0":"🕒","1":"✅","2":"❗️"]
     static var statusColors: [String:UIColor]=["0":UIColor(red: 253.0/255.0, green: 173.0/255.0, blue: 0.0/255.0, alpha: 1.0),
-        "1":UIColor(red: 168.0/255.0, green: 202.0/255.0, blue: 39.0/255.0, alpha: 1.0),
-        "2":UIColor(red: 247.0/255.0, green: 68.0/255.0, blue: 68.0/255.0, alpha: 1.0)]
+                                               "1":UIColor(red: 168.0/255.0, green: 202.0/255.0, blue: 39.0/255.0, alpha: 1.0),
+                                               "2":UIColor(red: 247.0/255.0, green: 68.0/255.0, blue: 68.0/255.0, alpha: 1.0)]
     
     var standort: Standort?
     var mauerlasche: Mauerlasche?
@@ -100,7 +100,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         veranlassungsnummer <- map["veranlassungsnummer"]
         protokollnummer <- map["protokollnummer"]
         aktionen <- map["n_aktionen"]
-
+        
         standort <- map["fk_standort"]
         leuchte <- map["fk_leuchte"]
         mauerlasche <- map["fk_mauerlasche"]
@@ -108,7 +108,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
         abzweigdose <- map["fk_abzweigdose"]
         schaltstelle <- map["fk_schaltstelle"]
         standaloneGeom <- map["fk_geometrie"]
-       
+        
         //Muss an den Schluss wegen by Value übergabe des mapObjects -.-
         //es ist nur ein slot gefüllt
         if let gbe=standort {
@@ -146,7 +146,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
             detailObjekt="Freie Geometrie"
             attachedGeoBaseEntity=gbe
         }
-       
+        
     }
     override func getType() -> Entity {
         return Entity.PROTOKOLLE
@@ -212,6 +212,9 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
             nr="\(n)"
         }
         data["main"]?.append(DoubleTitledInfoCellData(titleLeft: "Nummer",dataLeft: nr,titleRight: "Fachobjekt",dataRight: attachedGeoBaseEntity?.getAnnotationTitle() ?? "-"))
+        if (attachedGeoBaseEntity != nil && detailObjekt != nil) {
+            data["main"]?.append(SimpleInfoCellDataWithDetailsDrivenByWholeObject(data: detailObjekt!,detailObject: attachedGeoBaseEntity!, showSubActions: true))
+        }
         if let vnr = veranlassungsnummer {
             if let veranlassung=CidsConnector.sharedInstance().veranlassungsCache[vnr]{
                 let veranlassungDetails: [String: [CellData]] = veranlassung.getAllData()
@@ -237,7 +240,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
             
         }
         
-       
+        
         if aktionen.count>0 {
             data["Aktionen"]=[]
         }
@@ -249,7 +252,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
                     aktionDetails["main"]?.append(SingleTitledInfoCellData(title: "von",data: von))
                     aktionDetails["main"]?.append(SingleTitledInfoCellData(title: "nach",data: nach))
                     data["Aktionen"]?.append(SingleTitledInfoCellDataWithDetails(title: aktionstitle,data: nach,details: aktionDetails,sections: ["main"]))
-
+                    
                 }
                 else if let von=aktion.alt{
                     data["Aktionen"]?.append(SingleTitledInfoCellData(title: aktionstitle,data: von))
@@ -291,7 +294,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
                 detailNC.preferredContentSize = oAction.getPreferredSize()
                 
                 mainVC.present(detailNC, animated: true, completion: nil)
-
+                
             }
             
             return true
@@ -320,7 +323,7 @@ class Arbeitsprotokoll : GeoBaseEntity, CellInformationProviderProtocol, CellDat
                 }
             }
             return true
-        
+            
         })
         return [status,actions]
     }
