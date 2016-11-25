@@ -11,7 +11,7 @@
 					<key>kind</key>
 					<string>software-package</string>
 					<key>url</key>
-					<string>https://dl.dropboxusercontent.com/u/8114622/belisDeployments/bootstrap-3.3.2/docs/examples/cover/belis-app.ipa</string>
+					<string>http://cismet.github.io/belis-app/belis-app.ipa</string>
 				</dict>
 			</array>
 			<key>metadata</key>
