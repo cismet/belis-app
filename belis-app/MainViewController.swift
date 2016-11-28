@@ -935,7 +935,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
             if let actionProvider=gbe as? ActionProvider {
                 detailVC.actions=actionProvider.getAllActions()
-                let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.action, target: detailVC, action:Selector(("moreAction")))
+                let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.action, target: detailVC, action:#selector(DetailVC.moreAction))
                 detailVC.navigationItem.rightBarButtonItem = action
             }
             

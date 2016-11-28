@@ -114,7 +114,7 @@ open class CidsConnector {
     }
     
     // MARK: - other variables
-    fileprivate var login : String!
+    var login : String!
     fileprivate var password : String!
     fileprivate let domain = "BELIS2"
     

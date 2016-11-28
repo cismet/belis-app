@@ -338,6 +338,7 @@ class Leuchte : GeoBaseEntity,  CellInformationProviderProtocol, CellDataProvide
         
         var actions:[BaseEntityAction]=[]
         
+        actions.append(FileInstigationAction(yourself: self))
         actions.append(TakeFotoAction(yourself: self))
         actions.append(ChooseFotoAction(yourself: self))
         
