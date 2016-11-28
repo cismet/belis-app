@@ -95,7 +95,7 @@ class SimpleInfoCellDataWithDetailsDrivenByWholeObject : CellData,SimpleCellActi
         detailVC.objectToShow=detailObject
         if showSubActions {
             if let actionProvider = detailObject as? ActionProvider  {
-                let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.action, target: detailVC, action:Selector(("moreAction")))
+                let action = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.action, target: detailVC, action:#selector(DetailVC.moreAction))
                 detailVC.navigationItem.rightBarButtonItem = action
                 detailVC.actions=actionProvider.getAllActions()
             }
