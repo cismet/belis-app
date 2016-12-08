@@ -9,7 +9,7 @@
 import Foundation
 import ObjectMapper
 
-class StandaloneGeom: GeoBaseEntity, ObjectActionProvider {
+class StandaloneGeom: GeoBaseEntity, ObjectActionProvider, CellDataProvider {
     var dokumente: [DMSUrl] = []
     var bezeichnung: String?
     
