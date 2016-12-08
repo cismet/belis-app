@@ -19,7 +19,7 @@ open class ObjectAction: NSObject {
     var mainVC: UIViewController?
     var sender: UIView?
     var formVC: GenericFormViewController!
-    
+    let statusManagingSectionsHeight=150
     enum STATUSPT:String {
         case MONTEUR
         case DATUM
@@ -103,8 +103,6 @@ open class ObjectAction: NSObject {
         sectionStatus1.rows.append(row)
         
         return [sectionStatus,sectionStatus1]
-
-
     }
     
     func saveStatus(apc:ActionParameterContainer) {
