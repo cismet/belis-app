@@ -34,6 +34,8 @@ class AnstricharbeitenAction : ObjectAction {
         return form
     }
     
+    
+    
     override func getPreferredSize()->CGSize {
         return CGSize(width: 500, height: 100)
     }

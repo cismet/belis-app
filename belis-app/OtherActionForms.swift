@@ -214,7 +214,6 @@ class SchaltstellenRevisionAction : ObjectAction {
 
 
 class ProtokollStatusUpdateAction : ObjectAction {
-     var protokoll: Arbeitsprotokoll!
     enum PT:String {
         case MONTEUR
         case DATUM
@@ -239,7 +238,7 @@ class ProtokollStatusUpdateAction : ObjectAction {
             return "\(s?.bezeichnung ?? "???")"
             }
         row.configuration.cell.appearance = ["segmentedControl.tintColor" : UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)]
-        if let statid=protokoll.status?.id {
+        if let statid=protokoll?.status?.id {
             row.value="\(statid)" as AnyObject?
         }
         section0.rows.append(row)
@@ -247,14 +246,14 @@ class ProtokollStatusUpdateAction : ObjectAction {
         let section1 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
         row = FormRowDescriptor(tag: PT.MONTEUR.rawValue, type: .text, title: "Monteur")
         row.configuration.cell.appearance = ["textField.placeholder" : "Monteurname" as AnyObject, "textField.textAlignment" : NSTextAlignment.right.rawValue as AnyObject]
-        if let mont=protokoll.monteur {
+        if let mont=protokoll?.monteur {
             row.value=mont as AnyObject?
         } else {
             row.value=CidsConnector.sharedInstance().lastMonteur as AnyObject?
         }
         section1.rows.append(row)
         row = FormRowDescriptor(tag: PT.DATUM.rawValue, type: .date, title: "Datum")
-        if let dat=protokoll.datum {
+        if let dat=protokoll?.datum {
             row.value=dat as AnyObject?
         }
         else {
@@ -264,13 +263,13 @@ class ProtokollStatusUpdateAction : ObjectAction {
         let section2 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
         row = FormRowDescriptor(tag: PT.BEMERKUNG.rawValue, type: .multilineText, title: "")
         section2.headerTitle = "Bemerkung"
-        row.value=protokoll.bemerkung as AnyObject?
+        row.value=protokoll?.bemerkung as AnyObject?
         section2.rows.append(row)
         let section3 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
         row = FormRowDescriptor(tag: PT.MATERIAL.rawValue, type: .multilineText, title: "")
         section3.headerTitle = "Material"
         section3.rows.append(row)
-        row.value=protokoll.material as AnyObject?
+        row.value=protokoll?.material as AnyObject?
         
         form.sections=[section1,section0,section2,section3]
         return form

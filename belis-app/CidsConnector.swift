@@ -156,6 +156,7 @@ open class CidsConnector {
     var sortedArbeitsprotokollStatusListKeys: [String]=[]
     var arbeitsprotokollStatusList: [String:ArbeitsprotokollStatus]=[:]
     
+    
     // MARK: - constructor
     init(){
         cidsURLSessionQueue.maxConcurrentOperationCount=10

@@ -36,14 +36,35 @@ class LeuchtenerneuerungAction : ObjectAction {
             return "\(typ?.leuchtenTyp ?? "unbekannter Typ") - \(typ?.fabrikat ?? "unbekanntes Fabrikat")"
             }
         section0.rows.append(row)
-        
+
         form.sections = [section0]
+        form.sections.append(contentsOf: getStatusManagingSections())
+
+        
+        
         return form
         
     }
-    
+// EUREKA Form Syntax
+//    func getForm()->Form {
+//        return Form()
+//            +++ Section()
+//            <<< DateRow(){
+//                $0.title = "Inbetriebnahme"
+//                $0.value = Date(timeIntervalSinceReferenceDate: 0)
+//            }
+//            //Better Picker Support when #808 is merged in
+//            <<< PushRow<String>("Leuchtentyp") {
+//                $0.title = $0.tag
+//                $0.options = ["A","B","C","D"]
+//                $0.value = "A"
+//                }.onPresent({ (_, vc) in
+//                    vc.enableDeselection = false
+//                })
+//    }
+//    
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 100)
+        return CGSize(width: 500, height: 250)
     }
     
     override func save(){
@@ -61,7 +82,9 @@ class LeuchtenerneuerungAction : ObjectAction {
             if let x=content[PT.LEUCHTENTYP.rawValue] {
                 apc.append(PT.LEUCHTENTYP.rawValue, value: x)
             }
-
+            
+            saveStatus(apc:apc)
+            
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollLeuchteLeuchtenerneuerung", params: apc, handler: defaultAfterSaveHandler)
         }
     }
