@@ -13,12 +13,18 @@ import JGProgressHUD
 open class ObjectAction: NSObject {
     let PROTOKOLL_ID="PROTOKOLL_ID"
     var arbeitsprotokoll_id = -1
-    
+    var protokoll: Arbeitsprotokoll?
     var title:String = ""
     var style: UIAlertActionStyle = UIAlertActionStyle.default
     var mainVC: UIViewController?
     var sender: UIView?
     var formVC: GenericFormViewController!
+    let statusManagingSectionsHeight=150
+    enum STATUSPT:String {
+        case MONTEUR
+        case DATUM
+        case STATUS
+    }
     
     override init() {
         super.init()
@@ -44,6 +50,80 @@ open class ObjectAction: NSObject {
             assertionFailure("sender was Null, therefore Boom")
         }
         
+    }
+    
+    func getStatusManagingSections() -> [FormSectionDescriptor] {
+        
+        let sectionStatus = FormSectionDescriptor(headerTitle: "Statusupdate", footerTitle: nil)
+        sectionStatus.headerTitle = "Status"
+        var row = FormRowDescriptor(tag: STATUSPT.STATUS.rawValue, type: .segmentedControl, title: "")
+        var appearance: [String : AnyObject]=["segmentedControl.tintColor" : UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)]
+        
+        row.configuration.selection.options = CidsConnector.sharedInstance().sortedArbeitsprotokollStatusListKeys as [AnyObject]
+        row.configuration.selection.optionTitleClosure = { value in
+            let s=CidsConnector.sharedInstance().arbeitsprotokollStatusList[value as! String]
+            return "\(s?.bezeichnung ?? "???")"
+        }
+        
+        var idx=0
+        if let statid=protokoll?.status?.id {
+            row.value="\(statid)" as AnyObject
+            idx = 0
+            if let statusIndex=Int((protokoll?.status?.schluessel)!) {
+                idx=statusIndex
+            }
+            else {
+                idx = -1
+            }
+        }
+        else {
+            row.value="\(CidsConnector.sharedInstance().arbeitsprotokollStatusList[CidsConnector.sharedInstance().sortedArbeitsprotokollStatusListKeys[0]]!.id)" as AnyObject
+        }
+        if (idx != -1) {
+            appearance["segmentedControl.selectedSegmentIndex"]=idx as AnyObject
+        }
+        
+        row.configuration.cell.appearance = appearance
+        sectionStatus.rows.append(row)
+        
+        let sectionStatus1 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+        row = FormRowDescriptor(tag: STATUSPT.MONTEUR.rawValue, type: .text, title: "Monteur")
+        row.configuration.cell.appearance = ["textField.placeholder" : "Monteurname" as AnyObject, "textField.textAlignment" : NSTextAlignment.right.rawValue as AnyObject]
+        if let mont=protokoll?.monteur {
+            row.value=mont as AnyObject?
+        } else {
+            row.value=CidsConnector.sharedInstance().lastMonteur as AnyObject?
+        }
+        sectionStatus1.rows.append(row)
+        row = FormRowDescriptor(tag: STATUSPT.DATUM.rawValue, type: .date, title: "Datum")
+        
+        // Hier wird jetzt immer das aktuelle Datum als Voreinstellung genommen
+        row.value=Date() as AnyObject?
+        
+        sectionStatus1.rows.append(row)
+        
+        return [sectionStatus,sectionStatus1]
+    }
+    
+    func saveStatus(apc:ActionParameterContainer) {
+        let content = formVC.form.formValues()
+        //STATUSÄnderung
+        if let mont=content[STATUSPT.MONTEUR.rawValue] as?  String {
+            apc.append(STATUSPT.MONTEUR.rawValue, value: mont as AnyObject)
+            CidsConnector.sharedInstance().lastMonteur=mont
+            UserDefaults.standard.set(mont, forKey: "lastMonteur")
+        }
+        //------------------
+        let statusDate=content[STATUSPT.DATUM.rawValue]!
+        let statusNowDouble = statusDate.timeIntervalSince1970
+        let statusMillis = Int64(statusNowDouble!*1000) + Int64(statusNowDouble!/1000)
+        let statusParam = "\(statusMillis)"
+        apc.append(STATUSPT.DATUM.rawValue, value: statusParam as AnyObject)
+        //------------------
+        if let sid=content[STATUSPT.STATUS.rawValue]{
+            apc.append(STATUSPT.STATUS.rawValue, value: sid)
+        }
+
     }
     
     func getFormDescriptor()->FormDescriptor {

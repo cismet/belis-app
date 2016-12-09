@@ -31,11 +31,15 @@ class AnstricharbeitenAction : ObjectAction {
         
         section0.rows.append(row)
         form.sections = [section0]
+        form.sections.append(contentsOf: getStatusManagingSections())
+
         return form
     }
     
+    
+    
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 100)
+        return CGSize(width: 500, height: 100 + statusManagingSectionsHeight)
     }
     
     override func save(){
@@ -51,6 +55,8 @@ class AnstricharbeitenAction : ObjectAction {
             if let farbe=content[PT.ANSTRICHFARBE.rawValue] {
                 apc.append(PT.ANSTRICHFARBE.rawValue, value: farbe)
             }
+            saveStatus(apc:apc)
+
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollStandortAnstricharbeiten", params: apc, handler: defaultAfterSaveHandler)
         }
     }
@@ -78,11 +84,13 @@ class ElektrischePruefungAction : ObjectAction {
         row = FormRowDescriptor(tag: PT.ERDUNG_IN_ORDNUNG.rawValue, type: .booleanSwitch, title: "Erdung in Ordnung")
         section0.rows.append(row)
         form.sections = [section0]
+        form.sections.append(contentsOf: getStatusManagingSections())
+
         return form
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 100)
+        return CGSize(width: 500, height: 100 + statusManagingSectionsHeight)
     }
     override func save(){
         if arbeitsprotokoll_id != -1 {
@@ -108,6 +116,8 @@ class ElektrischePruefungAction : ObjectAction {
             }
             
             apc.append(PT.ERDUNG_IN_ORDNUNG.rawValue, value: erdung as AnyObject)
+            saveStatus(apc:apc)
+
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollStandortElektrischePruefung", params: apc, handler: defaultAfterSaveHandler)
         }
     }
@@ -132,11 +142,13 @@ class MasterneuerungAction : ObjectAction {
         row.configuration.cell.appearance = ["textField.textAlignment" : NSTextAlignment.right.rawValue as AnyObject]
         section0.rows.append(row)
         form.sections = [section0]
+        form.sections.append(contentsOf: getStatusManagingSections())
+
         return form
         
     }
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 100)
+        return CGSize(width: 500, height: 100 + statusManagingSectionsHeight)
     }
     
     override func save(){
@@ -152,6 +164,8 @@ class MasterneuerungAction : ObjectAction {
             if let firma=content[PT.MONTAGEFIRMA.rawValue] {
                 apc.append(PT.MONTAGEFIRMA.rawValue, value: firma)
             }
+            saveStatus(apc:apc)
+
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollStandortMasterneuerung", params: apc, handler: defaultAfterSaveHandler)
         }
     }
@@ -174,12 +188,14 @@ class MastRevisionAction : ObjectAction {
         row.value=Date() as AnyObject?
         section0.rows.append(row)
         form.sections = [section0]
+        form.sections.append(contentsOf: getStatusManagingSections())
+
         return form
     }
     
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 60)
+        return CGSize(width: 500, height: 60 + statusManagingSectionsHeight)
     }
     
     override func save(){
@@ -192,6 +208,7 @@ class MastRevisionAction : ObjectAction {
             let millis = Int64(nowDouble!*1000) + Int64(nowDouble!/1000)
             let param = "\(millis)"
             apc.append(PT.REVISIONSDATUM.rawValue, value: param as AnyObject)
+            saveStatus(apc:apc)
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollStandortRevision", params: apc, handler: defaultAfterSaveHandler)
         }
     }
@@ -221,10 +238,12 @@ class StandsicherheitspruefungAction : ObjectAction {
         row.value=Date() as AnyObject?
         section0.rows.append(row)
         form.sections = [section0]
+        form.sections.append(contentsOf: getStatusManagingSections())
+
         return form
     }
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 150)
+        return CGSize(width: 500, height: 150 + statusManagingSectionsHeight)
     }
     
     override func save(){
@@ -247,6 +266,7 @@ class StandsicherheitspruefungAction : ObjectAction {
                 apc.append(PT.VERFAHREN.rawValue, value: verfahren)
             }
             apc.append(PT.NAECHSTES_PRUEFDATUM.rawValue, value: parampdn as AnyObject)
+            saveStatus(apc:apc)
 
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollStandortStandsicherheitspruefung", params: apc, handler: defaultAfterSaveHandler)
         }

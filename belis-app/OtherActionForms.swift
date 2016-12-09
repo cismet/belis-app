@@ -26,12 +26,14 @@ class SonstigesAction : ObjectAction {
         section2.headerTitle = "Informationen zu den durchgeführten Tätigkeiten"
         section2.rows.append(row)
         form.sections = [section2]
+        form.sections.append(contentsOf: getStatusManagingSections())
+
         return form
         
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 160)
+        return CGSize(width: 500, height: 160 + statusManagingSectionsHeight)
     }
     
     override func save(){
@@ -39,13 +41,13 @@ class SonstigesAction : ObjectAction {
             let content = formVC.form.formValues() 
             showWaiting()
             let apc=getParameterContainer()
+
+
             if let bemerkung=content[PT.BEMERKUNG.rawValue] {
                 apc.append(PT.BEMERKUNG.rawValue, value: bemerkung)
-                CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollFortfuehrungsantrag", params: apc, handler: defaultAfterSaveHandler)
             }
-            else {
-                showSuccess()
-            }
+            saveStatus(apc:apc)
+            CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollFortfuehrungsantrag", params: apc, handler: defaultAfterSaveHandler)
         }
     }
 }
@@ -77,41 +79,9 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
         section2.rows.append(row)
 
         
-        //vorher schon auskommentiert
-//        row = FormRowDescriptor(tag: "", rowType: .Button, title: "Foto erstellen")
-//        row.configuration[FormRowDescriptor.Configuration.DidSelectClosure] = {
-//            super.formVC.view.endEditing(true)
-//            
-//            let picker = MainViewController.IMAGE_PICKER
-//            picker.sourceType = UIImagePickerControllerSourceType.Camera
-//            picker.delegate = self
-//            self.callBacker=FotoPickerCallBacker(yourself: self.entity ,refreshable: self)
-//            
-//            picker.allowsEditing = true
-//            //picker.showsCameraControls=true
-//            picker.modalPresentationStyle = UIModalPresentationStyle.OverFullScreen
-//            super.formVC.presentViewController(picker, animated: true, completion: { () -> Void in  })
-//            
-//            } as DidSelectClosure
-//        section2.addRow(row)
-//        row = FormRowDescriptor(tag: "", rowType: .Button, title: "Foto auswählen")
-//        row.configuration[FormRowDescriptor.Configuration.DidSelectClosure] = {
-//            super.formVC.view.endEditing(true)
-//            
-//            let picker = MainViewController.IMAGE_PICKER
-//            picker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
-//            picker.mediaTypes = UIImagePickerController.availableMediaTypesForSourceType(.PhotoLibrary)!
-//            picker.delegate = self
-//            self.callBacker=FotoPickerCallBacker(yourself: self.entity ,refreshable: self)
-//            
-//            picker.allowsEditing = true
-//            //picker.showsCameraControls=true
-//            picker.modalPresentationStyle = UIModalPresentationStyle.OverCurrentContext
-//            super.formVC.presentViewController(picker, animated: true, completion: { () -> Void in  })
-//            
-//            } as DidSelectClosure
-//        section2.addRow(row)
         form.sections = [section2]
+        form.sections.append(contentsOf: getStatusManagingSections())
+
         return form
         
     }
@@ -138,7 +108,7 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 160)
+        return CGSize(width: 500, height: 160 + statusManagingSectionsHeight)
     }
     
     override func save(){
@@ -167,7 +137,8 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
 //                    super.formVC.presentViewController(picker, animated: true, completion: { () -> Void in  })
 //                }
 //            }
-            
+            saveStatus(apc:apc)
+
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollMauerlaschePruefung", params: apc, handler: defaultAfterSaveHandler)
         }
     }
@@ -189,12 +160,14 @@ class SchaltstellenRevisionAction : ObjectAction {
         row.value=Date() as AnyObject?
         section2.rows.append(row)
         form.sections = [section2]
+        form.sections.append(contentsOf: getStatusManagingSections())
+
         return form
         
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 60)
+        return CGSize(width: 500, height: 60 + statusManagingSectionsHeight)
     }
     
     override func save(){
@@ -207,6 +180,8 @@ class SchaltstellenRevisionAction : ObjectAction {
             let millis = Int64(nowDouble!*1000) + Int64(nowDouble!/1000)
             let param = "\(millis)"
             apc.append(PT.PRUEFDATUM.rawValue, value: param as AnyObject)
+            saveStatus(apc:apc)
+
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollSchaltstelleRevision", params: apc, handler: defaultAfterSaveHandler)
         }
     }
@@ -214,7 +189,6 @@ class SchaltstellenRevisionAction : ObjectAction {
 
 
 class ProtokollStatusUpdateAction : ObjectAction {
-     var protokoll: Arbeitsprotokoll!
     enum PT:String {
         case MONTEUR
         case DATUM
@@ -239,7 +213,7 @@ class ProtokollStatusUpdateAction : ObjectAction {
             return "\(s?.bezeichnung ?? "???")"
             }
         row.configuration.cell.appearance = ["segmentedControl.tintColor" : UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)]
-        if let statid=protokoll.status?.id {
+        if let statid=protokoll?.status?.id {
             row.value="\(statid)" as AnyObject?
         }
         section0.rows.append(row)
@@ -247,14 +221,14 @@ class ProtokollStatusUpdateAction : ObjectAction {
         let section1 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
         row = FormRowDescriptor(tag: PT.MONTEUR.rawValue, type: .text, title: "Monteur")
         row.configuration.cell.appearance = ["textField.placeholder" : "Monteurname" as AnyObject, "textField.textAlignment" : NSTextAlignment.right.rawValue as AnyObject]
-        if let mont=protokoll.monteur {
+        if let mont=protokoll?.monteur {
             row.value=mont as AnyObject?
         } else {
             row.value=CidsConnector.sharedInstance().lastMonteur as AnyObject?
         }
         section1.rows.append(row)
         row = FormRowDescriptor(tag: PT.DATUM.rawValue, type: .date, title: "Datum")
-        if let dat=protokoll.datum {
+        if let dat=protokoll?.datum {
             row.value=dat as AnyObject?
         }
         else {
@@ -264,15 +238,16 @@ class ProtokollStatusUpdateAction : ObjectAction {
         let section2 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
         row = FormRowDescriptor(tag: PT.BEMERKUNG.rawValue, type: .multilineText, title: "")
         section2.headerTitle = "Bemerkung"
-        row.value=protokoll.bemerkung as AnyObject?
+        row.value=protokoll?.bemerkung as AnyObject?
         section2.rows.append(row)
         let section3 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
         row = FormRowDescriptor(tag: PT.MATERIAL.rawValue, type: .multilineText, title: "")
         section3.headerTitle = "Material"
         section3.rows.append(row)
-        row.value=protokoll.material as AnyObject?
+        row.value=protokoll?.material as AnyObject?
         
         form.sections=[section1,section0,section2,section3]
+        
         return form
         
     }
@@ -300,7 +275,7 @@ class ProtokollStatusUpdateAction : ObjectAction {
             //------------------
             if let mont=content[PT.MONTEUR.rawValue] as?  String {
                 showWaiting()
-
+                
                 apc.append(PT.MONTEUR.rawValue, value: mont as AnyObject)
                 CidsConnector.sharedInstance().lastMonteur=mont
                 UserDefaults.standard.set(mont, forKey: "lastMonteur")
@@ -324,7 +299,7 @@ class ProtokollStatusUpdateAction : ObjectAction {
                 }
                 //------------------
                 CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollStatusAenderung", params: apc, handler: defaultAfterSaveHandler)
-            } 
+            }
         }
     }
 }

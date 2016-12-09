@@ -36,14 +36,35 @@ class LeuchtenerneuerungAction : ObjectAction {
             return "\(typ?.leuchtenTyp ?? "unbekannter Typ") - \(typ?.fabrikat ?? "unbekanntes Fabrikat")"
             }
         section0.rows.append(row)
-        
+
         form.sections = [section0]
+        form.sections.append(contentsOf: getStatusManagingSections())
+
+        
+        
         return form
         
     }
-    
+// EUREKA Form Syntax
+//    func getForm()->Form {
+//        return Form()
+//            +++ Section()
+//            <<< DateRow(){
+//                $0.title = "Inbetriebnahme"
+//                $0.value = Date(timeIntervalSinceReferenceDate: 0)
+//            }
+//            //Better Picker Support when #808 is merged in
+//            <<< PushRow<String>("Leuchtentyp") {
+//                $0.title = $0.tag
+//                $0.options = ["A","B","C","D"]
+//                $0.value = "A"
+//                }.onPresent({ (_, vc) in
+//                    vc.enableDeselection = false
+//                })
+//    }
+//    
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 100)
+        return CGSize(width: 500, height: 100 + statusManagingSectionsHeight)
     }
     
     override func save(){
@@ -61,7 +82,9 @@ class LeuchtenerneuerungAction : ObjectAction {
             if let x=content[PT.LEUCHTENTYP.rawValue] {
                 apc.append(PT.LEUCHTENTYP.rawValue, value: x)
             }
-
+            
+            saveStatus(apc:apc)
+            
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollLeuchteLeuchtenerneuerung", params: apc, handler: defaultAfterSaveHandler)
         }
     }
@@ -105,12 +128,14 @@ class LeuchtmittelwechselEPAction : ObjectAction {
         row.configuration.cell.appearance = ["textField.placeholder" : "in Monaten" as AnyObject, "textField.textAlignment" : NSTextAlignment.right.rawValue as AnyObject]
         section0.rows.append(row)
         form.sections = [section0]
+        form.sections.append(contentsOf: getStatusManagingSections())
+
         return form
         
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 250)
+        return CGSize(width: 500, height: 250 + statusManagingSectionsHeight)
     }
     
     override func save(){
@@ -152,6 +177,7 @@ class LeuchtmittelwechselEPAction : ObjectAction {
             if let lebensdauer=content[PT.LEBENSDAUER.rawValue] {
                 apc.append(PT.LEBENSDAUER.rawValue, value: lebensdauer)
             }
+            saveStatus(apc:apc)
 
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollLeuchteLeuchtmittelwechselElekpruefung", params: apc, handler: defaultAfterSaveHandler)
         }
@@ -187,11 +213,13 @@ class LeuchtmittelwechselAction : ObjectAction {
         row.configuration.cell.appearance = ["textField.placeholder" : "in Monaten" as AnyObject, "textField.textAlignment" : NSTextAlignment.right.rawValue as AnyObject]
         section0.rows.append(row)
         form.sections = [section0]
+        form.sections.append(contentsOf: getStatusManagingSections())
+
         return form
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 150)
+        return CGSize(width: 500, height: 150 + statusManagingSectionsHeight)
     }
     
     override func save(){
@@ -213,7 +241,8 @@ class LeuchtmittelwechselAction : ObjectAction {
             if let lebensdauer=content[PT.LEBENSDAUER.rawValue] {
                 apc.append(PT.LEBENSDAUER.rawValue, value: lebensdauer)
             }
-            
+            saveStatus(apc:apc)
+
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollLeuchteLeuchtmittelwechsel", params: apc, handler: defaultAfterSaveHandler)
         }
     }
@@ -242,13 +271,15 @@ class RundsteuerempfaengerwechselAction : ObjectAction {
             } 
         section0.rows.append(row)
         form.sections = [section0]
+        form.sections.append(contentsOf: getStatusManagingSections())
+
         return form
         
         
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 100)
+        return CGSize(width: 500, height: 100 + statusManagingSectionsHeight)
     }
     
     
@@ -267,7 +298,8 @@ class RundsteuerempfaengerwechselAction : ObjectAction {
             if let rid=content[PT.RUNDSTEUEREMPFAENGER.rawValue]{
                 apc.append(PT.RUNDSTEUEREMPFAENGER.rawValue, value: rid)
             }
-            
+            saveStatus(apc:apc)
+
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollLeuchteRundsteuerempfaengerwechsel", params: apc, handler: defaultAfterSaveHandler)
         }
     }
@@ -283,19 +315,21 @@ class SonderturnusAction : ObjectAction {
     }
     override func getFormDescriptor()->FormDescriptor {
         let form = FormDescriptor()
-        form.title = "Rundsteuerempfängerwechsel"
+        form.title = "Sonderturnus"
         let section0 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
         let row = FormRowDescriptor(tag: PT.DATUM.rawValue, type: .date, title: "Sonderturnus")
         row.value=Date() as AnyObject?
         section0.rows.append(row)
         form.sections = [section0]
+        form.sections.append(contentsOf: getStatusManagingSections())
+
         return form
         
         
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 60)
+        return CGSize(width: 500, height: 60 + statusManagingSectionsHeight)
     }
     
     override func save(){
@@ -309,8 +343,9 @@ class SonderturnusAction : ObjectAction {
             let milliswd = Int64(nowDoublewd!*1000) + Int64(nowDoublewd!/1000)
             let paramwd = "\(milliswd)"
             apc.append(PT.DATUM.rawValue, value: paramwd as AnyObject)
-            //------------------
-            
+
+            saveStatus(apc:apc)
+
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollLeuchteSonderturnus", params: apc, handler: defaultAfterSaveHandler)
         }
     }
@@ -336,11 +371,13 @@ class VorschaltgeraetwechselAction : ObjectAction {
         row.configuration.cell.appearance = ["textField.textAlignment" : NSTextAlignment.right.rawValue as AnyObject]
         section0.rows.append(row)
         form.sections = [section0]
+        form.sections.append(contentsOf: getStatusManagingSections())
+
         return form
     }
     
     override func getPreferredSize()->CGSize {
-        return CGSize(width: 500, height: 100)
+        return CGSize(width: 500, height: 100 + statusManagingSectionsHeight)
     }
     
     override func save(){
@@ -358,7 +395,8 @@ class VorschaltgeraetwechselAction : ObjectAction {
             if let vid=content[PT.VORSCHALTGERAET.rawValue]{
                 apc.append(PT.VORSCHALTGERAET.rawValue, value: vid)
             }
-            
+            saveStatus(apc:apc)
+
             CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "ProtokollLeuchteVorschaltgeraetwechsel", params: apc, handler: defaultAfterSaveHandler)
         }
     }

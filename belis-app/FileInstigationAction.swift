@@ -73,8 +73,11 @@ class FileInstigationAction : BaseEntityAction {
             
             let section4 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
             row = FormRowDescriptor(tag: PT.BEMERKUNG.rawValue, type: .button, title: "Foto erstellen")
+            row.configuration.cell.appearance = ["titleLabel.textColor" : UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)]
+            
             section4.rows.append(row)
             row = FormRowDescriptor(tag: PT.BEMERKUNG.rawValue, type: .button, title: "Foto auswählen")
+            row.configuration.cell.appearance = ["titleLabel.textColor" : UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)]
             section4.rows.append(row)
             
             

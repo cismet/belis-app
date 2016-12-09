@@ -987,13 +987,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         request.naturalLanguageQuery = "Wuppertal, \(textfieldGeoSearch.text!)"
         request.region = mapView.region
         
-        let search = MKLocalSearch(request: request)
         
         
-        search.start(completionHandler: {(responseIn:
-            MKLocalSearchResponse?,
-            errorIn: NSError?) in
-            
+        
+        
+        let localSearch = MKLocalSearch(request: request)
+        localSearch.start { (responseIn, errorIn) -> Void in
             if let error = errorIn {
                 print("Error occured in search: \(error.localizedDescription)")
             } else if let response=responseIn {
@@ -1019,9 +1018,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                     
                 }
             }
-        } as! MKLocalSearchCompletionHandler)
-        
+        }
     }
+    
     fileprivate func ensureBrightOverlayIsDisplayedWhenItShould(){
         if brightenToggle.isOn {
             let overlays=mapView.overlays
