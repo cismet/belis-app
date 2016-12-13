@@ -59,7 +59,7 @@ class TakeFotoAction : BaseEntityAction {
 
 class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    let TESTPREFIX="this.is.only.a.test.can.be.deleted.without.problems"
+    
         
     var selfEntity: BaseEntity
     var refreshable: Refreshable
@@ -92,6 +92,15 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
         }
         
         
+        func getTestPrefix() -> String {
+            if CidsConnector.sharedInstance().inDevEnvironment() {
+                return "this.is.really.only.a.test.can.be.deleted.without.problems....";
+            }
+            else {
+                return "";
+            }
+        }
+        
         func handleCancel(_ alertView: UIAlertAction!) {
             picker.dismiss(animated: true, completion: nil)
         }
@@ -114,8 +123,8 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             let objectId=self.selfEntity.id
             let objectTyp=self.selfEntity.getType().tableName().lowercased()
             
-            let fileNameThumb="\(self.TESTPREFIX)upload.from.ios.for.\(objectTyp).\(objectId)-\(ctm).jpg.thumbnail.jpg"
-            let fileName="\(self.TESTPREFIX)upload.from.ios.for.\(objectTyp).\(objectId)-\(ctm).jpg"
+            let fileNameThumb="\(getTestPrefix())upload.from.ios.for.\(objectTyp).\(objectId)-\(ctm).jpg.thumbnail.jpg"
+            let fileName="\(getTestPrefix())upload.from.ios.for.\(objectTyp).\(objectId)-\(ctm).jpg"
             
             
             BelisPhotoAlbum.sharedInstance.save(image: imageToSave, pictureName: pictureName, keywords: "BelIS", instructions: "upload to: \(fileName)", description: "https://www.cismet.de", additionalInfoAsJson: "{}")

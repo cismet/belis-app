@@ -194,6 +194,11 @@ open class CidsConnector {
         }
     }
     
+    func inDevEnvironment()->Bool {
+        return (pureBaseUrl=="192.168.178.69" && password=="devdb")
+    }
+    
+    
     // MARK: - functions
     func login(_ user :String, password :String, handler: @escaping (Bool) -> ()) {
         self.login=user+"@"+domain
