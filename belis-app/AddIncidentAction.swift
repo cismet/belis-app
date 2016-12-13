@@ -9,7 +9,7 @@
 import Foundation
 import SwiftForms
 
-class FileInstigationAction : BaseEntityAction {
+class AddIncidentAction : BaseEntityAction {
     enum PT:String {
         case MONTEUR
         case DATUM
