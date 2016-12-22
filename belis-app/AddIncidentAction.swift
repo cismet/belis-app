@@ -21,6 +21,10 @@ class AddIncidentAction : BaseEntityAction {
     init(yourself: BaseEntity) {
         super.init(title: "Störung melden",style: UIAlertActionStyle.destructive, handler: {
             (action: UIAlertAction? , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
+            
+            let formVC = CidsConnector.sharedInstance().mainVC!.storyboard!.instantiateViewController(withIdentifier: "formView") as! GenericFormViewController
+            
+            
             let optionsListKeys: [String]=["nothing","singleAA","add2Current"]
             let options: [String:String]=["nothing":"nur Veranlassung","singleAA":"Einzelauftrag","add2Current":"📥6488"]
             
@@ -74,6 +78,23 @@ class AddIncidentAction : BaseEntityAction {
             let section4 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
             row = FormRowDescriptor(tag: PT.BEMERKUNG.rawValue, type: .button, title: "Foto erstellen")
             row.configuration.cell.appearance = ["titleLabel.textColor" : UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)]
+            row.configuration.button.didSelectClosure = { (FormRowDescriptor) -> Void in
+                print("Fotooooooo")
+                let pdc=PureDocumentContainer()
+                // let tfa=TakeFotoAction(yourself: pdc)
+                // tfa.handler(,
+                let picker = UIImagePickerController() //MainViewController.IMAGE_PICKER
+                picker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+                picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
+                picker.delegate = detailVC as! DetailVC
+                (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: pdc,refreshable: formVC)
+                picker.allowsEditing = true
+                picker.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+//
+                detailVC.present(picker, animated: true, completion: {})
+
+                
+            }
             
             section4.rows.append(row)
             row = FormRowDescriptor(tag: PT.BEMERKUNG.rawValue, type: .button, title: "Foto auswählen")
@@ -83,23 +104,23 @@ class AddIncidentAction : BaseEntityAction {
             
             form.sections=[section1,section0,section2,section3,section4]
 
-            let formVC = CidsConnector.sharedInstance().mainVC!.storyboard!.instantiateViewController(withIdentifier: "formView") as! GenericFormViewController
+            
             
             formVC.form=form
             
-            formVC.modalPresentationStyle=UIModalPresentationStyle.overCurrentContext
+            //formVC.modalPresentationStyle=UIModalPresentationStyle.overCurrentContext
             
-            let formNC=UINavigationController(rootViewController: formVC)
-            formNC.modalPresentationStyle=UIModalPresentationStyle.overCurrentContext
+            //let formNC=UINavigationController(rootViewController: formVC)
+            //formNC.modalPresentationStyle=UIModalPresentationStyle.overCurrentContext
             
-            detailVC.present(formNC, animated: true, completion: {})
-          
+            //detailVC.present(formNC, animated: true, completion: {})
+            
+            detailVC.navigationController?.pushViewController(formVC, animated: true)
+            
         } )
     }
-}
-
-class InnerViewController: GenericFormViewController {
     
+    
+    
+   }
 
-
-}
