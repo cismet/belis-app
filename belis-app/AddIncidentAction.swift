@@ -25,9 +25,17 @@ class AddIncidentAction : BaseEntityAction {
             let formVC = CidsConnector.sharedInstance().mainVC!.storyboard!.instantiateViewController(withIdentifier: "formView") as! GenericFormViewController
             
             
-            let optionsListKeys: [String]=["nothing","singleAA","add2Current"]
-            let options: [String:String]=["nothing":"nur Veranlassung","singleAA":"Einzelauftrag","add2Current":"📥6488"]
+            var optionsOpt: [String:String]=["nothing":"nur Veranlassung","singleAA":"Einzelauftrag"]
+            var optionsListKeysOpt: [String]=["nothing","singleAA"]
+            if let selectedArbeitsauftrag=CidsConnector.sharedInstance().selectedArbeitsauftrag {
+                optionsOpt=["nothing":"nur Veranlassung","singleAA":"Einzelauftrag","add2Current":"📥"+selectedArbeitsauftrag.nummer!]
+                optionsListKeysOpt=["nothing","singleAA","add2Current"]
+                
+            }
             
+            let options: [String:String]=optionsOpt
+            let optionsListKeys: [String]=optionsListKeysOptoptionsListKeysOpt
+
 
             let form = FormDescriptor()
             form.title = "Störung melden"
@@ -84,12 +92,12 @@ class AddIncidentAction : BaseEntityAction {
                 // let tfa=TakeFotoAction(yourself: pdc)
                 // tfa.handler(,
                 let picker = UIImagePickerController() //MainViewController.IMAGE_PICKER
-                picker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+                picker.sourceType = UIImagePickerControllerSourceType.camera
                 picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
                 picker.delegate = detailVC as! DetailVC
                 (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: pdc,refreshable: formVC)
                 picker.allowsEditing = true
-                picker.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+                picker.modalPresentationStyle = UIModalPresentationStyle.fullScreen
 //
                 detailVC.present(picker, animated: true, completion: {})
 
@@ -99,6 +107,23 @@ class AddIncidentAction : BaseEntityAction {
             section4.rows.append(row)
             row = FormRowDescriptor(tag: PT.BEMERKUNG.rawValue, type: .button, title: "Foto auswählen")
             row.configuration.cell.appearance = ["titleLabel.textColor" : UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)]
+            row.configuration.button.didSelectClosure = { (FormRowDescriptor) -> Void in
+                print("Mediaaaaa")
+                let pdc=PureDocumentContainer()
+                // let tfa=TakeFotoAction(yourself: pdc)
+                // tfa.handler(,
+                let picker = UIImagePickerController() //MainViewController.IMAGE_PICKER
+                picker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+                picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
+                picker.delegate = detailVC as! DetailVC
+                (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: pdc,refreshable: formVC)
+                picker.allowsEditing = true
+                picker.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
+                //
+                detailVC.present(picker, animated: true, completion: {})
+            }
+                
+
             section4.rows.append(row)
             
             
