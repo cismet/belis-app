@@ -810,8 +810,15 @@ open class CidsConnector {
     }
     func uploadImageToWebDAV(_ image: UIImage, fileName: String , completionHandler: @escaping (_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void) {
         assert(loggedIn)
+        var baseUrl=""
+        if  (!inDevEnvironment()) {
+            baseUrl="http://board.cismet.de/belis"
+        }else {
+            baseUrl="http://aaa.cismet.de/webdav"
+        }
         
-        let baseUrl="http://board.cismet.de/belis"
+//        //let baseUrl="http://board.cismet.de/belis"
+//        let baseUrl="http://aaa.cismet.de/belis"
         
         let up=WebDavUploadImageOperation(baseUrl: baseUrl, user: Secrets.getWebDavUser(), pass: Secrets.getWebDavPass(), fileName: fileName, image:image) {
             (data, response, error) -> Void in
