@@ -35,8 +35,8 @@ class AddIncidentAction : BaseEntityAction {
             
             let options: [String:String]=optionsOpt
             let optionsListKeys: [String]=optionsListKeysOpt
-
-
+            
+            
             let form = FormDescriptor()
             form.title = "Störung melden"
             
@@ -49,7 +49,7 @@ class AddIncidentAction : BaseEntityAction {
                 return "\(s ?? "???")"
             }
             row.configuration.cell.appearance = ["segmentedControl.tintColor" : UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)]
-
+            
             section0.rows.append(row)
             
             let section1 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
@@ -64,19 +64,19 @@ class AddIncidentAction : BaseEntityAction {
             
             row = FormRowDescriptor(tag: PT.MONTEUR.rawValue, type: .text, title: "User")
             row.configuration.cell.appearance = ["textField.placeholder" : "Monteurname" as AnyObject, "textField.textAlignment" : NSTextAlignment.right.rawValue as AnyObject]
-           
+            
             row.value=CidsConnector.sharedInstance().login as AnyObject?
-           
+            
             section1.rows.append(row)
             row = FormRowDescriptor(tag: PT.DATUM.rawValue, type: .date, title: "Datum")
-          
+            
             row.value=Date() as AnyObject?
             
             section1.rows.append(row)
             let section2 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
             row = FormRowDescriptor(tag: PT.BEMERKUNG.rawValue, type: .multilineText, title: "")
             section2.headerTitle = "Beschreibung"
-
+            
             section2.rows.append(row)
             let section3 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
             row = FormRowDescriptor(tag: PT.MATERIAL.rawValue, type: .multilineText, title: "")
@@ -98,9 +98,9 @@ class AddIncidentAction : BaseEntityAction {
                 (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: pdc,refreshable: formVC)
                 picker.allowsEditing = true
                 picker.modalPresentationStyle = UIModalPresentationStyle.fullScreen
-//
+                //
                 detailVC.present(picker, animated: true, completion: {})
-
+                
                 
             }
             
@@ -122,23 +122,28 @@ class AddIncidentAction : BaseEntityAction {
                 //
                 detailVC.present(picker, animated: true, completion: {})
             }
-                
-
+            
+            
             section4.rows.append(row)
-            
-            
             form.sections=[section1,section0,section2,section3,section4]
-
+            
             
             
             formVC.form=form
             
-            //formVC.modalPresentationStyle=UIModalPresentationStyle.overCurrentContext
             
-            //let formNC=UINavigationController(rootViewController: formVC)
-            //formNC.modalPresentationStyle=UIModalPresentationStyle.overCurrentContext
             
-            //detailVC.present(formNC, animated: true, completion: {})
+            func save() {
+                print("Hell yes")
+            }
+            func cancel() {
+                print("WHAAAAAT")
+                
+            }
+            
+            
+            formVC.saveHandler=save
+            formVC.cancelHandler=cancel
             
             detailVC.navigationController?.pushViewController(formVC, animated: true)
             
@@ -147,5 +152,5 @@ class AddIncidentAction : BaseEntityAction {
     
     
     
-   }
+}
 
