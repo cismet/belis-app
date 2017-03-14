@@ -34,7 +34,7 @@ class AddIncidentAction : BaseEntityAction {
             }
             
             let options: [String:String]=optionsOpt
-            let optionsListKeys: [String]=optionsListKeysOptoptionsListKeysOpt
+            let optionsListKeys: [String]=optionsListKeysOpt
 
 
             let form = FormDescriptor()
