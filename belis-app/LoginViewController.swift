@@ -30,6 +30,12 @@ class LoginViewController: UIViewController {
             CidsConnector.sharedInstance().selectedTeamId=st
         }
         
+        
+//        let storedTeamForIncident: AnyObject? = UserDefaults.standard.object(forKey: "teamid4incident") as AnyObject?
+//        if let sti = storedTeamForIncident as? String {
+//            CidsConnector.sharedInstance().lastUsedTeamKIdForIncident=sti
+//        }
+
         let storedMonteur: AnyObject? = UserDefaults.standard.object(forKey: "lastMonteur") as AnyObject?
         if let storedMonteurString=storedMonteur as? String {
             CidsConnector.sharedInstance().lastMonteur=storedMonteurString
