@@ -138,6 +138,9 @@ open class CidsConnector {
     var loggedIn=false
     var selectedTeam: Team?
     var selectedTeamId: String?
+    
+    var lastUsedTeamIdForIncident: String?
+    
     var lastMonteur: String?
     
     // MARK: - Lists
