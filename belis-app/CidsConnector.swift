@@ -35,7 +35,7 @@ open class CidsConnector {
             UserDefaults.standard.set(tlsEnabled, forKey: "tlsEnabled")
         }
     }
-    var pureBaseUrl="192.168.178.38" {
+    var pureBaseUrl="192.168.178.69" {
         didSet {
             UserDefaults.standard.set(pureBaseUrl, forKey: "cidsPureBaseURL")
         }
