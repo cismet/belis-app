@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftForms
+import JGProgressHUD
 
 class AddIncidentAction : BaseEntityAction {
     enum PT:String {
@@ -213,7 +214,7 @@ class AddIncidentAction : BaseEntityAction {
             let save: ()-> Void={
                 let content = formVC.form.formValues()
                 let params=ActionParameterContainer(params: [PT.AKTION.rawValue : content[PT.AKTION.rawValue]!,
-                                                             PT.OBJEKT_ID.rawValue: entity.id as AnyObject,
+                                                             PT.OBJEKT_ID.rawValue: "\(entity.id)" as AnyObject,
                                                              PT.OBJEKT_TYP.rawValue: entity.getType().tableName() as AnyObject,
                                                              ])
                 if let bezeichnung=content[PT.BEZEICHNUNG.rawValue] as? String {
@@ -230,6 +231,52 @@ class AddIncidentAction : BaseEntityAction {
                     params.append(PT.ARBEITSAUFTRAG_ZUGEWIESEN_AN.rawValue, value: team as AnyObject)
                 }
 
+                func showWaiting(){
+                    lazyMainQueueDispatch() {
+                        CidsConnector.sharedInstance().mainVC?.progressHUD?.show(in: CidsConnector.sharedInstance().mainVC!.view)
+                    }
+                }
+                func showError() {
+                    lazyMainQueueDispatch() {
+                        CidsConnector.sharedInstance().mainVC?.progressHUD?.dismiss(animated: false)
+                        let errorHUD=JGProgressHUD(style: JGProgressHUDStyle.dark)
+                        errorHUD?.indicatorView=JGProgressHUDErrorIndicatorView()
+                        errorHUD?.show(in: CidsConnector.sharedInstance().mainVC!.view, animated: false)
+                        errorHUD?.dismiss(afterDelay: TimeInterval(2), animated: true)
+                    }
+                }
+                func showSuccess() {
+                    lazyMainQueueDispatch(){
+                        CidsConnector.sharedInstance().mainVC?.progressHUD?.dismiss(animated: false)
+                        let successHUD=JGProgressHUD(style: JGProgressHUDStyle.dark)
+                        successHUD?.indicatorView=JGProgressHUDSuccessIndicatorView()
+                        successHUD?.show(in: CidsConnector.sharedInstance().mainVC!.view, animated: false)
+                        successHUD?.dismiss(afterDelay: TimeInterval(1), animated: true)
+                    }
+                }
+                
+                func afterSaveHandler(_ success: Bool){
+                    if !success {
+                        showError()
+                    }
+                    else {
+                        showSuccess()
+//                        //refresh
+//                        CidsConnector.sharedInstance().refreshArbeitsauftrag(CidsConnector.sharedInstance().selectedArbeitsauftrag, handler: { (success) -> () in
+//                            if success {
+//                                lazyMainQueueDispatch({ () -> () in
+//                                    CidsConnector.sharedInstance().mainVC?.tableView.reloadData()
+//                                    showSuccess()
+//                                })
+//                            }
+//                        })
+                        
+                    }
+                }
+                
+                
+                CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "AddIncident", params: params, handler: afterSaveHandler)
+                
                 
                 print(params.toJSONString(prettyPrint: true) ?? "no json for you")
             }
