@@ -33,7 +33,8 @@ class GenericFormViewController: FormViewController, Refreshable {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: UIBarButtonItemStyle.plain , target: self, action: #selector(GenericFormViewController.cancel))
     }
     
-    func save() {
+    
+     func save() {
         let check=preSaveCheck()
         if (check.passed) {
             self.dismiss(animated: true) { () -> Void in
@@ -76,6 +77,7 @@ class GenericFormViewController: FormViewController, Refreshable {
     }
     
     func refresh() {
+        super.tableView.reloadData()
         print("refresh ¯\\_(ツ)_/¯")
     }
 
