@@ -24,6 +24,7 @@ class AddIncidentAction : BaseEntityAction {
         case BEMERKUNG
         case ARBEITSAUFTRAG_ZUGEWIESEN_AN
         case DOKUMENT_URLS
+        case ARBEITSAUFTRAG
         
         case VERANLASSUNG
         case EINZELAUFTRAG
@@ -66,7 +67,7 @@ class AddIncidentAction : BaseEntityAction {
             let teamList=CidsConnector.sharedInstance().teamList
             
             if let lastTeam=CidsConnector.sharedInstance().lastUsedTeamIdForIncident {
-            
+                
             }
             else {
                 if let teamid=CidsConnector.sharedInstance().selectedTeam?.id {
@@ -89,7 +90,7 @@ class AddIncidentAction : BaseEntityAction {
                     CidsConnector.sharedInstance().lastUsedTeamIdForIncident=team
                 }
             }
-
+            
             row.configuration.cell.didUpdateClosure = { formRowDescriptor in
                 let content = formVC.form.formValues()
                 if let aktion=content[PT.AKTION.rawValue]{
@@ -107,10 +108,10 @@ class AddIncidentAction : BaseEntityAction {
             }
             
             row.configuration.cell.appearance = ["segmentedControl.tintColor" : UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)]
-//           // row.value=PT.VERANLASSUNG.rawValue as AnyObject
-//            row.configuration.cell.appearance["segmentedControl.selectedSegmentIndex"]=PT.VERANLASSUNG.rawValue as AnyObject
+            //           // row.value=PT.VERANLASSUNG.rawValue as AnyObject
+            //            row.configuration.cell.appearance["segmentedControl.selectedSegmentIndex"]=PT.VERANLASSUNG.rawValue as AnyObject
             var content = formVC.form.formValues()
-                        
+            
             aktionsSection.rows.append(row)
             
             let section1 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
@@ -209,7 +210,7 @@ class AddIncidentAction : BaseEntityAction {
                 print("preCancelCheck")
                 return CheckResult(passed: true)
             }
-
+            
             
             let save: ()-> Void={
                 let content = formVC.form.formValues()
@@ -217,6 +218,11 @@ class AddIncidentAction : BaseEntityAction {
                                                              PT.OBJEKT_ID.rawValue: "\(entity.id)" as AnyObject,
                                                              PT.OBJEKT_TYP.rawValue: entity.getType().tableName() as AnyObject,
                                                              ])
+                if content[PT.AKTION.rawValue] as! String  == PT.ADD2ARBEITSAUFTRAG.rawValue {
+                    if let selectedArbeitsauftrag=CidsConnector.sharedInstance().selectedArbeitsauftrag {
+                        params.append(PT.ARBEITSAUFTRAG.rawValue, value: "\(selectedArbeitsauftrag.id)" as AnyObject)
+                    }
+                }
                 if let bezeichnung=content[PT.BEZEICHNUNG.rawValue] as? String {
                     params.append(PT.BEZEICHNUNG.rawValue, value: bezeichnung as AnyObject)
                 }
@@ -230,7 +236,7 @@ class AddIncidentAction : BaseEntityAction {
                 if let team=content[PT.ARBEITSAUFTRAG_ZUGEWIESEN_AN.rawValue]  as? String {
                     params.append(PT.ARBEITSAUFTRAG_ZUGEWIESEN_AN.rawValue, value: team as AnyObject)
                 }
-
+                
                 func showWaiting(){
                     lazyMainQueueDispatch() {
                         CidsConnector.sharedInstance().mainVC?.progressHUD?.show(in: CidsConnector.sharedInstance().mainVC!.view)
@@ -260,16 +266,24 @@ class AddIncidentAction : BaseEntityAction {
                         showError()
                     }
                     else {
-                        showSuccess()
-//                        //refresh
-//                        CidsConnector.sharedInstance().refreshArbeitsauftrag(CidsConnector.sharedInstance().selectedArbeitsauftrag, handler: { (success) -> () in
-//                            if success {
-//                                lazyMainQueueDispatch({ () -> () in
-//                                    CidsConnector.sharedInstance().mainVC?.tableView.reloadData()
-//                                    showSuccess()
-//                                })
-//                            }
-//                        })
+                        if content[PT.AKTION.rawValue] as! String  == PT.ADD2ARBEITSAUFTRAG.rawValue {
+                            //refresh
+                            
+                        //skipVisualization= true means dont load the Arbeitsauftrag after adding a new Incident
+                        CidsConnector.sharedInstance().refreshArbeitsauftrag(CidsConnector.sharedInstance().selectedArbeitsauftrag, shouldCheckForMissingVeranlassungen: true, skipVisualization: true, handler: { (success) -> () in
+                                if success {
+                                    lazyMainQueueDispatch({ () -> () in
+                                        CidsConnector.sharedInstance().mainVC?.tableView.reloadData()
+                                        showSuccess()
+                                    })
+                                }
+                            })
+                        }
+                        else {
+                            lazyMainQueueDispatch({ () -> () in
+                                showSuccess()
+                            })
+                        }
                         
                     }
                 }

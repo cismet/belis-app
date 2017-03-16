@@ -495,24 +495,7 @@ open class CidsConnector {
                                                                 self.searchResults.updateValue([auftrag], forKey: Entity.ARBEITSAUFTRAEGE)
                                                             }
                                                             
-                                                            for veranlassungsnummer in auftrag.getVeranlassungsnummern() {
-                                                                if let _=self.veranlassungsCache[veranlassungsnummer] {
-                                                                    print("cacheHit")
-                                                                }
-                                                                else {
-                                                                    getVeranlassungByNummer(veranlassungsnummer, handler: { (veranlassung) -> () in
-                                                                        if let v=veranlassung {
-                                                                            self.veranlassungsCache.updateValue(v, forKey: veranlassungsnummer)
-                                                                            if self.selectedArbeitsauftrag != nil {
-                                                                                lazyMainQueueDispatch({ () -> () in
-                                                                                    self.mainVC?.tableView.reloadData()
-                                                                                })
-                                                                            }
-                                                                            
-                                                                        }
-                                                                    })
-                                                                }
-                                                            }
+                                                            checkForMissingVeranlassungen(auftrag: auftrag)
                                                         }
                                                     }
                                                     if (queue.operationCount==1 && !queue.cancelRequested) {
@@ -560,7 +543,28 @@ open class CidsConnector {
         
     }
     
-    func refreshArbeitsauftrag(_ arbeitsauftrag: Arbeitsauftrag?, queue: CancelableOperationQueue = CancelableOperationQueue(name: "refreshArbeitsauftrag", afterCancellation: {}), handler: @escaping (_ success: Bool)->() ){
+    func checkForMissingVeranlassungen(auftrag: Arbeitsauftrag) {
+        for veranlassungsnummer in auftrag.getVeranlassungsnummern() {
+            if let _=self.veranlassungsCache[veranlassungsnummer] {
+                print("cacheHit")
+            }
+            else {
+                getVeranlassungByNummer(veranlassungsnummer, handler: { (veranlassung) -> () in
+                    if let v=veranlassung {
+                        self.veranlassungsCache.updateValue(v, forKey: veranlassungsnummer)
+                        if self.selectedArbeitsauftrag != nil {
+                            lazyMainQueueDispatch({ () -> () in
+                                self.mainVC?.tableView.reloadData()
+                            })
+                        }
+                        
+                    }
+                })
+            }
+        }
+    }
+    
+    func refreshArbeitsauftrag(_ arbeitsauftrag: Arbeitsauftrag?, shouldCheckForMissingVeranlassungen: Bool=false, skipVisualization: Bool=false, queue: CancelableOperationQueue = CancelableOperationQueue(name: "refreshArbeitsauftrag", afterCancellation: {}), handler: @escaping (_ success: Bool)->() ){
         if let _=arbeitsauftrag {
             func completionHandler(_ operation:GetEntityOperation, data: Data?, response: URLResponse?, error: Error?, queue: OperationQueue) -> (){
                 if (error == nil) {
@@ -584,13 +588,17 @@ open class CidsConnector {
                                 }
                             }
                             
-                            self.mainVC!.fillArbeitsauftragIntoTable(aa)
-                            self.mainVC!.visualizeAllSearchResultsInMap(zoomToShowAll: false, showActivityIndicator: true)
-                            //  if let s=sel  {
-                            //  self.mainVC!.tableView.selectRowAtIndexPath(s, animated: false, scrollPosition: UITableViewScrollPosition.None)
-                            //  }
+                            if !skipVisualization {
+                                self.mainVC!.fillArbeitsauftragIntoTable(aa)
+                                self.mainVC!.visualizeAllSearchResultsInMap(zoomToShowAll: false, showActivityIndicator: true)
+                            }
+                            
+                            if shouldCheckForMissingVeranlassungen {
+                                checkForMissingVeranlassungen(auftrag: aa)
+                            }
                             
                             handler(true)
+                            
                             return
                         }
                         
