@@ -151,6 +151,7 @@ class AddIncidentAction : BaseEntityAction {
             row.configuration.button.didSelectClosure = { (FormRowDescriptor) -> Void in
                 print("Fotooooooo")
                 let pdc=PureDocumentContainer()
+
                 // let tfa=TakeFotoAction(yourself: pdc)
                 // tfa.handler(,
                 let picker = UIImagePickerController() //MainViewController.IMAGE_PICKER
@@ -214,6 +215,9 @@ class AddIncidentAction : BaseEntityAction {
             
             let save: ()-> Void={
                 let content = formVC.form.formValues()
+                
+                // prepare the action parameters
+                
                 let params=ActionParameterContainer(params: [PT.AKTION.rawValue : content[PT.AKTION.rawValue]!,
                                                              PT.OBJEKT_ID.rawValue: "\(entity.id)" as AnyObject,
                                                              PT.OBJEKT_TYP.rawValue: entity.getType().tableName() as AnyObject,
@@ -236,6 +240,12 @@ class AddIncidentAction : BaseEntityAction {
                 if let team=content[PT.ARBEITSAUFTRAG_ZUGEWIESEN_AN.rawValue]  as? String {
                     params.append(PT.ARBEITSAUFTRAG_ZUGEWIESEN_AN.rawValue, value: team as AnyObject)
                 }
+                
+                // add the documents
+
+                
+                
+                
                 
                 func showWaiting(){
                     lazyMainQueueDispatch() {
