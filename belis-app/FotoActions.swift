@@ -94,7 +94,7 @@ class AbstractPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINa
     func storeCidsObject(pictureName: String, fileName: String, picker: UIImagePickerController,progressHUD: JGProgressHUD? ) {
         let params=ActionParameterContainer(params: [   "OBJEKT_ID":"\(getIdString())" as AnyObject,
                                                         "OBJEKT_TYP":getTypeString() as AnyObject,
-                                                        "DOKUMENT_URL":"http://board.cismet.de/belis/\(fileName)\n\(pictureName)" as AnyObject])
+                                                        "DOKUMENT_URL":"\(CidsConnector.sharedInstance().getWebDAVBaseUrl().getUrl())\(fileName)\n\(pictureName)" as AnyObject])
         CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "AddDokument", params: params, handler: {(success:Bool) -> () in
             assert(!Thread.isMainThread )
             lazyMainQueueDispatch({ () -> () in
@@ -284,7 +284,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
                     print(NSString(data: resp, encoding: String.Encoding.utf8.rawValue) ?? "---")
                     let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"\(objectId)" as AnyObject,
                         "OBJEKT_TYP":objectTyp as AnyObject,
-                        "DOKUMENT_URL":"http://board.cismet.de/belis/\(fileName)\n\(pictureName)" as AnyObject])
+                        "DOKUMENT_URL":"\(CidsConnector.sharedInstance().getWebDAVBaseUrl().getUrl())\(fileName)\n\(pictureName)" as AnyObject])
                     CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {(success:Bool) -> () in
                         assert(!Thread.isMainThread )
                         lazyMainQueueDispatch({ () -> () in

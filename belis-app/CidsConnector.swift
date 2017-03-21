@@ -821,15 +821,7 @@ open class CidsConnector {
     }
     func uploadImageToWebDAV(_ image: UIImage, fileName: String , completionHandler: @escaping (_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void) {
         assert(loggedIn)
-        var baseUrl=""
-        if  (!inDevEnvironment()) {
-            baseUrl="http://board.cismet.de/belis"
-        }else {
-            baseUrl="http://aaa.cismet.de/webdav"
-        }
-        
-//        //let baseUrl="http://board.cismet.de/belis"
-//        let baseUrl="http://aaa.cismet.de/belis"
+        let baseUrl=getWebDAVBaseUrl().getUrl()
         
         let up=WebDavUploadImageOperation(baseUrl: baseUrl, user: Secrets.getWebDavUser(), pass: Secrets.getWebDavPass(), fileName: fileName, image:image) {
             (data, response, error) -> Void in
@@ -845,7 +837,20 @@ open class CidsConnector {
         let nowDouble = Date().timeIntervalSince1970
         return Int64(nowDouble*1000) + Int64(nowDouble/1000)
     }
+
+    func getWebDAVBaseUrl() -> UrlBase{
+        if  (!inDevEnvironment()) {
+            return  UrlBase(protPrefix: "http://",server: "board.cismet.de/",path: "belis/")
+        }else {
+            return UrlBase(protPrefix: "http://",server: "aaa.cismet.de/",path: "webdav/")
+        }
+    }
+
 }
+
+
+
+
 
 // MARK: - Entity Enum
 enum Entity : String{
