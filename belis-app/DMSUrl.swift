@@ -33,16 +33,26 @@ class DMSUrl : BaseEntity{
     
     // MARK: - object functions
     func getUrl() -> String{
-        return 
+        return
             (url?.urlBase?.protPrefix ?? "")
-            +
-            "\(Secrets.getWebDavAuthString())@"
-            +
-            (url?.urlBase?.server ?? "")
-            +
-            (url?.urlBase?.path ?? "")
-            +
-            (url?.objectName ?? "")
+                +
+                "\(Secrets.getWebDavAuthString())@"
+                +
+                (url?.urlBase?.server ?? "")
+                +
+                (url?.urlBase?.path ?? "")
+                +
+                (url?.objectName ?? "")
+    }
+    func getPublicUrl() -> String{
+        return
+            (url?.urlBase?.protPrefix ?? "")
+                +
+                (url?.urlBase?.server ?? "")
+                +
+                (url?.urlBase?.path ?? "")
+                +
+                (url?.objectName ?? "")
     }
     func getTitle() -> String {
         return name ?? description ?? "Dokument \(id)"

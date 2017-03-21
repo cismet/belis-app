@@ -35,6 +35,8 @@ class AddIncidentAction : BaseEntityAction {
         super.init(title: "Störung melden",style: UIAlertActionStyle.destructive, handler: {
             (action: UIAlertAction? , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
             let entity=yourself
+            let pdc=PureDocumentContainer()
+
             let formVC = CidsConnector.sharedInstance().mainVC!.storyboard!.instantiateViewController(withIdentifier: "formView") as! GenericFormViewController
             
             
@@ -150,7 +152,6 @@ class AddIncidentAction : BaseEntityAction {
             row.configuration.cell.appearance = ["titleLabel.textColor" : UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)]
             row.configuration.button.didSelectClosure = { (FormRowDescriptor) -> Void in
                 print("Fotooooooo")
-                let pdc=PureDocumentContainer()
 
                 // let tfa=TakeFotoAction(yourself: pdc)
                 // tfa.handler(,
@@ -170,7 +171,6 @@ class AddIncidentAction : BaseEntityAction {
             row.configuration.cell.appearance = ["titleLabel.textColor" : UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)]
             row.configuration.button.didSelectClosure = { (FormRowDescriptor) -> Void in
                 print("Mediaaaaa")
-                let pdc=PureDocumentContainer()
                 // let tfa=TakeFotoAction(yourself: pdc)
                 // tfa.handler(,
                 let picker = UIImagePickerController() //MainViewController.IMAGE_PICKER
@@ -242,9 +242,13 @@ class AddIncidentAction : BaseEntityAction {
                 }
                 
                 // add the documents
-
-                
-                
+                if pdc.dokumente.count>0 {
+                    var values: [String] = []
+                    for doc in pdc.dokumente {
+                        values.append(doc.getPublicUrl()+"\n"+doc.getTitle())
+                    }
+                    params.append(PT.DOKUMENT_URLS.rawValue, value: values as AnyObject)
+                }
                 
                 
                 func showWaiting(){
