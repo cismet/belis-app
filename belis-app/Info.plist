@@ -65,12 +65,16 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Erlauben Sie BelIS die Kamera zu benutzen um Bilder zu Objekten hinzuzufügen.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>BelIS-App möchte Ihren Standort verwenden.</string>
 	<key>NSLocationUsageDescription</key>
 	<string>BelIS-App möchte Ihren Standort verwenden.</string>
 	<key>NSLocationWhenInUsageDescription</key>
 	<string>BelIS-App möchte Ihren Standort verwenden.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Erlauben Sie BelIS den Zugriff auf Bilder um diese Objekten hinzuzufügen.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>webhostinghub-glyphs.ttf</string>
