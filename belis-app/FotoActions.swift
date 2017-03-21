@@ -206,9 +206,11 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
     
     var selfEntity: BaseEntity
     var refreshable: Refreshable
-    init (yourself: BaseEntity, refreshable: Refreshable){
+    var doneTrigger: (_: DMSUrl)->()
+    init (yourself: BaseEntity, refreshable: Refreshable, done: @escaping (_: DMSUrl)->() = {(_)->() in } ){
         selfEntity=yourself
         self.refreshable=refreshable
+        self.doneTrigger=done
         if let _ = selfEntity as? DocumentContainer {
             
         }
@@ -291,8 +293,10 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
                             picker.dismiss(animated:true , completion: nil)
                             if success {
                                 print("Everything is going to be 200-OK")
-                                (self.selfEntity as! DocumentContainer).addDocument(DMSUrl(name:pictureName, fileName:fileName))
+                                let dmsUrlObject=DMSUrl(name:pictureName, fileName:fileName)
+                                (self.selfEntity as! DocumentContainer).addDocument(dmsUrlObject)
                                 self.refreshable.refresh()
+                                self.doneTrigger(dmsUrlObject)
                                 progressHUD!.indicatorView=JGProgressHUDSuccessIndicatorView()
                             }
                             else {

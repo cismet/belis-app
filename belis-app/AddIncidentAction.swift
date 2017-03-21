@@ -110,8 +110,6 @@ class AddIncidentAction : BaseEntityAction {
             }
             
             row.configuration.cell.appearance = ["segmentedControl.tintColor" : UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)]
-            //           // row.value=PT.VERANLASSUNG.rawValue as AnyObject
-            //            row.configuration.cell.appearance["segmentedControl.selectedSegmentIndex"]=PT.VERANLASSUNG.rawValue as AnyObject
             var content = formVC.form.formValues()
             
             aktionsSection.rows.append(row)
@@ -147,46 +145,58 @@ class AddIncidentAction : BaseEntityAction {
             section3.headerTitle = "Bemerkungen"
             section3.rows.append(row)
             
-            let section4 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
+            let fotoSection = FormSectionDescriptor(headerTitle: "Fotos", footerTitle: nil)
+            
+            func getFotoRowDescriptor(dmsUrl: DMSUrl) -> FormRowDescriptor{
+                let singleFotoRow = FormRowDescriptor(tag: "\(PT.DOKUMENT_URLS.rawValue)--\(dmsUrl.getPublicUrl())", type: .booleanSwitch, title: dmsUrl.getTitle())
+                return singleFotoRow
+            }
+
             row = FormRowDescriptor(tag: PT.DOKUMENT_URLS.rawValue, type: .button, title: "Foto erstellen")
             row.configuration.cell.appearance = ["titleLabel.textColor" : UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)]
             row.configuration.button.didSelectClosure = { (FormRowDescriptor) -> Void in
-                print("Fotooooooo")
-
-                // let tfa=TakeFotoAction(yourself: pdc)
-                // tfa.handler(,
                 let picker = UIImagePickerController() //MainViewController.IMAGE_PICKER
                 picker.sourceType = UIImagePickerControllerSourceType.camera
                 picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
                 picker.delegate = detailVC as! DetailVC
-                (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: pdc,refreshable: formVC)
+                (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: pdc,refreshable: formVC, done: { (dmsUrl)->() in
+                    let singleFotoRow = getFotoRowDescriptor(dmsUrl: dmsUrl)
+                    singleFotoRow.value=true as AnyObject
+                    fotoSection.rows.append(singleFotoRow)
+                    formVC.refresh()
+                })
+                
                 picker.allowsEditing = true
                 picker.modalPresentationStyle = UIModalPresentationStyle.fullScreen
-                //
+                
                 detailVC.present(picker, animated: true, completion: {})
             }
             
-            section4.rows.append(row)
+            fotoSection.rows.append(row)
+        
             row = FormRowDescriptor(tag: PT.BEMERKUNG.rawValue, type: .button, title: "Foto auswählen")
             row.configuration.cell.appearance = ["titleLabel.textColor" : UIColor(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)]
             row.configuration.button.didSelectClosure = { (FormRowDescriptor) -> Void in
-                print("Mediaaaaa")
-                // let tfa=TakeFotoAction(yourself: pdc)
-                // tfa.handler(,
-                let picker = UIImagePickerController() //MainViewController.IMAGE_PICKER
+                let picker = UIImagePickerController()
                 picker.sourceType = UIImagePickerControllerSourceType.photoLibrary
                 picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
                 picker.delegate = detailVC as! DetailVC
-                (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: pdc,refreshable: formVC)
+                (detailVC as! DetailVC).callBacker=FotoPickerCallBacker(yourself: pdc,refreshable: formVC, done: { (dmsUrl)->() in
+                    let singleFotoRow = getFotoRowDescriptor(dmsUrl: dmsUrl)
+                    singleFotoRow.value=true as AnyObject
+                    fotoSection.rows.append(singleFotoRow)
+                    formVC.refresh()
+                })
                 picker.allowsEditing = true
                 picker.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
-                //
-                detailVC.present(picker, animated: true, completion: {})
+                
+                detailVC.present(picker, animated: true, completion: { })
             }
             
             
-            section4.rows.append(row)
-            form.sections=[section1,aktionsSection,section2,section3,section4]
+            fotoSection.rows.append(row)
+            
+            form.sections=[section1,aktionsSection,section2,section3,fotoSection]
             
             
             
@@ -245,7 +255,11 @@ class AddIncidentAction : BaseEntityAction {
                 if pdc.dokumente.count>0 {
                     var values: [String] = []
                     for doc in pdc.dokumente {
-                        values.append(doc.getPublicUrl()+"\n"+doc.getTitle())
+                        if let enabled=content["\(PT.DOKUMENT_URLS.rawValue)--\(doc.getPublicUrl())"] as? Bool {
+                            if enabled {
+                                values.append(doc.getPublicUrl()+"\n"+doc.getTitle())
+                            }
+                        }
                     }
                     params.append(PT.DOKUMENT_URLS.rawValue, value: values as AnyObject)
                 }
@@ -324,7 +338,6 @@ class AddIncidentAction : BaseEntityAction {
             
         } )
     }
-    
     
     
 }
