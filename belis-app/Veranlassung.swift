@@ -74,12 +74,18 @@ class Veranlassung : BaseEntity, CellDataProvider  {
         data["main"]?.append(MemoTitledInfoCellData(title: "Beschreibung", data: beschreibung ?? ""))
         data["main"]?.append(DoubleTitledInfoCellData(titleLeft: "angelegt von", dataLeft: username ?? "-", titleRight: "angelegt am", dataRight: datum?.toDateString() ?? "-"))
         data["main"]?.append(MemoTitledInfoCellData(title: "Bemerkungen", data: bemerkungen ?? ""))
+        if dokumente.count>0 {
+            data["Dokumente"]=[]
+            for url in dokumente {
+                data["Dokumente"]?.append(SimpleUrlPreviewInfoCellData(title: url.description ?? "Dokument", url: url.getUrl()))
+            }
+        }
         data["DeveloperInfo"]=[]
         data["DeveloperInfo"]?.append(SingleTitledInfoCellData(title: "Key", data: "\(getType().tableName())/\(id)"))
         return data
     }
     @objc func getDataSectionKeys() -> [String] {
-        return ["main","DeveloperInfo"]
+        return ["main","Dokumente","DeveloperInfo"]
     }
     
 }

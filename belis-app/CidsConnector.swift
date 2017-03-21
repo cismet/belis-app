@@ -35,7 +35,7 @@ open class CidsConnector {
             UserDefaults.standard.set(tlsEnabled, forKey: "tlsEnabled")
         }
     }
-    var pureBaseUrl="192.168.178.38" {
+    var pureBaseUrl="192.168.178.69" {
         didSet {
             UserDefaults.standard.set(pureBaseUrl, forKey: "cidsPureBaseURL")
         }
@@ -138,6 +138,9 @@ open class CidsConnector {
     var loggedIn=false
     var selectedTeam: Team?
     var selectedTeamId: String?
+    
+    var lastUsedTeamIdForIncident: String?
+    
     var lastMonteur: String?
     
     // MARK: - Lists
@@ -492,24 +495,7 @@ open class CidsConnector {
                                                                 self.searchResults.updateValue([auftrag], forKey: Entity.ARBEITSAUFTRAEGE)
                                                             }
                                                             
-                                                            for veranlassungsnummer in auftrag.getVeranlassungsnummern() {
-                                                                if let _=self.veranlassungsCache[veranlassungsnummer] {
-                                                                    print("cacheHit")
-                                                                }
-                                                                else {
-                                                                    getVeranlassungByNummer(veranlassungsnummer, handler: { (veranlassung) -> () in
-                                                                        if let v=veranlassung {
-                                                                            self.veranlassungsCache.updateValue(v, forKey: veranlassungsnummer)
-                                                                            if self.selectedArbeitsauftrag != nil {
-                                                                                lazyMainQueueDispatch({ () -> () in
-                                                                                    self.mainVC?.tableView.reloadData()
-                                                                                })
-                                                                            }
-                                                                            
-                                                                        }
-                                                                    })
-                                                                }
-                                                            }
+                                                            checkForMissingVeranlassungen(auftrag: auftrag)
                                                         }
                                                     }
                                                     if (queue.operationCount==1 && !queue.cancelRequested) {
@@ -557,7 +543,28 @@ open class CidsConnector {
         
     }
     
-    func refreshArbeitsauftrag(_ arbeitsauftrag: Arbeitsauftrag?, queue: CancelableOperationQueue = CancelableOperationQueue(name: "refreshArbeitsauftrag", afterCancellation: {}), handler: @escaping (_ success: Bool)->() ){
+    func checkForMissingVeranlassungen(auftrag: Arbeitsauftrag) {
+        for veranlassungsnummer in auftrag.getVeranlassungsnummern() {
+            if let _=self.veranlassungsCache[veranlassungsnummer] {
+                print("cacheHit")
+            }
+            else {
+                getVeranlassungByNummer(veranlassungsnummer, handler: { (veranlassung) -> () in
+                    if let v=veranlassung {
+                        self.veranlassungsCache.updateValue(v, forKey: veranlassungsnummer)
+                        if self.selectedArbeitsauftrag != nil {
+                            lazyMainQueueDispatch({ () -> () in
+                                self.mainVC?.tableView.reloadData()
+                            })
+                        }
+                        
+                    }
+                })
+            }
+        }
+    }
+    
+    func refreshArbeitsauftrag(_ arbeitsauftrag: Arbeitsauftrag?, shouldCheckForMissingVeranlassungen: Bool=false, skipVisualization: Bool=false, queue: CancelableOperationQueue = CancelableOperationQueue(name: "refreshArbeitsauftrag", afterCancellation: {}), handler: @escaping (_ success: Bool)->() ){
         if let _=arbeitsauftrag {
             func completionHandler(_ operation:GetEntityOperation, data: Data?, response: URLResponse?, error: Error?, queue: OperationQueue) -> (){
                 if (error == nil) {
@@ -581,13 +588,17 @@ open class CidsConnector {
                                 }
                             }
                             
-                            self.mainVC!.fillArbeitsauftragIntoTable(aa)
-                            self.mainVC!.visualizeAllSearchResultsInMap(zoomToShowAll: false, showActivityIndicator: true)
-                            //  if let s=sel  {
-                            //  self.mainVC!.tableView.selectRowAtIndexPath(s, animated: false, scrollPosition: UITableViewScrollPosition.None)
-                            //  }
+                            if !skipVisualization {
+                                self.mainVC!.fillArbeitsauftragIntoTable(aa)
+                                self.mainVC!.visualizeAllSearchResultsInMap(zoomToShowAll: false, showActivityIndicator: true)
+                            }
+                            
+                            if shouldCheckForMissingVeranlassungen {
+                                checkForMissingVeranlassungen(auftrag: aa)
+                            }
                             
                             handler(true)
+                            
                             return
                         }
                         
@@ -810,8 +821,7 @@ open class CidsConnector {
     }
     func uploadImageToWebDAV(_ image: UIImage, fileName: String , completionHandler: @escaping (_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void) {
         assert(loggedIn)
-        
-        let baseUrl="http://board.cismet.de/belis"
+        let baseUrl=getWebDAVBaseUrl().getUrl()
         
         let up=WebDavUploadImageOperation(baseUrl: baseUrl, user: Secrets.getWebDavUser(), pass: Secrets.getWebDavPass(), fileName: fileName, image:image) {
             (data, response, error) -> Void in
@@ -827,7 +837,20 @@ open class CidsConnector {
         let nowDouble = Date().timeIntervalSince1970
         return Int64(nowDouble*1000) + Int64(nowDouble/1000)
     }
+
+    func getWebDAVBaseUrl() -> UrlBase{
+        if  (!inDevEnvironment()) {
+            return  UrlBase(protPrefix: "http://",server: "board.cismet.de/",path: "belis/")
+        }else {
+            return UrlBase(protPrefix: "http://",server: "aaa.cismet.de/",path: "webdav/")
+        }
+    }
+
 }
+
+
+
+
 
 // MARK: - Entity Enum
 enum Entity : String{

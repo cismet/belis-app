@@ -33,16 +33,26 @@ class DMSUrl : BaseEntity{
     
     // MARK: - object functions
     func getUrl() -> String{
-        return 
+        return
             (url?.urlBase?.protPrefix ?? "")
-            +
-            "\(Secrets.getWebDavAuthString())@"
-            +
-            (url?.urlBase?.server ?? "")
-            +
-            (url?.urlBase?.path ?? "")
-            +
-            (url?.objectName ?? "")
+                +
+                "\(Secrets.getWebDavAuthString())@"
+                +
+                (url?.urlBase?.server ?? "")
+                +
+                (url?.urlBase?.path ?? "")
+                +
+                (url?.objectName ?? "")
+    }
+    func getPublicUrl() -> String{
+        return
+            (url?.urlBase?.protPrefix ?? "")
+                +
+                (url?.urlBase?.server ?? "")
+                +
+                (url?.urlBase?.path ?? "")
+                +
+                (url?.objectName ?? "")
     }
     func getTitle() -> String {
         return name ?? description ?? "Dokument \(id)"
@@ -53,7 +63,7 @@ class Url : BaseEntity{
     init(webdavObjectName: String){
         super.init()
         objectName=webdavObjectName
-        urlBase=UrlBase.WEBDAVURLBASE
+        urlBase=CidsConnector.sharedInstance().getWebDAVBaseUrl()
     }
     required init?(map: Map) {
         super.init()
@@ -74,7 +84,7 @@ class UrlBase : BaseEntity{
     var protPrefix: String?
     var server: String?
     var path: String?
-    static let WEBDAVURLBASE=UrlBase(protPrefix: "http://",server: "board.cismet.de/",path: "belis/")
+    
     
     init(protPrefix:String, server: String, path:String){
         super.init()
@@ -87,8 +97,10 @@ class UrlBase : BaseEntity{
     required init?(map: Map) {
         super.init(map: map)
     }
-
     
+    func getUrl() -> String {
+        return "\(protPrefix ?? "")\(server ?? "")\(path ?? "")"
+    }
     // MARK: - essential overrides BaseEntity
     override func mapping(map: Map) {
         id <- map["id"];

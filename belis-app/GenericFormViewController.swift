@@ -9,7 +9,7 @@
 import Foundation
 import SwiftForms
 
-class GenericFormViewController: FormViewController {
+class GenericFormViewController: FormViewController, Refreshable {
     var saveHandler : (()->())?
     var cancelHandler : (()->())?
     
@@ -33,7 +33,8 @@ class GenericFormViewController: FormViewController {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: image, style: UIBarButtonItemStyle.plain , target: self, action: #selector(GenericFormViewController.cancel))
     }
     
-    func save() {
+    
+     func save() {
         let check=preSaveCheck()
         if (check.passed) {
             self.dismiss(animated: true) { () -> Void in
@@ -54,6 +55,16 @@ class GenericFormViewController: FormViewController {
     }
     
     func cancel() {
+        if let nc=self.navigationController {
+            nc.popViewController(animated: true)
+            if let ch=self.cancelHandler {
+                ch()
+            }
+            else {
+                //should not  happen >> log it
+            }
+        }
+        else {
         self.dismiss(animated: true) { () -> Void in
             if let ch=self.cancelHandler {
                 ch()
@@ -62,7 +73,14 @@ class GenericFormViewController: FormViewController {
                 //should not  happen >> log it
             }
         }
+        }
     }
+    
+    func refresh() {
+        super.tableView.reloadData()
+        print("refresh ¯\\_(ツ)_/¯")
+    }
+
     
 }
 

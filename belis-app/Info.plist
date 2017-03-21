@@ -53,7 +53,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.9.2</string>
+	<string>0.10.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -65,12 +65,16 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Erlauben Sie BelIS die Kamera zu benutzen um Bilder zu Objekten hinzuzufügen.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>BelIS-App möchte Ihren Standort verwenden.</string>
 	<key>NSLocationUsageDescription</key>
 	<string>BelIS-App möchte Ihren Standort verwenden.</string>
 	<key>NSLocationWhenInUsageDescription</key>
 	<string>BelIS-App möchte Ihren Standort verwenden.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Erlauben Sie BelIS den Zugriff auf Bilder um diese Objekten hinzuzufügen.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>webhostinghub-glyphs.ttf</string>
