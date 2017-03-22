@@ -369,6 +369,8 @@ class ServerActionOperation: CidsRequestOperation {
         request.addValue("multipart/form-data; boundary=nFcUS6GTpcRsBnbvYHhdwyggifFtKeLm", forHTTPHeaderField: "Content-Type")
         
         let paramsAsJSON:String=Mapper().toJSONString(params!, prettyPrint: false)!
+        print("---- Action: \(url)")
+        print("Body:")
         let bodyString = "--nFcUS6GTpcRsBnbvYHhdwyggifFtKeLm\r\n" +
             "Content-Disposition: form-data; name=\"taskparams\"; filename=\"addDoc.json\"\r\n" +
             "Content-Type: application/json\r\n" +
@@ -376,7 +378,7 @@ class ServerActionOperation: CidsRequestOperation {
             "\(paramsAsJSON) \r\n" +
             "\r\n" +
         "--nFcUS6GTpcRsBnbvYHhdwyggifFtKeLm--\r\n"
-        
+        print(bodyString)
         
         request.httpBody = bodyString.data(using: String.Encoding.utf8, allowLossyConversion: true)
         task = session.dataTask(with: request, completionHandler: { (data , response , error ) -> Void in

@@ -75,8 +75,8 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
         row.value=Date() as AnyObject?
         
         section2.rows.append(row)
-        row = FormRowDescriptor(tag: PT.DOKUMENT.rawValue, type: .booleanSwitch, title: "inkl. Foto")
-        section2.rows.append(row)
+//        row = FormRowDescriptor(tag: PT.DOKUMENT.rawValue, type: .booleanSwitch, title: "inkl. Foto")
+//        section2.rows.append(row)
 
         
         form.sections = [section2]
@@ -121,6 +121,8 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
             let millis = Int64(nowDouble!*1000) + Int64(nowDouble!/1000)
             let param = "\(millis)"
             apc.append(PT.PRUEFDATUM.rawValue, value: param as AnyObject)
+//            let urls: [String] = []
+//            apc.append(PT.DOKUMENT.rawValue, value: urls as AnyObject)
             
             
 //            if let mitFoto=content[PT.DOKUMENT.rawValue] as? Bool{
