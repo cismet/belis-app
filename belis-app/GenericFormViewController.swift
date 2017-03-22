@@ -86,7 +86,8 @@ class GenericFormViewController: FormViewController, Refreshable {
     
     func refresh() {
         super.tableView.reloadData()
-        print("refresh ¯\\_(ツ)_/¯")
+        navigationController?.isModalInPopover=true
+
     }
 
     
