@@ -35,6 +35,7 @@ class AddIncidentAction : BaseEntityAction {
         super.init(title: "Störung melden",style: UIAlertActionStyle.destructive, handler: {
             (action: UIAlertAction? , selfAction: BaseEntityAction, obj: BaseEntity, detailVC: UIViewController)->Void in
             let entity=yourself
+            detailVC.navigationController?.isModalInPopover=true
             let pdc=PureDocumentContainer()
 
             let formVC = CidsConnector.sharedInstance().mainVC!.storyboard!.instantiateViewController(withIdentifier: "formView") as! GenericFormViewController
@@ -188,6 +189,7 @@ class AddIncidentAction : BaseEntityAction {
                     formVC.refresh()
                 })
                 picker.allowsEditing = true
+                picker.isModalInPopover = true
                 picker.modalPresentationStyle = UIModalPresentationStyle.overCurrentContext
                 
                 detailVC.present(picker, animated: true, completion: { })
@@ -314,6 +316,7 @@ class AddIncidentAction : BaseEntityAction {
                         }
                         
                     }
+                    detailVC.navigationController?.isModalInPopover=false
                 }
                 
                 
@@ -325,7 +328,8 @@ class AddIncidentAction : BaseEntityAction {
             
             func cancel() {
                 print("WHAAAAAT")
-                
+                detailVC.navigationController?.isModalInPopover=false
+
             }
             
             
