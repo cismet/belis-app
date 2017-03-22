@@ -124,17 +124,17 @@ class AddIncidentAction : BaseEntityAction {
             
             
             
-            row = FormRowDescriptor(tag: PT.USER.rawValue, type: .text, title: "User")
-            row.configuration.cell.appearance = ["textField.placeholder" : "Monteurname" as AnyObject, "textField.textAlignment" : NSTextAlignment.right.rawValue as AnyObject]
-            
-            row.value=CidsConnector.sharedInstance().login as AnyObject?
-            
-            section1.rows.append(row)
-            row = FormRowDescriptor(tag: PT.DATUM.rawValue, type: .date, title: "Datum")
-            
-            row.value=Date() as AnyObject?
-            
-            section1.rows.append(row)
+//            row = FormRowDescriptor(tag: PT.USER.rawValue, type: .text, title: "User")
+//            row.configuration.cell.appearance = ["textField.placeholder" : "Monteurname" as AnyObject, "textField.textAlignment" : NSTextAlignment.right.rawValue as AnyObject]
+//            
+//            row.value=CidsConnector.sharedInstance().login as AnyObject?
+//            
+//            section1.rows.append(row)
+//            row = FormRowDescriptor(tag: PT.DATUM.rawValue, type: .date, title: "Datum")
+//            
+//            row.value=Date() as AnyObject?
+//            
+//            section1.rows.append(row)
             let section2 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
             row = FormRowDescriptor(tag: PT.BESCHREIBUNG.rawValue, type: .multilineText, title: "")
             section2.headerTitle = "Beschreibung"
