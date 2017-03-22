@@ -55,25 +55,33 @@ class GenericFormViewController: FormViewController, Refreshable {
     }
     
     func cancel() {
-        if let nc=self.navigationController {
-            nc.popViewController(animated: true)
-            if let ch=self.cancelHandler {
-                ch()
-            }
-            else {
-                //should not  happen >> log it
+//        self.dismiss(animated: true) { () -> Void in
+//            if let ch=self.cancelHandler {
+//                ch()
+//            }
+//            else {
+//                //should not  happen >> log it
+//            }
+//        }
+        let check=preCancelCheck()
+        if (check.passed) {
+            self.dismiss(animated: true) { () -> Void in
+                if let sh=self.cancelHandler {
+                    sh()
+                }
+                else {
+                    //should not  happen >> log it
+                }
             }
         }
         else {
-        self.dismiss(animated: true) { () -> Void in
-            if let ch=self.cancelHandler {
-                ch()
-            }
-            else {
-                //should not  happen >> log it
-            }
+            let alert = UIAlertController(title: check.title, message: check.message, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler:{ (ACTION :UIAlertAction)in
+            }))
+            present(alert, animated: true, completion: nil)
         }
-        }
+
+    
     }
     
     func refresh() {
