@@ -19,7 +19,7 @@ public class CancelableOperationQueue: OperationQueue {
         //setProgressInWaitingHUD(0)
         postCancelHook=afterCancellation
         super.name=name
-        print("Start cancelable transaction with the name \(name)")
+        log.verbose("Start cancelable transaction with the name \(name)")
     }
     
     
@@ -140,7 +140,7 @@ class GetEntityOperation: CidsRequestOperation {
     }
     
     override func main() {
-        print("do get \(entityName).\(id)")
+        log.debug("do get \(self.entityName).\(self.id)")
         if (self.isCancelled || qu.cancelRequested) {
             return
         }
@@ -162,11 +162,11 @@ class GetEntityOperation: CidsRequestOperation {
                     if (error == nil) {
                         // Success
                         let statusCode = (response as! HTTPURLResponse).statusCode
-                        print("getEntity::URL Session Task Succeeded: HTTP \(statusCode)")
+                        log.verbose("getEntity::URL Session Task Succeeded: HTTP \(statusCode)")
                     }
                     else {
                         // Failure
-                        print("getEntity::URL Session Task Failed: %@", error!.localizedDescription);
+                        log.error("getEntity::URL Session Task Failed: \(error!.localizedDescription)")
                     }
                 }
                 
@@ -181,7 +181,7 @@ class GetEntityOperation: CidsRequestOperation {
         super.cancel()
         self._finished = true
 
-        print("cancel get \(entityName).\(id) \(self.isCancelled),\(self.isFinished),\(self.isExecuting) ")
+        log.verbose("cancel get \(self.entityName).\(self.id) \(self.isCancelled),\(self.isFinished),\(self.isExecuting) ")
     }
 }
 class GetAllEntitiesOperation: CidsRequestOperation {
@@ -217,11 +217,11 @@ class GetAllEntitiesOperation: CidsRequestOperation {
                     if (error == nil) {
                         // Success
                         let statusCode = (response as! HTTPURLResponse).statusCode
-                        print("getAllEntities::URL Session Task Succeeded: HTTP \(statusCode)")
+                        log.verbose("getAllEntities::URL Session Task Succeeded: HTTP \(statusCode)")
                     }
                     else {
                         // Failure
-                        print("getAllEntities::URL Session Task Failed: %@", error!.localizedDescription);
+                        log.error("getAllEntities::URL Session Task Failed:\(error!.localizedDescription)")
                     }
                 }
                 
@@ -262,7 +262,7 @@ class LoginOperation: CidsRequestOperation {
                 }
                 else {
                     let statusCode = (response as! HTTPURLResponse).statusCode
-                    print("URL Session Task Succeeded: HTTP \(statusCode) for \(self.url)")
+                    log.verbose("URL Session Task Succeeded: HTTP \(statusCode) for \(self.url)")
                     
                     if statusCode==200 {
                         self.completionHandler!(true,nil)
@@ -296,7 +296,7 @@ class SearchOperation: CidsRequestOperation {
     
     override func main() {
         let session=sessionFactory.getNewCidsSession()
-        print(url)
+        log.verbose("URL: \(self.url)")
         var URL = Foundation.URL(string: url)
         let URLParams = [
             "role": "all",
@@ -311,7 +311,7 @@ class SearchOperation: CidsRequestOperation {
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
         
         let y = Mapper().toJSON(parameters!)
-        print(Mapper().toJSONString(parameters!, prettyPrint: true)!)
+        log.verbose("Body:\n\(Mapper().toJSONString(self.parameters!, prettyPrint: true)!)")
         request.httpBody=try? JSONSerialization.data(withJSONObject: y, options: JSONSerialization.WritingOptions())
         
         /* Start a new Task */
@@ -324,11 +324,11 @@ class SearchOperation: CidsRequestOperation {
                 if (error == nil) {
                     // Success
                     let statusCode = (response as! HTTPURLResponse).statusCode
-                    print("search::URL Session Task Succeeded: HTTP \(statusCode)")
+                    log.verbose("search::URL Session Task Succeeded: HTTP \(statusCode)")
                 }
                 else {
                     // Failure
-                    print("search::URL Session Task Failed: %@", error!.localizedDescription);
+                    log.error("search::URL Session Task Failed: \(error!.localizedDescription)");
                 }
             }
             self.isExecuting=false
@@ -342,7 +342,7 @@ class SearchOperation: CidsRequestOperation {
         super.cancel()
         self._finished = true
         
-        print("cancel  \(searchKey) \(self.isCancelled),\(self.isFinished),\(self.isExecuting) ")
+        log.verbose("cancel  \(self.searchKey) \(self.isCancelled),\(self.isFinished),\(self.isExecuting) ")
     }
 }
 class ServerActionOperation: CidsRequestOperation {
@@ -369,8 +369,7 @@ class ServerActionOperation: CidsRequestOperation {
         request.addValue("multipart/form-data; boundary=nFcUS6GTpcRsBnbvYHhdwyggifFtKeLm", forHTTPHeaderField: "Content-Type")
         
         let paramsAsJSON:String=Mapper().toJSONString(params!, prettyPrint: false)!
-        print("---- Action: \(url)")
-        print("Body:")
+
         let bodyString = "--nFcUS6GTpcRsBnbvYHhdwyggifFtKeLm\r\n" +
             "Content-Disposition: form-data; name=\"taskparams\"; filename=\"addDoc.json\"\r\n" +
             "Content-Type: application/json\r\n" +
@@ -378,7 +377,7 @@ class ServerActionOperation: CidsRequestOperation {
             "\(paramsAsJSON) \r\n" +
             "\r\n" +
         "--nFcUS6GTpcRsBnbvYHhdwyggifFtKeLm--\r\n"
-        print(bodyString)
+        log.debug("---- Action: \(self.url)\nBody:\n\(bodyString)")
         
         request.httpBody = bodyString.data(using: String.Encoding.utf8, allowLossyConversion: true)
         task = session.dataTask(with: request, completionHandler: { (data , response , error ) -> Void in
@@ -390,11 +389,11 @@ class ServerActionOperation: CidsRequestOperation {
                 if (error == nil) {
                     // Success
                     let statusCode = (response as! HTTPURLResponse).statusCode
-                    print("serverAction::URL Session Task Succeeded: HTTP \(statusCode)")
+                    log.verbose("serverAction::URL Session Task Succeeded: HTTP \(statusCode)")
                 }
                 else {
                     // Failure
-                    print("serverAction::URL Session Task Failed: %@", error!.localizedDescription);
+                    log.error("serverAction::URL Session Task Failed: \(error!.localizedDescription)")
                 }
             }
             
@@ -435,11 +434,11 @@ class WebDavUploadImageOperation: CidsRequestOperation {
                 if (error == nil) {
                     // Success
                     let statusCode = (response as! HTTPURLResponse).statusCode
-                    print("webdavUpload::URL Session Task Succeeded: HTTP \(statusCode)")
+                    log.verbose("webdavUpload::URL Session Task Succeeded: HTTP \(statusCode)")
                 }
                 else {
                     // Failure
-                    print("webdavUpload::URL Session Task Failed: %@", error!.localizedDescription);
+                    log.error("webdavUpload::URL Session Task Failed: \(error!.localizedDescription)")
                 }
             }
             self.isExecuting=false

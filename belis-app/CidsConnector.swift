@@ -210,29 +210,29 @@ open class CidsConnector {
             self.loggedIn=loggedIn
             
             if loggedIn {
-                print("logged in")
+                log.info("logged in")
             }
             else {
-                print("Error\(error)")
+                log.error("Error\(error)")
             }
             if (loggedIn) {
                 func teamsCompletionHandler(_ operation: GetAllEntitiesOperation, data: Data?, response: URLResponse?, error: Error?, queue: OperationQueue){
                     if (error == nil) {
                         // Success
                         let statusCode = (response as! HTTPURLResponse).statusCode
-                        print("teams::GetAllEntities::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                        log.verbose("teams::GetAllEntities::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                         if let checkeddata: [String : AnyObject] = getJson(data!) {
                             let json =  checkeddata["$collection"] as! [[String : AnyObject]];
                             if let teams = Mapper<Team>().mapArray(JSONArray: json) {
                                 
-                                print("\(teams.count) Teams vorhanden")
+                                log.debug("\(teams.count) Teams vorhanden")
                                 let sortedTeams=teams.sorted(by: Team.ascending)
                                 self.sortedTeamListKeys=[]
                                 for t in sortedTeams {
                                     self.teamList.updateValue(t, forKey: "\(t.id)")
                                     self.sortedTeamListKeys.append("\(t.id)")
                                 }
-                                print("\(teams.count) Teams abgelegt")
+                                log.debug("\(teams.count) Teams abgelegt")
                                 if let tid=CidsConnector.sharedInstance().selectedTeamId {
                                     if let t=CidsConnector.sharedInstance().teamList[tid]{
                                         CidsConnector.sharedInstance().selectedTeam=t
@@ -241,13 +241,11 @@ open class CidsConnector {
                             }
                         }
                         else {
-                            print("no json data for \(operation.url)")
-                            //self.searchResults[0].append(Leuchte())
-                            
+                            log.error("no json data for \(operation.url)")
                         }
                     }else {
                         // Failure
-                        print("teams::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
+                        log.error("teams::GetAllEntities::URL Session Task Failed: \(error?.localizedDescription ?? self.defaultErrorMessageNoFurtherInformation)")
                     }
                     
                     handler(loggedIn)
@@ -272,28 +270,28 @@ open class CidsConnector {
             if (error == nil) {
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("arbeitsprotokollstati::GetAllEntities::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                log.verbose("arbeitsprotokollstati::GetAllEntities::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                 if let checkeddata: [String : AnyObject] = getJson(data!) {
                     let json =  checkeddata["$collection"] as! [[String : AnyObject]];
                     if let apsts = Mapper<ArbeitsprotokollStatus>().mapArray(JSONArray: json) {
                         
-                        print("\(apsts.count) Protokollstati vorhanden")
+                        log.debug("\(apsts.count) Protokollstati vorhanden")
                         let sortedApsts=apsts.sorted(by: ArbeitsprotokollStatus.ascending)
                         self.sortedArbeitsprotokollStatusListKeys=[]
                         for aps in sortedApsts {
                             self.arbeitsprotokollStatusList.updateValue(aps, forKey: "\(aps.id)")
                             self.sortedArbeitsprotokollStatusListKeys.append("\(aps.id)")
                         }
-                        print("\(apsts.count) Protokollstati abgelegt")
+                        log.debug("\(apsts.count) Protokollstati abgelegt")
                     }
                     else {
-                        print("no json data for \(operation.url)")
+                        log.error("no json data for \(operation.url)")
                         //self.searchResults[0].append(Leuchte())
                         
                     }
                 }else {
                     // Failure
-                    print("arbeitsprotokollstati::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
+                    log.error("arbeitsprotokollstati::GetAllEntities::URL Session Task Failed: \(error?.localizedDescription ?? self.defaultErrorMessageNoFurtherInformation)")
                 }
             }
         }
@@ -303,36 +301,29 @@ open class CidsConnector {
             if (error == nil) {
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("leuchtentypen::GetAllEntities::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                log.verbose("leuchtentypen::GetAllEntities::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                 if let checkeddata: [String : AnyObject] = getJson(data!) {
                     let json =  checkeddata["$collection"] as! [[String : AnyObject]];
                     if let lts = Mapper<LeuchtenTyp>().mapArray(JSONArray: json) {
                         
-                        print("\(lts.count) Leuchtentypen vorhanden")
+                        log.debug("\(lts.count) Leuchtentypen vorhanden")
                         let sortedLts=lts.sorted(by: LeuchtenTyp.ascending)
                         self.sortedLeuchtenTypListKeys=[]
                         for lt in sortedLts {
                             self.leuchtentypList.updateValue(lt, forKey: "\(lt.id)")
                             self.sortedLeuchtenTypListKeys.append("\(lt.id)")
                         }
-                        print("\(lts.count) Leuchtentypen abgelegt")
-                        
-                        //                        if self.queue.operationCount==1 {
-                        //                            let duration = (CidsConnector.currentTimeMillis() - self.start)
-                        //                            handler();
-                        //                            print("loaded \(duration)");
-                        //
-                        //                        }
-                    }
+                        log.debug("\(lts.count) Leuchtentypen abgelegt")
+                     }
                 }
                 else {
-                    print("no json data for \(operation.url)")
+                    log.error("no json data for \(operation.url)")
                     //self.searchResults[0].append(Leuchte())
                     
                 }
             }else {
                 // Failure
-                print("leuchtentypen::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription ?? "no further Info");
+                log.error("leuchtentypen::GetAllEntities::URL Session Task Failed: \(error?.localizedDescription ?? "no further Info")")
             }
             
         }
@@ -342,36 +333,30 @@ open class CidsConnector {
             if (error == nil) {
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("leuchtmittel::GetAllEntities::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                log.verbose("leuchtmittel::GetAllEntities::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                 if let checkeddata: [String : AnyObject] = getJson(data!) {
                     let json =  checkeddata["$collection"] as! [[String : AnyObject]];
                     if let lms = Mapper<Leuchtmittel>().mapArray(JSONArray: json) {
                         
-                        print("\(lms.count) Leuchtmittel vorhanden")
+                        log.debug("\(lms.count) Leuchtmittel vorhanden")
                         let sortedLms=lms.sorted(by: Leuchtmittel.ascending)
                         self.sortedLeuchtmittelListKeys=[]
                         for lm in sortedLms {
                             self.leuchtmittelList.updateValue(lm, forKey: "\(lm.id)")
                             self.sortedLeuchtmittelListKeys.append("\(lm.id)")
                         }
-                        print("\(lms.count) Leuchtmittel abgelegt")
+                        log.debug("\(lms.count) Leuchtmittel abgelegt")
                         
-                        //                        if self.queue.operationCount==1 {
-                        //                            let duration = (CidsConnector.currentTimeMillis() - self.start)
-                        //                            handler();
-                        //                            print("loaded \(duration)");
-                        //
-                        //                        }
-                    }
+                     }
                 }
                 else {
-                    print("no json data for \(operation.url)")
+                    log.error("no json data for \(operation.url)")
                     //self.searchResults[0].append(Leuchte())
                     
                 }
             }else {
                 // Failure
-                print("leuchtmittel::GetAllEntities::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
+                log.error("leuchtmittel::GetAllEntities::URL Session Task Failed: \(error?.localizedDescription ?? self.defaultErrorMessageNoFurtherInformation)")
             }
             
         }
@@ -382,36 +367,28 @@ open class CidsConnector {
             if (error == nil) {
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("runsdsteuerempfaenger::GetAllEntities::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                log.verbose("runsdsteuerempfaenger::GetAllEntities::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                 if let checkeddata: [String : AnyObject] = getJson(data!) {
                     let json =  checkeddata["$collection"] as! [[String : AnyObject]];
                     if let rses = Mapper<Rundsteuerempfaenger>().mapArray(JSONArray: json) {
                         
-                        print("\(rses.count) Rundsteuerempfänger vorhanden")
+                        log.debug("\(rses.count) Rundsteuerempfänger vorhanden")
                         let sortedRses=rses.sorted(by: Rundsteuerempfaenger.ascending)
                         self.sortedRundsteuerempfaengerListKeys=[]
                         for rse in sortedRses {
                             self.rundsteuerempfaengerList.updateValue(rse, forKey: "\(rse.id)")
                             self.sortedRundsteuerempfaengerListKeys.append( "\(rse.id)")
                         }
-                        print("\(rses.count) Rundsteuerempfänger abgelegt")
-                        
-                        //                        if self.queue.operationCount==1 {
-                        //                            let duration = (CidsConnector.currentTimeMillis() - self.start)
-                        //                            handler();
-                        //                            print("loaded \(duration)");
-                        //
-                        //                        }
+                        log.debug("\(rses.count) Rundsteuerempfänger abgelegt")
                     }
                 }
                 else {
-                    print("no json data for \(operation.url)")
-                    //self.searchResults[0].append(Leuchte())
+                    log.error("no json data for \(operation.url)")
                     
                 }
             }else {
                 // Failure
-                print("runsdsteuerempfaenger::GetAllEntities::URL Session Task Failed with error: \(error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation) for URL: \(operation.url)" );
+                log.error("runsdsteuerempfaenger::GetAllEntities::URL Session Task Failed with error: \(error?.localizedDescription ?? self.defaultErrorMessageNoFurtherInformation) for URL: \(operation.url)" );
             }
             
         }
@@ -447,9 +424,9 @@ open class CidsConnector {
             ]);
         func mySearchCompletionHandler(_ data : Data?, response : URLResponse?, error : Error?) -> Void {
             if (error == nil) {
-                print("Arbeitsaufträge Search kein Fehler")
+                log.verbose("Arbeitsaufträge Search kein Fehler")
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("URL Session Task Succeeded: HTTP \(statusCode)")
+                log.verbose("URL Session Task Succeeded: HTTP \(statusCode)")
                 if (!queue.cancelRequested) {
                     if let checkeddata: [String : AnyObject] = getJson(data!) {
                         let json =  checkeddata["$collection"] as! [[String : AnyObject]];
@@ -478,7 +455,7 @@ open class CidsConnector {
                                             if (error == nil) {
                                                 // Success
                                                 let statusCode = (response as! HTTPURLResponse).statusCode
-                                                print("arbeitsauftrag::GetEntity::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                                                log.verbose("arbeitsauftrag::GetEntity::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                                                 
                                                 if let json: [String : AnyObject] = getJson(data!) {
                                                     var aa:Arbeitsauftrag?
@@ -501,21 +478,21 @@ open class CidsConnector {
                                                     if (queue.operationCount==1 && !queue.cancelRequested) {
                                                         let duration = (CidsConnector.currentTimeMillis() - self.start)
                                                         handler();
-                                                        print("loaded \(duration)");
+                                                        log.verbose("loaded \(duration)");
                                                         
                                                     }
                                                     else {
-                                                        print("not 1=\(queue.operationCount)");
+                                                        log.verbose("not 1=\(queue.operationCount)");
                                                     }
                                                     
                                                 }else {
-                                                    print("no json data for \(operation.url)")
+                                                    log.error("no json data for \(operation.url)")
                                                     //self.searchResults[0].append(Leuchte())
                                                     
                                                 }
                                             }else {
                                                 // Failure
-                                                print("arbeitsauftrag::GetEntity::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
+                                                log.error("arbeitsauftrag::GetEntity::URL Session Task Failed: \(error?.localizedDescription ?? self.defaultErrorMessageNoFurtherInformation)")
                                             }
                                         }
                                         if (!queue.cancelRequested) {
@@ -531,7 +508,7 @@ open class CidsConnector {
                 }
             }
             else {
-                print("Arbeitsaufträge Search Cancelled oder Fehler")
+                log.debug("Arbeitsaufträge Search Cancelled oder Fehler")
             }
             
         }
@@ -546,7 +523,7 @@ open class CidsConnector {
     func checkForMissingVeranlassungen(auftrag: Arbeitsauftrag) {
         for veranlassungsnummer in auftrag.getVeranlassungsnummern() {
             if let _=self.veranlassungsCache[veranlassungsnummer] {
-                print("cacheHit")
+                log.verbose("cacheHit")
             }
             else {
                 getVeranlassungByNummer(veranlassungsnummer, handler: { (veranlassung) -> () in
@@ -570,7 +547,7 @@ open class CidsConnector {
                 if (error == nil) {
                     // Success
                     let statusCode = (response as! HTTPURLResponse).statusCode
-                    print("arbeitsauftrag::GetEntity::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                    log.verbose("arbeitsauftrag::GetEntity::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                     if let json: [String : AnyObject] = getJson(data!) {
                         //let sel=self.mainVC!.tableView.indexPathForSelectedRow
                         let entity = Mapper<Arbeitsauftrag>().map(JSON: json)
@@ -603,13 +580,11 @@ open class CidsConnector {
                         }
                         
                     }else {
-                        print("no json data for \(operation.url)")
-                        //self.searchResults[0].append(Leuchte())
-                        
+                        log.error("no json data for \(operation.url)")
                     }
                 }else {
                     // Failure
-                    print("arbeitsauftrag::GetEntity::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
+                    log.error("arbeitsauftrag::GetEntity::URL Session Task Failed: \(error?.localizedDescription ?? self.defaultErrorMessageNoFurtherInformation)")
                 }
                 
                 handler(false)
@@ -631,7 +606,7 @@ open class CidsConnector {
             if (error == nil) {
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("veranlassungByNummer::Search::URL Session Task Succeeded: HTTP \(statusCode)")
+                log.verbose("veranlassungByNummer::Search::URL Session Task Succeeded: HTTP \(statusCode)")
                 
                 if let cidsJsonCollection: [String : AnyObject] = getJson(data!) {
                     // Content is now a cids Collection of json Data
@@ -643,13 +618,13 @@ open class CidsConnector {
                     }
                 }
                 else {
-                    print("Problem in Request")
+                    log.error("Problem in Request")
                 }
                 
             }
             else {
                 // Failure
-                print("veranlassungByNummer::Search::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
+                log.error("veranlassungByNummer::Search::URL Session Task Failed:\(error?.localizedDescription ?? self.defaultErrorMessageNoFurtherInformation)")
             }
             handler(nil)
         }
@@ -678,7 +653,7 @@ open class CidsConnector {
             if (error == nil) {
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("mainSearch::URL Session Task Succeeded: HTTP \(statusCode)")
+                log.verbose("mainSearch::URL Session Task Succeeded: HTTP \(statusCode)")
                 var err: Error?
                 
                 if (!queue.cancelRequested) {
@@ -710,7 +685,7 @@ open class CidsConnector {
                                             if (error == nil && !queue.cancelRequested) {
                                                 // Success
                                                 let statusCode = (response as! HTTPURLResponse).statusCode
-                                                print("getObject::GetEntity::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
+                                                log.verbose("getObject::GetEntity::URL Session Task Succeeded: HTTP \(statusCode) for \(operation.url)")
                                                 
                                                 if let json: [String : AnyObject] = getJson(data!) {
                                                     var gbEntity:GeoBaseEntity?
@@ -727,7 +702,7 @@ open class CidsConnector {
                                                     case .SCHALTSTELLEN:
                                                         gbEntity = Mapper<Schaltstelle>().map(JSON: json)!
                                                     default:
-                                                        print("could not find object from entity \(operation.entityName)")
+                                                        log.severe("could not find object from entity \(operation.entityName)")
                                                     }
                                                     i=i+1
                                                     let progress=Float(i)/Float(nodes.count)
@@ -745,21 +720,21 @@ open class CidsConnector {
                                                     if (queue.operationCount==1 && !queue.cancelRequested) {
                                                         let duration = (CidsConnector.currentTimeMillis() - self.start)
                                                         handler();
-                                                        print("loaded \(duration)");
+                                                        log.verbose("loaded \(duration)");
                                                         
                                                     }
                                                     
                                                 }else {
-                                                    print("no json data for \(operation.url)")
+                                                    log.error("no json data for \(operation.url)")
                                                     //self.searchResults[0].append(Leuchte())
                                                     
                                                 }
                                             }else if (queue.cancelRequested){
-                                                print("CancelRequested! (and \(queue.operationCount) operations still alive in \(queue.name))")
+                                                log.verbose("CancelRequested! (and \(queue.operationCount) operations still alive in \(queue.name))")
                                             }
                                             else {
                                                 // Failure
-                                                print("getObject::GetEntity::URL Session Task Failed or Cancelled: \(error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation)");
+                                                log.error("getObject::GetEntity::URL Session Task Failed or Cancelled: \(error?.localizedDescription ?? self.defaultErrorMessageNoFurtherInformation)");
                                                 
                                             }
                                         }
@@ -774,14 +749,14 @@ open class CidsConnector {
                         }
                     }
                     else {
-                        print("Problem in Request")
+                        log.error("Problem in Request")
                     }
                 }
                 
             }
             else {
                 // Failure
-                print("mainSearch::URL Session Task Failed or Cancelled: \(error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation)");
+                log.error("mainSearch::URL Session Task Failed or Cancelled: \(error?.localizedDescription ?? self.defaultErrorMessageNoFurtherInformation)");
             }
             
         }
@@ -801,7 +776,7 @@ open class CidsConnector {
             if (error == nil) {
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
-                print("Action::URL Session Task no Error: HTTP Status Code\(statusCode)")
+                log.verbose("Action::URL Session Task no Error: HTTP Status Code\(statusCode)")
                 if statusCode == 200 {
                     handler(true)
                 }
@@ -811,7 +786,7 @@ open class CidsConnector {
             }
             else {
                 // Failure
-                print("Action::URL Session Task Failed: %@", error?.localizedDescription ?? defaultErrorMessageNoFurtherInformation);
+                log.error("Action::URL Session Task Failed:\(error?.localizedDescription ?? self.defaultErrorMessageNoFurtherInformation)")
                 handler(false)
             }
             

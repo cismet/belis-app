@@ -110,7 +110,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
             NSFontAttributeName : UIFont(name: GlyphTools.glyphFontName, size: 20)!],
             for: UIControlState())
         bbiZoomToAllObjects.title=WebHostingGlyps.glyphs["icon-world"]
-        print(UIDevice.current.identifierForVendor!.uuidString)
+        log.info(UIDevice.current.identifierForVendor!.uuidString)
         
         
         
@@ -157,9 +157,9 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         focusRectShape.removeFromSuperlayer()
         coordinator.animate(alongsideTransition: nil, completion: { context in
             if UIDevice.current.orientation.isLandscape {
-                print("landscape")
+                log.verbose("landscape")
             } else {
-                print("portraight")
+                log.verbose("portraight")
             }
             self.ensureFocusRectangleIsDisplayedWhenAndWhereItShould()
         })
@@ -236,7 +236,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     //MARK: UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        print("didSelectRowAtIndexPath")
+        log.verbose("didSelectRowAtIndexPath")
         if let obj=CidsConnector.sharedInstance().searchResults[Entity.byIndex((indexPath as NSIndexPath).section)]?[(indexPath as NSIndexPath).row] {
             selectOnMap(obj)
             //          lastSelection=obj
@@ -406,7 +406,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return nil;
     }
     func mapView(_ mapView: MKMapView, didChange mode: MKUserTrackingMode, animated: Bool) {
-        print("didChangeUserTrackingMode")
+        log.verbose("didChangeUserTrackingMode")
     }
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         delayed(0.0)
@@ -421,7 +421,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 }
                 
         }
-        print("didSelectAnnotationView >> \(view.annotation!.title)")
+        log.verbose("didSelectAnnotationView >> \(view.annotation!.title)")
     }
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
         delayed(0.0)
@@ -433,7 +433,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 }
                 
         }
-        print("didDeselectAnnotationView >> \(view.annotation!.title)")
+        log.verbose("didDeselectAnnotationView >> \(view.annotation!.title)")
     }
     
     //MARK: - IBActions
@@ -643,14 +643,10 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 let points=poly.points()
                 for i in  0 ... poly.pointCount-1 { //last point is jwd (dono why)
                     let coord = MKCoordinateForMapPoint(points[i])
-                    //print("CO: \(coord.longitude),\(coord.latitude)")
                     topLeftCoordinate.longitude = fmin(topLeftCoordinate.longitude, coord.longitude)
                     topLeftCoordinate.latitude = fmax(topLeftCoordinate.latitude, coord.latitude)
                     bottomRightCoordinate.longitude = fmax(bottomRightCoordinate.longitude, coord.longitude)
                     bottomRightCoordinate.latitude = fmin(bottomRightCoordinate.latitude, coord.latitude)
-                    //print("TL: \(topLeftCoordinate.longitude),\(topLeftCoordinate.latitude)")
-                    //belis selprint("BR: \(bottomRightCoordinate.longitude),\(bottomRightCoordinate.latitude)")
-                    
                 }
                 
             }
@@ -764,7 +760,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
         //let hittedUI = mapView.hitTest(touchPt, withEvent: nil)
         //        println(hittedUI)
-        print("mapTabbed")
+        log.verbose("mapTabbed")
         
         
         let buffer=CGFloat(22)
@@ -788,7 +784,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 
                 if (fuzzyPath?.contains(touchPt) == true) {
                     foundPoint = pointAnnotation
-                    print("foundPoint")
+                    log.verbose("foundPoint")
                     selectOnMap(foundPoint?.getGeoBaseEntity())
                     selectInTable(foundPoint?.getGeoBaseEntity())
                     break
@@ -994,18 +990,18 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         let localSearch = MKLocalSearch(request: request)
         localSearch.start { (responseIn, errorIn) -> Void in
             if let error = errorIn {
-                print("Error occured in search: \(error.localizedDescription)")
+                log.error("Error occured in search: \(error.localizedDescription)")
             } else if let response=responseIn {
                 if response.mapItems.count == 0 {
-                    print("No matches found")
+                    log.warning("No matches found")
                 } else {
-                    print("Matches found")
+                    log.verbose("Matches found")
                     
                     for item in response.mapItems as [MKMapItem] {
                         
                         
                         self.matchingSearchItems.append(item as MKMapItem)
-                        print("Matching items = \(self.matchingSearchItems.count)")
+                        log.verbose("Matching items = \(self.matchingSearchItems.count)")
                         
                         let annotation = MatchingSearchItemsAnnotations()
                         annotation.coordinate = item.placemark.coordinate

@@ -100,7 +100,7 @@ class AbstractPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINa
             lazyMainQueueDispatch({ () -> () in
                 picker.dismiss(animated:true , completion: nil)
                 if success {
-                    print("Everything is going to be 200-OK")
+                    log.verbose("Everything is going to be 200-OK")
                     (self.selfEntity as! DocumentContainer).addDocument(DMSUrl(name:pictureName, fileName:fileName))
                     self.refreshable.refresh()
                     progressHUD!.indicatorView=JGProgressHUDSuccessIndicatorView()
@@ -125,7 +125,7 @@ class AbstractPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINa
         
         func configurationTextField(_ textField: UITextField!)
         {
-            print("generating the TextField")
+            log.verbose("generating the TextField")
             textField.placeholder = "Name hier eingeben"
             tField = textField
         }
@@ -170,7 +170,7 @@ class AbstractPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINa
             
             func uploadCompletionHandler(_ data : Data?, response : URLResponse?, error : Error?) {
                 if let err = error {
-                    print("error: \(err.localizedDescription)")
+                    log.error("error: \(err.localizedDescription)")
                 }
                 if data != nil  {
                     self.storeCidsObject(pictureName: pictureName, fileName: fileName, picker: picker, progressHUD: progressHUD)
@@ -183,7 +183,7 @@ class AbstractPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINa
         }))
         progressHUD?.dismiss()
         picker.present(alert, animated: true, completion: {
-            print("completion block")
+            log.verbose("completion block")
         })
     }
 
@@ -192,7 +192,7 @@ class AbstractPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINa
     
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        print("FotoPickerCallBacker CANCEL")
+        log.verbose("FotoPickerCallBacker CANCEL")
         picker.dismiss(animated: true, completion: { () -> Void in })
         
     }
@@ -231,7 +231,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
         
         func configurationTextField(_ textField: UITextField!)
         {
-            print("generating the TextField")
+            log.verbose("generating the TextField")
             textField.placeholder = "Name hier eingeben"
             tField = textField
         }
@@ -275,15 +275,15 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             BelisPhotoAlbum.sharedInstance.save(image: imageToSave, pictureName: pictureName, keywords: "BelIS", instructions: "upload to: \(fileName)", description: "https://www.cismet.de", additionalInfoAsJson: "{}")
             
             func handleProgress(_ progress:Float) {
-                print(progress)
+                log.verbose(progress)
             }
             
             func handleCompletion(_ data : Data?, response : URLResponse?, error : Error?) {
                 if let err = error {
-                    print("error: \(err.localizedDescription)")
+                    log.error("error: \(err.localizedDescription)")
                 }
                 if let resp = data  {
-                    print(NSString(data: resp, encoding: String.Encoding.utf8.rawValue) ?? "---")
+                    log.verbose(NSString(data: resp, encoding: String.Encoding.utf8.rawValue) ?? "---")
                     let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"\(objectId)" as AnyObject,
                         "OBJEKT_TYP":objectTyp as AnyObject,
                         "DOKUMENT_URL":"\(CidsConnector.sharedInstance().getWebDAVBaseUrl().getUrl())\(fileName)\n\(pictureName)" as AnyObject])
@@ -292,7 +292,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
                         lazyMainQueueDispatch({ () -> () in
                             picker.dismiss(animated:true , completion: nil)
                             if success {
-                                print("Everything is going to be 200-OK")
+                                log.verbose("Everything is going to be 200-OK")
                                 let dmsUrlObject=DMSUrl(name:pictureName, fileName:fileName)
                                 (self.selfEntity as! DocumentContainer).addDocument(dmsUrlObject)
                                 self.refreshable.refresh()
@@ -321,7 +321,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
         }))
         progressHUD?.dismiss()
         picker.present(alert, animated: true, completion: {
-            print("completion block")
+            log.verbose("completion block")
         })
         
         
@@ -331,7 +331,7 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        print("FotoPickerCallBacker CANCEL")
+        log.verbose("FotoPickerCallBacker CANCEL")
         picker.dismiss(animated: true, completion: { () -> Void in })
         
     }

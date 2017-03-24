@@ -47,7 +47,6 @@ class BelisPhotoAlbum {
                 
                 if (success) {
                     let collectionFetchResult = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [self.assetCollectionPlaceholder.localIdentifier], options: nil)
-                    print(collectionFetchResult)
                     self.assetCollection = collectionFetchResult.firstObject! as PHAssetCollection
                 }
             })
@@ -117,8 +116,8 @@ class BelisPhotoAlbum {
             albumChangeRequest?.addAssets(enumeration)
         }, completionHandler: { (success, error) in
             // to-do: delete the temporary file
-            print("added image to album:")
-            print(error ?? "everything is ok")
+            log.verbose("added image to album:")
+            log.verbose(error ?? "everything is ok")
         })
     }
 }

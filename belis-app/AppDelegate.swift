@@ -9,14 +9,44 @@
 import UIKit
 import CoreData
 
+
+import XCGLogger
+let log = XCGLogger.default
+
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    var window: UIWindow?
+    let cacheDirectory: URL = {
+        let urls = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        return urls[urls.endIndex - 1]
+    }()
+    
 
+    var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        //Configuration
+        
+        // Create a destination for the system console log (via NSLog)
+        let logPath: URL = cacheDirectory.appendingPathComponent("XCGLogger_Log.txt")
+        let emojiLogFormatter = PrePostFixLogFormatter()
+        emojiLogFormatter.apply(prefix: "📒📒📒 ", to: .verbose)
+        emojiLogFormatter.apply(prefix: "📘📘📘 ", to: .debug)
+        emojiLogFormatter.apply(prefix: "📗📗📗 ", to: .info)
+        emojiLogFormatter.apply(prefix: "📙📙📙 ", to: .warning)
+        emojiLogFormatter.apply(prefix: "📕📕📕 ", to: .error)
+        emojiLogFormatter.apply(prefix: "💣💣💣 ", postfix: " 💣💣💣", to: .severe)
+        log.formatters = [emojiLogFormatter]
+        
+        log.setup(level: .verbose, showThreadName: true, showLevel: true, showFileNames: true, showLineNumbers: true, writeToFile: logPath, fileLevel: .verbose)
+
+        
+        
+        
+        log.logAppDetails()
         return true
     }
 
