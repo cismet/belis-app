@@ -41,17 +41,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         emojiLogFormatter.apply(prefix: "💣💣💣 ", postfix: " 💣💣💣", to: .severe)
         log.formatters = [emojiLogFormatter]
         
-        log.setup(level: .debug, showThreadName: true, showLevel: true, showFileNames: true, showLineNumbers: true, writeToFile: logPath, fileLevel: .debug)
+        log.setup(level: .verbose, showThreadName: true, showLevel: true, showFileNames: true, showLineNumbers: true, writeToFile: logPath, fileLevel: .verbose)
 
         
         
         
         log.logAppDetails()
-
-        
-        log.debug("============================================")
-        
-        
         return true
     }
 

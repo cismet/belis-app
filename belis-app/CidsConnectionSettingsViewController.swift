@@ -89,15 +89,9 @@ class CidsConnectionSettingsViewController: UIViewController {
         let serverCertData = try? Data(contentsOf: URL(fileURLWithPath: CidsConnector.sharedInstance().serverCertPath))
         let clientCertData = try? Data(contentsOf: URL(fileURLWithPath: CidsConnector.sharedInstance().clientCertPath))
         
-        print("ServerCert: \(CidsConnector.sharedInstance().serverCertPath) \(serverCertData)")
-        print("ClientCert: \(CidsConnector.sharedInstance().clientCertPath) \(clientCertData)")
-
-        
-
-        print("connect to: \(CidsConnector.sharedInstance().baseUrl)")
-
-        
-        
+        log.info("ServerCert: \(CidsConnector.sharedInstance().serverCertPath) \(serverCertData)")
+        log.info("ClientCert: \(CidsConnector.sharedInstance().clientCertPath) \(clientCertData)")
+        log.info("connect to: \(CidsConnector.sharedInstance().baseUrl)")
     }
     @IBAction func passwordChanged(_ sender: AnyObject) {
         CidsConnector.sharedInstance().clientCertContainerPass=certPassTextField.text!
@@ -141,7 +135,7 @@ class CidsConnectionSettingsViewController: UIViewController {
         }
         
         if error != nil {
-            print(error ?? "no detailed errormessage available")
+            log.error(error ?? "no detailed errormessage available")
         }
         if (ok) {
             CidsConnector.sharedInstance().serverCert=nil
@@ -160,7 +154,7 @@ class CidsConnectionSettingsViewController: UIViewController {
         }
         
         if error != nil {
-            print(error ?? "no detailed error message available")
+            log.error(error ?? "no detailed error message available")
         }
         if (ok) {
             CidsConnector.sharedInstance().clientCert=nil

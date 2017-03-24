@@ -58,7 +58,7 @@ class CidsSessionFactory : NSObject, URLSessionDelegate{
                 completionHandler(.useCredential, URLCredential(trust: challenge.protectionSpace.serverTrust!))
             }
             else {
-                print("Problem with Server CERT Check")
+                log.error("Problem with Server CERT Check")
             }
         } else if authMethod==NSURLAuthenticationMethodClientCertificate {
             if let clientCert=identityAndTrustForCSC {

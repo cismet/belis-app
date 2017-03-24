@@ -59,17 +59,17 @@ class DokumentPreviewVC: UIViewController , UIWebViewDelegate {
         // 2
         let deleteAction = UIAlertAction(title: "Delete", style: .default, handler: {
             (alert: UIAlertAction) -> Void in
-            print("File Deleted")
+            log.verbose("File Deleted")
         })
         let saveAction = UIAlertAction(title: "Save", style: .default, handler: {
             (alert: UIAlertAction) -> Void in
-            print("File Saved")
+            log.verbose("File Saved")
         })
         
         //
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
             (alert: UIAlertAction) -> Void in
-            print("Cancelled")
+            log.verbose("Cancelled")
         })
         
         
@@ -110,8 +110,7 @@ class DokumentPreviewVC: UIViewController , UIWebViewDelegate {
                 imageUrl=imageUrl+".thumbnail.png"
             }
             let body="<html><body><center><img src='\(imageUrl)' width='950'></center></body></html>"
-            print(body)
-            //NSURLConnection(request: request, delegate: self)
+            log.verbose(body)
             webview.loadHTMLString(body, baseURL: nil)
         }
         else {
@@ -134,15 +133,15 @@ class DokumentPreviewVC: UIViewController , UIWebViewDelegate {
 //        return true
 //    }
     func webViewDidStartLoad(_ webView: UIWebView) {
-        print("start")
+        log.verbose("start")
         
     }
     func webViewDidFinishLoad(_ webView: UIWebView) {
-        print("finished")
+        log.verbose("finished")
     }
     func webView(_ webView: UIWebView, didFailLoadWithError error: Error) {
         
-        print("Failed with error:\(error.localizedDescription)")
+        log.warning("Failed with error:\(error.localizedDescription)")
         
     }
 

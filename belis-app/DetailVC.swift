@@ -47,7 +47,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
             for action in actions {
                 let alertAction = UIAlertAction(title: action.title, style: action.style, handler: {
                     (alert: UIAlertAction) -> Void in
-                        print("Aktion: "+action.title)
+                        log.verbose("Aktion: "+action.title)
                         action.handler(alert, action, self.objectToShow,self)
                     
                     
@@ -61,7 +61,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
     }
     
     func doIt (_ alert: UIAlertAction!) {
-        print("mine")
+        log.debug("mine")
     }
     
 
@@ -91,7 +91,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
             filler.fillFromCellData(dataItem)
         }
         else {
-            print("NO CELLDATAUI")
+            log.warning("NO CELLDATAUI")
         }
         return cell
     }
@@ -144,7 +144,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
 
     // MARK: UIImagePickerControllerDelegate
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        print("DetailVC FINISH")
+        log.verbose("DetailVC FINISH")
         if let x = (callBacker as? UIImagePickerControllerDelegate) {
             x.imagePickerController!(picker, didFinishPickingMediaWithInfo: info)
         }
@@ -152,7 +152,7 @@ class DetailVC: UIViewController, UITableViewDataSource, UITableViewDelegate,UII
         
     }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        print("DetailVC CANCEL")
+        log.verbose("DetailVC CANCEL")
         if let x = (callBacker as? UIImagePickerControllerDelegate) {
             x.imagePickerControllerDidCancel!(picker)
         }

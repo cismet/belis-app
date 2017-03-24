@@ -21,7 +21,7 @@ class MyOSMMKTileOverlay : MKTileOverlay {
     @objc(URLForTilePathRenamed:)
     func URLForTilePath(_ path: MKTileOverlayPath) -> URL! {
         let ret=super.url(forTilePath: path);
-        print("http://b.tile.openstreetmap.org/\(path.z)/\(path.x)/\(path.y).png");
+        log.verbose("http://b.tile.openstreetmap.org/\(path.z)/\(path.x)/\(path.y).png");
         return ret;
     }
     

@@ -83,7 +83,6 @@ class AddIncidentAction : BaseEntityAction {
             teamRow.configuration.selection.options = teamKeys as [AnyObject]
             teamRow.configuration.selection.allowsMultipleSelection = false
             teamRow.configuration.selection.optionTitleClosure = { value in
-                print(value)
                 return teamList[value as! String]?.name ?? "Team ?"
             }
             teamRow.value=CidsConnector.sharedInstance().lastUsedTeamIdForIncident as AnyObject
@@ -220,7 +219,7 @@ class AddIncidentAction : BaseEntityAction {
             }
             
             let preCancelCheck: ()->CheckResult={
-                print("preCancelCheck")
+                log.verbose("preCancelCheck")
                 return CheckResult(passed: true)
             }
             
@@ -321,15 +320,10 @@ class AddIncidentAction : BaseEntityAction {
                 
                 
                 CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "AddIncident", params: params, handler: afterSaveHandler)
-                
-                
-                print(params.toJSONString(prettyPrint: true) ?? "no json for you")
             }
             
             func cancel() {
-                print("WHAAAAAT")
                 detailVC.navigationController?.isModalInPopover=false
-
             }
             
             

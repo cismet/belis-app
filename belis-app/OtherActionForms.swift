@@ -87,24 +87,14 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        print("DetailVC FINISH")
-//        if let x = (callBacker as? UIImagePickerControllerDelegate) {
-//            x.imagePickerController!(picker, didFinishPickingMediaWithInfo: info)
-//        }
-        //picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
-        
+        log.verbose("DetailVC FINISH")
     }
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        print("DetailVC CANCEL")
-//        if let x = (callBacker as? UIImagePickerControllerDelegate) {
-//            x.imagePickerControllerDidCancel!(picker)
-//        }
-        //picker.dismissViewControllerAnimated(true, completion: { () -> Void in })
-        
+        log.verbose("DetailVC CANCEL")
     }
     
     func refresh() {
-        print("refresh")
+        log.verbose("refresh")
     }
     
     override func getPreferredSize()->CGSize {
