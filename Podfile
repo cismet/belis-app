@@ -10,6 +10,8 @@ pod 'MGSwipeTableCell', '~>1.5'
 pod 'SwiftForms',  '~> 1.7'
 pod 'JGProgressHUD', '~> 1.4'
 pod 'AlamofireImage', '~> 3.1'
+pod 'XCGLogger', '~> 4.0'
+
 end
 
 target 'belis-appTests' do
@@ -18,4 +20,6 @@ pod 'MGSwipeTableCell', '~>1.5'
 pod 'SwiftForms',  '~> 1.7'
 pod 'JGProgressHUD', '~> 1.4'
 pod 'AlamofireImage', '~> 3.1'
+pod 'XCGLogger', '~> 4.0'
+
 end

@@ -140,7 +140,7 @@ class GetEntityOperation: CidsRequestOperation {
     }
     
     override func main() {
-        print("do get \(entityName).\(id)")
+        log.debug("do get \(self.entityName).\(self.id)")
         if (self.isCancelled || qu.cancelRequested) {
             return
         }
