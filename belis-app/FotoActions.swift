@@ -72,7 +72,16 @@ class AbstractPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINa
         }
     }
     
+    let alert = UIAlertController(title: "Bildname", message: "", preferredStyle: UIAlertControllerStyle.alert)
     
+    func alertTextFieldDidChange(field: UITextField){
+        let alertController:UIAlertController = alert as! UIAlertController;
+        let textField :UITextField  = alertController.textFields![0];
+        let addAction: UIAlertAction = alertController.actions[0];
+        addAction.isEnabled = (textField.text?.characters.count)! >= 5;
+        
+    }
+
     func getTypeString()->String {
         return self.selfEntity.getType().tableName().lowercased()
     }
@@ -144,11 +153,18 @@ class AbstractPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINa
             picker.dismiss(animated: true, completion: nil)
         }
         
-        let alert = UIAlertController(title: "Bildname", message: "", preferredStyle: UIAlertControllerStyle.alert)
+       
         
-        alert.addTextField(configurationHandler: configurationTextField)
+        
+        
+        //alert.addTextField(configurationHandler: configurationTextField)
+        alert.addTextField { (textField) in
+            textField.addTarget(self, action: #selector(self.alertTextFieldDidChange(field:)), for: UIControlEvents.editingChanged)
+        }
+        
+        
         alert.addAction(UIAlertAction(title: "Abbrechen", style: UIAlertActionStyle.cancel, handler:handleCancel))
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler:{ (UIAlertAction)in
+        let okAction=UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler:{ (UIAlertAction)in
             var imageToSave:UIImage
             
             imageToSave = info[UIImagePickerControllerOriginalImage]as! UIImage
@@ -178,9 +194,10 @@ class AbstractPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINa
             }
             self.uploadToWebDav(imageToSave: thumb, fileName: fileName, completionHandler: uploadCompletionHandler)
             
-            
-            
-        }))
+        })
+        okAction.isEnabled=false
+        alert.addAction(okAction)
+        
         progressHUD?.dismiss()
         picker.present(alert, animated: true, completion: {
             log.verbose("completion block")
@@ -218,7 +235,18 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             assert(false, "Entity must be a DocumentContainer")
         }
     }
+    let alert = UIAlertController(title: "Bildname", message: "", preferredStyle: UIAlertControllerStyle.alert)
     
+    
+    
+    
+    func alertTextFieldDidChange(field: UITextField){
+        let alertController:UIAlertController = alert
+        let textField :UITextField  = alertController.textFields![0]
+        let addAction: UIAlertAction = alertController.actions[1]
+        addAction.isEnabled = (textField.text?.characters.count)! >= 0
+        
+    }
     
     
     //UIImagePickerControllerDelegate
@@ -228,14 +256,6 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
         let progressHUD = JGProgressHUD(style: JGProgressHUDStyle.dark)
         progressHUD?.show(in: picker.view,animated: true)
         var tField: UITextField!
-        
-        func configurationTextField(_ textField: UITextField!)
-        {
-            log.verbose("generating the TextField")
-            textField.placeholder = "Name hier eingeben"
-            tField = textField
-        }
-        
         
         func getTestPrefix() -> String {
             if CidsConnector.sharedInstance().inDevEnvironment() {
@@ -250,11 +270,17 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             picker.dismiss(animated: true, completion: nil)
         }
         
-        var alert = UIAlertController(title: "Bildname", message: "", preferredStyle: UIAlertControllerStyle.alert)
         
-        alert.addTextField(configurationHandler: configurationTextField)
+        alert.addTextField { (textField) in
+            log.verbose("generating the TextField")
+            textField.placeholder = "Name hier eingeben"
+            tField = textField
+            textField.addTarget(self, action: #selector(self.alertTextFieldDidChange(field:)), for: UIControlEvents.editingChanged)
+        }
+
         alert.addAction(UIAlertAction(title: "Abbrechen", style: UIAlertActionStyle.cancel, handler:handleCancel))
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler:{ (UIAlertAction)in
+        
+        let okAction=UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler:{ (UIAlertAction)in
             var imageToSave:UIImage
             
             imageToSave = info[UIImagePickerControllerOriginalImage]as! UIImage
@@ -285,8 +311,8 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
                 if let resp = data  {
                     log.verbose(NSString(data: resp, encoding: String.Encoding.utf8.rawValue) ?? "---")
                     let parmas=ActionParameterContainer(params: [   "OBJEKT_ID":"\(objectId)" as AnyObject,
-                        "OBJEKT_TYP":objectTyp as AnyObject,
-                        "DOKUMENT_URL":"\(CidsConnector.sharedInstance().getWebDAVBaseUrl().getUrl())\(fileName)\n\(pictureName)" as AnyObject])
+                                                                    "OBJEKT_TYP":objectTyp as AnyObject,
+                                                                    "DOKUMENT_URL":"\(CidsConnector.sharedInstance().getWebDAVBaseUrl().getUrl())\(fileName)\n\(pictureName)" as AnyObject])
                     CidsConnector.sharedInstance().executeSimpleServerAction(actionName: "AddDokument", params: parmas, handler: {(success:Bool) -> () in
                         assert(!Thread.isMainThread )
                         lazyMainQueueDispatch({ () -> () in
@@ -315,10 +341,9 @@ class FotoPickerCallBacker : NSObject, UIImagePickerControllerDelegate, UINaviga
             
             
             CidsConnector.sharedInstance().uploadImageToWebDAV(thumb, fileName: fileNameThumb , completionHandler: handleCompletion)
-            
-            
-            
-        }))
+        })
+        okAction.isEnabled=false
+        alert.addAction(okAction)
         progressHUD?.dismiss()
         picker.present(alert, animated: true, completion: {
             log.verbose("completion block")
