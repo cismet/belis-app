@@ -9,6 +9,83 @@
 import Foundation
 import ObjectMapper
 
+
+class OperationInfo {
+    // MARK: SHARED INSTANCE
+    static let sharedInstance: OperationInfo!=OperationInfo()
+    private var debugOperationInfo=true
+    private let debugQueue=DispatchQueue(label: "de.cismet.operationinfo.queue.debugPrints")
+    
+    private var queues: [OPERATIONSTATUS:DispatchQueue] = [:]
+    private var values: [OPERATIONSTATUS:Int] = [:]
+    private init() {
+        for status in OPERATIONSTATUS.allValues {
+            queues[status]=DispatchQueue(label: "de.cismet.operationinfo.queue.\(status.rawValue)")
+            values[status]=0
+        }
+    }
+    
+    
+    enum OPERATIONSTATUS:String {
+        case SCHEDULED
+        case STARTED
+        case SUCCESSFUL
+        case RETRIEABLE_ERROR
+        case FINAL_ERROR
+        static let allValues = [SCHEDULED, STARTED, SUCCESSFUL, RETRIEABLE_ERROR, FINAL_ERROR]
+        
+    }
+    
+    func increment (status: OPERATIONSTATUS) {
+        queues[status]!.sync {
+            values[status]=values[status]!+1
+            if debugOperationInfo {
+                debugPrintOperationInfoValues()
+            }
+        }
+        
+    }
+    
+    func decrement(status: OPERATIONSTATUS) {
+        queues[status]!.sync {
+            values[status]=values[status]!-1
+            if debugOperationInfo {
+                debugPrintOperationInfoValues()
+            }
+            
+        }
+        
+    }
+    
+    func getValueFor(status: OPERATIONSTATUS) -> Int{
+        return values[status]!
+    }
+    
+    func debugPrintOperationInfoValues() {
+        let scheduled="⏲"
+        let started="🚀"
+        let successful="🌈"
+        let retrieable="😷"
+        let error="💩"
+        debugQueue.sync {
+                let sc="\(scheduled):\(getValueFor(status: .SCHEDULED)) \t"
+                let st="\(started):\(getValueFor(status: .STARTED)) \t"
+                let su="\(successful):\(getValueFor(status: .SUCCESSFUL)) \t"
+                let re="\(retrieable):\(getValueFor(status: .RETRIEABLE_ERROR)) \t"
+                let er="\(error):\(getValueFor(status: .FINAL_ERROR))"
+                log.debug("OperationInfo: \(sc)\(st)\(su)\(re)\(er)"
+            )
+        }
+    }
+    
+    
+}
+func getDocumentsDirectory() -> URL {
+    let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+    let documentsDirectory = paths[0]
+    return documentsDirectory
+}
+
 public class CancelableOperationQueue: OperationQueue {
     var cancelRequested=false
     var postCancelHook: (()->Void)?
@@ -27,7 +104,7 @@ public class CancelableOperationQueue: OperationQueue {
         cancelRequested=true
         super.cancelAllOperations()
         if let pch=postCancelHook {
-                pch()
+            pch()
         }
     }
 }
@@ -44,6 +121,7 @@ class CidsRequestOperation: Operation {
     var url=""
     
     init(user: String, pass:String, queue: CancelableOperationQueue){
+        OperationInfo.sharedInstance.increment(status: .SCHEDULED)
         qu=queue
         let loginString = NSString(format: "%@:%@", user, pass)
         let loginData: Data = loginString.data(using: String.Encoding.utf8.rawValue)!
@@ -78,30 +156,30 @@ class CidsRequestOperation: Operation {
     }
     
     /**
-    This creates a new query parameters string from the given NSDictionary. For
-    example, if the input is @{@"day":@"Tuesday", @"month":@"January"}, the output
-    string will be @"day=Tuesday&month=January".
-    @param queryParameters The input dictionary.
-    @return The created parameters string.
-    */
+     This creates a new query parameters string from the given NSDictionary. For
+     example, if the input is @{@"day":@"Tuesday", @"month":@"January"}, the output
+     string will be @"day=Tuesday&month=January".
+     @param queryParameters The input dictionary.
+     @return The created parameters string.
+     */
     func stringFromQueryParameters(_ queryParameters : Dictionary<String, String>) -> String {
         var parts: [String] = []
         for (name, value) in queryParameters {
             //let part = NSString(format: "%@=%@",name.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!, value.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!)
             let part = NSString(format: "%@=%@",
-                    name.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!,
-                    value.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)
+                                name.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!,
+                                value.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!)
             parts.append(part as String)
         }
         return parts.joined(separator: "&")
     }
     
     /**
-    Creates a new URL by adding the given query parameters.
-    @param URL The input URL.
-    @param queryParameters The query parameter dictionary to add.
-    @return A new NSURL.
-    */
+     Creates a new URL by adding the given query parameters.
+     @param URL The input URL.
+     @param queryParameters The query parameter dictionary to add.
+     @return A new NSURL.
+     */
     func NSURLByAppendingQueryParameters(_ URL : Foundation.URL!, queryParameters : Dictionary<String, String>) -> Foundation.URL {
         let URLString : NSString = NSString(format: "%@?%@", URL.absoluteString, self.stringFromQueryParameters(queryParameters))
         return Foundation.URL(string: URLString as String)!
@@ -113,25 +191,24 @@ class CidsRequestOperation: Operation {
     
 }
 class PingOperation: CidsRequestOperation {
-//    init(baseUrl: String, domain: String,entityName:String, id: Int, user: String, pass:String, queue: NSOperationQueue, completionHandler: (operation:GetEntityOperation, data : NSData!, response : NSURLResponse!, error : NSError!, queue: NSOperationQueue) -> ()) {
-//        super.init(user:user,pass:pass)
-//        self.id=id
-//        self.qu=queue
-//        self.completionHandler=completionHandler
-//        url="\(baseUrl)/\(domain).\(entityName)/\(id)"
-//    }
+    //    init(baseUrl: String, domain: String,entityName:String, id: Int, user: String, pass:String, queue: NSOperationQueue, completionHandler: (operation:GetEntityOperation, data : NSData!, response : NSURLResponse!, error : NSError!, queue: NSOperationQueue) -> ()) {
+    //        super.init(user:user,pass:pass)
+    //        self.id=id
+    //        self.qu=queue
+    //        self.completionHandler=completionHandler
+    //        url="\(baseUrl)/\(domain).\(entityName)/\(id)"
+    //    }
 }
-
-
-
 class GetEntityOperation: CidsRequestOperation {
     var id = -1
     var session:Foundation.URLSession?
     var entityName=""
     var completionHandler: ((_ operation:GetEntityOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: CancelableOperationQueue) -> ())?
     
-    init(baseUrl: String, domain: String,entityName:String, id: Int, user: String, pass:String, queue: CancelableOperationQueue, completionHandler: @escaping (_ operation:GetEntityOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: CancelableOperationQueue) -> ()) {
+    init(baseUrl: String, domain: String,entityName:String, id: Int, user: String, pass:String, queue:
+        CancelableOperationQueue, completionHandler: @escaping (_ operation:GetEntityOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: CancelableOperationQueue) -> ()) {
         super.init(user:user,pass:pass,queue:queue)
+        OperationInfo.sharedInstance.increment(status: .SCHEDULED)
         self.id=id
         self.qu=queue
         self.entityName=entityName
@@ -180,7 +257,6 @@ class GetEntityOperation: CidsRequestOperation {
     override func cancel() {
         super.cancel()
         self._finished = true
-
         log.verbose("cancel get \(self.entityName).\(self.id) \(self.isCancelled),\(self.isFinished),\(self.isExecuting) ")
     }
 }
@@ -190,13 +266,19 @@ class GetAllEntitiesOperation: CidsRequestOperation {
     
     init(baseUrl: String, domain: String,entityName:String, user: String, pass:String, queue: CancelableOperationQueue, completionHandler: @escaping (_ operation:GetAllEntitiesOperation, _ data : Data?, _ response : URLResponse?, _ error : Error?, _ queue: CancelableOperationQueue) -> ()) {
         super.init(user:user,pass:pass, queue:queue)
+        OperationInfo.sharedInstance.increment(status: .SCHEDULED)
         self.qu=queue
         self.completionHandler=completionHandler
         url="\(baseUrl)/\(domain).\(entityName)?limit=10000000"
     }
     
     override func main() {
+        OperationInfo.sharedInstance.decrement(status: .SCHEDULED)
+        OperationInfo.sharedInstance.increment(status: .STARTED)
+        
         if self.isCancelled {
+            OperationInfo.sharedInstance.decrement(status: .STARTED)
+            
             return
         }
         else  {
@@ -240,11 +322,17 @@ class LoginOperation: CidsRequestOperation {
     var completionHandler: ((_ loggedIn: Bool, _ error: Error?) -> ())?
     init(baseUrl: String, domain: String, user: String, pass:String, completionHandler: @escaping (_ loggedIn: Bool, _ error: Error?) -> ()){
         super.init(user:user,pass:pass,queue:CidsConnector.sharedInstance().backgroundQueue)
+        OperationInfo.sharedInstance.increment(status: .SCHEDULED)
         url="\(baseUrl)/classes?domain=local&limit=1&offset=0&role=all"
         self.completionHandler=completionHandler
     }
     override func main() {
+        OperationInfo.sharedInstance.decrement(status: .SCHEDULED)
+        OperationInfo.sharedInstance.increment(status: .STARTED)
+        
         if self.isCancelled {
+            OperationInfo.sharedInstance.decrement(status: .STARTED)
+            
             return
         }
         else  {
@@ -288,6 +376,7 @@ class SearchOperation: CidsRequestOperation {
     init(baseUrl: String, searchKey:String, user: String, pass:String, queue: CancelableOperationQueue, parameters:QueryParameters,completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)!) {
         self.searchKey=searchKey
         super.init(user: user, pass: pass, queue:queue)
+        OperationInfo.sharedInstance.increment(status: .SCHEDULED)
         self.qu=queue
         self.parameters=parameters
         url="\(baseUrl)/searches/\(searchKey)/results"
@@ -296,13 +385,16 @@ class SearchOperation: CidsRequestOperation {
     
     override func main() {
         let session=sessionFactory.getNewCidsSession()
+        OperationInfo.sharedInstance.decrement(status: .SCHEDULED)
+        OperationInfo.sharedInstance.increment(status: .STARTED)
         log.verbose("URL: \(self.url)")
+
         var URL = Foundation.URL(string: url)
         let URLParams = [
             "role": "all",
             "limit": "100",
             "offset\"": "null",
-        ]
+            ]
         URL = NSURLByAppendingQueryParameters(URL, queryParameters: URLParams)
         var request = URLRequest(url: URL!)
         request.httpMethod = "POST"
@@ -320,7 +412,6 @@ class SearchOperation: CidsRequestOperation {
                 handler(data, response, error)
             }
             else {
-                
                 if (error == nil) {
                     // Success
                     let statusCode = (response as! HTTPURLResponse).statusCode
@@ -350,17 +441,20 @@ class ServerActionOperation: CidsRequestOperation {
     var completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)?
     init(baseUrl: String, user: String, pass:String, actionName: String, params: ActionParameterContainer, completionHandler: @escaping (_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void) {
         super.init(user:user, pass:pass, queue:CidsConnector.sharedInstance().backgroundQueue)
+        OperationInfo.sharedInstance.increment(status: .SCHEDULED)
         url="\(baseUrl)/actions/\(domain).\(actionName)/tasks"
         self.params=params
         self.completionHandler=completionHandler
     }
     override func main() {
         let session=sessionFactory.getNewCidsSession()
+        OperationInfo.sharedInstance.decrement(status: .SCHEDULED)
+        OperationInfo.sharedInstance.increment(status: .STARTED)
         var URL = Foundation.URL(string: url)
         let URLParams = [
             "role": "all",
             "resultingInstanceType": "result",
-        ]
+            ]
         URL = self.NSURLByAppendingQueryParameters(URL, queryParameters: URLParams)
         var request = URLRequest(url: URL!)
         request.httpMethod = "POST"
@@ -380,6 +474,24 @@ class ServerActionOperation: CidsRequestOperation {
         log.debug("---- Action: \(self.url)\nBody:\n\(bodyString)")
         
         request.httpBody = bodyString.data(using: String.Encoding.utf8, allowLossyConversion: true)
+        
+        // store Test
+        let randomFilename = UUID().uuidString
+        let data = NSKeyedArchiver.archivedData(withRootObject: request)
+        let fullPath = getDocumentsDirectory().appendingPathComponent(randomFilename)
+        var loadedRequest:URLRequest? = nil
+        
+        do {
+            try data.write(to: fullPath)
+            loadedRequest=NSKeyedUnarchiver.unarchiveObject(withFile: fullPath.absoluteString) as? URLRequest
+        } catch {
+            log.error("Couldn't write file")
+        }
+        
+        
+        ///
+        
+        
         task = session.dataTask(with: request, completionHandler: { (data , response , error ) -> Void in
             if let handler=self.completionHandler {
                 handler(data, response, error)
@@ -409,12 +521,15 @@ class WebDavUploadImageOperation: CidsRequestOperation {
     var completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)?
     init(baseUrl: String, user: String, pass:String, fileName: String, image:UIImage, completionHandler: @escaping (_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void) {
         super.init(user:user, pass:pass, queue:CidsConnector.sharedInstance().backgroundQueue)
+        OperationInfo.sharedInstance.increment(status: .SCHEDULED)
         url="\(baseUrl)/\(fileName)"
         self.image=image
         self.completionHandler=completionHandler
         
     }
     override func main() {
+        OperationInfo.sharedInstance.decrement(status: .SCHEDULED)
+        OperationInfo.sharedInstance.increment(status: .STARTED)
         let session=sessionFactory.getNewWebDavSession()
         let URL = Foundation.URL(string: url)
         
