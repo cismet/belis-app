@@ -650,6 +650,8 @@ open class CidsConnector {
             ]);
         
         func mySearchCompletionHandler(_ data : Data?, response : URLResponse?, error : Error?) -> Void {
+            OperationInfo.sharedInstance.decrement(status: .STARTED)
+
             if (error == nil) {
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
@@ -774,17 +776,21 @@ open class CidsConnector {
         
         func myActionCompletionHandler(_ data : Data?, response : URLResponse?, error : Error?) -> Void {
             if (error == nil) {
+                OperationInfo.sharedInstance.decrement(status: .STARTED)
                 // Success
                 let statusCode = (response as! HTTPURLResponse).statusCode
                 log.verbose("Action::URL Session Task no Error: HTTP Status Code\(statusCode)")
                 if statusCode == 200 {
+                    OperationInfo.sharedInstance.increment(status: .SUCCESSFUL)
                     handler(true)
                 }
                 else {
+                    OperationInfo.sharedInstance.increment(status: .RETRIEABLE_ERROR)
                     handler(false)
                 }
             }
             else {
+                OperationInfo.sharedInstance.increment(status: .RETRIEABLE_ERROR)
                 // Failure
                 log.error("Action::URL Session Task Failed:\(error?.localizedDescription ?? self.defaultErrorMessageNoFurtherInformation)")
                 handler(false)
