@@ -113,6 +113,31 @@ open class CidsConnector {
         }
     }
     
+    
+    
+    var mapPosLat: CLLocationDegrees = 51.2751340785898 {
+        
+        didSet {
+            UserDefaults.standard.set(mapPosLat, forKey: "mapPosLat")
+        }
+        
+    }
+    var mapPosLng: CLLocationDegrees = 7.21241877946317 {
+        
+        didSet {
+            UserDefaults.standard.set(mapPosLng, forKey: "mapPosLng")
+        }
+        
+    }
+    var mapAltitude: Double=50 {
+        
+        didSet {
+            UserDefaults.standard.set(mapAltitude, forKey: "mapAltitude")
+        }
+        
+    }
+    
+    
     // MARK: - other variables
     var login : String!
     fileprivate var password : String!

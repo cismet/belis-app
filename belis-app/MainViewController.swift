@@ -39,7 +39,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var user="";
     var pass="";
     var timer = Timer();
-    
+    var mapRegionSetFromUserDefaults=false
     let progressHUD = JGProgressHUD(style: JGProgressHUDStyle.dark)
     
     
@@ -79,17 +79,33 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         //        mapView.addOverlay(tileOverlay);
         
         
-        let lat: CLLocationDegrees = 51.2751340785898
-        let lng: CLLocationDegrees = 7.21241877946317
-        let initLocation: CLLocationCoordinate2D = CLLocationCoordinate2DMake(lat, lng)
+        var lat: CLLocationDegrees = (UserDefaults.standard.double(forKey: "mapPosLat") as CLLocationDegrees?) ?? 0.0
+        var lng: CLLocationDegrees = (UserDefaults.standard.double(forKey: "mapPosLng") as CLLocationDegrees?) ?? 0.0
+        var altitude: Double = (UserDefaults.standard.double(forKey: "mapAltitude") as Double?) ?? 0.0
         
+        if lat == 0.0 {
+            lat=CidsConnector.sharedInstance().mapPosLat
+        }
+        if lng == 0.0 {
+            lng=CidsConnector.sharedInstance().mapPosLng
+        }
+        if altitude == 0.0 {
+            altitude = CidsConnector.sharedInstance().mapAltitude
+        }
+        let initLocation: CLLocationCoordinate2D = CLLocationCoordinate2DMake(lat, lng)
         mapView.isRotateEnabled=false;
         mapView.isZoomEnabled=true;
         mapView.showsBuildings=true;
         
         mapView.setCenter(initLocation, animated: true);
-        mapView.camera.altitude = 50;
+        mapView.camera.altitude = altitude
+        mapRegionSetFromUserDefaults=true
+        log.warning("initial Position from UserDefaults= \(UserDefaults.standard.double(forKey: "mapPosLat")),\(UserDefaults.standard.double(forKey: "mapPosLng")) with an altitude of \(UserDefaults.standard.double(forKey: "mapAltitide"))")
+
+        log.warning("initial Position from CidsConnector= \(CidsConnector.sharedInstance().mapPosLat),\(CidsConnector.sharedInstance().mapPosLng) with an altitude of \(CidsConnector.sharedInstance().mapAltitude)")
         
+        log.info("initial Position= \(lat),\(lng) with an altitude of \(self.mapView.camera.altitude)")
+
         focusRectShape.opacity = 0.4
         focusRectShape.lineWidth = 2
         focusRectShape.lineJoin = kCALineJoinMiter
@@ -309,7 +325,12 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
     }
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        log.verbose("Region changed")
+        if mapRegionSetFromUserDefaults {
+            log.verbose("Region changed to \(mapView.centerCoordinate.latitude),\(mapView.centerCoordinate.longitude) with an altitude of \(mapView.camera.altitude)")
+            CidsConnector.sharedInstance().mapPosLat=mapView.centerCoordinate.latitude
+            CidsConnector.sharedInstance().mapPosLng=mapView.centerCoordinate.longitude
+            CidsConnector.sharedInstance().mapAltitude=mapView.camera.altitude
+        }
     }
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if (annotation is GeoBaseEntityPointAnnotation){
