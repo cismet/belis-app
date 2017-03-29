@@ -149,8 +149,6 @@ class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProv
     func addDocument(_ document: DMSUrl) {
         dokumente.append(document)
     }
-
-    
     
     // MARK: - CellInformationProviderProtocol
     
@@ -184,6 +182,25 @@ class Mauerlasche : GeoBaseEntity, CellInformationProviderProtocol, CellDataProv
     @objc func getAllObjectActions() -> [ObjectAction]{
         return [MauerlaschenPruefungAction(entity: self),SonstigesAction()]
     }
+    
+    // MARK: - sorter
+    override func getSorter()->((GeoBaseEntity,GeoBaseEntity)->Bool) {
+        func sorter(a: GeoBaseEntity, b: GeoBaseEntity) -> Bool{
+            if let x=a as? Mauerlasche, let y=b as? Mauerlasche {
+                if x.strasse?.name ?? "" == y.strasse?.name ?? "" {
+                    return x.laufendeNummer ?? 0 < y.laufendeNummer ?? 0
+                }
+                else {
+                    return x.strasse?.name ?? "" < y.strasse?.name ?? ""
+                }
+            }
+            log.warning("GeoBaseEntity is no Mauerlasche. Will use the id to sort")
+            return a.id<b.id
+        }
+        return sorter;
+    }
+
+    
 }
 
 class Mauerlaschenmaterial : BaseEntity{

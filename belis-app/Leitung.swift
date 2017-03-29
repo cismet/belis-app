@@ -82,6 +82,17 @@ class Leitung : GeoBaseEntity ,CellInformationProviderProtocol, CellDataProvider
         return ["main","Dokumente","DeveloperInfo"]
     }
     
+    override func getSorter()->((GeoBaseEntity,GeoBaseEntity)->Bool) {
+        func sorter(a: GeoBaseEntity, b: GeoBaseEntity) -> Bool{
+            let ay=a.getPointOfObject().dimensionY
+            let by=b.getPointOfObject().dimensionY
+            return ay > by
+        }
+        return sorter;
+    }
+    
+
+    
     // MARK: - ActionProvider Impl
     @objc func getAllActions() -> [BaseEntityAction] {
         

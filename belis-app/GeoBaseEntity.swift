@@ -10,7 +10,7 @@ import Foundation
 import ObjectMapper
 import MGSwipeTableCell
 
-class GeoBaseEntity : BaseEntity, LeftSwipeActionProvider{
+class GeoBaseEntity : BaseEntity, LeftSwipeActionProvider {
     var mapObject : NSObject?;
     fileprivate var geom :WKTGeometry?
     
@@ -67,6 +67,40 @@ class GeoBaseEntity : BaseEntity, LeftSwipeActionProvider{
     func getAnnotationCalloutGlyphIconName() -> String {
         return "";
     }
+    
+    func getPointOfObject() -> WKTPoint {
+        if (mapObject is MKAnnotation){
+            let anno = mapObject as! MKAnnotation;
+            return WKTPoint(dimensionX: anno.coordinate.longitude, andDimensionY: anno.coordinate.latitude)
+        }
+        else if mapObject is MKPolyline {
+            let line = mapObject as! MKPolyline;
+            var coords = [CLLocationCoordinate2D](repeating: kCLLocationCoordinate2DInvalid, count: line.pointCount);
+            line.getCoordinates(&coords, range: NSMakeRange(0, line.pointCount));
+            
+            for coord in coords {
+                return WKTPoint(dimensionX: coord.longitude, andDimensionY: coord.latitude)
+            }
+        }
+        return WKTPoint(dimensionX: 0,andDimensionY: 0)
+    }
+    
+    func getSorter()->((GeoBaseEntity,GeoBaseEntity)->Bool) {
+        func sorter(a: GeoBaseEntity, b: GeoBaseEntity) -> Bool{
+            if let x=a as? CellInformationProviderProtocol, let y=b as? CellInformationProviderProtocol {
+                if x.getTertiaryInfo() == y.getTertiaryInfo() {
+                    return x.getMainTitle() < y.getMainTitle()
+                }
+                else  {
+                    return x.getTertiaryInfo() < y.getTertiaryInfo()
+                }
+            }
+            log.warning("GeoBaseEntity is not implement the CellInformationProviderProtocol. Will use the id to sort")
+            return a.id<b.id
+        }
+        return sorter;
+    }
+    
     
     // MARK: - LeftSwipeActionProvider Impl
     func getLeftSwipeActions() -> [MGSwipeButton] {

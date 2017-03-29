@@ -400,11 +400,11 @@ open class CidsConnector {
         rundsteuerempfaengerOperation.enqueue()
         
     }
+    
+        
     func sortSearchResults() {
         for key in searchResults.keys {
-            searchResults[key]?.sort {
-                return $0.id < $1.id
-            }
+            searchResults[key]?.sort(by: searchResults[key]![0].getSorter())
         }
     }
     func getJson(_ data: Data) -> [String: AnyObject]?{
