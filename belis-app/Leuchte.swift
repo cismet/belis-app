@@ -351,7 +351,8 @@ class Leuchte : GeoBaseEntity,  CellInformationProviderProtocol, CellDataProvide
     }
     
     // MARK: - CellInformationProviderProtocol Impl
-    func getMainTitle() -> String{
+    
+    func getMainTitleAlsoForSorting(leadingZeros: Bool) -> String {
         var typPart:String
         if let typKey = typ?.leuchtenTyp {
             typPart = typKey
@@ -360,7 +361,13 @@ class Leuchte : GeoBaseEntity,  CellInformationProviderProtocol, CellDataProvide
         }
         var nrPart:String
         if let lnInt = leuchtennummer {
-            nrPart = "-\(lnInt)"
+            if leadingZeros {
+                nrPart = "-\(String(format: "%05d", lnInt))"
+            }
+            else {
+                nrPart = "-\(lnInt)"
+            }
+            
         }
         else {
             nrPart = "-0"
@@ -375,6 +382,11 @@ class Leuchte : GeoBaseEntity,  CellInformationProviderProtocol, CellDataProvide
         
         return "\(typPart)\(nrPart)\(standortPart)"
     }
+    
+    func getMainTitle() -> String{
+        return getMainTitleAlsoForSorting(leadingZeros: false)
+    }
+    
     func getSubTitle() -> String{
         if let typBez = typ?.fabrikat {
             return typBez
@@ -412,8 +424,31 @@ class Leuchte : GeoBaseEntity,  CellInformationProviderProtocol, CellDataProvide
         return true
     }
     
+    
+    // MARK: - sorter
+    override func getSorter()->((GeoBaseEntity,GeoBaseEntity)->Bool) {
+        func sorter(a: GeoBaseEntity, b: GeoBaseEntity) -> Bool{
+            if let x=a as? Leuchte, let y=b as? Leuchte {
+                if x.strasse?.name ?? "" == y.strasse?.name ?? "" {
+                    if x.standort?.id ?? 0 == y.standort?.id {
+                       return x.getMainTitleAlsoForSorting(leadingZeros: true) < y.getMainTitleAlsoForSorting(leadingZeros: true)
+                    }
+                    else  {
+                       return "\(x.standort?.strasse) \(x.standort?.hausnummer)" < "\(y.standort?.strasse) \(y.standort?.hausnummer)"
+                    }
+                    
+                }
+                else {
+                    return x.strasse?.name ?? "" < y.strasse?.name ?? ""
+                }
+            }
+            log.warning("GeoBaseEntity is not implement the CellInformationProviderProtocol. Will use the id to sort")
+            return a.id<b.id
+        }
+        return sorter;
+    }
+    
 }
-
 
 class Energielieferant : BaseEntity{
     var name: String?

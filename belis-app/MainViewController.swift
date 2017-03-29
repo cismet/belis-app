@@ -309,7 +309,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
         
     }
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        //        println(mapView.region.span.latitudeDelta);
+        log.verbose("Region changed")
     }
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if (annotation is GeoBaseEntityPointAnnotation){
