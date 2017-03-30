@@ -430,11 +430,16 @@ class Leuchte : GeoBaseEntity,  CellInformationProviderProtocol, CellDataProvide
         func sorter(a: GeoBaseEntity, b: GeoBaseEntity) -> Bool{
             if let x=a as? Leuchte, let y=b as? Leuchte {
                 if x.strasse?.name ?? "" == y.strasse?.name ?? "" {
-                    if x.standort?.id ?? 0 == y.standort?.id {
-                       return x.getMainTitleAlsoForSorting(leadingZeros: true) < y.getMainTitleAlsoForSorting(leadingZeros: true)
+                    if x.kennziffer?.kennziffer ?? 0 == y.kennziffer?.kennziffer ?? 0 {
+                        if x.lfd_nummer ?? 0 == y.lfd_nummer ?? 0 {
+                            return x.leuchtennummer ?? 0 < y.leuchtennummer ?? 0
+                        }
+                        else {
+                            return x.lfd_nummer ?? 0 < y.lfd_nummer ?? 0
+                        }
                     }
                     else  {
-                       return "\(x.standort?.strasse) \(x.standort?.hausnummer)" < "\(y.standort?.strasse) \(y.standort?.hausnummer)"
+                       return x.kennziffer?.kennziffer ?? 0 < y.kennziffer?.kennziffer ?? 0
                     }
                     
                 }
