@@ -442,7 +442,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 }
                 
         }
-        log.verbose("didSelectAnnotationView >> \(view.annotation!.title)")
+        log.verbose("didSelectAnnotationView >> \(String(describing: view.annotation!.title))")
     }
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
         delayed(0.0)
@@ -454,7 +454,7 @@ class MainViewController: UIViewController, UITableViewDataSource, UITableViewDe
                 }
                 
         }
-        log.verbose("didDeselectAnnotationView >> \(view.annotation!.title)")
+        log.verbose("didDeselectAnnotationView >> \(String(describing: view.annotation!.title))")
     }
     
     //MARK: - IBActions
