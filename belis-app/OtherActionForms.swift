@@ -71,7 +71,7 @@ class MauerlaschenPruefungAction : ObjectAction, UIImagePickerControllerDelegate
         let form = FormDescriptor()
         form.title = "Prüfung"
         let section2 = FormSectionDescriptor(headerTitle: nil, footerTitle: nil)
-        var row = FormRowDescriptor(tag: PT.PRUEFDATUM.rawValue, type: .date, title: "Prüfdatum")
+        let row = FormRowDescriptor(tag: PT.PRUEFDATUM.rawValue, type: .date, title: "Prüfdatum")
         row.value=Date() as AnyObject?
         
         section2.rows.append(row)

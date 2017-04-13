@@ -238,7 +238,7 @@ open class CidsConnector {
                 log.info("logged in")
             }
             else {
-                log.error("Error\(error)")
+                log.error("Error\(String(describing: error))")
             }
             if (loggedIn) {
                 func teamsCompletionHandler(_ operation: GetAllEntitiesOperation, data: Data?, response: URLResponse?, error: Error?, queue: OperationQueue){
@@ -755,7 +755,7 @@ open class CidsConnector {
                                                     
                                                 }
                                             }else if (queue.cancelRequested){
-                                                log.verbose("CancelRequested! (and \(queue.operationCount) operations still alive in \(queue.name))")
+                                                log.verbose("CancelRequested! (and \(queue.operationCount) operations still alive in \(queue.name ?? "unknown queue"))")
                                             }
                                             else {
                                                 // Failure
@@ -789,7 +789,7 @@ open class CidsConnector {
             let sop=SearchOperation(baseUrl: self.baseUrl, searchKey: "BELIS2.de.cismet.belis2.server.search.BelisObjectsWktSearch", user: self.login, pass: self.password, queue:queue, parameters: qp, completionHandler: mySearchCompletionHandler)
             
             sop.enqueue()
-            print ("Search enqueued in \(queue.name). Queue with \(queue.operationCount) operations")
+            print ("Search enqueued in \(queue.name ?? "unknown queue"). Queue with \(queue.operationCount) operations")
             
         }
         

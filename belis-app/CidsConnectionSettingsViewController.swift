@@ -89,8 +89,8 @@ class CidsConnectionSettingsViewController: UIViewController {
         let serverCertData = try? Data(contentsOf: URL(fileURLWithPath: CidsConnector.sharedInstance().serverCertPath))
         let clientCertData = try? Data(contentsOf: URL(fileURLWithPath: CidsConnector.sharedInstance().clientCertPath))
         
-        log.info("ServerCert: \(CidsConnector.sharedInstance().serverCertPath) \(serverCertData)")
-        log.info("ClientCert: \(CidsConnector.sharedInstance().clientCertPath) \(clientCertData)")
+        log.info("ServerCert: \(CidsConnector.sharedInstance().serverCertPath) \(String(describing: serverCertData))")
+        log.info("ClientCert: \(CidsConnector.sharedInstance().clientCertPath) \(String(describing: clientCertData))")
         log.info("connect to: \(CidsConnector.sharedInstance().baseUrl)")
     }
     @IBAction func passwordChanged(_ sender: AnyObject) {

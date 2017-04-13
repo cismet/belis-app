@@ -482,7 +482,7 @@ class Rundsteuerempfaenger : BaseEntity{
         foto <- map["foto"]
     }
     class func ascending(_ lhs: Rundsteuerempfaenger, rhs: Rundsteuerempfaenger) -> Bool {
-        return "\(lhs.herrsteller_rs)-\(lhs.rs_typ)" < "\(rhs.herrsteller_rs)-\(rhs.rs_typ)"
+        return "\(lhs.herrsteller_rs ?? "ohne Hersteller")-\(lhs.rs_typ ?? "ohne Typ")" < "\(rhs.herrsteller_rs ?? "ohne Hersteller")-\(rhs.rs_typ ?? "ohne Typ")"
     }
 }
 
@@ -566,7 +566,7 @@ class Leuchtmittel : BaseEntity{
         lichtfarbe <- map["lichtfarbe"]
     }
     class func ascending(_ lhs: Leuchtmittel, rhs: Leuchtmittel) -> Bool {
-        return "\(lhs.hersteller)-\(lhs.lichtfarbe)" < "\(rhs.hersteller)-\(rhs.lichtfarbe)"
+        return "\(lhs.hersteller ?? "ohne Hersteller")-\(lhs.lichtfarbe ?? "ohne Lichtfarbe")" < "\(rhs.hersteller ?? "ohne Hersteller")-\"(rhs.lichtfarbe)"
     }
 }
 
