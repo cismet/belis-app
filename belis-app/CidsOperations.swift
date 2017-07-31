@@ -281,6 +281,61 @@ class LoginOperation: CidsRequestOperation {
         }
     }
 }
+
+
+class CheckOperation: CidsRequestOperation {
+    var completionHandler: ((_ status: Int, _ returnValue: [String: AnyObject], _ error: Error?) -> ())?
+    init(baseUrl: String, completionHandler: @escaping (_ status: Int, _ returnValue: [String: AnyObject], _ error: Error?) -> ()){
+        super.init(user:"notneeded",pass:"notneeded",queue:CidsConnector.sharedInstance().backgroundQueue)
+        url="\(baseUrl)/service/ping"
+        self.completionHandler=completionHandler
+    }
+    override func main() {
+        if self.isCancelled {
+            return
+        }
+        else  {
+            let nsurl = URL(string: url)
+            var request = URLRequest(url: nsurl!)
+            request.httpMethod = "GET"
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            let session=sessionFactory.getPickyNewCidsSession()
+            /* Start a new Task */
+            task = session.dataTask(with: request, completionHandler: { (data , response , error ) in
+                if let err=error {
+                    self.completionHandler!(-1,[:],err)
+                }
+                else {
+                    let statusCode = (response as! HTTPURLResponse).statusCode
+                    log.verbose("URL Session Task Succeeded: HTTP \(statusCode) for \(self.url)")
+                    
+                    if statusCode==200 {
+                        do {
+                            let checkedData = try JSONSerialization.jsonObject(with: data!, options: []) as? [String: AnyObject]
+                            self.completionHandler!(200,checkedData!,nil)
+                            
+                        }
+                        catch {
+                            self.completionHandler!(499,[:],nil)
+                        }
+                        
+                    }
+                    else {
+                        self.completionHandler!(statusCode,[:],error)
+                    }
+                }
+                self.isExecuting=false
+                self.isFinished = true
+                self.task=nil
+            })
+            if let t=self.task {
+                t.resume()
+            }
+        }
+    }
+    
+}
+
 class SearchOperation: CidsRequestOperation {
     var parameters:QueryParameters?
     var completionHandler: ((_ data : Data?, _ response : URLResponse?, _ error : Error?) -> Void)?

@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="ipad9_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -198,7 +198,7 @@
                                         <rect key="frame" x="0.0" y="22" width="276" height="58"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="N0M-Xt-0Mi" id="vF2-p0-x03">
-                                            <rect key="frame" x="0.0" y="0.0" width="276" height="57"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="276" height="57.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tragseil mit Freileitung" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fAi-yZ-iib" userLabel="MainTitle">
@@ -349,7 +349,7 @@
                                     </barButtonItem>
                                     <barButtonItem style="plain" id="FEy-dZ-rhg">
                                         <switch key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="W8A-zI-q3t">
-                                            <rect key="frame" x="145" y="7" width="51" height="31"/>
+                                            <rect key="frame" x="145" y="6.5" width="51" height="31"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <connections>
                                                 <action selector="focusToggleValueChanged:" destination="Kou-sk-bUr" eventType="valueChanged" id="gaC-vp-KN1"/>
@@ -364,7 +364,7 @@
                                     </barButtonItem>
                                     <barButtonItem style="plain" id="oCJ-cp-fOw">
                                         <switch key="customView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="gCr-QR-WvU" userLabel="Whitey Toggle">
-                                            <rect key="frame" x="330" y="7" width="51" height="31"/>
+                                            <rect key="frame" x="330" y="6.5" width="51" height="31"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <accessibility key="accessibilityConfiguration" label=""/>
                                             <connections>
@@ -376,7 +376,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="S2o-Ne-r6a"/>
                                     <barButtonItem width="187" style="plain" id="Xvf-cP-qxk">
                                         <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="CU0-RI-bDh">
-                                            <rect key="frame" x="541" y="8" width="187" height="29"/>
+                                            <rect key="frame" x="541" y="7.5" width="187" height="29"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <segments>
                                                 <segment title="Standard"/>
@@ -508,7 +508,7 @@
                                 <rect key="frame" x="16" y="45" width="242" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                 <connections>
                                     <action selector="serverUrlChanged:" destination="wik-43-POw" eventType="editingChanged" id="UlM-Xp-86b"/>
                                 </connections>

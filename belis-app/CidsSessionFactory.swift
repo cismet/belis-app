@@ -47,18 +47,20 @@ class CidsSessionFactory : NSObject, URLSessionDelegate{
         let authMethod=challenge.protectionSpace.authenticationMethod
         
         if authMethod==NSURLAuthenticationMethodServerTrust {
-            let serverTrust=challenge.protectionSpace.serverTrust
-            let serverCert=SecTrustGetCertificateAtIndex(serverTrust!, 0)!
-            let remoteCertificateData = NSData(data:SecCertificateCopyData(serverCert) as Data) as Data
-
-            
-            
-            if  remoteCertificateData == localServerCertData! {
-                
-                completionHandler(.useCredential, URLCredential(trust: challenge.protectionSpace.serverTrust!))
+            if localServerCertData == nil { //hope that a proper cert is provided
+                completionHandler(.performDefaultHandling, nil);
             }
             else {
-                log.error("Problem with Server CERT Check")
+                let serverTrust=challenge.protectionSpace.serverTrust
+                let serverCert=SecTrustGetCertificateAtIndex(serverTrust!, 0)!
+                let remoteCertificateData = NSData(data:SecCertificateCopyData(serverCert) as Data) as Data
+                if  remoteCertificateData == localServerCertData! {
+                
+                    completionHandler(.useCredential, URLCredential(trust: challenge.protectionSpace.serverTrust!))
+                }
+                else {
+                    log.error("Problem with Server CERT Check")
+                }
             }
         } else if authMethod==NSURLAuthenticationMethodClientCertificate {
             if let clientCert=identityAndTrustForCSC {

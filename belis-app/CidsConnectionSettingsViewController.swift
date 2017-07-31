@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import JGProgressHUD
 
 class CidsConnectionSettingsViewController: UIViewController {
     
@@ -57,7 +58,7 @@ class CidsConnectionSettingsViewController: UIViewController {
             serverCertTextLabel.textColor=black
             serverCertTextLabel.text="Serverzertifikat"
             cmdServerCertRemove.isHidden=false
-            chkTLS.isEnabled=true
+            //chkTLS.isEnabled=true
             
         }
         else {
@@ -65,8 +66,8 @@ class CidsConnectionSettingsViewController: UIViewController {
             serverCertTextLabel.textColor=gray
             serverCertTextLabel.text="kein Serverzertifikat"
             cmdServerCertRemove.isHidden=true
-            chkTLS.isEnabled=false
-            chkTLS.isOn=false
+            //chkTLS.isEnabled=false
+            //chkTLS.isOn=false
             
         }
         if CidsConnector.sharedInstance().clientCertPath != "" {
@@ -88,10 +89,49 @@ class CidsConnectionSettingsViewController: UIViewController {
     @IBAction func checkTabbed(_ sender: AnyObject) {
         let serverCertData = try? Data(contentsOf: URL(fileURLWithPath: CidsConnector.sharedInstance().serverCertPath))
         let clientCertData = try? Data(contentsOf: URL(fileURLWithPath: CidsConnector.sharedInstance().clientCertPath))
-        
+        let progress = UIAlertController(title: "Verbindungs-Check", message: "... wird durchgeführt ...", preferredStyle: UIAlertControllerStyle.alert)
         log.info("ServerCert: \(CidsConnector.sharedInstance().serverCertPath) \(String(describing: serverCertData))")
         log.info("ClientCert: \(CidsConnector.sharedInstance().clientCertPath) \(String(describing: clientCertData))")
         log.info("connect to: \(CidsConnector.sharedInstance().baseUrl)")
+        func cH(_ status: Int, _ returnValue: [String: AnyObject], _ error: Error?) -> () {
+            log.debug(returnValue);
+            
+            if status==200 {
+                log.error(returnValue);
+                let alert = UIAlertController(title: "Verbindungs-Check", message: "BelIS kann eine Verbindung zum Server herstellen. \\o/", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+                progress.dismiss(animated: false, completion: { 
+                    
+                })
+                self.present(alert, animated: true, completion: nil)
+            }
+            else {
+                log.error(error)
+                var details=""
+                if let det=error?.localizedDescription {
+                    details=det
+                }
+                else{
+                    details=""
+                }
+                let alert = UIAlertController(title: "Verbindungs-Check", message: "BelIS kann keine Verbindung zum Server herstellen.\n (\(details))", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+                progress.dismiss(animated: false, completion: {
+                    
+                })
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+        //CidsConnector.instance.baseUrl
+        //https://raw.githubusercontent.com/helllth/experiments/master
+        //https://wunda-geoportal-api.cismet.de
+        let checkOp=CheckOperation(baseUrl: CidsConnector.instance.baseUrl,completionHandler: cH )
+        checkOp.enqueue()
+//        lazyMainQueueDispatch() {
+//            CidsConnector.sharedInstance().mainVC?.progressHUD?.show(in: CidsConnector.sharedInstance().mainVC!.view)
+//        }
+        self.present(progress, animated: true, completion: nil)
+        
     }
     @IBAction func passwordChanged(_ sender: AnyObject) {
         CidsConnector.sharedInstance().clientCertContainerPass=certPassTextField.text!
