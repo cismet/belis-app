@@ -100,10 +100,11 @@ class CidsConnectionSettingsViewController: UIViewController {
                 log.error(returnValue);
                 let alert = UIAlertController(title: "Verbindungs-Check", message: "BelIS kann eine Verbindung zum Server herstellen. \\o/", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
-                progress.dismiss(animated: false, completion: { 
-                    
-                })
-                self.present(alert, animated: true, completion: nil)
+                lazyMainQueueDispatch() {
+                    progress.dismiss(animated: false, completion: {
+                        self.present(alert, animated: true, completion: nil)
+                    })
+                }
             }
             else {
                 log.error(error)
@@ -116,10 +117,11 @@ class CidsConnectionSettingsViewController: UIViewController {
                 }
                 let alert = UIAlertController(title: "Verbindungs-Check", message: "BelIS kann keine Verbindung zum Server herstellen.\n (\(details))", preferredStyle: UIAlertControllerStyle.alert)
                 alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
-                progress.dismiss(animated: false, completion: {
-                    
-                })
-                self.present(alert, animated: true, completion: nil)
+                lazyMainQueueDispatch() {
+                    progress.dismiss(animated: false, completion: {
+                        self.present(alert, animated: true, completion: nil)
+                    })
+                }
             }
         }
         //CidsConnector.instance.baseUrl
@@ -130,7 +132,9 @@ class CidsConnectionSettingsViewController: UIViewController {
 //        lazyMainQueueDispatch() {
 //            CidsConnector.sharedInstance().mainVC?.progressHUD?.show(in: CidsConnector.sharedInstance().mainVC!.view)
 //        }
-        self.present(progress, animated: true, completion: nil)
+        lazyMainQueueDispatch() {
+            self.present(progress, animated: true, completion: nil)
+        }
         
     }
     @IBAction func passwordChanged(_ sender: AnyObject) {
