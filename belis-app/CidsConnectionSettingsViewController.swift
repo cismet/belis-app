@@ -129,9 +129,6 @@ class CidsConnectionSettingsViewController: UIViewController {
         //https://wunda-geoportal-api.cismet.de
         let checkOp=CheckOperation(baseUrl: CidsConnector.instance.baseUrl,completionHandler: cH )
         checkOp.enqueue()
-//        lazyMainQueueDispatch() {
-//            CidsConnector.sharedInstance().mainVC?.progressHUD?.show(in: CidsConnector.sharedInstance().mainVC!.view)
-//        }
         lazyMainQueueDispatch() {
             self.present(progress, animated: true, completion: nil)
         }
